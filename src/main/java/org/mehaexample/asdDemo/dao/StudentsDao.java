@@ -1,9 +1,6 @@
 package org.mehaexample.asdDemo.dao;
 
-import java.util.ArrayList;
 import java.util.List;
-
-
 
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
@@ -168,21 +165,6 @@ public class StudentsDao {
                 Session session = factory.openSession();
                 tx = session.beginTransaction();
                 session.saveOrUpdate(student);
-//                String address = student.getAddress();
-//                String email = student.getEmail();
-//                String phone = student.getPhoneNum();
-//
-//                String hql = "UPDATE Students set Address = :address, "  +
-//                        "Email = :email, " +
-//                        "Phone = :phone " +
-//                        "WHERE NeuId = :neuId";
-//                org.hibernate.query.Query query = session.createQuery(hql);
-//                query.setParameter("address", address);
-//                query.setParameter("email", email);
-//                query.setParameter("phone", phone);
-//                query.setParameter("neuId", neuId);
-//                int result = query.executeUpdate();
-//                System.out.println("Rows affected: " + result);
                 tx.commit();
                 return student;
             }catch (HibernateException e) {
@@ -236,6 +218,21 @@ public class StudentsDao {
     public List<Students> searchStudentRecord(String firstName) {
         org.hibernate.query.Query query = session.createQuery("FROM Students WHERE FirstName = :studentfirstName ");
         query.setParameter("studentfirstName", firstName);
+        List<Students> list = query.list();
+        return list;
+    }
+    
+    /**
+     *  Get a list of students who have the same first name.
+     *
+     * @param firstName
+     * @return A list of students
+     */
+    public List<Students> searchStudentRecordByFirstNameAndLastName(String firstName, String lastName) {
+        org.hibernate.query.Query query = session.createQuery("FROM Students WHERE FirstName = :studentfirstName and LastName = :studentlastName");
+        query.setParameter("studentfirstName", firstName);
+        query.setParameter("studentlastName", lastName);
+        
         List<Students> list = query.list();
         return list;
     }

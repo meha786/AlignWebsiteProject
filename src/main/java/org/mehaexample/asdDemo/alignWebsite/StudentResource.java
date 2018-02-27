@@ -21,6 +21,7 @@ public class StudentResource {
 	StudentsDao studentDao = new StudentsDao();
 
 	/**
+	 * 
 	 * Method handling HTTP GET requests. The returned object will be sent
 	 * to the client as "text/plain" media type.
 	 *
@@ -58,7 +59,13 @@ public class StudentResource {
 		return studentRecord;
 	}
 	
-	
+	/**
+	 * Get a single student record using neuId that respects privacy rules
+	 * 
+	 * @param nuid
+	 * @return a student objects fields which are not hidden 
+	 * http://localhost:8080/alignWebsite/webapi/studentresource/privacies/id/1234567
+	 */
 	@GET
 	@Path("/privacies/id/{nuid}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -154,18 +161,37 @@ public class StudentResource {
 		
 		return studentList; 
 	}
-
-
-
-	// student opt-in/opt-out
-	@PUT
-	@Path("/opt-in/{nuid}")
-    @Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-    public void updateStudentOptIn(@PathParam("nuid") String nuid , Students student) {
-		System.out.println("update opt-in field for nuid=" + nuid);
-    }	
 	
+	/**
+	 * Search for other students
+	 * 
+	 * @param firstName
+	 * @return list of students with matched first name
+	 * http://localhost:8080/alignWebsite/webapi/studentresource/search/Tom21/lastName/Cat
+	 */
+	@GET
+	@Path("/search/{firstName}/lastName/{lastName}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Students> getStudentRecordByFirstNameAndLastName(@PathParam("firstName") String firstName, @PathParam("lastName") String lastName){
+		
+		if(firstName == null || firstName.isEmpty() || lastName == null || lastName.isEmpty()){
+			return null;	
+		}
+		
+		List<Students> studentList = studentDao.searchStudentRecordByFirstNameAndLastName(firstName, lastName);
+		
+		if(studentList.size() == 0){
+			return new ArrayList<>();
+		}
+		
+		return studentList; 
+	}
+
+	/**
+	 * Deleting a student record 
+	 * 
+	 * @param neuid
+	 */
 	@DELETE
 	@Path("{neuid}")
 	@Produces({ MediaType.APPLICATION_JSON})
