@@ -142,10 +142,10 @@ public class StudentResource {
 	 * 
 	 * @param firstName
 	 * @return list of students with matched first name
-	 * http://localhost:8080/alignWebsite/webapi/studentresource/search/Tom21
+	 * http://localhost:8080/alignWebsite/webapi/studentresource/search/firstName/Tom21
 	 */
 	@GET
-	@Path("/search/{firstName}")
+	@Path("/search/firstName/{firstName}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Students> getStudentRecordByFirstName(@PathParam("firstName") String firstName){
 		
@@ -153,7 +153,32 @@ public class StudentResource {
 			return null;	
 		}
 		
-		List<Students> studentList = studentDao.searchStudentRecord(firstName);
+		List<Students> studentList = studentDao.searchStudentRecordByFirstName(firstName);
+		
+		if(studentList.size() == 0){
+			return new ArrayList<>();
+		}
+		
+		return studentList; 
+	}
+	
+	/**
+	 * Search for other students
+	 * 
+	 * @param firstName
+	 * @return list of students with matched first name
+	 * http://localhost:8080/alignWebsite/webapi/studentresource/search/lastName/Cat
+	 */
+	@GET
+	@Path("/search/lastName/{lastName}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Students> getStudentRecordByLastName(@PathParam("lastName") String lastName){
+		
+		if(lastName == null || lastName.isEmpty()){
+			return null;	
+		}
+		
+		List<Students> studentList = studentDao.searchStudentRecordByLastName(lastName);
 		
 		if(studentList.size() == 0){
 			return new ArrayList<>();

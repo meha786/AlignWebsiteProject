@@ -215,9 +215,22 @@ public class StudentsDao {
      * @param firstName
      * @return A list of students
      */
-    public List<Students> searchStudentRecord(String firstName) {
+    public List<Students> searchStudentRecordByFirstName(String firstName) {
         org.hibernate.query.Query query = session.createQuery("FROM Students WHERE FirstName = :studentfirstName ");
         query.setParameter("studentfirstName", firstName);
+        List<Students> list = query.list();
+        return list;
+    }
+    
+    /**
+     *  Get a list of students who have the same last name.
+     *
+     * @param lastName
+     * @return A list of students
+     */
+    public List<Students> searchStudentRecordByLastName(String lastName) {
+        org.hibernate.query.Query query = session.createQuery("FROM Students WHERE LastName = :lastName ");
+        query.setParameter("lastName", lastName);
         List<Students> list = query.list();
         return list;
     }
