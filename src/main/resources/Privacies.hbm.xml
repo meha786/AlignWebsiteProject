@@ -1,0 +1,33 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name = "org.mehaexample.asdDemo.model.Privacies" table = "Privacies">
+
+        <meta attribute = "class-description">
+            This class contains the Privacy detail.
+        </meta>
+
+        <id name = "privacyId" type = "int" column = "PrivacyId">
+            <generator class="native"/>
+        </id>
+
+        <property name = "neuId" column = "NeuId" type = "string"/>
+        <property name = "neuIdShown" column = "NeuIdShown" type = "boolean"/>
+        <property name = "phoneShown" column = "PhoneShown" type = "boolean"/>
+        <property name = "addressShown" column = "AddressShown" type = "boolean"/>
+        <property name = "stateShown" column = "StateShown" type = "boolean"/>
+        <property name = "zipShown" column = "ZipShown" type = "boolean"/>
+        <property name = "emailShown" column = "EmailShown" type = "boolean"/>
+        <property name = "enrollmentStatusShown" column = "EnrollmentStatusShown" type = "boolean"/>
+        <property name = "priorEducationShown" column = "PriorEducationShown" type = "boolean"/>
+        <property name = "experienceShown" column = "ExperienceShown" type = "boolean" />
+        <property name = "workExperienceShown" column = "WorkExperienceShown" type = "boolean"/>
+        <property name = "entryTermShown" column = "EntryTermShown" type = "boolean"/>
+        <property name = "expectedLastTermShown" column = "ExpectedLastTermShown" type = "boolean"/>
+        <property name = "scholarshipShown" column = "ScholarshipShown" type = "boolean"/>
+        
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,24 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="org.alignprivate.asd.model.Experiences" table="experiences">
+
+		<meta attribute="class-description">
+			This class contains the Student's Experience details.
+		</meta>
+
+		<id name="experienceId" type="int" column="ExperienceId">
+			<generator class="native" />
+		</id>
+
+		<property name="title" column="Title" type="string" />
+		<property name="description" column="Description" type="string" />
+
+		<many-to-one name="student" class="org.alignprivate.asd.model.Students"
+			column="NeuId" />
+
+	</class>
+</hibernate-mapping>

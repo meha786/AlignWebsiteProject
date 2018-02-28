@@ -1,0 +1,61 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="org.mehaexample.asdDemo.model.Students" table="Students">
+
+		
+        <meta attribute = "class-description">
+            This class contains the Student detail.
+        </meta>
+
+        <id name = "neuId" type = "string" column = "NeuId">
+            <generator class="assigned"/>
+        </id>
+
+        <property name = "email" column = "Email" type = "string"/>
+        <property name = "firstName" column = "FirstName" type = "string"/>
+        <property name = "middleName" column = "MiddleName" type = "string"/>
+        <property name = "lastName" column = "LastName" type = "string"/>
+        <property name = "gender" column = "Gender">
+            <type name = "org.hibernate.type.EnumType">
+                <param name="enumClass">org.mehaexample.asdDemo.enums.Gender</param>
+                <param name="type">12</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
+        <property name = "scholarship" column = "Scholarship" type = "boolean"/>
+        <property name = "visa" column = "visa" type = "string"/>
+        <property name = "phoneNum" column = "Phone" type = "string"/>
+        <property name = "address" column = "Address" type = "string"/>
+        <property name = "state" column = "State" type = "string"/>
+        <property name = "city" column = "City" type = "string" />
+        <property name = "zip" column = "Zip" type = "string"/>
+        <property name = "enrollmentStatus" column = "EnrollmentStatus">
+            <type name= "org.hibernate.type.EnumType">
+                <param name="enumClass">org.mehaexample.asdDemo.enums.EnrollmentStatus</param>
+                <param name="type">12</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
+        <property name = "campus" column = "Campus">
+            <type name= "org.hibernate.type.EnumType">
+                <param name="enumClass">org.mehaexample.asdDemo.enums.Campus</param>
+                <param name="type">12</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
+        <property name = "degree" column = "DegreeCandidacy">
+            <type name= "org.hibernate.type.EnumType">
+                <param name="enumClass">org.mehaexample.asdDemo.enums.DegreeCandidacy</param>
+                <param name="type">12</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
+        <property name = "photo" column = "Photo" type = "string"/> 
+
+
+	</class>
+</hibernate-mapping>
