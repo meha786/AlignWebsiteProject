@@ -12,10 +12,8 @@
          org.mariadb.jdbc.Driver
       </property>
       
-      <!-- Assume test is the database name -->
-      
       <property name = "hibernate.connection.url">
-         jdbc:mariadb://localhost:3307/align_students_db
+         jdbc:mariadb://localhost:3307/alignprivate
       </property>
       
       <property name = "hibernate.connection.username">
@@ -27,9 +25,7 @@
       </property>
       
       <!-- List of XML mapping files -->
-      <mapping resource = "Student.hbm.xml"/>
-      <mapping resource = "PriorEducation.hbm.xml"/>
-      <mapping resource = "Experience.hbm.xml"/>
-      
+      <mapping resource = "Students.hbm.xml"/>
+      <mapping resource = "Privacies.hbm.xml"/>
    </session-factory>
 </hibernate-configuration>

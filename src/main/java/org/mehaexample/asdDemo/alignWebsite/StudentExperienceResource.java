@@ -1,5 +1,5 @@
 package org.mehaexample.asdDemo.alignWebsite;
-
+/*
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,4 +76,4 @@ public class StudentExperienceResource {
 		System.out.println("experience id to be deleted is: " + id);
 		studentExperienceDao.deleteExperienceRecord(id);
 	} 
-}
+}*/

@@ -1,5 +1,5 @@
 package org.mehaexample.asdDemo.alignWebsite;
-
+/*
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +46,7 @@ public class StudentPriorEducationResource {
 	@Path("{nuid}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void savePriorEducationForm(@PathParam("nuid") String nuid, PriorEducation priorEducation){
-		System.out.println("save priror edu " + priorEducation.getInstitutionName());
+		System.out.println("save priror edu " + priorEducation.getInstitutionId());
 		studentPriorEducationDao.addPriorEducation(nuid, priorEducation); 
 	} 
 	
@@ -60,3 +60,4 @@ public class StudentPriorEducationResource {
     }
 
 }
+*/

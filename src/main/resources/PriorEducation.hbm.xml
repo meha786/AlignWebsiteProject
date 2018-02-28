@@ -10,14 +10,17 @@
          This class contains the Student's Prior Education Information. 
       </meta>
       
-      <id name = "id" type = "int" column = "id">
+      <id name = "id" type = "int" column = "PriorEducationId">
          <generator class="native"/>
       </id>
       
-      <property name = "nuid" column = "nuid" type = "string"/>    
-      <property name = "InstitutionName" column = "institution_name" type = "string"/>
-      <property name = "DegreeLevel" column = "degree_level" type = "string"/>
-      <property name = "Major" column = "major" type = "string"/>
-     
+      <property name = "neuId" column = "NeuId" type = "string"/>    
+      <property name = "institutionId" column = "InstitutionId" type = "string"/>
+      <property name = "majorId" column = "MajorId" type = "string"/>
+      <property name = "graduationDate" column = "GraduationDate" type = "string"/>
+      <property name = "degreeLevel" column = "DegreeLevel" type = "string"/>
+      <property name = "gpa" column = "Gpa" type = "string"/>
+      <property name = "degreeCandidacy" column = "DegreeCandidacy" type = "string"/>
+       
    </class>
 </hibernate-mapping>
