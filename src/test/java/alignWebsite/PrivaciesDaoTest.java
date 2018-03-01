@@ -19,6 +19,7 @@ public class PrivaciesDaoTest {
 
     @Test
     public void addPrivacyRecordTest() {
+    	System.out.println("enrty addPrivacyRecordTest");
         Privacies privacy = new Privacies("111234544", true, true, true,
                 true, true, true, true, true,
                 true, true, true, true, true);
@@ -26,6 +27,9 @@ public class PrivaciesDaoTest {
         privaciesDao.addPrivacyRecord(privacy);
         Assert.assertTrue(privaciesDao.ifNuidExists("111234544"));
         privaciesDao.deletePrivacyRecord(privacy);
+        
+    	System.out.println("exit addPrivacyRecordTest");
+
     }
 
     @Test

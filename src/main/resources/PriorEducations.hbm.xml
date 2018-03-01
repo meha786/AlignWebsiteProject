@@ -4,13 +4,13 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
 
 <hibernate-mapping>
-   <class name = "org.mehaexample.asdDemo.model.PriorEducation" table = "PriorEducation">
+   <class name = "org.mehaexample.asdDemo.model.PriorEducations" table = "PriorEducations">
       
       <meta attribute = "class-description">
          This class contains the Student's Prior Education Information. 
       </meta>
       
-      <id name = "id" type = "int" column = "PriorEducationId">
+      <id name = "priorEducationId" type = "int" column = "PriorEducationId">
          <generator class="native"/>
       </id>
       

@@ -48,7 +48,7 @@ public class StudentResource {
 	 * 
 	 * @param nuid
 	 * @return a student object
-	 * http://localhost:8080/alignWebsite/webapi/studentresource/id/211234549
+	 *c
 	 */
 	@GET
 	@Path("/id/{nuid}")
