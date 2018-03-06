@@ -1,4 +1,4 @@
-package org.mehaexample.asdDemo.dao;
+package org.mehaexample.asdDemo.script;
 
 import org.mehaexample.asdDemo.Constants;
 import org.mehaexample.asdDemo.dao.ConnectionManager;

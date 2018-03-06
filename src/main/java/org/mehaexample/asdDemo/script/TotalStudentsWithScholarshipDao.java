@@ -3,9 +3,6 @@ package org.mehaexample.asdDemo.script;
 
 import java.sql.SQLException;
 
-import org.mehaexample.asdDemo.dao.PrivateDatabaseEtlQuery;
-import org.mehaexample.asdDemo.dao.PublicDatabaseEtlQuery;
-
 public class TotalStudentsWithScholarshipDao {
     // Singleton pattern
     private static TotalStudentsWithScholarshipDao instance = null;

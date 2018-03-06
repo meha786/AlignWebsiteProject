@@ -15,26 +15,27 @@ import javax.ws.rs.core.MediaType;
 import org.json.JSONObject;
 import org.mehaexample.asdDemo.dao.ElectivesDao;
 import org.mehaexample.asdDemo.dao.StudentsDao;
-import org.mehaexample.asdDemo.dao.TopTenBachelorsDegreeDao;
 import org.mehaexample.asdDemo.dao.WorkExperiencesDao;
 import org.mehaexample.asdDemo.enums.DegreeCandidacy;
 import org.mehaexample.asdDemo.enums.EnrollmentStatus;
 import org.mehaexample.asdDemo.model.Electives;
 import org.mehaexample.asdDemo.model.Students;
+import org.mehaexample.asdDemo.script.TopFiveElectivesDao;
+import org.mehaexample.asdDemo.script.TopFiveEmployersDao;
+import org.mehaexample.asdDemo.script.TopTenBachelorsDegreeDao;
+import org.mehaexample.asdDemo.script.TotalExperiencedStudentsDao;
+import org.mehaexample.asdDemo.script.TotalFemaleStudentsDao;
+import org.mehaexample.asdDemo.script.TotalMaleStudentsDao;
+import org.mehaexample.asdDemo.script.TotalStudentsInAmazonDao;
+import org.mehaexample.asdDemo.script.TotalStudentsInBostonDao;
+import org.mehaexample.asdDemo.script.TotalStudentsInCharlotteDao;
+import org.mehaexample.asdDemo.script.TotalStudentsInFacebookDao;
+import org.mehaexample.asdDemo.script.TotalStudentsInGoogleDao;
+import org.mehaexample.asdDemo.script.TotalStudentsInMicrosoftDao;
+import org.mehaexample.asdDemo.script.TotalStudentsInSeattleDao;
+import org.mehaexample.asdDemo.script.TotalStudentsInSiliconValleyDao;
 import org.mehaexample.asdDemo.script.TotalStudentsWithScholarshipDao;
-import org.mehaexample.asdDemo.dao.TopFiveEmployersDao;
-import org.mehaexample.asdDemo.dao.TopFiveElectivesDao;
-import org.mehaexample.asdDemo.dao.TotalExperiencedStudentsDao;
-import org.mehaexample.asdDemo.dao.TotalFemaleStudentsDao;
-import org.mehaexample.asdDemo.dao.TotalMaleStudentsDao;
-import org.mehaexample.asdDemo.dao.TotalStudentsInAmazonDao;
-import org.mehaexample.asdDemo.dao.TotalStudentsInBostonDao;
-import org.mehaexample.asdDemo.dao.TotalStudentsInCharlotteDao;
-import org.mehaexample.asdDemo.dao.TotalStudentsInFacebookDao;
-import org.mehaexample.asdDemo.dao.TotalStudentsInGoogleDao;
-import org.mehaexample.asdDemo.dao.TotalStudentsInMicrosoftDao;
-import org.mehaexample.asdDemo.dao.TotalStudentsInSeattleDao;
-import org.mehaexample.asdDemo.dao.TotalStudentsInSiliconValleyDao;
+
 
 
 @Path("admin")
