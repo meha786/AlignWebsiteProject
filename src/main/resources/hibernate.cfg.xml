@@ -34,6 +34,6 @@
       <mapping resource = "Terms.hbm.xml"/>
       <mapping resource = "Companies.hbm.xml"/>
       <mapping resource = "WorkExperiences.hbm.xml"/>
-      
+      <mapping resource = "Experiences.hbm.xml"/>
    </session-factory>
 </hibernate-configuration>
