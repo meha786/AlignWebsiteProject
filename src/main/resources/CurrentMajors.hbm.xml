@@ -4,7 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name = "org.alignprivate.asd.model.CurrentMajors" table="CurrentMajors">
+    <class name = "org.mehaexample.asdDemo.model.CurrentMajors" table="CurrentMajors">
 
         <meta attribute = "class-description">
             This class contains the Work Experience detail.
@@ -13,10 +13,10 @@
             <generator class="native"/>
         </id>
 
-        <many-to-one name="student" class="org.alignprivate.asd.model.Students"
+        <many-to-one name="student" class="org.mehaexample.asdDemo.model.Students"
                      column="NeuId" />
 
-        <many-to-one name="major" class="org.alignprivate.asd.model.Majors"
+        <many-to-one name="major" class="org.mehaexample.asdDemo.model.Majors"
                      column="MajorId" />
     </class>
 </hibernate-mapping>
