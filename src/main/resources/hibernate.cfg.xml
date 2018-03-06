@@ -38,6 +38,7 @@
       <mapping resource = "CurrentMajors.hbm.xml"/>
       <mapping resource = "Courses.hbm.xml"/>
       <mapping resource = "Electives.hbm.xml"/>
+      <mapping resource = "ExpectedLastTerms.hbm.xml"/>
       
    </session-factory>
 </hibernate-configuration>
