@@ -28,6 +28,11 @@
       <mapping resource = "Students.hbm.xml"/>
       <mapping resource = "Privacies.hbm.xml"/>
       <mapping resource = "Administrators.hbm.xml"/>
-      <mapping resource = "AdministratorNotes.hbm.xml"/>
+      <mapping resource = "Institutions.hbm.xml"/>
+      <mapping resource = "Majors.hbm.xml"/>
+      <mapping resource = "PriorEducations.hbm.xml"/>
+      <mapping resource = "Terms.hbm.xml"/>
+      
+      
    </session-factory>
 </hibernate-configuration>

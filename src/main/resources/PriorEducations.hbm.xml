@@ -4,7 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name = "org.alignprivate.asd.model.PriorEducations" table="PriorEducations">
+    <class name = "org.mehaexample.asdDemo.model.PriorEducations" table="PriorEducations">
 
         <meta attribute = "class-description">
             This class contains the Prior Education detail.
@@ -19,19 +19,19 @@
 
         <property name = "degreeCandidacy" column = "DegreeCandidacy">
             <type name= "org.hibernate.type.EnumType">
-                <param name="enumClass">org.alignprivate.asd.enumeration.DegreeCandidacy</param>
+                <param name="enumClass">org.mehaexample.asdDemo.enums.DegreeCandidacy</param>
                 <param name="type">12</param>
                 <param name="useNamed">true</param>
             </type>
         </property>
 
-        <many-to-one name="student" class="org.alignprivate.asd.model.Students"
+        <many-to-one name="student" class="org.mehaexample.asdDemo.model.Students"
                      column="NeuId" />
 
-        <many-to-one name="institution" class="org.alignprivate.asd.model.Institutions"
+        <many-to-one name="institution" class="org.mehaexample.asdDemo.model.Institutions"
                      column="InstitutionId" />
 
-        <many-to-one name="major" class="org.alignprivate.asd.model.Majors"
+        <many-to-one name="major" class="org.mehaexample.asdDemo.model.Majors"
                      column="MajorId" />
     </class>
 </hibernate-mapping>

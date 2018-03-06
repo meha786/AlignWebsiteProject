@@ -4,7 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name = "org.alignprivate.asd.model.Majors" table="Majors">
+    <class name = "org.mehaexample.asdDemo.model.Majors" table="Majors">
 
         <meta attribute = "class-description">
             This class contains the Institutions detail.

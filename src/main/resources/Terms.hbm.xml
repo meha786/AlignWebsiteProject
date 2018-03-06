@@ -4,7 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-	<class name="org.alignprivate.asd.model.Terms" table="Terms">
+	<class name="org.mehaexample.asdDemo.model.Terms" table="Terms">
 
 		<meta attribute="class-description">
 			This class contains the Term detail.
@@ -15,7 +15,7 @@
 
 		<property name="term" column="Term">
 			<type name="org.hibernate.type.EnumType">
-				<param name="enumClass">org.alignprivate.asd.enumeration.Term</param>
+				<param name="enumClass">org.mehaexample.asdDemo.enums.Term</param>
 				<param name="type">12</param>
 				<param name="useNamed">true</param>
 			</type>
@@ -25,7 +25,7 @@
 		
 		<property name="termType" column="TermType">
 			<type name="org.hibernate.type.EnumType">
-				<param name="enumClass">org.alignprivate.asd.enumeration.TermType</param>
+				<param name="enumClass">org.mehaexample.asdDemo.enums.TermType</param>
 				<param name="type">12</param>
 				<param name="useNamed">true</param>
 			</type>
