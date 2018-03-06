@@ -1,0 +1,19 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name = "org.alignprivate.asd.model.Institutions" table="Institutions">
+
+        <meta attribute = "class-description">
+            This class contains the Institutions detail.
+        </meta>
+        <id name = "institutionId" column="InstitutionId" type="int">
+            <generator class="native"/>
+        </id>
+
+        <property name = "institutionName" column="InstitutionName" type="string" />
+
+    </class>
+</hibernate-mapping>

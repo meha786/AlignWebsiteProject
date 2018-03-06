@@ -1,0 +1,24 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="org.alignprivate.asd.model.ExpectedLastTerms" table="ExpectedLastTerms">
+
+		<meta attribute="class-description">
+			This class contains the ExpectedLastTerms details.
+		</meta>
+		
+		<id name="expectedLastTermId" type="int" column="ExpectedLastTermId">
+			<generator class="native" />
+		</id>
+
+		<many-to-one name="student" class="org.alignprivate.asd.model.Students"
+			column="NeuId" />
+
+		<many-to-one name="term" class="org.alignprivate.asd.model.Terms"
+			column="TermId" />
+			
+	</class>
+</hibernate-mapping>

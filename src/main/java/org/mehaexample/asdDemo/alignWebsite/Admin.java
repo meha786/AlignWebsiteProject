@@ -21,6 +21,7 @@ import org.mehaexample.asdDemo.enums.DegreeCandidacy;
 import org.mehaexample.asdDemo.enums.EnrollmentStatus;
 import org.mehaexample.asdDemo.model.Electives;
 import org.mehaexample.asdDemo.model.Students;
+import org.mehaexample.asdDemo.script.TotalStudentsWithScholarshipDao;
 import org.mehaexample.asdDemo.dao.TopFiveEmployersDao;
 import org.mehaexample.asdDemo.dao.TopFiveElectivesDao;
 import org.mehaexample.asdDemo.dao.TotalExperiencedStudentsDao;
@@ -34,7 +35,6 @@ import org.mehaexample.asdDemo.dao.TotalStudentsInGoogleDao;
 import org.mehaexample.asdDemo.dao.TotalStudentsInMicrosoftDao;
 import org.mehaexample.asdDemo.dao.TotalStudentsInSeattleDao;
 import org.mehaexample.asdDemo.dao.TotalStudentsInSiliconValleyDao;
-import org.mehaexample.asdDemo.dao.TotalStudentsWithScholarshipDao;
 
 
 @Path("admin")
