@@ -4,7 +4,7 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-	<class name="org.alignprivate.asd.model.EntryTerms" table="EntryTerms">
+	<class name="org.mehaexample.asdDemo.model.EntryTerms" table="EntryTerms">
 
 		<meta attribute="class-description">
 			This class contains the Course details.
@@ -14,10 +14,10 @@
 			<generator class="native" />
 		</id>
 
-		<many-to-one name="student" class="org.alignprivate.asd.model.Students"
+		<many-to-one name="student" class="org.mehaexample.asdDemo.model.Students"
 			column="NeuId" />
 
-		<many-to-one name="terms" class="org.alignprivate.asd.model.Terms"
+		<many-to-one name="terms" class="org.mehaexample.asdDemo.model.Terms"
 			column="TermId" />
 
 	</class>
