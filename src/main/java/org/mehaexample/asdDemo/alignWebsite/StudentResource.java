@@ -13,12 +13,15 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.mehaexample.asdDemo.dao.PasswordDao;
 import org.mehaexample.asdDemo.dao.StudentsDao;
+import org.mehaexample.asdDemo.model.PasswordChangeModel;
 import org.mehaexample.asdDemo.model.Students;
 
 @Path("studentresource")
 public class StudentResource {
 	StudentsDao studentDao = new StudentsDao();
+	PasswordDao passwordDao = new PasswordDao();
 
 	/**
 	 * Method handling HTTP GET requests. The returned object will be sent
@@ -72,7 +75,30 @@ public class StudentResource {
 		Students studentRecord = studentDao.getStudentRecordPrivately(nuid);
 		return studentRecord;
 	}
+	
+	/**
+	 * Delete a student
+	 * 
+	 * @param firstName
+	 * @return String
+	 * http://localhost:8080/alignWebsite/webapi/studentresource/211232248
+	 */
+	@DELETE
+	@Path("{neuid}")
+	@Produces({ MediaType.APPLICATION_JSON})
+	public void deleteStudentByNUID(@PathParam("neuid") String neuid)
+	{      
+		Students student = new Students();
 
+		System.out.println("nuid to be deleted is: " + neuid);
+		boolean exists = studentDao.ifNuidExists(neuid);
+		if(exists == true){
+			studentDao.deleteStudent(neuid);
+		}else{
+			System.out.println("This nuid doesn't exist");
+		}
+	}
+	
 	/**
 	 * Fetch the student details by email id
 	 * 
@@ -89,13 +115,50 @@ public class StudentResource {
 		return studentRecord; 
 	}
 
-	/**
-	 * Add a student into the database
-	 * 
-	 * @param student
-	 * @return status created if added successfully else error message
-	 * http://localhost:8080/alignWebsite/webapi/studentresource
-	 */
+/**------------------------------------------------------------------------------------------------*/
+
+	//  webapi/student-facing/students/change-password/{NUID}
+	@POST
+	@Path("/{changePassword}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public boolean chnagePassword(PasswordChangeModel passwordModel){
+		boolean exists = studentDao.ifEmailExists(passwordModel.getEmail());
+		
+		if(passwordDao.getOldPassword(passwordModel.getEmail()).equals(passwordModel.getOldPwd())) {
+			passwordDao.updatePassword(passwordModel);
+		}
+		
+		return true;
+	}
+	
+	// webapi/student-facing/students/reset-password/{NUID}
+	@POST
+	@Path("/{resetPassword}")
+	@Consumes(MediaType.TEXT_PLAIN)
+	public void resetPassword(String nuid) {
+		// check if nuid is valid
+		// get the email of student from db
+		// send an email with the link
+	}
+	
+	//  webapi/student-facing/students/registration
+	@POST
+	@Path("/{registerStudent}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void registerStudent(Students student) {
+		// check if the student data is present in align db
+		// register the student.
+	}
+	
+	/**-----------------------------------------------------**/
+	@POST 
+	@Path("/{VerifyStudentLogin2FA}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void VerifyStudentLogin2FA(){
+		// check if password entered is correct from db
+		// if it is correct, send him an email 
+	}
+	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String saveStudentForm(Students student){
@@ -169,26 +232,5 @@ public class StudentResource {
 		System.out.println("update opt-in field for nuid=" + nuid);
     }	
 	
-	/**
-	 * Delete a student
-	 * 
-	 * @param firstName
-	 * @return String
-	 * http://localhost:8080/alignWebsite/webapi/studentresource/211232248
-	 */
-	@DELETE
-	@Path("{neuid}")
-	@Produces({ MediaType.APPLICATION_JSON})
-	public void deleteStudentByNUID(@PathParam("neuid") String neuid)
-	{      
-		Students student = new Students();
-
-		System.out.println("nuid to be deleted is: " + neuid);
-		boolean exists = studentDao.ifNuidExists(neuid);
-		if(exists == true){
-			studentDao.deleteStudent(neuid);
-		}else{
-			System.out.println("This nuid doesn't exist");
-		}
-	}
+	
 }

@@ -450,4 +450,7 @@ public class StudentsDao {
         return list;
     }
 
+	public boolean ifEmailExists(String email) {
+		return false;
+	}
 }
