@@ -13,6 +13,10 @@
             <generator class="native"/>
         </id>
 
+        <property name = "neuId" column="NeuId" type="string" />
+
+        <property name = "companyName" column="CompanyName" type="string" />
+
         <property name = "startDate" column="StartDate" type="date" />
 
         <property name = "endDate" column="EndDate" type="date" />
@@ -23,10 +27,7 @@
 
         <property name = "description" column="Description" type="string" />
 
-        <many-to-one name="student" class="org.mehaexample.asdDemo.model.Students"
-                     column="NeuId" />
-
-        <many-to-one name="company" class="org.mehaexample.asdDemo.model.Companies"
-                     column="CompanyId" />
+        <!--<many-to-one name="student" class="org.alignprivate.asd.model.Students"-->
+                     <!--column="NeuId" />-->
     </class>
 </hibernate-mapping>

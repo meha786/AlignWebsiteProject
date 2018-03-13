@@ -4,13 +4,24 @@ import java.util.Date;
 
 public class WorkExperiences {
   private int workExperienceId;
+  private String neuId;
+  private String companyName;
   private Date startDate;
   private Date endDate;
   private boolean currentJob;
   private String title;
   private String description;
-  private Students student;
-  private Companies company;
+
+  public WorkExperiences(String neuId, String companyName, Date startDate, Date endDate,
+                         boolean currentJob, String title, String description) {
+    this.neuId = neuId;
+    this.companyName = companyName;
+    this.startDate = startDate;
+    this.endDate = endDate;
+    this.currentJob = currentJob;
+    this.title = title;
+    this.description = description;
+  }
 
   public WorkExperiences() { }
 
@@ -20,6 +31,22 @@ public class WorkExperiences {
 
   public void setWorkExperienceId(int workExperienceId) {
     this.workExperienceId = workExperienceId;
+  }
+
+  public String getNeuId() {
+    return neuId;
+  }
+
+  public void setNeuId(String neuId) {
+    this.neuId = neuId;
+  }
+
+  public String getCompanyName() {
+    return companyName;
+  }
+
+  public void setCompanyName(String companyName) {
+    this.companyName = companyName;
   }
 
   public Date getStartDate() {
@@ -60,21 +87,5 @@ public class WorkExperiences {
 
   public void setDescription(String description) {
     this.description = description;
-  }
-
-  public Students getStudent() {
-    return student;
-  }
-
-  public void setStudent(Students student) {
-    this.student = student;
-  }
-
-  public Companies getCompany() {
-    return company;
-  }
-
-  public void setCompany(Companies company) {
-    this.company = company;
   }
 }

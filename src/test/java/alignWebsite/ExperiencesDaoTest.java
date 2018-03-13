@@ -3,7 +3,6 @@ package alignWebsite;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mehaexample.asdDemo.dao.ExperiencesDao;
@@ -12,6 +11,7 @@ import org.mehaexample.asdDemo.enums.Campus;
 import org.mehaexample.asdDemo.enums.DegreeCandidacy;
 import org.mehaexample.asdDemo.enums.EnrollmentStatus;
 import org.mehaexample.asdDemo.enums.Gender;
+import org.mehaexample.asdDemo.enums.Term;
 import org.mehaexample.asdDemo.model.Experiences;
 import org.mehaexample.asdDemo.model.Students;
 
@@ -36,7 +36,8 @@ public class ExperiencesDaoTest {
     Students newStudent = new Students("0000000", "tomcat@gmail.com", "Tom", "",
             "Cat", Gender.M, "F1", "1111111111",
             "401 Terry Ave", "WA", "Seattle", "98109",
-            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null);
+            Term.FALL, 2014, Term.SPRING, 2016,
+            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
     studentsDao.addStudent(newStudent);
 
     Experiences experiences = new Experiences();
@@ -61,7 +62,8 @@ public class ExperiencesDaoTest {
     Students newStudent = new Students("00000094", "tomcat44@gmail.com", "Tom21", "",
             "Cat", Gender.M, "F1", "1111111111",
             "401 Terry Ave", "WA", "Seattle", "98109",
-            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null);
+            Term.FALL, 2014, Term.SPRING, 2016,
+            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
     studentsDao.addStudent(newStudent);
 
     // add experience to table
@@ -85,7 +87,8 @@ public class ExperiencesDaoTest {
     Students newStudent = new Students("00000094", "tomcat44@gmail.com", "Tom21", "",
             "Cat", Gender.M, "F1", "1111111111",
             "401 Terry Ave", "WA", "Seattle", "98109",
-            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null);
+            Term.FALL, 2014, Term.SPRING, 2016,
+            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
     studentsDao.addStudent(newStudent);
 
     // add experience to table
@@ -106,7 +109,8 @@ public class ExperiencesDaoTest {
     Students newStudent = new Students("00000094", "tomcat44@gmail.com", "Tom21", "",
             "Cat", Gender.M, "F1", "1111111111",
             "401 Terry Ave", "WA", "Seattle", "98109",
-            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null);
+            Term.FALL, 2014, Term.SPRING, 2016,
+            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
     studentsDao.addStudent(newStudent);
 
     // add experience to table
@@ -129,7 +133,8 @@ public class ExperiencesDaoTest {
     Students newStudent = new Students("00000094", "tomcat44@gmail.com", "Tom21", "",
             "Cat", Gender.M, "F1", "1111111111",
             "401 Terry Ave", "WA", "Seattle", "98109",
-            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null);
+            Term.FALL, 2014, Term.SPRING, 2016,
+            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
     studentsDao.addStudent(newStudent);
 
     // add experience to table

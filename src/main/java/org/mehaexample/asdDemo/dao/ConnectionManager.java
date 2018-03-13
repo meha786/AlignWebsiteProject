@@ -38,13 +38,13 @@ public class ConnectionManager {
       connectionProperties.setProperty("user", username);
       connectionProperties.setProperty("password", password);
 
-//      // Configure the SSL connection
-//      connectionProperties.setProperty("useSSL", "true");
-//      System.setProperty("javax.net.ssl.keyStoreType", "pkcs12");
-//      System.setProperty("javax.net.ssl.trustStoreType", "jks");
-//      System.setProperty("javax.net.ssl.keyStore", "/Users/valeryfardeli/.ssl/clientcertificate.p12");
-//      System.setProperty("javax.net.ssl.trustStore", "/Users/valeryfardeli/.ssl/mariadbserver.keystore");
-//      System.setProperty("javax.net.ssl.keyStorePassword", "password");
+      // Configure the SSL connection
+      connectionProperties.setProperty("useSSL", "true");
+      System.setProperty("javax.net.ssl.keyStoreType", "pkcs12");
+      System.setProperty("javax.net.ssl.trustStoreType", "jks");
+      System.setProperty("javax.net.ssl.keyStore", "/Users/valeryfardeli/.ssl/clientcertificate.p12");
+      System.setProperty("javax.net.ssl.trustStore", "/Users/valeryfardeli/.ssl/mariadbserver.keystore");
+      System.setProperty("javax.net.ssl.keyStorePassword", "AlienGUIse-93");
 
       String url = "jdbc:mysql://" + host + ":" + port + "/" + database;
       connection = DriverManager.getConnection(url, connectionProperties);

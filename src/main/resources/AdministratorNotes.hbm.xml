@@ -15,12 +15,8 @@
 
         <property name = "title" column = "Title" type = "string" />
         <property name = "desc" column = "Description" type = "string" />
-
-        <many-to-one name="student" class="org.mehaexample.asdDemo.model.Students"
-                     column="NeuId" />
-
-        <many-to-one name="admin" class="org.mehaexample.asdDemo.model.Administrators"
-                     column="AdministratorNeuId" />
+        <property name = "neuId" column="NeuId" type="string" />
+        <property name = "administratorNeuId" column="AdministratorNeuId" type="string" />
 
     </class>
 </hibernate-mapping>

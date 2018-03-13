@@ -1,18 +1,27 @@
 package org.mehaexample.asdDemo.model;
 
-
 import java.util.Date;
 
 import org.mehaexample.asdDemo.enums.DegreeCandidacy;
 
 public class PriorEducations {
   private int priorEducationId;
+  private String institutionName;
+  private String majorName;
   private Date graduationDate;
   private float gpa;
   private DegreeCandidacy degreeCandidacy;
-  private Students student;
-  private Institutions institution;
-  private Majors major;
+  private String neuId;
+
+  public PriorEducations(String institutionName, String majorName, Date graduationDate,
+                         float gpa, DegreeCandidacy degreeCandidacy, String neuId) {
+    this.institutionName = institutionName;
+    this.majorName = majorName;
+    this.graduationDate = graduationDate;
+    this.gpa = gpa;
+    this.degreeCandidacy = degreeCandidacy;
+    this.neuId = neuId;
+  }
 
   public PriorEducations() { }
 
@@ -22,6 +31,22 @@ public class PriorEducations {
 
   public void setPriorEducationId(int priorEducationId) {
     this.priorEducationId = priorEducationId;
+  }
+
+  public String getInstitutionName() {
+    return institutionName;
+  }
+
+  public void setInstitutionName(String institutionName) {
+    this.institutionName = institutionName;
+  }
+
+  public String getMajorName() {
+    return majorName;
+  }
+
+  public void setMajorName(String majorName) {
+    this.majorName = majorName;
   }
 
   public Date getGraduationDate() {
@@ -48,27 +73,11 @@ public class PriorEducations {
     this.degreeCandidacy = degreeCandidacy;
   }
 
-  public Students getStudent() {
-    return student;
+  public String getNeuId() {
+    return neuId;
   }
 
-  public void setStudent(Students student) {
-    this.student = student;
-  }
-
-  public Institutions getInstitution() {
-    return institution;
-  }
-
-  public void setInstitution(Institutions institution) {
-    this.institution = institution;
-  }
-
-  public Majors getMajor() {
-    return major;
-  }
-
-  public void setMajor(Majors major) {
-    this.major = major;
+  public void setNeuId(String neuId) {
+    this.neuId = neuId;
   }
 }

@@ -2,7 +2,6 @@ package org.mehaexample.asdDemo.dao;
 
 import java.util.List;
 
-
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -55,6 +54,7 @@ public class AdministratorsDao {
             } catch (HibernateException e) {
                 System.out.println("HibernateException: " + e);
                 if (tx!=null) tx.rollback();
+                administrators = null;
             } finally {
             	session.close();
             }
@@ -103,10 +103,11 @@ public class AdministratorsDao {
      * Update a Administrator record.
      *
      * @param administrator which contains the latest information.
-     * @return Updated Administrator object if successful. Otherwise, null.
+     * @return true if update successfully. Otherwise, return false.
      */
-    public Administrators updateAdministratorRecord(Administrators administrator) {
+    public boolean updateAdministratorRecord(Administrators administrator) {
         Transaction tx = null;
+        boolean updated = false;
         
         String administratorNeuId = administrator.getAdministratorNeuId();
         
@@ -114,26 +115,9 @@ public class AdministratorsDao {
             try{
                 Session session = factory.openSession();
                 tx = session.beginTransaction();
-                String emailId = administrator.getEmail();
-                String firstName = administrator.getFirstName();
-                String middleName = administrator.getMiddleName();
-                String lastName = administrator.getLastName();
-
-                String hql = "UPDATE Administrators set Email = :email, "  +
-                        "FirstName = :firstName, " +
-                        "MiddleName = :middleName, " +
-                        "LastName = :lastName " +
-                        "WHERE AdministratorNeuId = :administratorNeuId";
-                org.hibernate.query.Query query = session.createQuery(hql);
-                query.setParameter("email", emailId);
-                query.setParameter("firstName", firstName);
-                query.setParameter("middleName", middleName);
-                query.setParameter("lastName", lastName);
-                query.setParameter("administratorNeuId", administratorNeuId);
-                int result = query.executeUpdate();
-                System.out.println("Rows affected: " + result);
+                session.saveOrUpdate(administrator);
                 tx.commit();
-                return administrator;
+                updated = true;
             }catch (HibernateException e) {
                 if (tx!=null) tx.rollback();
                 e.printStackTrace();
@@ -144,7 +128,7 @@ public class AdministratorsDao {
             System.out.println("student id doesn't exists..");
         }
 
-        return null;
+        return updated;
     }
 
     
@@ -155,34 +139,29 @@ public class AdministratorsDao {
      * @return true if delete successfully. Otherwise, false.
      */
     public boolean deleteAdministrator(String administratorNeuId){
+        boolean deleted = false;
     	if(administratorNeuId == null || administratorNeuId.isEmpty()){
     		return false;
     	}
-    	
+
+    	Administrators admin = getAdministratorRecord(administratorNeuId);
         Transaction tx = null;
-        try {
-            session = factory.openSession();
-
-            tx = session.beginTransaction();
-            org.hibernate.query.Query query = session.createQuery("DELETE FROM Administrators"
-            		+ " WHERE AdministratorNeuId = :administratorNeuId ");
-            query.setParameter("administratorNeuId", administratorNeuId);
-            query.executeUpdate();
-            tx.commit();
-            if(ifAdminNuidExists(administratorNeuId)){
-                return false;
-            }else{
-                return true;
+        if (admin != null) {
+            try {
+                session = factory.openSession();
+                tx = session.beginTransaction();
+                session.delete(admin);
+                tx.commit();
+                deleted = true;
+            } catch (HibernateException e) {
+                if (tx!=null) tx.rollback();
+                e.printStackTrace();
+            }finally {
+                session.close();
             }
-        } catch (HibernateException e) {
-            System.out.println("exception");
-            if (tx!=null) tx.rollback();
-            e.printStackTrace();
-        }finally {
-			session.close();
-		}
+        }
 
-        return true;
+        return deleted;
     }
     
     /**
@@ -192,6 +171,7 @@ public class AdministratorsDao {
      * @return true if existed, false if not.
      */
     public boolean ifAdminNuidExists(String adminNeuId){
+        boolean find = false;
         try{
             session = factory.openSession();
 
@@ -203,12 +183,12 @@ public class AdministratorsDao {
             
             session.close();
             if(list.size() == 1){
-                return true;
+                find = true;
             }
         }catch (HibernateException e) {
             e.printStackTrace();
         }
 
-        return false;
+        return find;
     }
 }

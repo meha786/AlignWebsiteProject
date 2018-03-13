@@ -1,6 +1,5 @@
 package org.mehaexample.asdDemo.dao;
 
-
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -14,16 +13,10 @@ public class AdministratorNotesDao {
     private static SessionFactory factory;
     private static Session session;
 
-    private StudentsDao studentsDao;
-    private AdministratorsDao adminDao;
-
     /**
      * Default Constructor
      */
     public AdministratorNotesDao() {
-        studentsDao = new StudentsDao();
-        adminDao = new AdministratorsDao();
-
         try {
             // it will check the hibernate.cfg.xml file and load it
             // next it goes to all table files in the hibernate file and loads them
@@ -43,7 +36,7 @@ public class AdministratorNotesDao {
     public List<AdministratorNotes> getAdministratorNoteRecordByNeuId(String neuId) {
         try {
             session = factory.openSession();
-            org.hibernate.query.Query query = session.createQuery("FROM AdministratorNotes WHERE student.neuId = :neuId ");
+            org.hibernate.query.Query query = session.createQuery("FROM AdministratorNotes WHERE neuId = :neuId ");
             query.setParameter("neuId", neuId);
             List<AdministratorNotes> list = query.list();
             return list;
@@ -66,7 +59,7 @@ public class AdministratorNotesDao {
         try {
             session = factory.openSession();
             org.hibernate.query.Query query = session.createQuery("FROM AdministratorNotes " +
-                    "WHERE admin.administratorNeuId = :administratorNeuId ");
+                    "WHERE administratorNeuId = :administratorNeuId ");
             query.setParameter("administratorNeuId", administratorNeuId);
             List<AdministratorNotes> list = query.list();
             return list;
@@ -83,7 +76,7 @@ public class AdministratorNotesDao {
      * Insert Administrator Note record into database.
      *
      * @param note Administrator Note to be inserted
-     * @return Newly inserted Administrator Note
+     * @return Newly inserted Administrator Note if success. Otherwise, null.
      */
     public AdministratorNotes addAdministratorNoteRecord(AdministratorNotes note) {
         Transaction tx = null;
@@ -96,6 +89,7 @@ public class AdministratorNotesDao {
         } catch (HibernateException e) {
             e.printStackTrace();
             if (tx!=null) tx.rollback();
+            note = null;
         } finally {
             session.close();
         }
@@ -111,16 +105,18 @@ public class AdministratorNotesDao {
      */
     public boolean deleteAdministratorNoteRecord(AdministratorNotes note) {
         Transaction tx = null;
-        String neuId = note.getStudent().getNeuId();
+        String neuId = note.getNeuId();
+        boolean deleted = false;
+
         try {
             session = factory.openSession();
             tx = session.beginTransaction();
             org.hibernate.query.Query query = session.createQuery("DELETE FROM AdministratorNotes " +
-                    "WHERE student.neuId = :neuId ");
+                    "WHERE neuId = :neuId ");
             query.setParameter("neuId", neuId);
             query.executeUpdate();
             tx.commit();
-            return true;
+            deleted = true;
         } catch (HibernateException e) {
             if (tx!=null) tx.rollback();
             e.printStackTrace();
@@ -128,7 +124,7 @@ public class AdministratorNotesDao {
             session.close();
         }
 
-        return false;
+        return deleted;
     }
 
     /**
@@ -137,13 +133,14 @@ public class AdministratorNotesDao {
      * @return true if exists. Return false if not.
      */
     public boolean ifNuidExists(String neuId) {
+        boolean find = false;
         try{
             session = factory.openSession();
-            org.hibernate.query.Query query = session.createQuery("FROM AdministratorNotes WHERE student.neuId = :neuId");
+            org.hibernate.query.Query query = session.createQuery("FROM AdministratorNotes WHERE neuId = :neuId");
             query.setParameter("neuId", neuId);
             List list = query.list();
             if(list.size() != 0){
-                return true;
+                find = true;
             }
         }catch (HibernateException e) {
             e.printStackTrace();
@@ -151,6 +148,6 @@ public class AdministratorNotesDao {
             session.close();
         }
 
-        return false;
+        return find;
     }
 }

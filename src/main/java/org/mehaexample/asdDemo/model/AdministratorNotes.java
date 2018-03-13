@@ -2,14 +2,14 @@ package org.mehaexample.asdDemo.model;
 
 public class AdministratorNotes {
     private int administratorNoteId;
-    private Students student;
-    private Administrators admin;
+    private String neuId;
+    private String administratorNeuId;
     private String title;
     private String desc;
 
-    public AdministratorNotes(Students student, Administrators admin, String title, String desc) {
-        this.student = student;
-        this.admin = admin;
+    public AdministratorNotes(String neuId, String administratorNeuId, String title, String desc) {
+        this.neuId = neuId;
+        this.administratorNeuId = administratorNeuId;
         this.title = title;
         this.desc = desc;
     }
@@ -26,20 +26,20 @@ public class AdministratorNotes {
         this.administratorNoteId = administratorNoteId;
     }
 
-    public Students getStudent() {
-        return student;
+    public String getNeuId() {
+        return neuId;
     }
 
-    public void setStudent(Students student) {
-        this.student = student;
+    public void setNeuId(String neuId) {
+        this.neuId = neuId;
     }
 
-    public Administrators getAdmin() {
-        return admin;
+    public String getAdministratorNeuId() {
+        return administratorNeuId;
     }
 
-    public void setAdmin(Administrators admin) {
-        this.admin = admin;
+    public void setAdministratorNeuId(String administratorId) {
+        this.administratorNeuId = administratorId;
     }
 
     public String getTitle() {

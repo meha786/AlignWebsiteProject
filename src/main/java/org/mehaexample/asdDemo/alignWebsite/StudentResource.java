@@ -13,15 +13,13 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.mehaexample.asdDemo.dao.PasswordDao;
 import org.mehaexample.asdDemo.dao.StudentsDao;
-import org.mehaexample.asdDemo.model.PasswordChangeModel;
 import org.mehaexample.asdDemo.model.Students;
 
 @Path("studentresource")
 public class StudentResource {
 	StudentsDao studentDao = new StudentsDao();
-	PasswordDao passwordDao = new PasswordDao();
+//	PasswordDao passwordDao = new PasswordDao();
 
 	/**
 	 * Method handling HTTP GET requests. The returned object will be sent
@@ -57,22 +55,6 @@ public class StudentResource {
 	public Students getStudentRecord(@PathParam("nuid") String nuid){
 		System.out.println("getting student for nuid = " + nuid);
 		Students studentRecord = studentDao.getStudentRecord(nuid);
-		return studentRecord;
-	}
-	
-	/**
-	 * Fetch the student details by nuid valuing his/her privacy settings
-	 * 
-	 * @param nuid
-	 * @return a student object
-	 * http://localhost:8080/alignWebsite/webapi/studentresource/privacies/id/211234549
-	 */
-	@GET
-	@Path("/privacies/id/{nuid}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Students getStudentRecordPrivately(@PathParam("nuid") String nuid){
-		System.out.println("getting student for nuid = " + nuid);
-		Students studentRecord = studentDao.getStudentRecordPrivately(nuid);
 		return studentRecord;
 	}
 	
@@ -117,19 +99,19 @@ public class StudentResource {
 
 /**------------------------------------------------------------------------------------------------*/
 
-	//  webapi/student-facing/students/change-password/{NUID}
-	@POST
-	@Path("/{changePassword}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public boolean chnagePassword(PasswordChangeModel passwordModel){
-		boolean exists = studentDao.ifEmailExists(passwordModel.getEmail());
-		
-		if(passwordDao.getOldPassword(passwordModel.getEmail()).equals(passwordModel.getOldPwd())) {
-			passwordDao.updatePassword(passwordModel);
-		}
-		
-		return true;
-	}
+//	//  webapi/student-facing/students/change-password/{NUID}
+//	@POST
+//	@Path("/{changePassword}")
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	public boolean chnagePassword(PasswordChangeModel passwordModel){
+//		boolean exists = studentDao.ifEmailExists(passwordModel.getEmail());
+//		
+////		if(passwordDao.getOldPassword(passwordModel.getEmail()).equals(passwordModel.getOldPwd())) {
+////			passwordDao.updatePassword(passwordModel);
+////		}
+//		
+//		return true;
+//	}
 	
 	// webapi/student-facing/students/reset-password/{NUID}
 	@POST

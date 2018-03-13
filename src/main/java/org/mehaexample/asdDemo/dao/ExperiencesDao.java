@@ -1,6 +1,5 @@
 package org.mehaexample.asdDemo.dao;
 
-
 import java.util.List;
 
 import org.hibernate.HibernateException;

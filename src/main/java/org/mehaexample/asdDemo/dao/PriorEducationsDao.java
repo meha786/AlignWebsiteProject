@@ -5,6 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.mehaexample.asdDemo.enums.Campus;
 import org.mehaexample.asdDemo.model.PriorEducations;
 
 import java.util.List;
@@ -13,19 +14,12 @@ public class PriorEducationsDao {
   private static SessionFactory factory;
   private static Session session;
 
-  private StudentsDao studentsDao;
-  private MajorsDao majorsDao;
-  private InstitutionsDao institutionsDao;
-
   /**
    * Default constructor.
    * it will check the Hibernate.cfg.xml file and load it
    * next it goes to all table files in the hibernate file and loads them.
    */
   public PriorEducationsDao() {
-    studentsDao = new StudentsDao();
-    majorsDao = new MajorsDao();
-    institutionsDao = new InstitutionsDao();
     try {
       factory = new Configuration().configure().buildSessionFactory();
     } catch (Throwable ex) {
@@ -51,7 +45,6 @@ public class PriorEducationsDao {
       return null;
     }
     PriorEducations priorEducations = (PriorEducations) listOfPriorEducation.get(0);
-    populateForeignKey(priorEducations);
     session.close();
     return priorEducations;
   }
@@ -65,14 +58,11 @@ public class PriorEducationsDao {
   public List<PriorEducations> getPriorEducationsByNeuId(String neuId) {
     session = factory.openSession();
     org.hibernate.query.Query query = session.createQuery(
-            "FROM PriorEducations WHERE student.neuId = :neuId");
+            "FROM PriorEducations WHERE neuId = :neuId");
     query.setParameter("neuId", neuId);
     List<PriorEducations> listOfPriorEducation = query.list();
     if (listOfPriorEducation.isEmpty()) {
       return null;
-    }
-    for (PriorEducations priorEducation : listOfPriorEducation) {
-      populateForeignKey(priorEducation);
     }
     session.close();
     return listOfPriorEducation;
@@ -84,8 +74,9 @@ public class PriorEducationsDao {
    * object inside the prior education object to be not null.
    *
    * @param priorEducation the prior education object to be created; not null.
+   * @return newly created priorEducation.
    */
-  public void createPriorEducation(PriorEducations priorEducation) {
+  public PriorEducations createPriorEducation(PriorEducations priorEducation) {
     session = factory.openSession();
     Transaction tx = null;
     try {
@@ -97,9 +88,12 @@ public class PriorEducationsDao {
     } catch (HibernateException e) {
       System.out.println("HibernateException: " + e);
       if (tx != null) tx.rollback();
+      priorEducation = null;
     } finally {
       session.close();
     }
+
+    return priorEducation;
   }
 
   /**
@@ -109,6 +103,8 @@ public class PriorEducationsDao {
    * @return true if prior education is deleted, false otherwise.
    */
   public boolean deletePriorEducationById(int priorEducationId) {
+    boolean deleted = false;
+
     PriorEducations priorEducation = getPriorEducationById(priorEducationId);
     if (priorEducation != null) {
       session = factory.openSession();
@@ -118,16 +114,16 @@ public class PriorEducationsDao {
         System.out.println("Deleting prior education with id = " + priorEducation.getPriorEducationId());
         session.delete(priorEducation);
         tx.commit();
+        deleted = true;
       } catch (HibernateException e) {
         if (tx != null) tx.rollback();
         e.printStackTrace();
-        return false;
       } finally {
         session.close();
       }
-      return true;
     }
-    return false;
+
+    return deleted;
   }
 
   /**
@@ -137,6 +133,8 @@ public class PriorEducationsDao {
    * @return true if the prior education is updated, false otherwise.
    */
   public boolean updatePriorEducation(PriorEducations priorEducation) {
+    boolean updated = false;
+
     if (getPriorEducationById(priorEducation.getPriorEducationId()) != null) {
       session = factory.openSession();
       Transaction tx = null;
@@ -145,21 +143,36 @@ public class PriorEducationsDao {
         System.out.println("updating prior education in Prior Educations table...");
         session.saveOrUpdate(priorEducation);
         tx.commit();
+        updated = true;
       } catch (HibernateException e) {
         System.out.println("HibernateException: " + e);
         if (tx != null) tx.rollback();
-        return false;
       } finally {
         session.close();
       }
-      return true;
     }
-    return false;
+    return updated;
   }
 
-  private void populateForeignKey(PriorEducations priorEducations) {
-    priorEducations.setStudent(studentsDao.getStudentRecord(priorEducations.getStudent().getNeuId()));
-    priorEducations.setInstitution(institutionsDao.getInstitutionById(priorEducations.getInstitution().getInstitutionId()));
-    priorEducations.setMajor(majorsDao.getMajorById(priorEducations.getMajor().getMajorId()));
+  public List<String> getTopTenBachelors(Campus campus) {
+    StringBuilder hql = new StringBuilder("SELECT pe.majorName AS MajorName " +
+            "FROM Students s INNER JOIN PriorEducations pe " +
+            "ON s.neuId = pe.neuId " +
+            "WHERE pe.degreeCandidacy = 'BACHELORS' ");
+    if (campus != null) {
+      hql.append("AND s.campus = :campus ");
+    }
+    hql.append("GROUP BY MajorName ");
+    hql.append("ORDER BY Count(*) DESC ");
+    session = factory.openSession();
+    org.hibernate.query.Query query = session.createQuery(
+            hql.toString());
+    query.setMaxResults(10);
+    if (campus != null) {
+      query.setParameter("campus", campus);
+    }
+    List<String> listOfBachelorDegrees = query.list();
+    session.close();
+    return listOfBachelorDegrees;
   }
 }

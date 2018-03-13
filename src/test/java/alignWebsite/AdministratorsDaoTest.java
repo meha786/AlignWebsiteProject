@@ -2,7 +2,6 @@ package alignWebsite;
 
 import java.util.List;
 
-
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -84,8 +83,9 @@ public class AdministratorsDaoTest {
 		Administrators newAdministrator = new Administrators("123789456", "john.stewart123@gmail.com", 
 				"John", "Main", "Stewart");
 
-		administrator = administratorsDao.updateAdministratorRecord(newAdministrator);
-		Assert.assertTrue(administrator.getEmail().equals("john.stewart123@gmail.com"));
+		administratorsDao.updateAdministratorRecord(newAdministrator);
+		Assert.assertTrue(administratorsDao.getAdministratorRecord("123789456")
+				.getEmail().equals("john.stewart123@gmail.com"));
 
 		administratorsDao.deleteAdministrator("123789456");
 	}
@@ -99,4 +99,3 @@ public class AdministratorsDaoTest {
 		Assert.assertFalse(result);
 	}
 }
-

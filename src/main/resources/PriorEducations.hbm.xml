@@ -6,12 +6,16 @@
 <hibernate-mapping>
     <class name = "org.mehaexample.asdDemo.model.PriorEducations" table="PriorEducations">
 
-        <meta attribute = "class-description">
+               <meta attribute = "class-description">
             This class contains the Prior Education detail.
         </meta>
         <id name = "priorEducationId" column="PriorEducationId" type="int">
             <generator class="native"/>
         </id>
+
+        <property name = "institutionName" column="InstitutionName" type="string" />
+
+        <property name = "majorName" column="MajorName" type="string" />
 
         <property name = "graduationDate" column="GraduationDate" type="date" />
 
@@ -25,13 +29,6 @@
             </type>
         </property>
 
-        <many-to-one name="student" class="org.mehaexample.asdDemo.model.Students"
-                     column="NeuId" />
-
-        <many-to-one name="institution" class="org.mehaexample.asdDemo.model.Institutions"
-                     column="InstitutionId" />
-
-        <many-to-one name="major" class="org.mehaexample.asdDemo.model.Majors"
-                     column="MajorId" />
+        <property name = "neuId" column="NeuId" type="string" />
     </class>
 </hibernate-mapping>

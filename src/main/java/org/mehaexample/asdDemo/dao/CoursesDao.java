@@ -2,14 +2,12 @@ package org.mehaexample.asdDemo.dao;
 
 import java.util.List;
 
-import org.mehaexample.asdDemo.model.Companies;
-import org.mehaexample.asdDemo.model.Courses;
-import org.mehaexample.asdDemo.model.Students;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.mehaexample.asdDemo.model.Courses;
 
 public class CoursesDao {
 
@@ -73,7 +71,7 @@ public class CoursesDao {
     session = factory.openSession();
     org.hibernate.query.Query query = session.createQuery("FROM Courses WHERE courseName = :courseName");
     query.setParameter("courseName", courseName);
-    List listOfCourses = query.list();
+    List<Courses> listOfCourses = query.list();
     session.close();
 
     return listOfCourses;
@@ -99,7 +97,7 @@ public class CoursesDao {
     } catch (HibernateException e) {
       System.out.println("HibernateException: " + e);
       if (tx != null) tx.rollback();
-      return null;
+      course = null;
     } finally {
       session.close();
     }
@@ -115,8 +113,10 @@ public class CoursesDao {
    * @return true if course is deleted, false otherwise.
    */
   public boolean deleteCourseById(String courseId) {
+    boolean deleted = false;
+
     if (courseId == null || courseId.isEmpty()) {
-      return false;
+      return deleted;
     }
 
     Courses course = getCourseById(courseId);
@@ -128,16 +128,16 @@ public class CoursesDao {
         System.out.println("Deleting course with name = " + course.getCourseName());
         session.delete(course);
         tx.commit();
+        deleted = true;
       } catch (HibernateException e) {
         if (tx != null) tx.rollback();
         e.printStackTrace();
-        return false;
       } finally {
         session.close();
       }
-      return true;
     }
-    return false;
+
+    return deleted;
   }
 
   /**
@@ -147,6 +147,8 @@ public class CoursesDao {
    * @return true if course is updated, false otherwise.
    */
   public boolean updateCourse(Courses course) {
+    boolean updated = false;
+
     if (getCourseById(course.getCourseId()) != null) {
       session = factory.openSession();
       Transaction tx = null;
@@ -155,16 +157,16 @@ public class CoursesDao {
         tx = session.beginTransaction();
         session.saveOrUpdate(course);
         tx.commit();
-        return true;
+        updated = true;
       } catch (HibernateException e) {
-        System.out.println("HibernateException: " + e);
         if (tx != null) tx.rollback();
-        return false;
+        e.printStackTrace();
       } finally {
         session.close();
       }
     }
-    return false;
+
+    return updated;
   }
 
 }
