@@ -1,4 +1,4 @@
-package org.mehaexample.asdDemo.dao;
+package org.mehaexample.asdDemo.scripts;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
