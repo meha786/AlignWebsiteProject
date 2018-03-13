@@ -1,20 +1,19 @@
 package org.mehaexample.asdDemo.dao;
 
-import org.mehaexample.asdDemo.model.WorkExperiences;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.mehaexample.asdDemo.enums.Campus;
+import org.mehaexample.asdDemo.model.WorkExperiences;
 
 import java.util.List;
+import java.util.Set;
 
 public class WorkExperiencesDao {
   private static SessionFactory factory;
   private static Session session;
-
-  private StudentsDao studentsDao;
-  private CompaniesDao companiesDao;
 
   /**
    * Default constructor.
@@ -22,8 +21,6 @@ public class WorkExperiencesDao {
    * next it goes to all table files in the hibernate file and loads them.
    */
   public WorkExperiencesDao() {
-    studentsDao = new StudentsDao();
-    companiesDao = new CompaniesDao();
     try {
       factory = new Configuration().configure().buildSessionFactory();
     } catch (Throwable ex) {
@@ -37,42 +34,33 @@ public class WorkExperiencesDao {
    * This method searches the work experience from the private database.
    *
    * @param workExperienceId work experience Id in private database.
-   * @return Work Experience if found, null if not found.
+   * @return Work Experience if found.
    */
   public WorkExperiences getWorkExperienceById(int workExperienceId) {
     session = factory.openSession();
     org.hibernate.query.Query query = session.createQuery(
             "FROM WorkExperiences WHERE workExperienceId = :workExperienceId");
     query.setParameter("workExperienceId", workExperienceId);
-    List listOfWorkExperience = query.list();
-    if (listOfWorkExperience.isEmpty()) {
+    List<WorkExperiences> listOfWorkExperience = query.list();
+    if (listOfWorkExperience.size() == 0)
       return null;
-    }
-    WorkExperiences workExperiences = (WorkExperiences) listOfWorkExperience.get(0);
-    populateForeignKey(workExperiences);
+    WorkExperiences workExperiences = listOfWorkExperience.get(0);
     session.close();
     return workExperiences;
   }
 
-  
   /**
    * Find work experience records of a student in private DB.
    *
    * @param neuId the neu Id of a student; not null.
-   * @return List of Work Experiences if neu Id found, null if Neu Id not found.
+   * @return List of Work Experiences.
    */
   public List<WorkExperiences> getWorkExperiencesByNeuId(String neuId) {
     session = factory.openSession();
     org.hibernate.query.Query query = session.createQuery(
-            "FROM WorkExperiences WHERE student.neuId = :neuId");
+            "FROM WorkExperiences WHERE neuId = :neuId");
     query.setParameter("neuId", neuId);
     List<WorkExperiences> listOfWorkExperience = query.list();
-    if (listOfWorkExperience.isEmpty()) {
-      return null;
-    }
-    for (WorkExperiences workExperience : listOfWorkExperience) {
-      populateForeignKey(workExperience);
-    }
     session.close();
     return listOfWorkExperience;
   }
@@ -83,8 +71,9 @@ public class WorkExperiencesDao {
    * object inside the work experience object to be not null.
    *
    * @param workExperience the work experience object to be created; not null.
+   * @return newly created WorkExperience if success. Otherwise, return null;
    */
-  public void createWorkExperience(WorkExperiences workExperience) {
+  public WorkExperiences createWorkExperience(WorkExperiences workExperience) {
     session = factory.openSession();
     Transaction tx = null;
     try {
@@ -96,9 +85,12 @@ public class WorkExperiencesDao {
     } catch (HibernateException e) {
       System.out.println("HibernateException: " + e);
       if (tx != null) tx.rollback();
+      workExperience = null;
     } finally {
       session.close();
     }
+
+    return workExperience;
   }
 
   /**
@@ -108,6 +100,7 @@ public class WorkExperiencesDao {
    * @return true if work experience is deleted, false otherwise.
    */
   public boolean deleteWorkExperienceById(int workExperienceId) {
+    boolean deleted = false;
     WorkExperiences workExperiences = getWorkExperienceById(workExperienceId);
     if (workExperiences != null) {
       session = factory.openSession();
@@ -117,47 +110,158 @@ public class WorkExperiencesDao {
         System.out.println("Deleting work experience with id = " + workExperiences.getWorkExperienceId());
         session.delete(workExperiences);
         tx.commit();
+        deleted = true;
       } catch (HibernateException e) {
         if (tx != null) tx.rollback();
         e.printStackTrace();
-        return false;
       } finally {
         session.close();
       }
-      return true;
     }
-    return false;
+
+    return deleted;
+  }
+
+  public boolean deleteWorkExperienceByNeuId(String neuId) {
+    Transaction tx = null;
+    boolean deleted = false;
+
+    try {
+      session = factory.openSession();
+      tx = session.beginTransaction();
+      org.hibernate.query.Query query = session.createQuery("DELETE FROM WorkExperiences " +
+              "WHERE neuId = :neuId ");
+      query.setParameter("neuId", neuId);
+      query.executeUpdate();
+      tx.commit();
+      deleted = true;
+    } catch (HibernateException e) {
+      if (tx!=null) tx.rollback();
+      e.printStackTrace();
+    } finally {
+      session.close();
+    }
+
+    return deleted;
   }
 
   /**
    * Update a work experience in the private DB.
    *
-   * @param workExperiences work experience object; not null.
+   * @param workExperience work experience object; not null.
    * @return true if the work experience is updated, false otherwise.
    */
-  public boolean updateWorkExperience(WorkExperiences workExperiences) {
-    if (getWorkExperienceById(workExperiences.getWorkExperienceId()) != null) {
+  public boolean updateWorkExperience(WorkExperiences workExperience) {
+    boolean updated = false;
+
+    if (getWorkExperienceById(workExperience.getWorkExperienceId()) != null) {
       session = factory.openSession();
       Transaction tx = null;
       try {
         tx = session.beginTransaction();
         System.out.println("updating work experience in Work Experiences table...");
-        session.saveOrUpdate(workExperiences);
+        session.saveOrUpdate(workExperience);
         tx.commit();
+        updated = true;
       } catch (HibernateException e) {
         System.out.println("HibernateException: " + e);
         if (tx != null) tx.rollback();
-        return false;
       } finally {
         session.close();
       }
-      return true;
     }
-    return false;
+
+    return updated;
   }
 
-  private void populateForeignKey(WorkExperiences workExperiences) {
-    workExperiences.setStudent(studentsDao.getStudentRecord(workExperiences.getStudent().getNeuId()));
-    workExperiences.setCompany(companiesDao.getCompanyById(workExperiences.getCompany().getCompanyId()));
+  public List<String> getTopTenEmployers(Campus campus, Integer year) {
+    StringBuilder hql = new StringBuilder("SELECT we.companyName AS CompanyName " +
+            "FROM Students s INNER JOIN WorkExperiences we " +
+            "ON s.neuId = we.neuId ");
+    boolean first = true;
+    if (campus != null) {
+      hql.append("WHERE s.campus = :campus ");
+      first = false;
+    }
+    if (year != null) {
+      if (first) {
+        hql.append("WHERE ");
+      } else {
+        hql.append("AND ");
+      }
+      hql.append("year(we.startDate) = :year ");
+    }
+    hql.append("GROUP BY s.neuId ");
+    hql.append("ORDER BY Count(DISTINCT s.neuId) DESC ");
+    session = factory.openSession();
+    org.hibernate.query.Query query = session.createQuery(
+            hql.toString());
+    query.setMaxResults(10);
+    if (campus != null) {
+      query.setParameter("campus", campus);
+    }
+    if (year != null) {
+      query.setParameter("year", year);
+    }
+    List<String> listOfWorkExperience = query.list();
+    session.close();
+    return listOfWorkExperience;
+  }
+
+  public int getTotalStudentsWithWorkExp(Campus campus, Integer year) {
+    StringBuilder hql = new StringBuilder("SELECT Count(DISTINCT s.neuId) AS Total " +
+            "FROM Students s INNER JOIN WorkExperiences we " +
+            "ON s.neuId = we.neuId ");
+    boolean first = true;
+    if (campus != null) {
+      hql.append("WHERE s.campus = :campus ");
+      first = false;
+    }
+    if (year != null) {
+      if (first) {
+        hql.append("WHERE ");
+      } else {
+        hql.append("AND ");
+      }
+      hql.append("year(we.startDate) = :year ");
+    }
+    session = factory.openSession();
+    org.hibernate.query.Query query = session.createQuery(
+            hql.toString());
+    if (campus != null) {
+      query.setParameter("campus", campus);
+    }
+    if (year != null) {
+      query.setParameter("year", year);
+    }
+    List<Long> listOfWorkExperience = query.list();
+    session.close();
+    return listOfWorkExperience.get(0).intValue();
+  }
+
+  public int getTotalStudentsWorkingInACompany(Campus campus, Integer year, String companyName) {
+    StringBuilder hql = new StringBuilder("SELECT Count(DISTINCT s.neuId) AS Total " +
+            "FROM Students s INNER JOIN WorkExperiences we " +
+            "ON s.neuId = we.neuId " +
+            "WHERE we.companyName = :companyName ");
+    if (campus != null) {
+      hql.append("AND s.campus = :campus ");
+    }
+    if (year != null) {
+      hql.append("AND year(we.startDate) = :year ");
+    }
+    session = factory.openSession();
+    org.hibernate.query.Query query = session.createQuery(
+            hql.toString());
+    query.setParameter("companyName", companyName);
+    if (campus != null) {
+      query.setParameter("campus", campus);
+    }
+    if (year != null) {
+      query.setParameter("year", year);
+    }
+    List<Long> listOfWorkExperience = query.list();
+    session.close();
+    return listOfWorkExperience.get(0).intValue();
   }
 }

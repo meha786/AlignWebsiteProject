@@ -2,31 +2,26 @@ package org.mehaexample.asdDemo.dao;
 
 import java.util.List;
 
-import org.mehaexample.asdDemo.model.Electives;
-import org.mehaexample.asdDemo.model.WorkExperiences;
-import org.mehaexample.asdDemo.model.Students;
-import org.mehaexample.asdDemo.model.Terms;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.mehaexample.asdDemo.enums.Campus;
+import org.mehaexample.asdDemo.model.Electives;
 
 public class ElectivesDao {
   private static SessionFactory factory;
   private static Session session;
 
-  private CoursesDao coursesDao;
-  private StudentsDao studentsDao;
-  private TermsDao termsDao;
+  private StudentsDao studentDao;
 
   /**
    * Default Constructor.
    */
   public ElectivesDao() {
-    coursesDao = new CoursesDao();
-    studentsDao = new StudentsDao();
-    termsDao = new TermsDao();
+//    coursesDao = new CoursesDao();
+    studentDao = new StudentsDao();
     try {
       // it will check the hibernate.cfg.xml file and load it
       // next it goes to all table files in the hibernate file and loads them
@@ -38,28 +33,14 @@ public class ElectivesDao {
     }
   }
 
-  public List<Electives> getAllElectives() {
-	    session = factory.openSession();
-	    org.hibernate.query.Query query = session.createQuery("from Electives");
-	    List<Electives> list = query.list();
-	    for (Electives elective : list) {
-	      populateForeignKey(elective);
-	    }
-	    session.close();
-	    return list;
-	  }
-  
-  public List<Electives> getAllElectivesbyNuid(String nuid) {
-	    session = factory.openSession();
-	    org.hibernate.query.Query query = session.createQuery("from Electives where student.neuId = :nuid");
-	    query.setParameter("nuid", nuid);
-	    List<Electives> list = query.list();
-	    for (Electives elective : list) {
-	      populateForeignKey(elective);
-	    }
-	    session.close();
-	    return list;
-	  }
+  public List<Electives> getElectivesByNeuId(String neuId) {
+    session = factory.openSession();
+    org.hibernate.query.Query query = session.createQuery("from Electives where neuId = :neuId");
+    query.setParameter("neuId", neuId);
+    List<Electives> list = query.list();
+    session.close();
+    return list;
+  }
 
   public Electives getElectiveById(int electiveId) {
     session = factory.openSession();
@@ -71,7 +52,6 @@ public class ElectivesDao {
       return null;
     }
     Electives elective = list.get(0);
-    populateForeignKey(elective);
     return elective;
   }
 
@@ -87,10 +67,9 @@ public class ElectivesDao {
     }
 
     Transaction tx = null;
-    StudentsDao studentDao = new StudentsDao();
     session = factory.openSession();
 
-    if (studentDao.ifNuidExists(elective.getStudent().getNeuId())) {
+    if (studentDao.ifNuidExists(elective.getNeuId())) {
       try {
         tx = session.beginTransaction();
         session.save(elective);
@@ -106,7 +85,6 @@ public class ElectivesDao {
       System.out.println("The student with a given nuid doesn't exists");
       return null;
     }
-    populateForeignKey(elective);
     return elective;
   }
 
@@ -149,9 +127,60 @@ public class ElectivesDao {
     return true;
   }
 
-  private void populateForeignKey(Electives electives) {
-    electives.setStudent(studentsDao.getStudentRecord(electives.getStudent().getNeuId()));
-    electives.setTerms(termsDao.getTermById(electives.getTerms().getTermId()));
-    electives.setCourse(coursesDao.getCourseById(electives.getCourse().getCourseId()));
+  public boolean deleteElectivesByNeuId(String neuId) {
+    Transaction tx = null;
+    boolean deleted = false;
+
+    try {
+      session = factory.openSession();
+      tx = session.beginTransaction();
+      org.hibernate.query.Query query = session.createQuery("DELETE FROM Electives " +
+              "WHERE neuId = :neuId ");
+      query.setParameter("neuId", neuId);
+      query.executeUpdate();
+      tx.commit();
+      deleted = true;
+    } catch (HibernateException e) {
+      if (tx!=null) tx.rollback();
+      e.printStackTrace();
+    } finally {
+      session.close();
+    }
+
+    return deleted;
+  }
+
+  public List<String> getTopTenElectives(Campus campus, Integer year) {
+    StringBuilder hql = new StringBuilder("SELECT e.courseId AS CourseId " +
+            "FROM Students s INNER JOIN Electives e " +
+            "ON s.neuId = e.neuId ");
+    boolean first = true;
+    if (campus != null) {
+      hql.append("WHERE s.campus = :campus ");
+      first = false;
+    }
+    if (year != null) {
+      if (first) {
+        hql.append("WHERE ");
+      } else {
+        hql.append("AND ");
+      }
+      hql.append("e.courseYear = :year ");
+    }
+    hql.append("GROUP BY CourseId ");
+    hql.append("ORDER BY Count(*) DESC ");
+    session = factory.openSession();
+    org.hibernate.query.Query query = session.createQuery(
+            hql.toString());
+    query.setMaxResults(10);
+    if (campus != null) {
+      query.setParameter("campus", campus);
+    }
+    if (year != null) {
+      query.setParameter("year", year);
+    }
+    List<String> listOfElectives = query.list();
+    session.close();
+    return listOfElectives;
   }
 }

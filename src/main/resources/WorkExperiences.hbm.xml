@@ -4,7 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name = "org.alignprivate.asd.model.WorkExperiences" table="WorkExperiences">
+    <class name = "org.mehaexample.asdDemo.model.WorkExperiences" table="WorkExperiences">
 
         <meta attribute = "class-description">
             This class contains the Work Experience detail.
@@ -12,6 +12,10 @@
         <id name = "workExperienceId" column="WorkExperienceId" type="int">
             <generator class="native"/>
         </id>
+
+        <property name = "neuId" column="NeuId" type="string" />
+
+        <property name = "companyName" column="CompanyName" type="string" />
 
         <property name = "startDate" column="StartDate" type="date" />
 
@@ -23,10 +27,7 @@
 
         <property name = "description" column="Description" type="string" />
 
-        <many-to-one name="student" class="org.alignprivate.asd.model.Students"
-                     column="NeuId" />
-
-        <many-to-one name="company" class="org.alignprivate.asd.model.Companies"
-                     column="CompanyId" />
+        <!--<many-to-one name="student" class="org.alignprivate.asd.model.Students"-->
+                     <!--column="NeuId" />-->
     </class>
 </hibernate-mapping>

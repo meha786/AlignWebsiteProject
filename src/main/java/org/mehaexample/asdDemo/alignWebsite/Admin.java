@@ -15,26 +15,27 @@ import javax.ws.rs.core.MediaType;
 import org.json.JSONObject;
 import org.mehaexample.asdDemo.dao.ElectivesDao;
 import org.mehaexample.asdDemo.dao.StudentsDao;
-import org.mehaexample.asdDemo.dao.TopTenBachelorsDegreeDao;
 import org.mehaexample.asdDemo.dao.WorkExperiencesDao;
 import org.mehaexample.asdDemo.enums.DegreeCandidacy;
 import org.mehaexample.asdDemo.enums.EnrollmentStatus;
 import org.mehaexample.asdDemo.model.Electives;
 import org.mehaexample.asdDemo.model.Students;
-import org.mehaexample.asdDemo.dao.TopFiveEmployersDao;
-import org.mehaexample.asdDemo.dao.TopFiveElectivesDao;
-import org.mehaexample.asdDemo.dao.TotalExperiencedStudentsDao;
-import org.mehaexample.asdDemo.dao.TotalFemaleStudentsDao;
-import org.mehaexample.asdDemo.dao.TotalMaleStudentsDao;
-import org.mehaexample.asdDemo.dao.TotalStudentsInAmazonDao;
-import org.mehaexample.asdDemo.dao.TotalStudentsInBostonDao;
-import org.mehaexample.asdDemo.dao.TotalStudentsInCharlotteDao;
-import org.mehaexample.asdDemo.dao.TotalStudentsInFacebookDao;
-import org.mehaexample.asdDemo.dao.TotalStudentsInGoogleDao;
-import org.mehaexample.asdDemo.dao.TotalStudentsInMicrosoftDao;
-import org.mehaexample.asdDemo.dao.TotalStudentsInSeattleDao;
-import org.mehaexample.asdDemo.dao.TotalStudentsInSiliconValleyDao;
-import org.mehaexample.asdDemo.dao.TotalStudentsWithScholarshipDao;
+import org.mehaexample.asdDemo.scripts.TopFiveElectivesDao;
+import org.mehaexample.asdDemo.scripts.TopFiveEmployersDao;
+import org.mehaexample.asdDemo.scripts.TopTenBachelorsDegreeDao;
+import org.mehaexample.asdDemo.scripts.TotalExperiencedStudentsDao;
+import org.mehaexample.asdDemo.scripts.TotalFemaleStudentsDao;
+import org.mehaexample.asdDemo.scripts.TotalMaleStudentsDao;
+import org.mehaexample.asdDemo.scripts.TotalStudentsInAmazonDao;
+import org.mehaexample.asdDemo.scripts.TotalStudentsInBostonDao;
+import org.mehaexample.asdDemo.scripts.TotalStudentsInCharlotteDao;
+import org.mehaexample.asdDemo.scripts.TotalStudentsInFacebookDao;
+import org.mehaexample.asdDemo.scripts.TotalStudentsInGoogleDao;
+import org.mehaexample.asdDemo.scripts.TotalStudentsInMicrosoftDao;
+import org.mehaexample.asdDemo.scripts.TotalStudentsInSeattleDao;
+import org.mehaexample.asdDemo.scripts.TotalStudentsInSiliconValleyDao;
+import org.mehaexample.asdDemo.scripts.TotalStudentsWithScholarshipDao;
+
 
 
 @Path("admin")
@@ -431,5 +432,4 @@ public class Admin{
 		final int gcd = gcd(a,b);
 		return String.valueOf(a/gcd) + " " + String.valueOf(b/gcd);
 	}
-	
 }
