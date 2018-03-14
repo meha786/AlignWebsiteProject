@@ -281,9 +281,9 @@ public class StudentsDaoTest {
       coursesDao.createCourse(newCourse2);
 
       Electives newElective1 = new Electives("1111111", "5800", Term.SPRING,
-              2018, false, 4, false);
+              2018);
       Electives newElective2 = new Electives("2222222", "5100", Term.SPRING,
-              2018, false, 4, false);
+              2018);
       electivesDao.addElective(newElective1);
       electivesDao.addElective(newElective2);
 

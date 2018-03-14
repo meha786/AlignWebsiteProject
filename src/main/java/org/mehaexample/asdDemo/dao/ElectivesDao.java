@@ -26,7 +26,7 @@ public class ElectivesDao {
       // it will check the hibernate.cfg.xml file and load it
       // next it goes to all table files in the hibernate file and loads them
       factory = new Configuration()
-              .configure("/hibernate_Admin.cfg.xml").buildSessionFactory();
+              .configure().buildSessionFactory();
     } catch (Throwable ex) {
       System.err.println("Failed to create sessionFactory object." + ex);
       throw new ExceptionInInitializerError(ex);

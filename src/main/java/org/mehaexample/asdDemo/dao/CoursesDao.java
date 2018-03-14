@@ -54,10 +54,10 @@ public class CoursesDao {
     org.hibernate.query.Query query = session.createQuery("FROM Courses WHERE courseId = :courseId");
     query.setParameter("courseId", courseId);
     List listOfCourses = query.list();
+    session.close();
     if (listOfCourses.isEmpty()) {
       return null;
     }
-    session.close();
     return (Courses) listOfCourses.get(0);
   }
 
@@ -87,6 +87,11 @@ public class CoursesDao {
     if (course == null) {
       return null;
     }
+
+    if (getCourseById(course.getCourseId()) != null) {
+      return course;
+    }
+
     session = factory.openSession();
     Transaction tx = null;
     System.out.println("saving " + course.getCourseName() + " in Courses table");

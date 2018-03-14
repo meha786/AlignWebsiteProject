@@ -34,11 +34,5 @@
 
 		<property name="courseYear" column="CourseYear" type="int" />
 
-		<property name="retake" column="Retake" type="boolean" />
-
-		<property name="plagiarism" column="Plagiarism" type="boolean" />
-
-		<property name="gpa" column="Gpa" type="float" />
-
 	</class>
 </hibernate-mapping>
