@@ -13,8 +13,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.mehaexample.asdDemo.dao.StudentsDao;
-import org.mehaexample.asdDemo.model.Students;
+import org.mehaexample.asdDemo.dao.alignprivate.StudentsDao;
+import org.mehaexample.asdDemo.model.alignprivate.Students;
 
 @Path("studentresource")
 public class StudentResource {

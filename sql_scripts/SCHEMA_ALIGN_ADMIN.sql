@@ -21,15 +21,7 @@ CREATE TABLE Electives (
     CONSTRAINT pk_Electives_ElectiveId
 		PRIMARY KEY (ElectiveId),
 	CONSTRAINT uq_Electives_Elective
-		UNIQUE (NeuId, CourseId, CourseTerm, CourseYear),
-	CONSTRAINT fk_Electives_NeuId
-		FOREIGN KEY (NeuId)
-		REFERENCES AlignPrivate.Students(NeuId)
-        ON UPDATE CASCADE ON DELETE CASCADE,
-	CONSTRAINT fk_Electives_CourseId
-		FOREIGN KEY (CourseId)
-		REFERENCES AlignPrivate.Courses(CourseId)
-        ON UPDATE CASCADE ON DELETE SET NULL
+		UNIQUE (NeuId, CourseId, CourseTerm, CourseYear)
 );
 
 CREATE TABLE Administrators (
@@ -63,10 +55,6 @@ CREATE TABLE AdministratorNotes (
     Description VARCHAR(255),
     CONSTRAINT pk_AdministratorNotes_AdministratorNoteId
 		PRIMARY KEY (AdministratorNoteId),
-	CONSTRAINT fk_AdministratorNotes_NeuId
-		FOREIGN KEY (NeuId)
-        REFERENCES AlignPrivate.Students(NeuId)
-        ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT fk_AdministratorNotes_AdministratorNeuId
 		FOREIGN KEY (AdministratorNeuId)
         REFERENCES Administrators(AdministratorNeuId)

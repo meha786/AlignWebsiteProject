@@ -8,12 +8,13 @@ DROP TABLE IF EXISTS StudentLogins;
 DROP TABLE IF EXISTS PriorEducations;
 DROP TABLE IF EXISTS WorkExperiences;
 DROP TABLE IF EXISTS Electives;
-DROP TABLE IF EXISTS Courses;
 DROP TABLE IF EXISTS Experiences;
 DROP TABLE IF EXISTS Students;
+DROP TABLE IF EXISTS Courses;
 
 CREATE TABLE Students (
 	NeuId VARCHAR(16) NOT NULL,
+    PublicId INT AUTO_INCREMENT,
     Email VARCHAR(255) NOT NULL,
     FirstName VARCHAR(25) NOT NULL,
     MiddleName VARCHAR(25),
@@ -37,6 +38,7 @@ CREATE TABLE Students (
     Visible BOOLEAN DEFAULT TRUE,
     CONSTRAINT pk_Students_NeuId
 		PRIMARY KEY (NeuId),
+	KEY PublicId (PublicId),
 	CONSTRAINT uq_Students_Email
 		UNIQUE (Email)
 );

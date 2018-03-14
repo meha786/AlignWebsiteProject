@@ -39,7 +39,7 @@ public class TopFiveEmployersDao {
   public List<String> getTopFiveEmployersFromPrivateDatabase() throws SQLException {
     String getTopFiveEmployersFromPrivateDatabase =
             "SELECT Companies.CompanyName AS EMPLOYER, COUNT(*) AS TOTAL " +
-                    "FROM WorkExperiences INNER JOIN Companies ON WorkExperiences.CompanyId = Companies.CompanyId " +
+                    "FROM WorkExperiencesPublic INNER JOIN Companies ON WorkExperiencesPublic.CompanyId = Companies.CompanyId " +
                     "GROUP BY EMPLOYER " +
                     "ORDER BY TOTAL DESC " +
                     "LIMIT 5;";

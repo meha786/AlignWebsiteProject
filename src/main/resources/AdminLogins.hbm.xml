@@ -4,7 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name="org.mehaexample.asdDemo.model.StudentLogins" table="StudentLogins">
+    <class name="org.mehaexample.asdDemo.model.alignadmin.AdminLogins" table="AdminLogins">
 
         <meta attribute="class-description">
             This class contains the Student Logins detail.
@@ -14,7 +14,7 @@
             <generator class="assigned"/>
         </id>
 
-        <property name="studentPassword" column="StudentPassword" type="string" />
+        <property name="adminPassword" column="AdminPassword" type="string" />
 
 
     </class>

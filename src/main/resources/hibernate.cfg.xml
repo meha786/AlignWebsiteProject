@@ -13,7 +13,7 @@
 		</property>
 
 		<property name="hibernate.connection.url">
-			jdbc:mariadb://localhost:3306/alignprivate
+			jdbc:mariadb://localhost:3307/alignprivate
 		</property>
 
 		<property name="hibernate.connection.username">

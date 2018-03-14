@@ -14,7 +14,7 @@ public class TotalStudentsInBostonDao {
   /**
    * Singleton Pattern.
    *
-   * @return Total Students In Boston Dao.
+   * @return Total StudentsPublic In Boston Dao.
    * @throws SQLException when connection to the DB has something wrong.
    */
   public static TotalStudentsInBostonDao getInstance() throws SQLException {
@@ -29,13 +29,13 @@ public class TotalStudentsInBostonDao {
    * This is a script that extract the information for total students
    * in Boston from the private database.
    *
-   * @return Total Students In Boston
+   * @return Total StudentsPublic In Boston
    * @throws SQLException when connection to database has something wrong.
    */
   public int getTotalStudentsInBostonFromPrivateDatabase() throws SQLException {
     String getTotalStudentsFromPrivateDatabase =
             "SELECT COUNT(*) AS TOTAL_BOSTON_STUDENTS " +
-                    "FROM Students " +
+                    "FROM StudentsPublic " +
                     "WHERE Campus = \"BOSTON\";";
     PrivateDatabaseEtlQuery privateDatabaseEtlQuery = new PrivateDatabaseEtlQuery();
     return privateDatabaseEtlQuery.getSingleValueQuery(
@@ -48,7 +48,7 @@ public class TotalStudentsInBostonDao {
    * This is a script that update the information for total students
    * in Boston in the public database.
    *
-   * @param totalStudents Total Students in Boston (extracted from the
+   * @param totalStudents Total StudentsPublic in Boston (extracted from the
    *                      private database); not null.
    * @throws SQLException when connection to the DB has something wrong.
    */
@@ -64,7 +64,7 @@ public class TotalStudentsInBostonDao {
    * This is a script that gets the information for total students
    * in Boston from the public database.
    *
-   * @return Total Students In Boston (From public database)
+   * @return Total StudentsPublic In Boston (From public database)
    * @throws SQLException when connection to the DB has something wrong.
    */
   public int getTotalStudentsInBostonFromPublicDatabase() throws SQLException {

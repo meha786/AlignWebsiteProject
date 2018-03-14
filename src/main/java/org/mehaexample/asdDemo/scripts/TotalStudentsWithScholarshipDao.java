@@ -14,7 +14,7 @@ public class TotalStudentsWithScholarshipDao {
     /**
      * Singleton Pattern.
      *
-     * @return Total Students With Scholarship Dao.
+     * @return Total StudentsPublic With Scholarship Dao.
      * @throws SQLException when connection to the DB has something wrong.
      */
     public static TotalStudentsWithScholarshipDao getInstance() throws SQLException {
@@ -29,13 +29,13 @@ public class TotalStudentsWithScholarshipDao {
      * This is a script that extract the information for total students
      * with scholarship from the private database.
      *
-     * @return Total Students With Scholarship
+     * @return Total StudentsPublic With Scholarship
      * @throws SQLException when connection to database has something wrong.
      */
     public int getTotalStudentsWithScholarshipFromPrivateDatabase() throws SQLException {
         String getTotalStudentsFromPrivateDatabase =
                 "SELECT COUNT(*) AS TOTAL_SCHOLARSHIP_STUDENTS " +
-                        "FROM Students " +
+                        "FROM StudentsPublic " +
                         "WHERE Scholarship = true;";
         PrivateDatabaseEtlQuery privateDatabaseEtlQuery = new PrivateDatabaseEtlQuery();
         return privateDatabaseEtlQuery.getSingleValueQuery(
@@ -48,7 +48,7 @@ public class TotalStudentsWithScholarshipDao {
      * This is a script that update the information for total students
      * with scholarship in the public database.
      *
-     * @param totalStudents Total Students with Scholarship (extracted from the
+     * @param totalStudents Total StudentsPublic with Scholarship (extracted from the
      *                      private database); not null.
      * @throws SQLException when connection to the DB has something wrong.
      */
@@ -64,7 +64,7 @@ public class TotalStudentsWithScholarshipDao {
      * This is a script that gets the information for total students
      * with scholarship from the public database.
      *
-     * @return Total Students With Scholarship (From public database)
+     * @return Total StudentsPublic With Scholarship (From public database)
      * @throws SQLException when connection to the DB has something wrong.
      */
     public int getTotalStudentsWithScholarshipFromPublicDatabase() throws SQLException {

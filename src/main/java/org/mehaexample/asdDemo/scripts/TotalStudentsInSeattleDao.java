@@ -14,7 +14,7 @@ public class TotalStudentsInSeattleDao {
     /**
      * Singleton Pattern.
      *
-     * @return Total Students In Seattle Dao.
+     * @return Total StudentsPublic In Seattle Dao.
      * @throws SQLException when connection to the DB has something wrong.
      */
     public static TotalStudentsInSeattleDao getInstance() throws SQLException {
@@ -29,13 +29,13 @@ public class TotalStudentsInSeattleDao {
      * This is a script that extract the information for total students
      * in Seattle from the private database.
      *
-     * @return Total Students In Seattle
+     * @return Total StudentsPublic In Seattle
      * @throws SQLException when connection to database has something wrong.
      */
     public int getTotalStudentsInSeattleFromPrivateDatabase() throws SQLException {
         String getTotalStudentsFromPrivateDatabase =
                 "SELECT COUNT(*) AS TOTAL_SEATTLE_STUDENTS " +
-                        "FROM Students " +
+                        "FROM StudentsPublic " +
                         "WHERE Campus = \"SEATTLE\";";
         PrivateDatabaseEtlQuery privateDatabaseEtlQuery = new PrivateDatabaseEtlQuery();
         return privateDatabaseEtlQuery.getSingleValueQuery(
@@ -48,7 +48,7 @@ public class TotalStudentsInSeattleDao {
      * This is a script that update the information for total students
      * in Seattle in the public database.
      *
-     * @param totalStudents Total Students in Seattle (extracted from the
+     * @param totalStudents Total StudentsPublic in Seattle (extracted from the
      *                      private database); not null.
      * @throws SQLException when connection to the DB has something wrong.
      */
@@ -64,7 +64,7 @@ public class TotalStudentsInSeattleDao {
      * This is a script that gets the information for total students
      * in Seattle from the public database.
      *
-     * @return Total Students In Seattle (From public database)
+     * @return Total StudentsPublic In Seattle (From public database)
      * @throws SQLException when connection to the DB has something wrong.
      */
     public int getTotalStudentsInSeattleFromPublicDatabase() throws SQLException {

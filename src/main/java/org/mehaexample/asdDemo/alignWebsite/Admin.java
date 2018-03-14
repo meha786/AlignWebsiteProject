@@ -13,13 +13,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.json.JSONObject;
-import org.mehaexample.asdDemo.dao.ElectivesDao;
-import org.mehaexample.asdDemo.dao.StudentsDao;
-import org.mehaexample.asdDemo.dao.WorkExperiencesDao;
+import org.mehaexample.asdDemo.dao.alignadmin.ElectivesAdminDao;
+import org.mehaexample.asdDemo.dao.alignprivate.StudentsDao;
+import org.mehaexample.asdDemo.dao.alignprivate.WorkExperiencesDao;
 import org.mehaexample.asdDemo.enums.DegreeCandidacy;
 import org.mehaexample.asdDemo.enums.EnrollmentStatus;
-import org.mehaexample.asdDemo.model.Electives;
-import org.mehaexample.asdDemo.model.Students;
+import org.mehaexample.asdDemo.model.alignprivate.Electives;
+import org.mehaexample.asdDemo.model.alignprivate.Students;
 import org.mehaexample.asdDemo.scripts.TopFiveElectivesDao;
 import org.mehaexample.asdDemo.scripts.TopFiveEmployersDao;
 import org.mehaexample.asdDemo.scripts.TopTenBachelorsDegreeDao;
@@ -43,7 +43,7 @@ public class Admin{
 	
 	// student details methods
 	StudentsDao studentDao = new StudentsDao();
-	ElectivesDao electiveDao = new ElectivesDao();
+	ElectivesAdminDao electiveDao = new ElectivesAdminDao();
 	TopTenBachelorsDegreeDao topTenBachelorsDegreeDao = new TopTenBachelorsDegreeDao();
 	TopFiveEmployersDao topFiveEmployersDao = new TopFiveEmployersDao();
 	TopFiveElectivesDao topFiveElectivesDao = new TopFiveElectivesDao();

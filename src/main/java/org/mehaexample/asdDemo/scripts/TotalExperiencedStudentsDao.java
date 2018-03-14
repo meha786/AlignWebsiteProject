@@ -14,7 +14,7 @@ public class TotalExperiencedStudentsDao {
     /**
      * Singleton Pattern.
      *
-     * @return Total Students With Work Experience Dao.
+     * @return Total StudentsPublic With Work Experience Dao.
      * @throws SQLException when connection to the DB has something wrong.
      */
     public static TotalExperiencedStudentsDao getInstance() throws SQLException {
@@ -35,8 +35,8 @@ public class TotalExperiencedStudentsDao {
     public int getTotalStudentsFromPrivateDB() throws SQLException {
         String query = "SELECT COUNT(*) AS TOTAL_EXPERIENCED_STUDENT FROM ( " +
                 "SELECT S.NeuId, COUNT(*) " +
-                "FROM AlignPrivate.Students AS S " +
-                "INNER JOIN AlignPrivate.WorkExperiences AS E ON S.NeuId = E.NeuId " +
+                "FROM AlignPrivate.StudentsPublic AS S " +
+                "INNER JOIN AlignPrivate.WorkExperiencesPublic AS E ON S.NeuId = E.NeuId " +
                 "GROUP BY S.NeuId) AS Count_NeuId;";
 
         PrivateDatabaseEtlQuery privateDatabaseEtlQuery = new PrivateDatabaseEtlQuery();

@@ -1,0 +1,39 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.mehaexample.asdDemo.model.alignpublic.StudentsPublic" table="Students">
+
+        <meta attribute="class-description">
+            This class contains the Students detail for Public Database.
+        </meta>
+        <id name="publicId" column="PublicId" type="int">
+            <generator class="assigned"/>
+        </id>
+
+        <property name="firstName" column="FirstName" type="string"/>
+
+        <property name="photo" column="Photo" type="blob"/>
+
+        <property name="graduationYear" column="GraduationYear" type="int"/>
+
+        <bag name="workExperiences" table="WorkExperiences"
+             inverse="true" lazy="false" fetch="select">
+            <key>
+                <column name="PublicId" not-null="true"/>
+            </key>
+            <one-to-many class="org.mehaexample.asdDemo.model.alignpublic.WorkExperiencesPublic"/>
+        </bag>
+
+        <bag name="undergraduates" table="Undergraduates"
+             inverse="true" lazy="false">
+            <key>
+                <column name="PublicId" not-null="true"/>
+            </key>
+            <one-to-many class="org.mehaexample.asdDemo.model.alignpublic.UndergraduatesPublic"/>
+        </bag>
+
+    </class>
+</hibernate-mapping>

@@ -4,7 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name="org.mehaexample.asdDemo.model.StudentLogins" table="StudentLogins">
+    <class name="org.mehaexample.asdDemo.model.alignprivate.StudentLogins" table="StudentLogins">
 
         <meta attribute="class-description">
             This class contains the Student Logins detail.
