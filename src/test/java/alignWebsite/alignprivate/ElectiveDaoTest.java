@@ -57,9 +57,6 @@ public class ElectiveDaoTest {
     elective.setNeuId(newStudent.getNeuId());
     elective.setCourseId(newCourse.getCourseId());
 //    elective.setTerms(newTerm);
-//    elective.setRetake(false);
-//    elective.setGpa((float) 3.2);
-//    elective.setPlagiarism(false);
 
     Electives electivesNew = electivesDao.addElective(elective);
 
@@ -90,9 +87,6 @@ public class ElectiveDaoTest {
     Electives elective = new Electives();
     elective.setNeuId(newStudent.getNeuId());
     elective.setCourseId(newCourse.getCourseId());
-//    elective.setRetake(false);
-//    elective.setGpa((float) 3.2);
-//    elective.setPlagiarism(false);
 
     Electives electivesNew = electivesDao.addElective(elective);
     electivesDao.deleteElectiveRecord(electivesNew.getElectiveId());
@@ -125,15 +119,12 @@ public class ElectiveDaoTest {
     Electives elective = new Electives();
     elective.setNeuId(newStudent.getNeuId());
     elective.setCourseId(newCourse.getCourseId());
-//    elective.setRetake(false);
-//    elective.setGpa((float) 3.2);
-//    elective.setPlagiarism(false);
 
     Electives electivesNew = electivesDao.addElective(elective);
 
-//    electivesNew.setGpa((float) 4.2332);
-//    electivesDao.updateElectives(electivesNew);
-//    Assert.assertEquals(electivesNew.getGpa(), ((float) 4.2332), 0.1);
+    electivesNew.setCourseYear(2018);
+    electivesDao.updateElectives(electivesNew);
+    Assert.assertEquals(electivesNew.getCourseYear(), 2018);
 
     electivesDao.deleteElectiveRecord(electivesNew.getElectiveId());
     coursesDao.deleteCourseById(tempId + "");
@@ -162,9 +153,6 @@ public class ElectiveDaoTest {
     elective.setCourseId(newCourse.getCourseId());
     elective.setCourseTerm(Term.SPRING);
     elective.setCourseYear(2017);
-//    elective.setRetake(false);
-//    elective.setGpa((float) 3.2);
-//    elective.setPlagiarism(false);
 
     Electives electivesNew = electivesDao.addElective(elective);
 
@@ -189,9 +177,6 @@ public class ElectiveDaoTest {
     elective2.setCourseId(newCourse2.getCourseId());
     elective2.setCourseTerm(Term.SPRING);
     elective2.setCourseYear(2017);
-//    elective2.setRetake(false);
-//    elective2.setGpa((float) 3.2);
-//    elective2.setPlagiarism(false);
     Electives electivesNew2 = electivesDao.addElective(elective2);
 
     temp = electivesDao.getTopTenElectives(Campus.SEATTLE, 2017);

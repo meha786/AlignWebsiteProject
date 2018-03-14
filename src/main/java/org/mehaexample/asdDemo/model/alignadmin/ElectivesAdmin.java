@@ -9,9 +9,9 @@ public class ElectivesAdmin {
   private String courseId;
   private Term courseTerm;
   private int courseYear;
-  private boolean retake = false;
-  private float gpa = 0;
-  private boolean plagiarism = false;
+  private boolean retake;
+  private float gpa;
+  private boolean plagiarism;
 
   public ElectivesAdmin(String neuId, String courseId, Term courseTerm, int courseYear, boolean retake, float gpa, boolean plagiarism) {
     this.neuId = neuId;
