@@ -25,8 +25,6 @@ public class AdministratorNotesDaoTest {
         studentsDao = new StudentsDao();
         adminDao = new AdministratorsDao();
         administratorNotesDao = new AdministratorNotesDao();
-        adminDao = new AdministratorsDao();
-        studentsDao = new StudentsDao();
     }
 
     @Before

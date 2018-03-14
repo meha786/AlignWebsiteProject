@@ -13,7 +13,7 @@
 		</property>
 
 		<property name="hibernate.connection.url">
-			jdbc:mariadb://localhost:3307/alignprivate2
+			jdbc:mariadb://localhost:3306/alignprivate
 		</property>
 
 		<property name="hibernate.connection.username">
@@ -31,9 +31,6 @@
 		<mapping resource="Electives.hbm.xml" />
 		<mapping resource="PriorEducations.hbm.xml" />
 		<mapping resource="Experiences.hbm.xml" />
-		<mapping resource="Administrators.hbm.xml" />
-		<mapping resource="AdministratorNotes.hbm.xml" />
 		<mapping resource="StudentLogins.hbm.xml" />
-		<mapping resource="AdminLogins.hbm.xml" />
 	</session-factory>
 </hibernate-configuration>
