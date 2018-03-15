@@ -7,15 +7,18 @@ public class ElectivesAdmin {
 
   private String neuId;
   private String courseId;
+  private String courseName;
   private Term courseTerm;
   private int courseYear;
   private boolean retake;
   private float gpa;
   private boolean plagiarism;
 
-  public ElectivesAdmin(String neuId, String courseId, Term courseTerm, int courseYear, boolean retake, float gpa, boolean plagiarism) {
+  public ElectivesAdmin(String neuId, String courseId, String courseName, Term courseTerm,
+                        int courseYear, boolean retake, float gpa, boolean plagiarism) {
     this.neuId = neuId;
     this.courseId = courseId;
+    this.courseName = courseName;
     this.courseTerm = courseTerm;
     this.courseYear = courseYear;
     this.retake = retake;
@@ -49,6 +52,15 @@ public class ElectivesAdmin {
 
   public void setCourseId(String courseId) {
     this.courseId = courseId;
+  }
+
+
+  public String getCourseName() {
+    return courseName;
+  }
+
+  public void setCourseName(String courseName) {
+    this.courseName = courseName;
   }
 
   public Term getCourseTerm() {

@@ -80,8 +80,8 @@ public class StudentsDaoTest {
     filters.put("firstName", firstName);
     List<Students> students = studentdao.getAdminFilteredStudents(filters);
     Assert.assertTrue(students.size() == 2);
-    Assert.assertTrue(students.get(0).getNeuId().equals("2222222"));
-    Assert.assertTrue(students.get(1).getNeuId().equals("0000000"));
+    Assert.assertTrue(students.get(0).getNeuId().equals("0000000"));
+    Assert.assertTrue(students.get(1).getNeuId().equals("2222222"));
 
     // first name = Tom or Jerry, and company = Amazon
     Map<String, List<String>> filters2 = new HashMap<>();
@@ -279,9 +279,9 @@ public class StudentsDaoTest {
       coursesDao.createCourse(newCourse1);
       coursesDao.createCourse(newCourse2);
 
-      Electives newElective1 = new Electives("1111111", "5800", Term.SPRING,
+      Electives newElective1 = new Electives("1111111", "5800", "Course Name", Term.SPRING,
               2018);
-      Electives newElective2 = new Electives("2222222", "5100", Term.SPRING,
+      Electives newElective2 = new Electives("2222222", "5100", "Course Name2", Term.SPRING,
               2018);
       electivesDao.addElective(newElective1);
       electivesDao.addElective(newElective2);

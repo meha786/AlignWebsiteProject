@@ -1,11 +1,11 @@
-package org.mehaexample.asdDemo.model;
+package org.mehaexample.asdDemo.model.alignadmin;
 
 public class GenderRatio {
   private int entryYear;
-  private int male;
-  private int female;
+  private long male;
+  private long female;
 
-  public GenderRatio(int entryYear, int male, int female) {
+  public GenderRatio(int entryYear, long male, long female) {
     this.entryYear = entryYear;
     this.male = male;
     this.female = female;
@@ -21,19 +21,19 @@ public class GenderRatio {
     this.entryYear = entryYear;
   }
 
-  public int getMale() {
+  public long getMale() {
     return male;
   }
 
-  public void setMale(int male) {
+  public void setMale(long male) {
     this.male = male;
   }
 
-  public int getFemale() {
+  public long getFemale() {
     return female;
   }
 
-  public void setFemale(int female) {
+  public void setFemale(long female) {
     this.female = female;
   }
 
@@ -52,8 +52,8 @@ public class GenderRatio {
   @Override
   public int hashCode() {
     int result = entryYear;
-    result = 31 * result + male;
-    result = 31 * result + female;
+    result = 31 * result + (int) (male ^ (male >>> 32));
+    result = 31 * result + (int) (female ^ (female >>> 32));
     return result;
   }
 }

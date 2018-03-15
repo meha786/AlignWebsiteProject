@@ -24,6 +24,8 @@
 
         <property name="courseId" column="CourseId" type="string" />
 
+        <property name="courseName" column="CourseName" type="string" />
+
         <property name = "courseTerm" column = "CourseTerm">
             <type name= "org.hibernate.type.EnumType">
                 <param name="enumClass">org.mehaexample.asdDemo.enums.Term</param>

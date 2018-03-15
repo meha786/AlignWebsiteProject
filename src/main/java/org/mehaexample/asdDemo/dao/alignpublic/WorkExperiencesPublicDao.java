@@ -6,8 +6,11 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.mehaexample.asdDemo.model.alignpublic.StudentsPublic;
+import org.mehaexample.asdDemo.model.alignpublic.TopCoops;
+import org.mehaexample.asdDemo.model.alignpublic.TopUndergradSchools;
 import org.mehaexample.asdDemo.model.alignpublic.WorkExperiencesPublic;
 
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 public class WorkExperiencesPublicDao {
@@ -58,6 +61,43 @@ public class WorkExperiencesPublicDao {
       return null;
     }
     return list.get(0);
+  }
+
+  public List<TopCoops> getTopCoops(int numberOfResultsDesired) {
+    String hql = "SELECT NEW org.mehaexample.asdDemo.model.alignpublic.TopCoops(w.coop, Count(*)) " +
+            "FROM WorkExperiencesPublic w " +
+            "GROUP BY w.coop " +
+            "ORDER BY Count(*) DESC ";
+    List<TopCoops> listOfTopCoops;
+    try {
+      session = factory.openSession();
+      TypedQuery<TopCoops> query = session.createQuery(hql, TopCoops.class);
+      query.setMaxResults(numberOfResultsDesired);
+      listOfTopCoops = query.getResultList();
+    } catch (HibernateException e) {
+      throw new HibernateException("Connection error.");
+    } finally{
+      session.close();
+    }
+    return listOfTopCoops;
+  }
+
+  public List<String> getListOfAllCoopCompanies() {
+    String hql = "SELECT w.coop " +
+            "FROM WorkExperiencesPublic w " +
+            "GROUP BY w.coop " +
+            "ORDER BY Count(*) DESC";
+    List<String> listOfAllCoopCompanies;
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery(hql);
+      listOfAllCoopCompanies = query.getResultList();
+    } catch (HibernateException e) {
+      throw new HibernateException("Connection error.");
+    } finally{
+      session.close();
+    }
+    return listOfAllCoopCompanies;
   }
 
   public boolean deleteWorkExperienceById(int workExperienceId) {

@@ -74,7 +74,7 @@ CREATE TABLE PriorEducations (
 
 CREATE TABLE Courses (
 	CourseId VARCHAR(6) NOT NULL,
-    CourseName VARCHAR(1250),
+    CourseName VARCHAR(255),
     Description VARCHAR(1250),
     CONSTRAINT pk_Courses_CourseId
 		PRIMARY KEY (CourseId)
@@ -84,6 +84,7 @@ CREATE TABLE Electives (
 	ElectiveId INT AUTO_INCREMENT,
     NeuId VARCHAR(16),
     CourseId VARCHAR(6),
+    CourseName VARCHAR(255),
     CourseTerm ENUM('SPRING', 'SUMMER', 'FALL'),
     CourseYear INT NOT NULL,
     CONSTRAINT pk_Electives_ElectiveId

@@ -13,6 +13,7 @@ CREATE TABLE Electives (
 	ElectiveId INT AUTO_INCREMENT,
     NeuId VARCHAR(16),
     CourseId VARCHAR(6),
+    CourseName VARCHAR(255),
     CourseTerm ENUM('SPRING', 'SUMMER', 'FALL'),
     CourseYear INT NOT NULL,
     Retake BOOLEAN DEFAULT FALSE,
