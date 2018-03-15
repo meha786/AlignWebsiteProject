@@ -66,7 +66,7 @@ public class StudentsDao {
 	}
 
 	public List<Students> getAdminFilteredStudents(Map<String, List<String>> filters) {
-		StringBuilder hql = new StringBuilder("SELECT s " +
+		StringBuilder hql = new StringBuilder("SELECT Distinct(s) " +
 				"FROM Students s LEFT OUTER JOIN WorkExperiences we " +
 				"ON s.neuId = we.neuId");
 		Set<String> filterKeys = filters.keySet();
@@ -100,18 +100,24 @@ public class StudentsDao {
 			}
 		}
 
+		hql.append(" ORDER BY s.expectedLastYear DESC ");
+
 		session = factory.openSession();
 		org.hibernate.query.Query query = session.createQuery(hql.toString());
 
 		for (String filter : filterKeys) {
 			List<String> filterElements = filters.get(filter);
 			for (int i = 0; i < filterElements.size(); i++) {
-				query.setParameter(filter + i, filterElements.get(i));
+				if (filter.equals("expectedLastYear")) {
+					query.setParameter(filter + i, Integer.parseInt(filterElements.get(i)));
+				} else {
+					query.setParameter(filter + i, filterElements.get(i));
+				}
 			}
 		}
 		List<Students> list = query.list();
 		session.close();
-		return deleteDuplicate(list);
+		return list;
 	}
 
 	/**
@@ -122,7 +128,7 @@ public class StudentsDao {
 	 * @return a list of students filtered by specified map.
 	 */
 	public List<Students> getStudentFilteredStudents(Map<String, List<String>> filters) {
-		StringBuilder hql = new StringBuilder("SELECT s FROM Students s ");
+		StringBuilder hql = new StringBuilder("SELECT Distinct(s) FROM Students s ");
 
 		if (filters.containsKey("companyName")) {
 			hql.append("INNER JOIN WorkExperiences we ON s.neuId = we.neuId ");
@@ -192,15 +198,7 @@ public class StudentsDao {
 
 		List<Students> list = query.list();
 		session.close();
-		return deleteDuplicate(list);
-	}
-
-	private List<Students> deleteDuplicate(List<Students> students) {
-		Map<String, Students> outputMap = new HashMap<>();
-		for (Students student: students) {
-			outputMap.put(student.getNeuId(),student);
-		}
-		return (List<Students>) new ArrayList<>(outputMap.values());
+		return list;
 	}
 
 	/**

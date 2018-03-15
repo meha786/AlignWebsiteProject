@@ -7,20 +7,16 @@ public class Electives {
 
   private String neuId;
   private String courseId;
+  private String courseName;
   private Term courseTerm;
   private int courseYear;
-//  private boolean retake = false;
-//  private float gpa = 0;
-//  private boolean plagiarism = false;
 
-  public Electives(String neuId, String courseId, Term courseTerm, int courseYear) {
+  public Electives(String neuId, String courseId, String courseName, Term courseTerm, int courseYear) {
     this.neuId = neuId;
     this.courseId = courseId;
+    this.courseName = courseName;
     this.courseTerm = courseTerm;
     this.courseYear = courseYear;
-//    this.retake = retake;
-//    this.gpa = gpa;
-//    this.plagiarism = plagiarism;
   }
 
   public Electives() {
@@ -51,6 +47,14 @@ public class Electives {
     this.courseId = courseId;
   }
 
+  public String getCourseName() {
+    return courseName;
+  }
+
+  public void setCourseName(String courseName) {
+    this.courseName = courseName;
+  }
+
   public Term getCourseTerm() {
     return courseTerm;
   }
@@ -66,29 +70,5 @@ public class Electives {
   public void setCourseYear(int courseYear) {
     this.courseYear = courseYear;
   }
-
-//  public boolean isRetake() {
-//    return retake;
-//  }
-//
-//  public void setRetake(boolean retake) {
-//    this.retake = retake;
-//  }
-//
-//  public float getGpa() {
-//    return gpa;
-//  }
-//
-//  public void setGpa(float gpa) {
-//    this.gpa = gpa;
-//  }
-//
-//  public boolean isPlagiarism() {
-//    return plagiarism;
-//  }
-//
-//  public void setPlagiarism(boolean plagiarism) {
-//    this.plagiarism = plagiarism;
-//  }
 
 }

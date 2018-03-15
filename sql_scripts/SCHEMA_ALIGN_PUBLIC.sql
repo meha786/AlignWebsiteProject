@@ -3,19 +3,10 @@
 CREATE SCHEMA IF NOT EXISTS AlignPublic;
 USE AlignPublic;
 
-DROP TABLE IF EXISTS GenderRatio;
 DROP TABLE IF EXISTS WorkExperiences;
 DROP TABLE IF EXISTS Undergraduates;
 DROP TABLE IF EXISTS Students;
  
-CREATE TABLE GenderRatio (
-	EntryYear INT,
-    Male INT NOT NULL,
-    Female INT NOT NULL,
-    CONSTRAINT pk_GenderRatio_EntryYear
-		PRIMARY KEY (EntryYear)
-);
-
 CREATE TABLE Students(
 	PublicId INT NOT NULL,
 	FirstName VARCHAR(50),

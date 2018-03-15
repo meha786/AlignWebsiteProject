@@ -1,0 +1,159 @@
+package org.mehaexample.asdDemo.dao.alignpublic;
+
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+import org.mehaexample.asdDemo.model.alignpublic.TopUndergradDegrees;
+import org.mehaexample.asdDemo.model.alignpublic.TopUndergradSchools;
+import org.mehaexample.asdDemo.model.alignpublic.UndergraduatesPublic;
+
+import javax.persistence.TypedQuery;
+import java.util.List;
+
+public class UndergraduatesPublicDao {
+  private SessionFactory factory;
+  private Session session;
+
+  public UndergraduatesPublicDao() {
+    try {
+      // it will check the hibernate.cfg.xml file and load it
+      // next it goes to all table files in the hibernate file and loads them
+      factory = new Configuration().configure("/hibernate_Public.cfg.xml").buildSessionFactory();
+    } catch (Throwable ex) {
+      System.err.println("Failed to create sessionFactory object." + ex);
+      throw new ExceptionInInitializerError(ex);
+    }
+  }
+
+  public UndergraduatesPublic createUndergraduate(UndergraduatesPublic undergraduate) {
+    Transaction tx = null;
+    try {
+      session = factory.openSession();
+      tx = session.beginTransaction();
+      session.save(undergraduate);
+      tx.commit();
+    } catch (HibernateException e) {
+      if (tx != null) tx.rollback();
+      throw new HibernateException("Connection error.");
+    } finally {
+      session.close();
+    }
+    return undergraduate;
+  }
+
+  public UndergraduatesPublic findUndergraduateById(int undergraduateId) {
+    List<UndergraduatesPublic> list;
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery(
+              "FROM UndergraduatesPublic WHERE undergraduateId = :undergraduateId ");
+      query.setParameter("undergraduateId", undergraduateId);
+      list = query.list();
+    } catch (HibernateException e) {
+      throw new HibernateException("Connection error.");
+    } finally {
+      session.close();
+    }
+    if (list.isEmpty()) {
+      return null;
+    }
+    return list.get(0);
+  }
+
+  public List<TopUndergradSchools> getTopUndergradSchools(int numberOfResultsDesired) {
+    String hql = "SELECT NEW org.mehaexample.asdDemo.model.alignpublic.TopUndergradSchools(u.undergradSchool, Count(*)) " +
+            "FROM UndergraduatesPublic u " +
+            "GROUP BY u.undergradSchool " +
+            "ORDER BY Count(*) DESC ";
+    List<TopUndergradSchools> listOfTopUndergradSchools;
+    try {
+      session = factory.openSession();
+      TypedQuery<TopUndergradSchools> query = session.createQuery(hql, TopUndergradSchools.class);
+      query.setMaxResults(numberOfResultsDesired);
+      listOfTopUndergradSchools = query.getResultList();
+    } catch (HibernateException e) {
+      throw new HibernateException("Connection error.");
+    } finally{
+      session.close();
+    }
+    return listOfTopUndergradSchools;
+  }
+
+  public List<TopUndergradDegrees> getTopUndergradDegrees(int numberOfResultsDesired) {
+    String hql = "SELECT NEW org.mehaexample.asdDemo.model.alignpublic.TopUndergradDegrees(u.undergradDegree, Count(*)) " +
+            "FROM UndergraduatesPublic u " +
+            "GROUP BY u.undergradDegree " +
+            "ORDER BY Count(*) DESC ";
+    List<TopUndergradDegrees> listOfTopUndergradDegrees;
+    try {
+      session = factory.openSession();
+      TypedQuery<TopUndergradDegrees> query = session.createQuery(hql, TopUndergradDegrees.class);
+      query.setMaxResults(numberOfResultsDesired);
+      listOfTopUndergradDegrees = query.getResultList();
+    } catch (HibernateException e) {
+      throw new HibernateException("Connection error.");
+    } finally{
+      session.close();
+    }
+    return listOfTopUndergradDegrees;
+  }
+
+  public List<String> getListOfAllSchools() {
+    String hql = "SELECT u.undergradSchool " +
+            "FROM UndergraduatesPublic u " +
+            "GROUP BY u.undergradSchool " +
+            "ORDER BY Count(*) DESC";
+    List<String> listOfAllSchools;
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery(hql);
+      listOfAllSchools = query.getResultList();
+    } catch (HibernateException e) {
+      throw new HibernateException("Connection error.");
+    } finally{
+      session.close();
+    }
+    return listOfAllSchools;
+  }
+
+  public List<String> getListOfAllUndergraduateDegrees() {
+    String hql = "SELECT u.undergradDegree " +
+            "FROM UndergraduatesPublic u " +
+            "GROUP BY u.undergradDegree " +
+            "ORDER BY Count(*) DESC";
+    List<String> listOfAllSchools;
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery(hql);
+      listOfAllSchools = query.getResultList();
+    } catch (HibernateException e) {
+      throw new HibernateException("Connection error.");
+    } finally{
+      session.close();
+    }
+    return listOfAllSchools;
+  }
+
+  public boolean deleteUndergraduateById(int undergraduateId) {
+    UndergraduatesPublic undergraduate = findUndergraduateById(undergraduateId);
+    if (undergraduate != null) {
+      session = factory.openSession();
+      Transaction tx = null;
+      try {
+        tx = session.beginTransaction();
+        session.delete(undergraduate);
+        tx.commit();
+      } catch (HibernateException e) {
+        if (tx != null) tx.rollback();
+        throw new HibernateException("Connection error.");
+      } finally {
+        session.close();
+      }
+    } else {
+      throw new HibernateException("Undergraduate Id does not exist.");
+    }
+    return true;
+  }
+}
