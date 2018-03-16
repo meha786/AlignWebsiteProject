@@ -7,7 +7,7 @@
     <class name="org.mehaexample.asdDemo.model.alignadmin.AdminLogins" table="AdminLogins">
 
         <meta attribute="class-description">
-            This class contains the Student Logins detail.
+            This class contains the Admin Logins detail.
         </meta>
 
         <id name = "email" type = "string" column = "Email">
@@ -16,6 +16,9 @@
 
         <property name="adminPassword" column="AdminPassword" type="string" />
 
+        <property name="registrationKey" column="RegistrationKey" type="string" />
+
+        <property name="keyExpiration" column="KeyExpiration" type="timestamp" />
 
     </class>
 </hibernate-mapping>

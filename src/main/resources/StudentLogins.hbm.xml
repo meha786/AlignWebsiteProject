@@ -16,6 +16,9 @@
 
         <property name="studentPassword" column="StudentPassword" type="string" />
 
+        <property name="registrationKey" column="RegistrationKey" type="string" />
+
+        <property name="keyExpiration" column="KeyExpiration" type="timestamp" />
 
     </class>
 </hibernate-mapping>

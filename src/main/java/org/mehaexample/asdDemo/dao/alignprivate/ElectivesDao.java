@@ -166,7 +166,7 @@ public class ElectivesDao {
       } else {
         hql.append("AND ");
       }
-      hql.append("e.courseYear = :year ");
+      hql.append("s.expectedLastYear = :year ");
     }
     hql.append("GROUP BY CourseId ");
     hql.append("ORDER BY Count(*) DESC ");

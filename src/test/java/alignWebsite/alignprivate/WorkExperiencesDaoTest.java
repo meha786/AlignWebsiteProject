@@ -11,6 +11,8 @@ import org.mehaexample.asdDemo.enums.DegreeCandidacy;
 import org.mehaexample.asdDemo.enums.EnrollmentStatus;
 import org.mehaexample.asdDemo.enums.Gender;
 import org.mehaexample.asdDemo.enums.Term;
+import org.mehaexample.asdDemo.model.alignprivate.StudentBasicInfo;
+import org.mehaexample.asdDemo.model.alignprivate.StudentCoopList;
 import org.mehaexample.asdDemo.model.alignprivate.Students;
 import org.mehaexample.asdDemo.model.alignprivate.WorkExperiences;
 
@@ -65,47 +67,65 @@ public class WorkExperiencesDaoTest {
   }
 
   @Test
-  public void getTotalStudentsWorkingInACompanyTest() {
-    int temp = workExperiencesDao.getTotalStudentsWorkingInACompany(
-            Campus.SEATTLE, 2017, "amazon");
-    assertTrue(temp == 1);
-    temp = workExperiencesDao.getTotalStudentsWorkingInACompany(
-            Campus.BOSTON, 2017, "Amazon");
-    assertTrue(temp == 0);
-    temp = workExperiencesDao.getTotalStudentsWorkingInACompany(
-            Campus.SEATTLE, 2015, "Amazon");
-    assertTrue(temp == 0);
-    temp = workExperiencesDao.getTotalStudentsWorkingInACompany(
-            Campus.SEATTLE, 2015, "xyz");
-    assertTrue(temp == 0);
-    temp = workExperiencesDao.getTotalStudentsWorkingInACompany(
-            null, null, "Amazon");
-    assertTrue(temp == 1);
-    temp = workExperiencesDao.getTotalStudentsWorkingInACompany(
-            Campus.SEATTLE, null, "Amazon");
-    assertTrue(temp == 1);
-    temp = workExperiencesDao.getTotalStudentsWorkingInACompany(
-            null, 2017, "Amazon");
-    assertTrue(temp == 1);
-    temp = workExperiencesDao.getTotalStudentsWorkingInACompany(
-            null, 2016, "Amazon");
-    assertTrue(temp == 0);
+  public void getStudentsWorkingInACompanyTest() {
+    List<StudentBasicInfo> list =
+            workExperiencesDao.getStudentsWorkingInACompany(Campus.SEATTLE, 2016, "Amazon");
+    assertTrue(list.size() == 1);
+    assertTrue(list.get(0).getFirstName().equals("Tom"));
+    assertTrue(list.get(0).getNeuId().equals("001234567"));
+
+    list = workExperiencesDao.getStudentsWorkingInACompany(Campus.SEATTLE, 2017, "Amazon");
+    assertTrue(list.size() == 0);
   }
 
   @Test
-  public void getTotalStudentsWithWorkExpTest() {
-    int temp = workExperiencesDao.getTotalStudentsWithWorkExp(null, null);
-    assertTrue(temp == 1);
-    temp = workExperiencesDao.getTotalStudentsWithWorkExp(Campus.SEATTLE, null);
-    assertTrue(temp == 1);
-    temp = workExperiencesDao.getTotalStudentsWithWorkExp(Campus.BOSTON, null);
-    assertTrue(temp == 0);
-    temp = workExperiencesDao.getTotalStudentsWithWorkExp(null, 2017);
-    assertTrue(temp == 1);
-    temp = workExperiencesDao.getTotalStudentsWithWorkExp(Campus.SEATTLE, 2016);
-    assertTrue(temp == 0);
-    temp = workExperiencesDao.getTotalStudentsWithWorkExp(null, 1994);
-    assertTrue(temp == 0);
+  public void getStudentCoopCompaniesTest() throws ParseException {
+    WorkExperiences newWorkExperience = new WorkExperiences();
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    newWorkExperience.setStartDate(dateFormat.parse("2016-06-01"));
+    newWorkExperience.setEndDate(dateFormat.parse("2016-12-01"));
+    newWorkExperience.setCurrentJob(false);
+    newWorkExperience.setTitle("Title");
+    newWorkExperience.setDescription("Description");
+    newWorkExperience.setNeuId("001234567");
+    newWorkExperience.setCompanyName("Google");
+    workExperiencesDao.createWorkExperience(newWorkExperience);
+
+    List<StudentCoopList> temp = workExperiencesDao.getStudentCoopCompanies(Campus.SEATTLE, null);
+    assertTrue(temp.size() == 1);
+    assertTrue(temp.get(0).getCompanies().size() == 2);
+
+    List<StudentCoopList> temp2 = workExperiencesDao.getStudentCoopCompanies(Campus.SEATTLE, 2016);
+    assertTrue(temp2.size() == 1);
+    assertTrue(temp2.get(0).getCompanies().get(0).equals("Amazon"));
+
+    temp2 = workExperiencesDao.getStudentCoopCompanies(Campus.SEATTLE, 1994);
+    assertTrue(temp2.isEmpty());
+
+    workExperiencesDao.deleteWorkExperienceByNeuId("001234567");
+  }
+
+  @Test
+  public void getStudentCurrentCompaniesTest() throws ParseException {
+    WorkExperiences newWorkExperience = new WorkExperiences();
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    newWorkExperience.setStartDate(dateFormat.parse("2017-06-01"));
+    newWorkExperience.setEndDate(dateFormat.parse("2017-12-01"));
+    newWorkExperience.setCurrentJob(true);
+    newWorkExperience.setTitle("Title");
+    newWorkExperience.setDescription("Description");
+    newWorkExperience.setNeuId("001234567");
+    newWorkExperience.setCompanyName("Google");
+    workExperiencesDao.createWorkExperience(newWorkExperience);
+
+    List<StudentCoopList> temp = workExperiencesDao.getStudentCurrentCompanies(Campus.SEATTLE, 2016);
+    assertTrue(temp.size() == 1);
+    assertTrue(temp.get(0).getCompanies().get(0).equals("Google"));
+
+    List<StudentCoopList> temp2 = workExperiencesDao.getStudentCoopCompanies(Campus.SEATTLE, 2017);
+    assertTrue(temp2.isEmpty());
+
+    workExperiencesDao.deleteWorkExperienceByNeuId("001234567");
   }
 
   @Test
@@ -135,7 +155,7 @@ public class WorkExperiencesDaoTest {
     newWorkExperience2.setCompanyName("Aaa");
     workExperiencesDao.createWorkExperience(newWorkExperience2);
 
-    temp = workExperiencesDao.getTopTenEmployers(null, null);
+    temp = workExperiencesDao.getTopTenEmployers(Campus.SEATTLE, 2016);
     assertTrue(temp.size() == 2);
     assertTrue(temp.get(0).equals("Amazon"));
     assertTrue(temp.get(1).equals("Aaa"));
