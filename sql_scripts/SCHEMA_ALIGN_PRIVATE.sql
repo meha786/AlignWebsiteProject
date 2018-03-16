@@ -20,6 +20,7 @@ CREATE TABLE Students (
     MiddleName VARCHAR(25),
     LastName VARCHAR(25) NOT NULL,
     Gender ENUM ('M', 'F') NOT NULL,
+    Race VARCHAR(25) DEFAULT NULL,
     Scholarship BOOLEAN DEFAULT FALSE,
     Visa VARCHAR(5),
     Phone VARCHAR(25),
@@ -46,6 +47,8 @@ CREATE TABLE Students (
 CREATE TABLE StudentLogins(
 	Email VARCHAR(255) NOT NULL,
     StudentPassword VARCHAR(50) NOT NULL,
+    RegistrationKey VARCHAR(255),
+    KeyExpiration TIMESTAMP,
     CONSTRAINT pk_StudentLogins_Email
 		PRIMARY KEY (Email),
 	CONSTRAINT fk_StudentLogins_Email

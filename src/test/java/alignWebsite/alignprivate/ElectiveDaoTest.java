@@ -156,15 +156,14 @@ public class ElectiveDaoTest {
 
     Electives electivesNew = electivesDao.addElective(elective);
 
-    List<String> temp = electivesDao.getTopTenElectives(Campus.SEATTLE, null);
+    List<String> temp = electivesDao.getTopTenElectives(Campus.SEATTLE, 2016);
     Assert.assertTrue(temp.size() == 1);
-    temp = electivesDao.getTopTenElectives(null, null);
+    temp = electivesDao.getTopTenElectives(null, 2016);
     Assert.assertTrue(temp.size() == 1);
     temp = electivesDao.getTopTenElectives(Campus.SEATTLE, null);
     Assert.assertTrue(temp.size() == 1);
     temp = electivesDao.getTopTenElectives(Campus.SEATTLE, 2017);
-    Assert.assertTrue(temp.size() == 1);
-    Assert.assertTrue(temp.get(0).equals(tempId));
+    Assert.assertTrue(temp.size() == 0);
     temp = electivesDao.getTopTenElectives(Campus.BOSTON, 2017);
     Assert.assertTrue(temp.size() == 0);
     temp = electivesDao.getTopTenElectives(Campus.SEATTLE, 1994);
@@ -179,7 +178,7 @@ public class ElectiveDaoTest {
     elective2.setCourseYear(2017);
     Electives electivesNew2 = electivesDao.addElective(elective2);
 
-    temp = electivesDao.getTopTenElectives(Campus.SEATTLE, 2017);
+    temp = electivesDao.getTopTenElectives(Campus.SEATTLE, 2016);
     Assert.assertTrue(temp.size() == 2);
     temp = electivesDao.getTopTenElectives(Campus.BOSTON, 2017);
     Assert.assertTrue(temp.size() == 0);
