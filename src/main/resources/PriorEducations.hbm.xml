@@ -1,0 +1,34 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name = "org.mehaexample.asdDemo.model.PriorEducations" table="PriorEducations">
+
+               <meta attribute = "class-description">
+            This class contains the Prior Education detail.
+        </meta>
+        <id name = "priorEducationId" column="PriorEducationId" type="int">
+            <generator class="native"/>
+        </id>
+
+        <property name = "institutionName" column="InstitutionName" type="string" />
+
+        <property name = "majorName" column="MajorName" type="string" />
+
+        <property name = "graduationDate" column="GraduationDate" type="date" />
+
+        <property name = "gpa" column="Gpa" type="float" />
+
+        <property name = "degreeCandidacy" column = "DegreeCandidacy">
+            <type name= "org.hibernate.type.EnumType">
+                <param name="enumClass">org.mehaexample.asdDemo.enums.DegreeCandidacy</param>
+                <param name="type">12</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
+
+        <property name = "neuId" column="NeuId" type="string" />
+    </class>
+</hibernate-mapping>
