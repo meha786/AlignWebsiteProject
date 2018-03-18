@@ -102,7 +102,7 @@ public class StudentResource {
     @PUT
     @Path("/students/{nuId}")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public String updateStudentRecord(@PathParam("nuId") String neuId, Students student) {
 
         student = studentDao.getStudentRecord(neuId);
