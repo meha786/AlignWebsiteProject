@@ -111,7 +111,11 @@ public class StudentsDao {
 				if (filter.equals("expectedLastYear")) {
 					query.setParameter(filter + i, Integer.parseInt(filterElements.get(i)));
 				} else {
-					query.setParameter(filter + i, filterElements.get(i));
+					if (filter.trim().toUpperCase().equals("CAMPUS")) {
+						query.setParameter(filter + i, Campus.valueOf(filterElements.get(i).trim().toUpperCase()));
+					} else {
+						query.setParameter(filter + i, filterElements.get(i));
+					}
 				}
 			}
 		}

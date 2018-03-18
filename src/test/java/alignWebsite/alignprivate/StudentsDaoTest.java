@@ -76,8 +76,11 @@ public class StudentsDaoTest {
     // first name = Tom
     List<String> firstName = new ArrayList<>();
     firstName.add("Tom");
+    List<String> campus = new ArrayList<>();
+    campus.add("SEATTLE");
     Map<String, List<String>> filters = new HashMap<>();
     filters.put("firstName", firstName);
+    filters.put("campus", campus);
     List<Students> students = studentdao.getAdminFilteredStudents(filters);
     Assert.assertTrue(students.size() == 2);
     Assert.assertTrue(students.get(0).getNeuId().equals("0000000"));
