@@ -4,7 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name = "org.mehaexample.asdDemo.model.WorkExperiences" table="WorkExperiences">
+    <class name = "org.mehaexample.asdDemo.model.alignprivate.WorkExperiences" table="WorkExperiences">
 
         <meta attribute = "class-description">
             This class contains the Work Experience detail.
@@ -27,7 +27,7 @@
 
         <property name = "description" column="Description" type="string" />
 
-        <!--<many-to-one name="student" class="org.alignprivate.asd.model.Students"-->
+        <!--<many-to-one name="student" class="org.alignprivate.asd.model.StudentsPublic"-->
                      <!--column="NeuId" />-->
     </class>
 </hibernate-mapping>

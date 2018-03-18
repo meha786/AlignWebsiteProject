@@ -4,7 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name = "org.mehaexample.asdDemo.model.PriorEducations" table="PriorEducations">
+    <class name = "org.mehaexample.asdDemo.model.alignprivate.PriorEducations" table="PriorEducations">
 
                <meta attribute = "class-description">
             This class contains the Prior Education detail.

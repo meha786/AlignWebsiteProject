@@ -14,7 +14,7 @@ public class TotalMaleStudentsDao {
   /**
    * Singleton Pattern.
    *
-   * @return Total Male Students.
+   * @return Total Male StudentsPublic.
    * @throws SQLException when connection to the DB has something wrong.
    */
   public static TotalMaleStudentsDao getInstance() throws SQLException {
@@ -30,13 +30,13 @@ public class TotalMaleStudentsDao {
    * This is a script that extract the information for total male students
    * from the private database.
    *
-   * @return Total Male Students.
+   * @return Total Male StudentsPublic.
    * @throws SQLException when connection to database has something wrong.
    */
   public int getTotalMaleStudentsFromPrivateDatabase() throws SQLException {
     String getTotalStudentsFromPrivateDatabase =
             "SELECT COUNT(*) AS TOTAL_MALE_STUDENTS " +
-                    "FROM Students " +
+                    "FROM StudentsPublic " +
                     "WHERE Gender = \"M\";";
     PrivateDatabaseEtlQuery privateDatabaseEtlQuery = new PrivateDatabaseEtlQuery();
     return privateDatabaseEtlQuery.getSingleValueQuery(
@@ -49,7 +49,7 @@ public class TotalMaleStudentsDao {
    * This is a script that update the information for total male students
    * in the public database.
    *
-   * @param totalStudents Total Male Students (extracted from the
+   * @param totalStudents Total Male StudentsPublic (extracted from the
    *                      private database); not null.
    * @throws SQLException when connection to the DB has something wrong.
    */
@@ -65,7 +65,7 @@ public class TotalMaleStudentsDao {
    * This is a script that gets the information for total Male students
    * from the public database.
    *
-   * @return Total Male Students (From public database)
+   * @return Total Male StudentsPublic (From public database)
    * @throws SQLException when connection to the DB has something wrong.
    */
   public int getTotalMaleStudentsFromPublicDatabase() throws SQLException {

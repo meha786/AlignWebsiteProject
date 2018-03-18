@@ -14,7 +14,7 @@ public class TotalStudentsInFacebookDao {
     /**
      * Singleton Pattern.
      *
-     * @return Total Students Who Worked In Facebook Dao.
+     * @return Total StudentsPublic Who Worked In Facebook Dao.
      * @throws SQLException when connection to the DB has something wrong.
      */
     public static TotalStudentsInFacebookDao getInstance() throws SQLException {
@@ -35,8 +35,8 @@ public class TotalStudentsInFacebookDao {
     public int getTotalStudentsFromPrivateDB() throws SQLException {
         String query = "SELECT COUNT(*) AS TOTAL_FACEBOOK_STUDENT FROM ( " +
                 "SELECT S.NeuId, COUNT(*) " +
-                "FROM AlignPrivate.Students AS S " +
-                "INNER JOIN AlignPrivate.WorkExperiences AS E ON S.NeuId = E.NeuId " +
+                "FROM AlignPrivate.StudentsPublic AS S " +
+                "INNER JOIN AlignPrivate.WorkExperiencesPublic AS E ON S.NeuId = E.NeuId " +
                 "INNER JOIN AlignPrivate.Companies AS C ON E.CompanyId = C.CompanyId " +
                 "WHERE C.CompanyName = \"Facebook\" " +
                 "GROUP BY S.NeuId) AS Student_Facebook;";

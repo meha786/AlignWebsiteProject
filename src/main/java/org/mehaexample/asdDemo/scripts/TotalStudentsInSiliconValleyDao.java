@@ -15,7 +15,7 @@ public class TotalStudentsInSiliconValleyDao {
   /**
    * Singleton Pattern.
    *
-   * @return Total Students In SiliconValley Dao.
+   * @return Total StudentsPublic In SiliconValley Dao.
    * @throws SQLException when connection to the DB has something wrong.
    */
   public static TotalStudentsInSiliconValleyDao getInstance() throws SQLException {
@@ -30,13 +30,13 @@ public class TotalStudentsInSiliconValleyDao {
    * This is a script that extract the information for total students
    * in Silicon Valley from the private database.
    *
-   * @return Total Students In Silicon Valley
+   * @return Total StudentsPublic In Silicon Valley
    * @throws SQLException when connection to database has something wrong.
    */
   public int getTotalStudentsInSiliconValleyFromPrivateDatabase() throws SQLException {
     String getTotalStudentsFromPrivateDatabase =
             "SELECT COUNT(*) AS TOTAL_SILICON_VALLEY_STUDENTS " +
-                    "FROM Students " +
+                    "FROM StudentsPublic " +
                     "WHERE Campus = \"SILICON_VALLEY\";";
     PrivateDatabaseEtlQuery privateDatabaseEtlQuery = new PrivateDatabaseEtlQuery();
     return privateDatabaseEtlQuery.getSingleValueQuery(
@@ -49,7 +49,7 @@ public class TotalStudentsInSiliconValleyDao {
    * This is a script that update the information for total students
    * in Silicon Valley in the public database.
    *
-   * @param totalStudents Total Students in Silicon Valley (extracted from the
+   * @param totalStudents Total StudentsPublic in Silicon Valley (extracted from the
    *                      private database); not null.
    * @throws SQLException when connection to the DB has something wrong.
    */
@@ -65,7 +65,7 @@ public class TotalStudentsInSiliconValleyDao {
    * This is a script that gets the information for total students
    * in Silicon Valley from the public database.
    *
-   * @return Total Students In Silicon Valley (From public database).
+   * @return Total StudentsPublic In Silicon Valley (From public database).
    * @throws SQLException when connection to the DB has something wrong.
    */
   public int getTotalStudentsInSiliconValleyFromPublicDatabase() throws SQLException {

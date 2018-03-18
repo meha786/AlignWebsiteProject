@@ -15,7 +15,7 @@ public class TotalStudentsInCharlotteDao {
   /**
    * Singleton Pattern.
    *
-   * @return Total Students In Charlotte Dao.
+   * @return Total StudentsPublic In Charlotte Dao.
    * @throws SQLException when connection to the DB has something wrong.
    */
   public static TotalStudentsInCharlotteDao getInstance() throws SQLException {
@@ -30,13 +30,13 @@ public class TotalStudentsInCharlotteDao {
    * This is a script that extract the information for total students
    * in Charlotte from the private database.
    *
-   * @return Total Students In Charlotte
+   * @return Total StudentsPublic In Charlotte
    * @throws SQLException when connection to database has something wrong.
    */
   public int getTotalStudentsInCharlotteFromPrivateDatabase() throws SQLException {
     String getTotalStudentsFromPrivateDatabase =
             "SELECT COUNT(*) AS TOTAL_CHARLOTTE_STUDENTS " +
-                    "FROM Students " +
+                    "FROM StudentsPublic " +
                     "WHERE Campus = \"CHARLOTTE\";";
     PrivateDatabaseEtlQuery privateDatabaseEtlQuery = new PrivateDatabaseEtlQuery();
     return privateDatabaseEtlQuery.getSingleValueQuery(
@@ -49,7 +49,7 @@ public class TotalStudentsInCharlotteDao {
    * This is a script that update the information for total students
    * in Charlotte in the public database.
    *
-   * @param totalStudents Total Students in Charlotte (extracted from the
+   * @param totalStudents Total StudentsPublic in Charlotte (extracted from the
    *                      private database); not null.
    * @throws SQLException when connection to the DB has something wrong.
    */
@@ -65,7 +65,7 @@ public class TotalStudentsInCharlotteDao {
    * This is a script that gets the information for total students
    * in Charlotte from the public database.
    *
-   * @return Total Students In Charlotte (From public database)
+   * @return Total StudentsPublic In Charlotte (From public database)
    * @throws SQLException when connection to the DB has something wrong.
    */
   public int getTotalStudentsInCharlotteFromPublicDatabase() throws SQLException {

@@ -14,7 +14,7 @@ public class TotalStudentsInMicrosoftDao {
     /**
      * Singleton Pattern.
      *
-     * @return Total Students Who Worked In Microsoft Dao.
+     * @return Total StudentsPublic Who Worked In Microsoft Dao.
      * @throws SQLException when connection to the DB has something wrong.
      */
     public static TotalStudentsInMicrosoftDao getInstance() throws SQLException {
@@ -35,8 +35,8 @@ public class TotalStudentsInMicrosoftDao {
     public int getTotalStudentsFromPrivateDB() throws SQLException {
         String query = "SELECT COUNT(*) AS TOTAL_MICROSOFT_STUDENT FROM ( " +
                 "SELECT S.NeuId, COUNT(*) " +
-                "FROM AlignPrivate.Students AS S " +
-                "INNER JOIN AlignPrivate.WorkExperiences AS E ON S.NeuId = E.NeuId " +
+                "FROM AlignPrivate.StudentsPublic AS S " +
+                "INNER JOIN AlignPrivate.WorkExperiencesPublic AS E ON S.NeuId = E.NeuId " +
                 "INNER JOIN AlignPrivate.Companies AS C ON E.CompanyId = C.CompanyId " +
                 "WHERE C.CompanyName = \"Microsoft\" " +
                 "GROUP BY S.NeuId) AS Student_Microsoft;";

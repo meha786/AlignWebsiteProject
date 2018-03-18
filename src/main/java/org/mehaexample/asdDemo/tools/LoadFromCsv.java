@@ -9,7 +9,7 @@
 //import org.alignprivate.asd.enumeration.DegreeCandidacy;
 //import org.alignprivate.asd.enumeration.EnrollmentStatus;
 //import org.alignprivate.asd.enumeration.Gender;
-//import org.alignprivate.asd.model.Students;
+//import org.alignprivate.asd.model.StudentsPublic;
 //
 //public class LoadFromCsv {
 //    private StudentsDao studentDao;
@@ -48,7 +48,7 @@
 //                    campus = Campus.SILICON_VALLEY;
 //                }
 //
-//                Students student = new Students(neuId, email, firstName, middleName, lastName, gender,
+//                StudentsPublic student = new StudentsPublic(neuId, email, firstName, middleName, lastName, gender,
 //                        visa, phone, address, state, city, zip, status, campus, degree, null);
 //                if (studentDao.ifNuidExists(neuId)) {
 //                    studentDao.updateStudentRecord(student);

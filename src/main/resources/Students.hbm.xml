@@ -4,7 +4,7 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-	<class name="org.mehaexample.asdDemo.model.Students" table="Students">
+	<class name="org.mehaexample.asdDemo.model.alignprivate.Students" table="Students">
 
 
 		<meta attribute="class-description">
@@ -26,6 +26,7 @@
 				<param name="useNamed">true</param>
 			</type>
 		</property>
+		<property name="race" column="Race" type="string" />
 		<property name="scholarship" column="Scholarship" type="boolean" />
 		<property name="visa" column="visa" type="string" />
 		<property name="phoneNum" column="Phone" type="string" />
@@ -77,7 +78,7 @@
 				<param name="useNamed">true</param>
 			</type>
 		</property>
-		<property name="photo" column="Photo" type="string" />
+		<property name="photo" column="Photo" type="blob" />
 
 
 	</class>
