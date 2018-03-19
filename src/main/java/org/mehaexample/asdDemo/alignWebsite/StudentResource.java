@@ -133,13 +133,13 @@ public class StudentResource {
 	}
 	
 	/**-----------------------------------------------------**/
-	@POST 
-	@Path("/{VerifyStudentLogin2FA}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public void VerifyStudentLogin2FA(){
-		// check if password entered is correct from db
-		// if it is correct, send him an email 
-	}
+//	@POST 
+//	@Path("/{VerifyStudentLogin2FA}")
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	public void VerifyStudentLogin2FA(){
+//		// check if password entered is correct from db
+//		// if it is correct, send him an email 
+//	}
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)

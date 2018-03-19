@@ -31,9 +31,10 @@ public class AdminLoginsDao {
 
   public AdminLogins findAdminLoginsByEmail(String email) {
     session = factory.openSession();
-    org.hibernate.query.Query query = session.createQuery("FROM AdminLogins WHERE email = :email ");
+    org.hibernate.query.Query query = session.createQuery("FROM AdminLogins WHERE email = :email");
     query.setParameter("email", email);
     List list = query.list();
+    System.out.println("list size" + list.size()); 
     session.close();
     if (list.isEmpty()) {
       return null;

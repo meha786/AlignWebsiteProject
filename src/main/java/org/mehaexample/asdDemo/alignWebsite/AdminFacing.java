@@ -3,22 +3,30 @@ package org.mehaexample.asdDemo.alignWebsite;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.json.JSONObject;
+import org.mehaexample.asdDemo.dao.alignadmin.AdminLoginsDao;
 import org.mehaexample.asdDemo.dao.alignadmin.ElectivesAdminDao;
 import org.mehaexample.asdDemo.dao.alignprivate.StudentsDao;
 import org.mehaexample.asdDemo.dao.alignprivate.WorkExperiencesDao;
 import org.mehaexample.asdDemo.enums.DegreeCandidacy;
 import org.mehaexample.asdDemo.enums.EnrollmentStatus;
+import org.mehaexample.asdDemo.model.alignadmin.AdminLogins;
+import org.mehaexample.asdDemo.model.alignadmin.PasswordChangeObject;
 import org.mehaexample.asdDemo.model.alignprivate.Electives;
+import org.mehaexample.asdDemo.model.alignprivate.MailClient;
+import org.mehaexample.asdDemo.model.alignprivate.StudentLogins;
 import org.mehaexample.asdDemo.model.alignprivate.Students;
 import org.mehaexample.asdDemo.scripts.TopFiveElectivesDao;
 import org.mehaexample.asdDemo.scripts.TopFiveEmployersDao;
@@ -38,11 +46,14 @@ import org.mehaexample.asdDemo.scripts.TotalStudentsWithScholarshipDao;
 
 
 
-@Path("admin")
-public class Admin{
+@Path("admin-facing")
+public class AdminFacing{
 	
 	// student details methods
 	StudentsDao studentDao = new StudentsDao();
+	AdminLoginsDao adminLoginsDao = new AdminLoginsDao();
+	StudentLogins studentLogins = new StudentLogins();
+	
 	ElectivesAdminDao electiveDao = new ElectivesAdminDao();
 	TopTenBachelorsDegreeDao topTenBachelorsDegreeDao = new TopTenBachelorsDegreeDao();
 	TopFiveEmployersDao topFiveEmployersDao = new TopFiveEmployersDao();
@@ -421,6 +432,82 @@ public class Admin{
 		System.out.println("getting total number of ALIGN students in silicon valley");
 		int total = totalStudentsInSiliconValleyDao.getTotalStudentsInSiliconValleyFromPublicDatabase();
 		return total; 
+	}
+	
+	/**
+	 * This is a function to change an existing admin's password
+	 * 
+	 * http://localhost:8080/alignWebsite/webapi/admin-facing/{email-id}/password-change
+	 * @param passwordChangeObject
+	 * @return 200 if password changed successfully else return 400 
+	 */
+	@POST
+	@Path("/{email}/password-change")
+    @Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response changeUserPassword(@PathParam("email") String adminEmail,PasswordChangeObject passwordChangeObject){
+		
+		AdminLogins adminLogins = adminLoginsDao.findAdminLoginsByEmail(adminEmail);
+				
+		if(adminLogins == null){
+		  return Response.status(Response.Status.BAD_REQUEST).
+				  entity("Email doesn't exist: " + adminEmail).build();
+		}
+		
+		System.out.println("yo " + passwordChangeObject.getOldPassword() + adminLogins.getAdminPassword() );
+		
+		if(adminLogins.getAdminPassword().equals(passwordChangeObject.getOldPassword())){
+			adminLogins.setAdminPassword(passwordChangeObject.getNewPassword());
+			adminLoginsDao.updateAdminLogin(adminLogins);
+			
+			return Response.status(Response.Status.OK).
+					  entity("Password Changed Succesfully!" ).build();
+		}else{
+			return Response.status(Response.Status.BAD_REQUEST).
+					  entity("Incorrect Password: ").build();
+		}
+	}
+	
+	/**
+	 * 
+	 * @param adminEmail
+	 * @return
+	 */
+	@POST
+	@Path("/{email}/password-reset")
+	@Produces(MediaType.APPLICATION_JSON)
+	// Send email to admin’s northeastern ID to reset the password.
+	public Response sendEmailForPasswordResetAdmin(@PathParam("email") String adminEmail){
+		
+		AdminLogins adminLogins = adminLoginsDao.findAdminLoginsByEmail(adminEmail);
+		
+		if(adminLogins == null){
+			  return Response.status(Response.Status.BAD_REQUEST).
+					  entity("Email doesn't exist: " + adminEmail).build();
+		}
+		
+		// generate registration key 
+		String registrationKey = createRegistrationKey(); 
+		
+		// after generation, send email
+		MailClient.sendPasswordResetEmail(adminEmail, registrationKey);
+		
+		return Response.status(Response.Status.OK).
+				  entity("Reset link sent succesfully!" ).build();  
+	}
+	
+	private String createRegistrationKey() {
+
+		return UUID.randomUUID().toString();
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+
+	public Response registerStudent(){		
+		return null;
 	}
 	
 	private int gcd(int p, int q) {
