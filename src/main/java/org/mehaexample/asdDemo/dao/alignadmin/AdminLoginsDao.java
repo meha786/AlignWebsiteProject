@@ -43,7 +43,7 @@ public class AdminLoginsDao {
 
   public AdminLogins createAdminLogin(AdminLogins adminLogin) {
     Transaction tx = null;
-    if (findAdminLoginsByEmail(adminLogin.getEmail()) == null) {
+    if (findAdminLoginsByEmail(adminLogin.getEmail()) != null) {
       System.out.println("Admin Login already exists!");
     } else {
       System.out.println("Saving admin login...");

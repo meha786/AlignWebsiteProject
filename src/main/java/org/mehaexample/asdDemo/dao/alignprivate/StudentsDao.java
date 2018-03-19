@@ -226,6 +226,24 @@ public class StudentsDao {
 	}
 
 	/**
+	 * Search a single student record using email.
+	 *
+	 * @param email Student's email.
+	 * @return Corresponding Student according to the email.
+	 */
+	public Students findStudentByEmail(String email) {
+		session = factory.openSession();
+		org.hibernate.query.Query query = session.createQuery("FROM Students WHERE email = :email ");
+		query.setParameter("email", email);
+		List list = query.list();
+		session.close();
+		if (list.isEmpty()) {
+			return null;
+		}
+		return (Students) list.get(0);
+	}
+
+	/**
 	 * Update a student record with most recent details.
 	 *
 	 * @param student which contains the new student details.
