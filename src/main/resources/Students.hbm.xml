@@ -80,6 +80,14 @@
 		</property>
 		<property name="photo" column="Photo" type="blob" />
 
+		<property name="visible" column="Visible" type="boolean" />
+		<property name="linkedin" column="Linkedin" type="string" />
+		<property name="facebook" column="Facebook" type="string" />
+		<property name="github" column="Github" type="string" />
+		<property name="website" column="Website" type="string" />
+		<property name="skills" column="Skills" type="string" />
+		<property name="summary" column="Summary" type="string" />
+
 
 	</class>
 </hibernate-mapping>
