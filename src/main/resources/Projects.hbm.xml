@@ -1,0 +1,26 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name = "org.mehaexample.asdDemo.model.alignprivate.Projects" table="Projects">
+
+        <meta attribute = "class-description">
+            This class contains the Project detail.
+        </meta>
+        <id name = "projectId" column="ProjectId" type="int">
+            <generator class="native"/>
+        </id>
+
+        <property name = "neuId" column="NeuId" type="string" />
+
+        <property name = "projectName" column="ProjectName" type="string" />
+
+        <property name = "startDate" column="StartDate" type="date" />
+
+        <property name = "endDate" column="EndDate" type="date" />
+
+        <property name = "description" column="Description" type="string" />
+    </class>
+</hibernate-mapping>

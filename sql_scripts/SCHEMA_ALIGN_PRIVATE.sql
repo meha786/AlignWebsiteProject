@@ -150,7 +150,6 @@ CREATE TABLE ExtraExperiences (
     CompanyName VARCHAR(50),
     StartDate DATE NOT NULL,
     EndDate DATE,
-    CurrentJob BOOLEAN,
     Title VARCHAR(255) NOT NULL,
     Description VARCHAR(1250),
     CONSTRAINT pk_ExtraExperiences_ExtraExperienceId
