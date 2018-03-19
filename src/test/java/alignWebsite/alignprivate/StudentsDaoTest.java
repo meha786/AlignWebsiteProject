@@ -22,9 +22,6 @@ import org.mehaexample.asdDemo.model.alignprivate.Students;
 import org.mehaexample.asdDemo.model.alignprivate.WorkExperiences;
 
 public class StudentsDaoTest {
-  public static final int COUNT_OF_MALE = 5;
-  private static final int COUNT_OF_FEMALE = 5;
-
   private static StudentsDao studentdao;
   private static WorkExperiencesDao workExperiencesDao;
   private static ElectivesDao electivesDao;
@@ -121,6 +118,20 @@ public class StudentsDaoTest {
 
     Students student = studentdao.addStudent(newStudent);
     Assert.assertTrue(student.toString().equals(newStudent.toString()));
+    studentdao.deleteStudent("0000000");
+  }
+
+  @Test
+  public void findStudentByEmailTest() {
+    Students newStudent = new Students("0000000", "tomcat@gmail.com", "Tom", "",
+            "Cat", Gender.M, "F1", "1111111111",
+            "401 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2015,
+            Term.SPRING, 2017,
+            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
+
+    Students student = studentdao.addStudent(newStudent);
+    Assert.assertTrue(studentdao.findStudentByEmail("tomcat@gmail.com").getNeuId().equals("0000000"));
+    Assert.assertTrue(studentdao.findStudentByEmail("tomcat2@gmail.com") == null);
     studentdao.deleteStudent("0000000");
   }
 

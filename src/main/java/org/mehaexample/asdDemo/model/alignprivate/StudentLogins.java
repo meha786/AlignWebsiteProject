@@ -7,12 +7,15 @@ public class StudentLogins {
   private String studentPassword;
   private String registrationKey;
   private Timestamp keyExpiration;
+  private boolean confirmed;
 
-  public StudentLogins(String email, String studentPassword, String registrationKey, Timestamp keyExpiration) {
+  public StudentLogins(String email, String studentPassword, String registrationKey,
+                       Timestamp keyExpiration, boolean confirmed) {
     this.email = email;
     this.studentPassword = studentPassword;
     this.registrationKey = registrationKey;
     this.keyExpiration = keyExpiration;
+    this.confirmed = confirmed;
   }
 
   public StudentLogins() { }
@@ -47,5 +50,13 @@ public class StudentLogins {
 
   public void setKeyExpiration(Timestamp keyExpiration) {
     this.keyExpiration = keyExpiration;
+  }
+
+  public boolean isConfirmed() {
+    return confirmed;
+  }
+
+  public void setConfirmed(boolean confirmed) {
+    this.confirmed = confirmed;
   }
 }
