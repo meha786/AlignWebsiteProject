@@ -2,7 +2,10 @@ package org.mehaexample.asdDemo.alignWebsite;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -11,175 +14,183 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+import org.mehaexample.asdDemo.dao.alignadmin.AdminLoginsDao;
 import org.mehaexample.asdDemo.dao.alignadmin.ElectivesAdminDao;
+import org.mehaexample.asdDemo.dao.alignadmin.GenderRatioDao;
+import org.mehaexample.asdDemo.dao.alignprivate.ElectivesDao;
+import org.mehaexample.asdDemo.dao.alignprivate.PriorEducationsDao;
 import org.mehaexample.asdDemo.dao.alignprivate.StudentsDao;
 import org.mehaexample.asdDemo.dao.alignprivate.WorkExperiencesDao;
-import org.mehaexample.asdDemo.enums.DegreeCandidacy;
-import org.mehaexample.asdDemo.enums.EnrollmentStatus;
-import org.mehaexample.asdDemo.model.alignprivate.Electives;
+import org.mehaexample.asdDemo.enums.Campus;
+import org.mehaexample.asdDemo.model.alignadmin.AdminLogins;
+import org.mehaexample.asdDemo.model.alignadmin.ElectivesAdmin;
+import org.mehaexample.asdDemo.model.alignadmin.GenderRatio;
+import org.mehaexample.asdDemo.model.alignadmin.PasswordChangeObject;
+import org.mehaexample.asdDemo.model.alignprivate.MailClient;
+import org.mehaexample.asdDemo.model.alignprivate.StudentBasicInfo;
+import org.mehaexample.asdDemo.model.alignprivate.StudentCoopList;
+import org.mehaexample.asdDemo.model.alignprivate.StudentLogins;
 import org.mehaexample.asdDemo.model.alignprivate.Students;
-import org.mehaexample.asdDemo.scripts.TopFiveElectivesDao;
-import org.mehaexample.asdDemo.scripts.TopFiveEmployersDao;
-import org.mehaexample.asdDemo.scripts.TopTenBachelorsDegreeDao;
-import org.mehaexample.asdDemo.scripts.TotalExperiencedStudentsDao;
-import org.mehaexample.asdDemo.scripts.TotalFemaleStudentsDao;
-import org.mehaexample.asdDemo.scripts.TotalMaleStudentsDao;
-import org.mehaexample.asdDemo.scripts.TotalStudentsInAmazonDao;
-import org.mehaexample.asdDemo.scripts.TotalStudentsInBostonDao;
-import org.mehaexample.asdDemo.scripts.TotalStudentsInCharlotteDao;
-import org.mehaexample.asdDemo.scripts.TotalStudentsInFacebookDao;
-import org.mehaexample.asdDemo.scripts.TotalStudentsInGoogleDao;
-import org.mehaexample.asdDemo.scripts.TotalStudentsInMicrosoftDao;
-import org.mehaexample.asdDemo.scripts.TotalStudentsInSeattleDao;
-import org.mehaexample.asdDemo.scripts.TotalStudentsInSiliconValleyDao;
-import org.mehaexample.asdDemo.scripts.TotalStudentsWithScholarshipDao;
+import org.mehaexample.asdDemo.model.alignprivate.WorkExperiences;
 
-
-
-@Path("admin")
+@Path("admin-facing")
 public class Admin{
 	
-	// student details methods
+	// DAO methods
 	StudentsDao studentDao = new StudentsDao();
 	ElectivesAdminDao electiveDao = new ElectivesAdminDao();
-	TopTenBachelorsDegreeDao topTenBachelorsDegreeDao = new TopTenBachelorsDegreeDao();
-	TopFiveEmployersDao topFiveEmployersDao = new TopFiveEmployersDao();
-	TopFiveElectivesDao topFiveElectivesDao = new TopFiveElectivesDao();
-	TotalExperiencedStudentsDao totalExperiencedStudentsDao = new TotalExperiencedStudentsDao();
-	TotalFemaleStudentsDao totalFemaleStudentsDao = new TotalFemaleStudentsDao();
-	TotalMaleStudentsDao totalMaleStudentsDao = new TotalMaleStudentsDao();
-	TotalStudentsInAmazonDao totalStudentsInAmazonDao = new TotalStudentsInAmazonDao();
-	TotalStudentsInBostonDao totalStudentsInBostonDao = new TotalStudentsInBostonDao();
-	TotalStudentsInCharlotteDao totalStudentsInCharlotteDao = new TotalStudentsInCharlotteDao();
-	TotalStudentsInFacebookDao totalStudentsInFacebookDao = new TotalStudentsInFacebookDao();
-	TotalStudentsInGoogleDao totalStudentsInGoogleDao = new TotalStudentsInGoogleDao();
-	TotalStudentsInMicrosoftDao totalStudentsInMicrosoftDao = new TotalStudentsInMicrosoftDao();
-	TotalStudentsInSeattleDao totalStudentsInSeattleDao = new TotalStudentsInSeattleDao();
-	TotalStudentsInSiliconValleyDao totalStudentsInSiliconValleyDao = new TotalStudentsInSiliconValleyDao();
-	TotalStudentsWithScholarshipDao totalStudentsWithScholarshipDao = new TotalStudentsWithScholarshipDao();
-	
-	
+	GenderRatioDao genderRatioDao = new GenderRatioDao();
 	WorkExperiencesDao workExperiencesDao = new WorkExperiencesDao();
-	
+	PriorEducationsDao priorEducationsDao = new PriorEducationsDao();
+	ElectivesDao electivesDao = new ElectivesDao();
+	AdminLoginsDao adminLoginsDao = new AdminLoginsDao();
+	StudentLogins studentLogins = new StudentLogins();
+
 	/**
-     * This is the function to search a student based on his/her firstname.
+     * This is the function to search for students
      *	
-     *	http://localhost:8080/alignWebsite/webapi/admin/search/Tony
+     *	http://localhost:8080/alignWebsite/webapi/admin-facing/students
      * @param firstname
-     * @return the list of student profiles matching the first name.
+     * @return the list of student profiles matching the fields.
      */
-	@GET
-	@Path("search/{firstName}")
+	@POST
+	@Path("students")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Students> searchStudent(@PathParam("firstName") String firstName){
-		System.out.println("getting search results for firstName = " + firstName);
-		ArrayList<Students> studentRecords = (ArrayList<Students>) studentDao.searchStudentRecord(firstName);
-		return studentRecords; 
+	public Response searchStudent(String search){
+		JSONObject jsonObj = new JSONObject(search);
+		Map<String,List<String>> map = new HashMap<String,List<String>>();
+		String firstname = "";
+		String lastname = "";
+		String email = "";
+		String degreeyear = "";
+		String enrollmentstatus = "";
+		String campus = "";
+		String company = "";
+		if (!jsonObj.isNull("firstname")){
+			firstname = jsonObj.get("firstname").toString();
+			ArrayList<String> firstnameList = new ArrayList<String>();
+			firstnameList.add(firstname);
+			map.put("firstName",firstnameList);
+		}
+		if (!jsonObj.isNull("lastname")){
+			lastname = jsonObj.get("lastname").toString();
+			ArrayList<String> lastnameList = new ArrayList<String>();
+			lastnameList.add(lastname);
+			map.put("lastName",lastnameList);
+		}
+		if (!jsonObj.isNull("email")){
+			email = jsonObj.get("email").toString();
+			ArrayList<String> emailList = new ArrayList<String>();
+			emailList.add(email);
+			map.put("email",emailList);
+		}
+		if (!jsonObj.isNull("degreeyear")){
+			degreeyear = jsonObj.get("degreeyear").toString();
+			ArrayList<String> degreeyearList = new ArrayList<String>();
+			degreeyearList.add(degreeyear);
+			map.put("expectedLastYear",degreeyearList);
+		}
+		if (!jsonObj.isNull("enrollmentstatus")){
+			enrollmentstatus = jsonObj.get("enrollmentstatus").toString();
+			ArrayList<String> enrollmentstatusList = new ArrayList<String>();
+			enrollmentstatusList.add(enrollmentstatus);
+			map.put("enrollmentStatus",enrollmentstatusList);
+		}
+		if (!jsonObj.isNull("campus")){
+			campus = jsonObj.get("campus").toString();
+			ArrayList<String> campusList = new ArrayList<String>();
+			campusList.add(campus);
+			map.put("campus",campusList);
+		}
+		if (!jsonObj.isNull("company")){
+			company = jsonObj.get("company").toString();
+			ArrayList<String> companyList = new ArrayList<String>();
+			companyList.add(company);
+			map.put("companyName",companyList);
+		}
+		ArrayList<Students> studentRecords = (ArrayList<Students>) studentDao.getAdminFilteredStudents(map);
+		JSONArray resultArray = new JSONArray();
+		
+		for(Students st : studentRecords) {
+			JSONObject studentJson = new JSONObject();
+			JSONObject eachStudentJson = new JSONObject(st);
+			java.util.Set<String> keys = eachStudentJson.keySet();
+			for(int i=0;i<keys.toArray().length; i++){
+				studentJson.put(((String) keys.toArray()[i]).toLowerCase(), eachStudentJson.get((String) keys.toArray()[i]));
+			}
+			resultArray.put(studentJson);
+	    }
+		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
 	}
 	
 	/**
      * This is the function to search a student based on his/her nuid.
      *	
-     *	http://localhost:8080/alignWebsite/webapi/admin/student/111234547
+     *	http://localhost:8080/alignWebsite/webapi/admin/student/090
      * @param nuid
      * @return the student profile matching the nuid.
      */
 	@GET
-	@Path("student/{nuid}")
+	@Path("students/{nuid}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Students getStudentProfile(@PathParam("nuid") String nuid){
-		System.out.println("getting student for nuid = " + nuid);
-		Students studentRecord = studentDao.getStudentRecord(nuid);
-		return studentRecord; 
+	public Response getStudentProfile(@PathParam("nuid") String nuid){
+		if(!studentDao.ifNuidExists(nuid)){
+			return Response.status(Response.Status.NOT_FOUND).entity("No Student record exists with given ID").build();
+		} else {
+			Students studentRecord = studentDao.getStudentRecord(nuid);
+			JSONObject jsonObj = new JSONObject(studentRecord);
+			ArrayList<WorkExperiences> workEx = (ArrayList<WorkExperiences>) workExperiencesDao.getWorkExperiencesByNeuId(nuid);
+			jsonObj.put("company", workEx);
+			ArrayList<ElectivesAdmin> electives = (ArrayList<ElectivesAdmin>) electiveDao.getElectivesByNeuId(nuid);
+			jsonObj.put("courses", electives);
+			return Response.status(Response.Status.OK).entity(jsonObj.toString()).build();
+		}
 	}
-	
-	/**
-     * This is the function to search a student based on his/her emailid.
-     *	
-     *	http://localhost:8080/alignWebsite/webapi/admin/studentdetails/doe.j@husky.neu.edu
-     * @param email
-     * @return the student profile and gpa info matching the emailid.
-     */
-	@GET
-	@Path("studentdetails/{email}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String getStudentProfileDetails(@PathParam("email") String email){
-		System.out.println("getting student details for email = " + email);
-		Students studentRecordDetails = studentDao.getStudentRecordByEmailId(email);
-		List<Electives> electivesDetails = new ArrayList<>();
-		//electiveDao.getAllElectivesbyNuid(studentRecordDetails.getNeuId());
-		JSONObject jsonObj = new JSONObject(studentRecordDetails);
-		jsonObj.put("terms", electivesDetails);
-		return jsonObj.toString(); 
-	}
-	
-	/**
-     * This is the function to search and filter a students based on degree, programType,name, email.
-     *	{
-	 *		"degree":"PHD",
-	 *		"enrollmentStatus":"FULL_TIME",
-	 *		"name": "John",
-	 *		"email": "doe.j@husky.neu.edu"
-	 *	}
-     *	http://localhost:8080/alignWebsite/webapi/admin/filter
-     * @param email
-     * @return the list of student profiles matching the filters.
-     */
-	@POST
-	@Path("filter")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<Students> searchSimilarStudents(String search){
-		JSONObject jsonObj = new JSONObject(search);
-		String degree = "PLACEHOLDER";
-		DegreeCandidacy degreeCandidacyEnum = DegreeCandidacy.valueOf(degree);
-		String enrollmentStatus = "PLACEHOLDER";
-		EnrollmentStatus enrollmentEnum = EnrollmentStatus.valueOf(enrollmentStatus);
-		String name = "PLACEHOLDER";
-		String email = "PLACEHOLDER";
-		
-		if (!jsonObj.isNull("degree")){
-			degree = jsonObj.get("degree").toString();
-			degreeCandidacyEnum = DegreeCandidacy.valueOf(degree);
-		}
-		if (!jsonObj.isNull("enrollmentStatus")){
-			enrollmentStatus = jsonObj.get("enrollmentStatus").toString();
-			enrollmentEnum = EnrollmentStatus.valueOf(enrollmentStatus);
-		}
-		if (!jsonObj.isNull("firstName")){
-			name = jsonObj.get("firstName").toString();
-		}
-		if (!jsonObj.isNull("email")){
-			email = jsonObj.get("email").toString();
-		}
-		
-		ArrayList<Students> studentRecords = 
-				(ArrayList<Students>) studentDao.adminFiterStudents(degreeCandidacyEnum, enrollmentEnum, name ,email);
-		return studentRecords;
-	}
-	
 	
 	// Data analytics methods
 	
 	/**
      * This is the function to get the men to women ratio.
      *	
-     *	http://localhost:8080/alignWebsite/webapi/admin/analytics/genderratio
+     *	http://localhost:8080/alignWebsite/webapi/admin/analytics/gender-ratio
      * @param 
      * @return the gender ratio is returned as string
 	 * @throws SQLException 
      */
-	@GET
-	@Path("analytics/genderratio")
+	@POST
+	@Path("analytics/gender-ratio")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getGenderRatio() throws SQLException{
-		System.out.println("getting gender ratio");
-		int a = totalMaleStudentsDao.getTotalMaleStudentsFromPublicDatabase();
-		int b = totalFemaleStudentsDao.getTotalFemaleStudentsFromPublicDatabase();
-		String ratio = ratio(a,b);
-		return ratio; 
+	public Response getGenderRatio(String para) throws SQLException{
+		JSONObject jsonObj = new JSONObject(para);
+		Object campus ="";
+		List<GenderRatio> ratio = new ArrayList();
+		if (!jsonObj.isNull("campus")){
+			try{
+				campus = jsonObj.get("campus");
+				ratio = genderRatioDao.getYearlyGenderRatio(Campus.valueOf(campus.toString().toUpperCase()));
+			} catch(Exception e){
+				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist").build();
+			}
+		} else {
+			return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus field cannot be null").build();
+		}
+		JSONArray resultArray = new JSONArray();
+		for(GenderRatio gr : ratio) {
+			JSONObject studentJson = new JSONObject();
+			JSONObject eachStudentJson = new JSONObject(gr);
+			java.util.Set<String> keys = eachStudentJson.keySet();
+			for(int i=0;i<keys.toArray().length; i++){
+				studentJson.put(((String) keys.toArray()[i]).toLowerCase(), eachStudentJson.get((String) keys.toArray()[i]));
+			}
+			resultArray.put(studentJson);
+	    }
+		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
 	}
 	
 	/**
@@ -191,31 +202,76 @@ public class Admin{
 	 * @throws SQLException 
      * 
      */
-	@GET
-	@Path("analytics/topbachelordegrees")
+	@POST
+	@Path("analytics/top-bachelor-degrees")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<String> getTopBachelorDegree() throws SQLException{
-		System.out.println("getting top bachelor degrees");
-		ArrayList<String> list = (ArrayList<String>) topTenBachelorsDegreeDao.getTopTenBachelorsDegreeFromPublicDatabase();
-		return list; 
+	public Response getTopBachelorDegree(String para) throws SQLException{
+		JSONObject jsonObj = new JSONObject(para);
+		Object campus ="";
+		List<String> degrees = new ArrayList();
+		if (!jsonObj.isNull("campus")){
+			try{
+				campus = jsonObj.get("campus");
+				degrees = priorEducationsDao.getTopTenBachelors(Campus.valueOf(campus.toString().toUpperCase()));
+			} catch(Exception e){
+				degrees = priorEducationsDao.getTopTenBachelors(null);
+			}
+		}
+		JSONArray resultArray = new JSONArray();
+		for(String deg : degrees) {
+			resultArray.put(deg);
+	    }
+		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
 	}
 	
 	/**
      * This is the function to get the top 10 employers.
      *	
-     *	http://localhost:8080/alignWebsite/webapi/admin/analytics/topemployers
+     *	http://localhost:8080/alignWebsite/webapi/admin/analytics/top-employers
      * @param 
      * @return the list of top 10 employers
 	 * @throws SQLException 
      * 
      */
-	@GET
-	@Path("analytics/topemployers")
+	@POST
+	@Path("analytics/top-employers")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<String> getTopEmployers() throws SQLException{
-		System.out.println("getting top employers");
-		ArrayList<String> list = (ArrayList<String>) topFiveEmployersDao.getTopFiveEmployersFromPublicDatabase();
-		return list;
+	public Response getTopEmployers(String para) throws SQLException{
+		JSONObject jsonObj = new JSONObject(para);
+		Object campus = null;
+		Campus camp;
+		int year;
+		List<String> employers = new ArrayList();
+		try{
+			if (!jsonObj.isNull("campus")){
+				campus = jsonObj.get("campus");
+				camp = Campus.valueOf(campus.toString().toUpperCase());
+			} else {
+				camp = null;
+			}
+		} catch(Exception e){
+			camp = null;
+		}
+		try{
+			if (!jsonObj.isNull("year")){
+				year = Integer.valueOf(jsonObj.get("year").toString());
+			} else {
+				year = -1;
+			}
+		} catch(Exception e){
+			year = -1;
+		}
+		if (year <0)
+			employers = workExperiencesDao.getTopTenEmployers(camp,null);
+		else
+			employers = workExperiencesDao.getTopTenEmployers(camp,year);
+		JSONArray resultArray = new JSONArray();
+		for(String emp : employers) {
+			resultArray.put(emp);
+	    }
+		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
 	}
 	
 	
@@ -228,208 +284,300 @@ public class Admin{
 	 * @throws SQLException 
      * 
      */
-	@GET
-	@Path("analytics/topelectives")
+	@POST
+	@Path("analytics/top-electives")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<String> getTopElectives() throws SQLException{
-		System.out.println("getting top electives");
-		ArrayList<String> list =  (ArrayList<String>) topFiveElectivesDao.getTopFiveElectivesFromPublicDatabase();
-		return list; 
-	}
-	
-	
-	/**
-     * This is the function to get the total number of students with work experience.
-     *	
-     *	http://localhost:8080/alignWebsite/webapi/admin/analytics/withworkexp
-     * @param 
-     * @return the total number of students with work experience
-	 * @throws SQLException 
-     * 
-     */
-	@GET
-	@Path("analytics/withworkexp")
-	@Produces(MediaType.APPLICATION_JSON)
-	public int getStudentsWorkExp() throws SQLException{
-		System.out.println("getting total number of students with work experience");
-		int total = totalExperiencedStudentsDao.getTotalExperiencedStudents();
-		return total; 
-	}
-	
-	/**
-     * This is the function to get the total number of students working in facebook.
-     *	
-     *	http://localhost:8080/alignWebsite/webapi/admin/analytics/workinginfacebook
-     * @param 
-     * @return the total number of students working in facebook.
-	 * @throws SQLException 
-     * 
-     */
-	@GET
-	@Path("analytics/workinginfacebook")
-	@Produces(MediaType.APPLICATION_JSON)
-	public int getStudentsWorkingInFacebook() throws SQLException{
-		System.out.println("getting total number of students working in facebook");
-		int total = totalStudentsInFacebookDao.getTotalStudentsInFacebook();
-		return total; 
-	}
-	
-	
-	/**
-     * This is the function to get the total number of students working in amazon.
-     *	
-     *	http://localhost:8080/alignWebsite/webapi/admin/analytics/workinginamazon
-     * @param 
-     * @return the total number of students working in amazon.
-	 * @throws SQLException 
-     * 
-     */
-	@GET
-	@Path("analytics/workinginamazon")
-	@Produces(MediaType.APPLICATION_JSON)
-	public int getStudentsWorkingInAmazon() throws SQLException{
-		System.out.println("getting total number of students working in amazon");
-		int total = totalStudentsInAmazonDao.getTotalStudentsInAmazon();
-		return total; 
-	}
-	
-	
-	/**
-     * This is the function to get the total number of students working in google.
-     *	
-     *	http://localhost:8080/alignWebsite/webapi/admin/analytics/workingingoogle
-     * @param 
-     * @return the total number of students working in google.
-	 * @throws SQLException 
-     * 
-     */
-	@GET
-	@Path("analytics/workingingoogle")
-	@Produces(MediaType.APPLICATION_JSON)
-	public int getStudentsWorkingInGoogle() throws SQLException{
-		System.out.println("getting total number of students working in google");
-		int total = totalStudentsInGoogleDao.getTotalStudentsInGoogle();
-		return total; 
-	}
-	
-	
-	/**
-     * This is the function to get the total number of students working in microsoft.
-     *	
-     *	http://localhost:8080/alignWebsite/webapi/admin/analytics/workinginmicrosoft
-     * @param 
-     * @return the total number of students working in microsoft.
-	 * @throws SQLException 
-     * 
-     */
-	@GET
-	@Path("analytics/workinginmicrosoft")
-	@Produces(MediaType.APPLICATION_JSON)
-	public int getStudentsWorkingInMicrosoft() throws SQLException{
-		System.out.println("getting total number of students working in microsoft");
-		int total = totalStudentsInMicrosoftDao.getTotalStudentsInMicrosoft();
-		return total; 
+	public Response getTopElectives(String para) throws SQLException{
+		JSONObject jsonObj = new JSONObject(para);
+		Object campus =null;
+		Campus camp;
+		int year;
+		List<String> electives = new ArrayList();
+		try{
+			if (!jsonObj.isNull("campus")){
+				campus = jsonObj.get("campus");
+				camp = Campus.valueOf(campus.toString().toUpperCase());
+			} else {
+				camp = null;
+			}
+		} catch(Exception e){
+			camp = null;
+		}
+		try{
+			if (!jsonObj.isNull("year")){
+				year = Integer.valueOf(jsonObj.get("year").toString());
+			} else {
+				year = -1;
+			}
+		} catch(Exception e){
+			year = -1;
+		}
+		if (year <0)
+			electives = electivesDao.getTopTenElectives(camp,null);
+		else
+			electives = electivesDao.getTopTenElectives(camp,year);
+		JSONArray resultArray = new JSONArray();
+		for(String ele : electives) {
+			resultArray.put(ele);
+	    }
+		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
 	}
 	
 	/**
-     * This is the function to get the total number of students with scholarship.
+     * This is the function to get the list of companies students worked for as coop.
      *	
-     *	http://localhost:8080/alignWebsite/webapi/admin/analytics/withscholarship
+     *	http://localhost:8080/alignWebsite/webapi/admin/analytics/coop-students
      * @param 
-     * @return the total number of students with scholarship
+     * @return the list of top 10 electives
 	 * @throws SQLException 
      * 
      */
-	@GET
-	@Path("analytics/withscholarship")
+	@POST
+	@Path("analytics/coop-students")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public int getStudentsWithScholarship() throws SQLException{
-		System.out.println("getting total number of students with scholarship");
-		int total = totalStudentsWithScholarshipDao.getTotalStudentsWithScholarshipFromPublicDatabase();
-		return total; 
+	public Response getCoopStudents(String para) throws SQLException{
+		JSONObject jsonObj = new JSONObject(para);
+		Object campus =null;
+		Campus camp;
+		int year;
+		List<StudentCoopList> coopStudentsList = new ArrayList();
+		try{
+			if (!jsonObj.isNull("campus")){
+				campus = jsonObj.get("campus");
+				camp = Campus.valueOf(campus.toString().toUpperCase());
+			} else {
+				camp = null;
+			}
+		} catch(Exception e){
+			camp = null;
+		}
+		try{
+			if (!jsonObj.isNull("year")){
+				year = Integer.valueOf(jsonObj.get("year").toString());
+			} else {
+				year = -1;
+			}
+		} catch(Exception e){
+			year = -1;
+		}
+		if (year <0)
+			coopStudentsList = workExperiencesDao.getStudentCoopCompanies(camp,null);
+		else
+			coopStudentsList = workExperiencesDao.getStudentCoopCompanies(camp,year);
+		
+		JSONArray resultArray = new JSONArray();
+		for(StudentCoopList cl : coopStudentsList) {
+			JSONObject studentJson = new JSONObject();
+			JSONObject eachStudentJson = new JSONObject(cl);
+			java.util.Set<String> keys = eachStudentJson.keySet();
+			for(int i=0;i<keys.toArray().length; i++){
+				studentJson.put(((String) keys.toArray()[i]).toLowerCase(), eachStudentJson.get((String) keys.toArray()[i]));
+			}
+			resultArray.put(studentJson);
+	    }
+		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
 	}
+	
 	
 	
 	/**
-     * This is the function to get the total number of students in align program in seattle.
-     *	
-     *	http://localhost:8080/alignWebsite/webapi/admin/analytics/alignseattle
-     * @param 
-     * @return the total number of students in align program in seattle.
-	 * @throws SQLException 
-     * 
-     */
-	@GET
-	@Path("analytics/alignseattle")
-	@Produces(MediaType.APPLICATION_JSON)
-	public int getStudentsAlignSeattle() throws SQLException{
-		System.out.println("getting total number of ALIGN students in seattle");
-		int total = totalStudentsInSeattleDao.getTotalStudentsInSeattleFromPublicDatabase();
-		return total; 
+	 * This is a function for retrieving the students working in a given company
+	 * 
+	 * http://localhost:8080/alignWebsite/webapi/admin-facing/analytics/company
+	 * @param params
+	 * @return
+	 */
+	@POST
+	@Path("/analytics/company")
+	public Response getStudentsWorkingForACompany(String params){
+		JSONObject jsonObj = new JSONObject(params);
+		Object campus = null;
+		Campus camp;
+		int year;
+		String company = null;
+		List<StudentBasicInfo> studentsList = new ArrayList();
+		
+		// company can't have null value
+		if (!jsonObj.isNull("company")){
+			try {
+				campus = jsonObj.get("campus");
+				camp = Campus.valueOf(campus.toString().toUpperCase());
+			} catch(Exception e){
+				camp = null;
+			}
+			try{
+				if (!jsonObj.isNull("year")){
+					year = Integer.valueOf(jsonObj.get("year").toString());
+				} else {
+					year = -1;
+				}
+			} catch(Exception e){
+				year = -1;
+			}
+			
+			company = (String) jsonObj.get("company");
+			
+			if (year <0)
+				studentsList = workExperiencesDao.getStudentsWorkingInACompany(camp, null, company);
+			else
+				studentsList = workExperiencesDao.getStudentsWorkingInACompany(camp, year, company);
+				
+		}else{
+			return Response.status(Response.Status.BAD_REQUEST).
+					entity("Company can't be null: ").build();
+		}
+		
+		JSONArray resultArray = new JSONArray();
+		
+		for(StudentBasicInfo st : studentsList) {
+			JSONObject studentJson = new JSONObject();
+			JSONObject eachStudentJson = new JSONObject(st);
+			java.util.Set<String> keys = eachStudentJson.keySet();
+			for(int i=0;i<keys.toArray().length; i++){
+				studentJson.put(((String) keys.toArray()[i]).toLowerCase(), eachStudentJson.get((String) keys.toArray()[i]));
+			}
+			resultArray.put(studentJson);
+	    }
+		
+		return Response.status(Response.Status.OK).
+				entity(resultArray.toString()).build();  
+	}
+
+	
+	/**
+	 * This is a function for retrieving the students working as full time
+	 * 
+	 * http://localhost:8080/alignWebsite/webapi/admin-facing/analytics/working
+	 * @param params
+	 * @return
+	 */
+	@POST
+	@Path("/analytics/working")
+	public Response getStudentWorkingFullTime(String params){
+		JSONObject jsonObj = new JSONObject(params);
+		Object campus = null;
+		Campus camp;
+		int year;
+		List<StudentCoopList> studentsList = new ArrayList();
+		
+		// company can't have null value
+		try {
+			campus = jsonObj.get("campus");
+			camp = Campus.valueOf(campus.toString().toUpperCase());
+		} catch(Exception e){
+			camp = null;
+		}
+		try{
+			if (!jsonObj.isNull("year")){
+				year = Integer.valueOf(jsonObj.get("year").toString());
+			} else {
+				year = -1;
+			}
+		} catch(Exception e){
+			year = -1;
+		}
+			
+		if (year <0)
+			studentsList = workExperiencesDao.getStudentCurrentCompanies(camp, null);
+		else
+			studentsList = workExperiencesDao.getStudentCurrentCompanies(camp, year);
+				
+		JSONArray resultArray = new JSONArray();
+		
+		for(StudentCoopList st : studentsList) {
+			JSONObject studentJson = new JSONObject();
+			JSONObject eachStudentJson = new JSONObject(st);
+			java.util.Set<String> keys = eachStudentJson.keySet();
+			for(int i=0;i<keys.toArray().length; i++){
+				studentJson.put(((String) keys.toArray()[i]).toLowerCase(), eachStudentJson.get((String) keys.toArray()[i]));
+			}
+			resultArray.put(studentJson);
+	    }
+		
+		return Response.status(Response.Status.OK).
+				entity(resultArray.toString()).build();  
 	}
 	
 	/**
-     * This is the function to get the total number of students in align program in boston.
-     *	
-     *	http://localhost:8080/alignWebsite/webapi/admin/analytics/alignboston
-     * @param 
-     * @return the total number of students in align program in boston.
-	 * @throws SQLException 
-     * 
-     */
-	@GET
-	@Path("analytics/alignboston")
+	 * This is a function to change an existing admin's password
+	 * 
+	 * http://localhost:8080/alignWebsite/webapi/admin-facing/password-change
+	 * @param passwordChangeObject
+	 * @return 200 if password changed successfully else return 404
+	 */
+	@POST
+	@Path("/password-change")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public int getStudentsAlignBoston() throws SQLException{
-		System.out.println("getting total number of ALIGN students in boston");
-		int total = totalStudentsInBostonDao.getTotalStudentsInBostonFromPublicDatabase();
-		return total; 
+	public Response changeUserPassword(PasswordChangeObject passwordChangeObject){
+
+		AdminLogins adminLogins = adminLoginsDao.findAdminLoginsByEmail(passwordChangeObject.getEmail());
+
+		if(adminLogins == null){
+			return Response.status(Response.Status.NOT_FOUND).
+					entity("Email doesn't exist: " + passwordChangeObject.getEmail()).build();
+		}
+
+		System.out.println("yo " + passwordChangeObject.getOldPassword() + adminLogins.getAdminPassword() );
+
+		if(adminLogins.getAdminPassword().equals(passwordChangeObject.getOldPassword())){
+			adminLogins.setAdminPassword(passwordChangeObject.getNewPassword());
+			adminLoginsDao.updateAdminLogin(adminLogins);
+
+			return Response.status(Response.Status.OK).
+					entity("Password Changed Succesfully!" ).build();
+		}else{
+			return Response.status(Response.Status.BAD_REQUEST).
+					entity("Incorrect Password: ").build();
+		}
 	}
-	
-	
+
 	/**
-     * This is the function to get the total number of students in align program in charlotte.
-     *	
-     *	http://localhost:8080/alignWebsite/webapi/admin/analytics/aligncharlotte
-     * @param 
-     * @return the total number of students in align program in charlotte.
-	 * @throws SQLException 
-     * 
-     */
-	@GET
-	@Path("analytics/aligncharlotte")
+	 * This function sends email to admin’s northeastern ID to reset the password.
+	 * 
+	 * @param adminEmail
+	 * @return 200 if password changed successfully else return 404
+	 */
+	@POST
+	@Path("/password-reset")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public int getStudentsAlignCharlotte() throws SQLException{
-		System.out.println("getting total number of ALIGN students in charlotte");
-		int total = totalStudentsInCharlotteDao.getTotalStudentsInCharlotteFromPublicDatabase();
-		return total; 
+	public Response sendEmailForPasswordResetAdmin(String jsonInput){
+
+		JSONObject jsonObj = new JSONObject(jsonInput);
+
+		if (jsonObj.isNull("email")){
+			return Response.status(Response.Status.BAD_REQUEST).
+					entity("Email Id can't be null").build();
+		}else{
+			String adminEmail = (String) jsonObj.get("email");
+
+			AdminLogins adminLogins = adminLoginsDao.findAdminLoginsByEmail(adminEmail);
+
+			// or invalid entry
+			if(adminLogins == null){
+				return Response.status(Response.Status.NOT_FOUND).
+						entity("Email doesn't exist: " + adminEmail).build();
+			}
+
+			// generate registration key 
+			String registrationKey = createRegistrationKey(); 
+
+			System.out.println("Registration key: " + registrationKey);
+			// after generation, send email
+			MailClient.sendPasswordResetEmail(adminEmail, registrationKey);
+
+			return Response.status(Response.Status.OK).
+					entity("Password Reset link sent succesfully!" ).build(); 	
+		}
+
 	}
-	
-	/**
-     * This is the function to get the total number of students in align program in siliconvalley.
-     *	
-     *	http://localhost:8080/alignWebsite/webapi/admin/analytics/alignsiliconvalley
-     * @param 
-     * @return the total number of students in align program in siliconvalley.
-	 * @throws SQLException 
-     * 
-     */
-	@GET
-	@Path("analytics/alignsiliconvalley")
-	@Produces(MediaType.APPLICATION_JSON)
-	public int getStudentsAlignSiliconValley() throws SQLException{
-		System.out.println("getting total number of ALIGN students in silicon valley");
-		int total = totalStudentsInSiliconValleyDao.getTotalStudentsInSiliconValleyFromPublicDatabase();
-		return total; 
-	}
-	
-	private int gcd(int p, int q) {
-	    if (q == 0) return p;
-	    else return gcd(q, p % q);
-	}
-	
-	private String ratio(int a, int b) {
-		final int gcd = gcd(a,b);
-		return String.valueOf(a/gcd) + " " + String.valueOf(b/gcd);
-	}
+
+	private String createRegistrationKey() {
+
+		//make it 6 digit?
+		return UUID.randomUUID().toString();
+	}	
 }
