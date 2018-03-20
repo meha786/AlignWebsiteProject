@@ -2,6 +2,7 @@ package org.mehaexample.asdDemo.alignWebsite;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -12,15 +13,19 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
+import org.mehaexample.asdDemo.dao.alignprivate.StudentLoginsDao;
 import org.mehaexample.asdDemo.dao.alignprivate.StudentsDao;
+import org.mehaexample.asdDemo.model.alignadmin.AdminLogins;
+import org.mehaexample.asdDemo.model.alignprivate.MailClient;
+import org.mehaexample.asdDemo.model.alignprivate.StudentLogins;
 import org.mehaexample.asdDemo.model.alignprivate.Students;
 
-@Path("studentresource")
+@Path("student-facing")
 public class StudentResource {
 	StudentsDao studentDao = new StudentsDao();
-//	PasswordDao passwordDao = new PasswordDao();
-
+	StudentLoginsDao studentLoginsDao = new StudentLoginsDao(); 
 	/**
 	 * Method handling HTTP GET requests. The returned object will be sent
 	 * to the client as "APPLICATION_JSON" media type.
@@ -213,6 +218,45 @@ public class StudentResource {
     public void updateStudentOptIn(@PathParam("nuid") String nuid , Students student) {
 		System.out.println("update opt-in field for nuid=" + nuid);
     }	
+	
+	
+	// Send registration email
+	/**
+	 * 
+	 * @param adminEmail
+	 * @return
+	 */
+	@POST
+	@Path("/{email}/registration")
+    @Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	// Send email to admin’s northeastern ID to reset the password.
+	public Response sendRegistrationEmail(@PathParam("email") String studentEmail){
+		
+		// check student record student table
+		//if he is registered?
+		StudentLogins studentLogin = studentLoginsDao.findStudentLoginsByEmail(studentEmail);
+		
+		if(studentLogin == null){
+			// generate registration key 
+			String registrationKey = createRegistrationKey(); 
+			 
+			// after generation, send email
+			MailClient.sendRegistrationEmail(studentEmail, registrationKey);
+			
+			return Response.status(Response.Status.OK).
+					  entity("Registration link sent succesfully!" + studentEmail).build(); 
+			 
+		}else{
+			 return Response.status(Response.Status.NOT_ACCEPTABLE).
+					  entity("Student is Already Registered!" + studentEmail).build();
+		} 
+	}
+
+	private String createRegistrationKey() {
+
+		return UUID.randomUUID().toString();
+	}
 	
 	
 }

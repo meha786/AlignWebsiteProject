@@ -8,8 +8,8 @@ import javax.activation.*;
 public class MailClient
 {
 	public static void sendPasswordResetEmail(String toEmail, String registrationKey) {
-        final String fromEmail = "northeasternaccount@gmail.com"; //requires valid gmail id
-        final String password = "your password"; // correct password for gmail id
+        final String fromEmail = "te97399@gmail.com"; //requires valid gmail id
+        final String password = "Test#786"; // correct password for gmail id
 
         System.out.println("TLSEmail Start");
         Properties props = new Properties();
@@ -33,6 +33,32 @@ public class MailClient
 
     }
 
+	public static void sendRegistrationEmail(String toEmail, String registrationKey) {
+        final String fromEmail = "te97399@gmail.com"; //requires valid gmail id
+        final String password = "Test#786"; // correct password for gmail id
+
+        System.out.println("TLSEmail Start");
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.gmail.com"); //SMTP Host
+        props.put("mail.smtp.port", "587"); //TLS Port
+        props.put("mail.smtp.auth", "true"); //enable authentication
+        props.put("mail.smtp.starttls.enable", "true"); //enable STARTTLS
+
+        //create Authenticator object to pass in Session.getInstance argument
+        Authenticator auth = new Authenticator() {
+            //override the getPasswordAuthentication method
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(fromEmail, password);
+            }
+        };
+        Session session = Session.getInstance(props, auth);
+
+        String resetLink = "http://localhost:8080/alignWebsite/webapi/registration";
+        sendEmail(session, toEmail,"Registration Email Northeastern Account", 
+        		"Your Registration key is: " + registrationKey + "and Registration link is " + resetLink);
+
+    }
+	
     private static void sendEmail(Session session, String toEmail, String subject, String body){
         try
         {
