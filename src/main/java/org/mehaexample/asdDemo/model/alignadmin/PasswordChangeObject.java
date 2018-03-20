@@ -3,13 +3,23 @@ package org.mehaexample.asdDemo.model.alignadmin;
 public class PasswordChangeObject {
 	 private String oldPassword; 
 	 private String newPassword;
+	 private String email;
 	 
 	public PasswordChangeObject(String email, String oldPassword, String newPassword) {
 		super();
+		this.email = email;
 		this.oldPassword = oldPassword;
 		this.newPassword = newPassword;
 	}
 	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public PasswordChangeObject() {
 		super();
 	}
