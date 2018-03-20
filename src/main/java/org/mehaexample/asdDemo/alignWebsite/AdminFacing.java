@@ -251,15 +251,15 @@ public class AdminFacing{
 		return list; 
 	}
 	// =====================================================================================================================
-	// webapi/analytics/working
 	/**
 	 * This is a function for retrieving the students working in a given company
 	 * 
+	 * http://localhost:8080/alignWebsite/webapi/admin-facing/analytics/company
 	 * @param params
 	 * @return
 	 */
 	@POST
-	@Path("/analytics/working")
+	@Path("/analytics/company")
 	public Response getStudentsWorkingForACompany(String params){
 		JSONObject jsonObj = new JSONObject(params);
 		System.out.println("Params in: " + params);  
@@ -289,6 +289,44 @@ public class AdminFacing{
 				entity(resultObj.toString()).build();  
 	}
 
+	
+	/**
+	 * This is a function for retrieving the students working as full time
+	 * 
+	 * http://localhost:8080/alignWebsite/webapi/admin-facing/analytics/working
+	 * @param params
+	 * @return
+	 */
+	@POST
+	@Path("/analytics/working")
+	public Response getStudentWorkingFullTime(String params){
+		JSONObject jsonObj = new JSONObject(params);
+		System.out.println("Params in: " + params);  
+
+		String campus =null;
+		int year;
+		List<StudentCoopList> studentsList = new ArrayList();
+		
+		// company can't have null value
+		if (!jsonObj.isNull("company")){
+			campus = (String) jsonObj.get("campus");
+			year = Integer.valueOf(jsonObj.get("year").toString());
+			studentsList = workExperiencesDao.
+					getStudentCurrentCompanies(Campus.valueOf(campus.toString().toUpperCase()), year);
+					
+		}else{
+			return Response.status(Response.Status.BAD_REQUEST).
+					entity("No Full time students Exists").build();
+		}
+		
+		System.out.println("student List" + studentsList.size()); 
+		JSONObject resultObj = new JSONObject(studentsList);
+		System.out.println("result " + resultObj.toString()); 
+		return Response.status(Response.Status.OK).
+				entity(resultObj.toString()).build();  
+	}
+
+	// =====================================================================================================================
 
 	/**
 	 * This is the function to get the total number of students with work experience.
