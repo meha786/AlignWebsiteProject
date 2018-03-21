@@ -14,8 +14,7 @@ public class Projects {
         super();
     }
 
-    public Projects(int projectId, String neuId, String projectName, Date startDate, Date endDate, String description) {
-        this.projectId = projectId;
+    public Projects(String neuId, String projectName, Date startDate, Date endDate, String description) {
         this.neuId = neuId;
         this.projectName = projectName;
         this.startDate = startDate;
