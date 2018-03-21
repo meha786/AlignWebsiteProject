@@ -5,6 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.mehaexample.asdDemo.Constants;
 import org.mehaexample.asdDemo.enums.Campus;
 import org.mehaexample.asdDemo.model.alignprivate.Electives;
 
@@ -77,8 +78,7 @@ public class ElectivesDao {
         tx.commit();
       } catch (HibernateException e) {
         if (tx != null) tx.rollback();
-        e.printStackTrace();
-        return null;
+        throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
       } finally {
         session.close();
       }
@@ -100,7 +100,7 @@ public class ElectivesDao {
     } catch (HibernateException e) {
       System.out.println("HibernateException: " + e);
       if (tx != null) tx.rollback();
-      return false;
+      throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
     } finally {
       session.close();
     }
@@ -120,7 +120,7 @@ public class ElectivesDao {
     } catch (HibernateException e) {
       System.out.println("exceptionnnnnn");
       if (tx != null) tx.rollback();
-      e.printStackTrace();
+      throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
     } finally {
       session.close();
     }
@@ -143,7 +143,7 @@ public class ElectivesDao {
       deleted = true;
     } catch (HibernateException e) {
       if (tx!=null) tx.rollback();
-      e.printStackTrace();
+      throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
     } finally {
       session.close();
     }

@@ -5,13 +5,16 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.mehaexample.asdDemo.Constants;
 import org.mehaexample.asdDemo.model.alignadmin.AdministratorNotes;
 
 import java.util.List;
 
 public class AdministratorNotesDao {
-    private static SessionFactory factory;
-    private static Session session;
+    private static final String NEU_ID = "neuId";
+
+    private SessionFactory factory;
+    private Session session;
 
     /**
      * Default Constructor
@@ -22,8 +25,7 @@ public class AdministratorNotesDao {
             // next it goes to all table files in the hibernate file and loads them
             factory = new Configuration()
                     .configure("/hibernate_Admin.cfg.xml").buildSessionFactory();
-        } catch (Throwable ex) {
-            System.err.println("Failed to create sessionFactory object." + ex);
+        } catch (ExceptionInInitializerError ex) {
             throw new ExceptionInInitializerError(ex);
         }
     }
@@ -38,16 +40,13 @@ public class AdministratorNotesDao {
         try {
             session = factory.openSession();
             org.hibernate.query.Query query = session.createQuery("FROM AdministratorNotes WHERE neuId = :neuId ");
-            query.setParameter("neuId", neuId);
-            List<AdministratorNotes> list = query.list();
-            return list;
+            query.setParameter(NEU_ID, neuId);
+            return (List<AdministratorNotes>) query.list();
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
         } finally {
             session.close();
         }
-
-        return null;
     }
 
     /**
@@ -62,15 +61,12 @@ public class AdministratorNotesDao {
             org.hibernate.query.Query query = session.createQuery("FROM AdministratorNotes " +
                     "WHERE administratorNeuId = :administratorNeuId ");
             query.setParameter("administratorNeuId", administratorNeuId);
-            List<AdministratorNotes> list = query.list();
-            return list;
+            return (List<AdministratorNotes>) query.list();
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
         } finally {
             session.close();
         }
-
-        return null;
     }
 
     /**
@@ -81,20 +77,17 @@ public class AdministratorNotesDao {
      */
     public AdministratorNotes addAdministratorNoteRecord(AdministratorNotes note) {
         Transaction tx = null;
-
         try {
             session = factory.openSession();
             tx = session.beginTransaction();
             session.save(note);
             tx.commit();
         } catch (HibernateException e) {
-            e.printStackTrace();
             if (tx!=null) tx.rollback();
-            note = null;
+            throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
         } finally {
             session.close();
         }
-
         return note;
     }
 
@@ -114,13 +107,13 @@ public class AdministratorNotesDao {
             tx = session.beginTransaction();
             org.hibernate.query.Query query = session.createQuery("DELETE FROM AdministratorNotes " +
                     "WHERE neuId = :neuId ");
-            query.setParameter("neuId", neuId);
+            query.setParameter(NEU_ID, neuId);
             query.executeUpdate();
             tx.commit();
             deleted = true;
         } catch (HibernateException e) {
             if (tx!=null) tx.rollback();
-            e.printStackTrace();
+            throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
         } finally {
             session.close();
         }
@@ -138,13 +131,13 @@ public class AdministratorNotesDao {
         try{
             session = factory.openSession();
             org.hibernate.query.Query query = session.createQuery("FROM AdministratorNotes WHERE neuId = :neuId");
-            query.setParameter("neuId", neuId);
+            query.setParameter(NEU_ID, neuId);
             List list = query.list();
-            if(list.size() != 0){
+            if(!list.isEmpty()){
                 find = true;
             }
         }catch (HibernateException e) {
-            e.printStackTrace();
+            throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
         } finally {
             session.close();
         }

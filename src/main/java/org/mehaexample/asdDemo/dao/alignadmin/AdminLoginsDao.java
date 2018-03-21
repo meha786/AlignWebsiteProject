@@ -5,12 +5,15 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.mehaexample.asdDemo.Constants;
 import org.mehaexample.asdDemo.model.alignadmin.AdminLogins;
 
 import java.util.InputMismatchException;
 import java.util.List;
 
 public class AdminLoginsDao {
+  private static final String ADMIN_EXIST_ERROR = "Admin Login already exist.";
+
   private SessionFactory factory;
   private Session session;
 
@@ -23,8 +26,7 @@ public class AdminLoginsDao {
       // next it goes to all table files in the hibernate file and loads them
       factory = new Configuration()
               .configure("/hibernate_Admin.cfg.xml").buildSessionFactory();
-    } catch (Throwable ex) {
-      System.err.println("Failed to create sessionFactory object." + ex);
+    } catch (ExceptionInInitializerError ex) {
       throw new ExceptionInInitializerError(ex);
     }
   }
@@ -34,7 +36,6 @@ public class AdminLoginsDao {
     org.hibernate.query.Query query = session.createQuery("FROM AdminLogins WHERE email = :email");
     query.setParameter("email", email);
     List list = query.list();
-    System.out.println("list size" + list.size()); 
     session.close();
     if (list.isEmpty()) {
       return null;
@@ -45,18 +46,16 @@ public class AdminLoginsDao {
   public AdminLogins createAdminLogin(AdminLogins adminLogin) {
     Transaction tx = null;
     if (findAdminLoginsByEmail(adminLogin.getEmail()) != null) {
-      System.out.println("Admin Login already exists!");
+      throw new HibernateException(ADMIN_EXIST_ERROR);
     } else {
-      System.out.println("Saving admin login...");
       try {
         session = factory.openSession();
         tx = session.beginTransaction();
         session.save(adminLogin);
         tx.commit();
       } catch (HibernateException e) {
-        System.out.println("HibernateException: " + e);
         if (tx != null) tx.rollback();
-        throw new HibernateException("Connecting went wrong, cannot save admin login.");
+        throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
       } finally {
         session.close();
       }
@@ -69,14 +68,14 @@ public class AdminLoginsDao {
     boolean updated;
     if (findAdminLoginsByEmail(adminLogin.getEmail()) != null) {
       try {
-        Session session = factory.openSession();
+        session = factory.openSession();
         tx = session.beginTransaction();
         session.saveOrUpdate(adminLogin);
         tx.commit();
         updated = true;
       } catch (HibernateException e) {
         if (tx != null) tx.rollback();
-        throw new HibernateException("Connecting went wrong, cannot save admin login.");
+        throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
       } finally {
         session.close();
       }
@@ -105,7 +104,7 @@ public class AdminLoginsDao {
         deleted = true;
       } catch (HibernateException e) {
         if (tx != null) tx.rollback();
-        throw new HibernateException("Connecting went wrong, cannot save admin login.");
+        throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
       } finally {
         session.close();
       }
