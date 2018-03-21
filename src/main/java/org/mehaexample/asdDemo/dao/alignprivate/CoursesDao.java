@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.mehaexample.asdDemo.Constants;
 import org.mehaexample.asdDemo.model.alignprivate.Courses;
 
 public class CoursesDao {
@@ -36,10 +37,10 @@ public class CoursesDao {
   public List<Courses> getAllCourses() {
     session = factory.openSession();
     org.hibernate.query.Query query = session.createQuery("FROM Courses");
-    List<Courses> listOfCoarses = query.list();
+    List<Courses> listOfCourses = query.list();
 
     session.close();
-    return listOfCoarses;
+    return listOfCourses;
   }
 
   /**
@@ -102,7 +103,7 @@ public class CoursesDao {
     } catch (HibernateException e) {
       System.out.println("HibernateException: " + e);
       if (tx != null) tx.rollback();
-      course = null;
+      throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
     } finally {
       session.close();
     }
@@ -136,7 +137,7 @@ public class CoursesDao {
         deleted = true;
       } catch (HibernateException e) {
         if (tx != null) tx.rollback();
-        e.printStackTrace();
+        throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
       } finally {
         session.close();
       }
@@ -165,7 +166,7 @@ public class CoursesDao {
         updated = true;
       } catch (HibernateException e) {
         if (tx != null) tx.rollback();
-        e.printStackTrace();
+        throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
       } finally {
         session.close();
       }

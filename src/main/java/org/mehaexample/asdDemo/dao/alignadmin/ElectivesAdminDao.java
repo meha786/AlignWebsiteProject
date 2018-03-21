@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.mehaexample.asdDemo.Constants;
 import org.mehaexample.asdDemo.dao.alignprivate.StudentsDao;
 import org.mehaexample.asdDemo.model.alignadmin.ElectivesAdmin;
 
@@ -20,15 +21,13 @@ public class ElectivesAdminDao {
    * Default Constructor.
    */
   public ElectivesAdminDao() {
-//    coursesDao = new CoursesDao();
     studentDao = new StudentsDao();
     try {
       // it will check the hibernate.cfg.xml file and load it
       // next it goes to all table files in the hibernate file and loads them
       factory = new Configuration()
               .configure("/hibernate_Admin.cfg.xml").buildSessionFactory();
-    } catch (Throwable ex) {
-      System.err.println("Failed to create sessionFactory object." + ex);
+    } catch (ExceptionInInitializerError ex) {
       throw new ExceptionInInitializerError(ex);
 
     }
@@ -52,8 +51,7 @@ public class ElectivesAdminDao {
     if (list.isEmpty()) {
       return null;
     }
-    ElectivesAdmin elective = list.get(0);
-    return elective;
+    return list.get(0);
   }
 
   /**
@@ -77,14 +75,12 @@ public class ElectivesAdminDao {
         tx.commit();
       } catch (HibernateException e) {
         if (tx != null) tx.rollback();
-        e.printStackTrace();
-        return null;
+        throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
       } finally {
         session.close();
       }
     } else {
-      System.out.println("The student with a given nuid doesn't exists");
-      return null;
+      throw new HibernateException("The student with a given nuid doesn't exists");
     }
     return elective;
   }
@@ -92,15 +88,13 @@ public class ElectivesAdminDao {
   public boolean updateElectives(ElectivesAdmin elective) {
     session = factory.openSession();
     Transaction tx = null;
-    System.out.println("updating electives in electives table...");
     try {
       tx = session.beginTransaction();
       session.saveOrUpdate(elective);
       tx.commit();
     } catch (HibernateException e) {
-      System.out.println("HibernateException: " + e);
       if (tx != null) tx.rollback();
-      return false;
+      throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
     } finally {
       session.close();
     }
@@ -114,13 +108,11 @@ public class ElectivesAdminDao {
       session = factory.openSession();
       tx = session.beginTransaction();
       ElectivesAdmin electives = session.get(ElectivesAdmin.class, id);
-      System.out.println("Deleting elective for id = " + id);
       session.delete(electives);
       tx.commit();
     } catch (HibernateException e) {
-      System.out.println("exceptionnnnnn");
       if (tx != null) tx.rollback();
-      e.printStackTrace();
+      throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
     } finally {
       session.close();
     }
@@ -143,7 +135,7 @@ public class ElectivesAdminDao {
       deleted = true;
     } catch (HibernateException e) {
       if (tx!=null) tx.rollback();
-      e.printStackTrace();
+      throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
     } finally {
       session.close();
     }

@@ -9,6 +9,7 @@ import java.util.Set;
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.mehaexample.asdDemo.Constants;
 import org.mehaexample.asdDemo.enums.Campus;
 import org.mehaexample.asdDemo.enums.DegreeCandidacy;
 import org.mehaexample.asdDemo.enums.EnrollmentStatus;
@@ -56,7 +57,7 @@ public class StudentsDao {
 			} catch (HibernateException e) {
 				System.out.println("HibernateException: " + e);
 				if (tx != null) tx.rollback();
-				student = null;
+				throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
 			} finally {
 				session.close();
 			}
@@ -256,14 +257,14 @@ public class StudentsDao {
 
 		if (ifNuidExists(neuId)) {
 			try {
-				Session session = factory.openSession();
+				session = factory.openSession();
 				tx = session.beginTransaction();
 				session.saveOrUpdate(student);
 				tx.commit();
 				updated = true;
 			} catch (HibernateException e) {
 				if (tx != null) tx.rollback();
-				e.printStackTrace();
+				throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
 			} finally {
 				session.close();
 			}
@@ -297,7 +298,7 @@ public class StudentsDao {
 				deleted = true;
 			} catch (HibernateException e) {
 				if (tx != null) tx.rollback();
-				e.printStackTrace();
+				throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
 			} finally {
 				session.close();
 			}
@@ -353,7 +354,7 @@ public class StudentsDao {
 				find = true;
 			}
 		} catch (HibernateException e) {
-			e.printStackTrace();
+			throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
 		} finally {
 			session.close();
 		}

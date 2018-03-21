@@ -5,6 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.mehaexample.asdDemo.Constants;
 import org.mehaexample.asdDemo.model.alignprivate.ExtraExperiences;
 
 import java.util.List;
@@ -81,9 +82,8 @@ public class ExtraExperiencesDao {
             session.save(extraExperience);
             tx.commit();
         } catch (HibernateException e) {
-            System.out.println("HibernateException: " + e);
             if (tx != null) tx.rollback();
-            extraExperience = null;
+            throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
         } finally {
             session.close();
         }
@@ -111,7 +111,7 @@ public class ExtraExperiencesDao {
                 deleted = true;
             } catch (HibernateException e) {
                 if (tx != null) tx.rollback();
-                e.printStackTrace();
+                throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
             } finally {
                 session.close();
             }
@@ -135,7 +135,7 @@ public class ExtraExperiencesDao {
             deleted = true;
         } catch (HibernateException e) {
             if (tx!=null) tx.rollback();
-            e.printStackTrace();
+            throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
         } finally {
             session.close();
         }
@@ -162,8 +162,8 @@ public class ExtraExperiencesDao {
                 tx.commit();
                 updated = true;
             } catch (HibernateException e) {
-                System.out.println("HibernateException: " + e);
                 if (tx != null) tx.rollback();
+                throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
             } finally {
                 session.close();
             }

@@ -66,7 +66,7 @@ public class StudentLoginsDao {
     Transaction tx = null;
     if (findStudentLoginsByEmail(studentLogin.getEmail()) != null) {
       try {
-        Session session = factory.openSession();
+        session = factory.openSession();
         tx = session.beginTransaction();
         session.saveOrUpdate(studentLogin);
         tx.commit();

@@ -5,6 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.mehaexample.asdDemo.Constants;
 import org.mehaexample.asdDemo.enums.Campus;
 import org.mehaexample.asdDemo.model.alignprivate.StudentBasicInfo;
 import org.mehaexample.asdDemo.model.alignprivate.StudentCoopList;
@@ -88,7 +89,7 @@ public class WorkExperiencesDao {
     } catch (HibernateException e) {
       System.out.println("HibernateException: " + e);
       if (tx != null) tx.rollback();
-      workExperience = null;
+      throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
     } finally {
       session.close();
     }
@@ -116,7 +117,7 @@ public class WorkExperiencesDao {
         deleted = true;
       } catch (HibernateException e) {
         if (tx != null) tx.rollback();
-        e.printStackTrace();
+        throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
       } finally {
         session.close();
       }
@@ -140,7 +141,7 @@ public class WorkExperiencesDao {
       deleted = true;
     } catch (HibernateException e) {
       if (tx!=null) tx.rollback();
-      e.printStackTrace();
+      throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
     } finally {
       session.close();
     }
@@ -169,6 +170,7 @@ public class WorkExperiencesDao {
       } catch (HibernateException e) {
         System.out.println("HibernateException: " + e);
         if (tx != null) tx.rollback();
+        throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
       } finally {
         session.close();
       }
