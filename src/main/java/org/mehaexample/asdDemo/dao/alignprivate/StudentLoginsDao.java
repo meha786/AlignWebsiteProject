@@ -42,7 +42,7 @@ public class StudentLoginsDao {
 
   public StudentLogins createStudentLogin(StudentLogins studentLogin) {
     Transaction tx = null;
-    if (findStudentLoginsByEmail(studentLogin.getEmail()) == null) {
+    if (findStudentLoginsByEmail(studentLogin.getEmail()) != null) {
       System.out.println("Student Login already exists!");
     } else {
       System.out.println("Saving student login...");

@@ -49,6 +49,15 @@
 			<scope>provided</scope>
 		</dependency>
 
+
+		<!-- https://mvnrepository.com/artifact/javax.mail/javax.mail-api -->
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
+			<version>1.5.5</version>
+		</dependency>
+
+
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
 			<artifactId>jersey-container-servlet-core</artifactId>
@@ -106,11 +115,11 @@
 
 		<!-- https://mvnrepository.com/artifact/org.json/json -->
 		<dependency>
-    		<groupId>org.json</groupId>
-    		<artifactId>json</artifactId>
-    		<version>20180130</version>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20180130</version>
 		</dependency>
-		
+
 	</dependencies>
 	<properties>
 		<jersey.version>2.26</jersey.version>

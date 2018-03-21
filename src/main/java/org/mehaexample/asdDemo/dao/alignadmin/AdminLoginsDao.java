@@ -31,9 +31,10 @@ public class AdminLoginsDao {
 
   public AdminLogins findAdminLoginsByEmail(String email) {
     session = factory.openSession();
-    org.hibernate.query.Query query = session.createQuery("FROM AdminLogins WHERE email = :email ");
+    org.hibernate.query.Query query = session.createQuery("FROM AdminLogins WHERE email = :email");
     query.setParameter("email", email);
     List list = query.list();
+    System.out.println("list size" + list.size()); 
     session.close();
     if (list.isEmpty()) {
       return null;
@@ -43,7 +44,7 @@ public class AdminLoginsDao {
 
   public AdminLogins createAdminLogin(AdminLogins adminLogin) {
     Transaction tx = null;
-    if (findAdminLoginsByEmail(adminLogin.getEmail()) == null) {
+    if (findAdminLoginsByEmail(adminLogin.getEmail()) != null) {
       System.out.println("Admin Login already exists!");
     } else {
       System.out.println("Saving admin login...");
