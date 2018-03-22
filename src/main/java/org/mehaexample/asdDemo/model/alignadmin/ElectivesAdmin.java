@@ -26,9 +26,7 @@ public class ElectivesAdmin {
     this.plagiarism = plagiarism;
   }
 
-  public ElectivesAdmin() {
-    super();
-  }
+  public ElectivesAdmin() { }
 
   public int getElectiveId() {
     return electiveId;

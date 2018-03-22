@@ -17,14 +17,9 @@ public class UndergraduatesPublicDao {
   private Session session;
 
   public UndergraduatesPublicDao() {
-    try {
       // it will check the hibernate.cfg.xml file and load it
       // next it goes to all table files in the hibernate file and loads them
       factory = new Configuration().configure("/hibernate_Public.cfg.xml").buildSessionFactory();
-    } catch (Throwable ex) {
-      System.err.println("Failed to create sessionFactory object." + ex);
-      throw new ExceptionInInitializerError(ex);
-    }
   }
 
   public UndergraduatesPublic createUndergraduate(UndergraduatesPublic undergraduate) {
@@ -36,7 +31,7 @@ public class UndergraduatesPublicDao {
       tx.commit();
     } catch (HibernateException e) {
       if (tx != null) tx.rollback();
-      throw new HibernateException("Connection error.");
+      throw new HibernateException(e);
     } finally {
       session.close();
     }
@@ -51,8 +46,6 @@ public class UndergraduatesPublicDao {
               "FROM UndergraduatesPublic WHERE undergraduateId = :undergraduateId ");
       query.setParameter("undergraduateId", undergraduateId);
       list = query.list();
-    } catch (HibernateException e) {
-      throw new HibernateException("Connection error.");
     } finally {
       session.close();
     }
@@ -73,8 +66,6 @@ public class UndergraduatesPublicDao {
       TypedQuery<TopUndergradSchools> query = session.createQuery(hql, TopUndergradSchools.class);
       query.setMaxResults(numberOfResultsDesired);
       listOfTopUndergradSchools = query.getResultList();
-    } catch (HibernateException e) {
-      throw new HibernateException("Connection error.");
     } finally{
       session.close();
     }
@@ -92,8 +83,6 @@ public class UndergraduatesPublicDao {
       TypedQuery<TopUndergradDegrees> query = session.createQuery(hql, TopUndergradDegrees.class);
       query.setMaxResults(numberOfResultsDesired);
       listOfTopUndergradDegrees = query.getResultList();
-    } catch (HibernateException e) {
-      throw new HibernateException("Connection error.");
     } finally{
       session.close();
     }
@@ -110,8 +99,6 @@ public class UndergraduatesPublicDao {
       session = factory.openSession();
       org.hibernate.query.Query query = session.createQuery(hql);
       listOfAllSchools = query.getResultList();
-    } catch (HibernateException e) {
-      throw new HibernateException("Connection error.");
     } finally{
       session.close();
     }
@@ -128,16 +115,14 @@ public class UndergraduatesPublicDao {
       session = factory.openSession();
       org.hibernate.query.Query query = session.createQuery(hql);
       listOfAllSchools = query.getResultList();
-    } catch (HibernateException e) {
-      throw new HibernateException("Connection error.");
     } finally{
       session.close();
     }
     return listOfAllSchools;
   }
 
-  public boolean deleteUndergraduateById(int undergraduateId) {
-    UndergraduatesPublic undergraduate = findUndergraduateById(undergraduateId);
+  public boolean deleteUndergraduateById(int publicId) {
+    UndergraduatesPublic undergraduate = findUndergraduateById(publicId);
     if (undergraduate != null) {
       session = factory.openSession();
       Transaction tx = null;
@@ -147,7 +132,7 @@ public class UndergraduatesPublicDao {
         tx.commit();
       } catch (HibernateException e) {
         if (tx != null) tx.rollback();
-        throw new HibernateException("Connection error.");
+        throw new HibernateException(e);
       } finally {
         session.close();
       }

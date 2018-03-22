@@ -5,10 +5,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import org.mehaexample.asdDemo.Constants;
 import org.mehaexample.asdDemo.model.alignadmin.AdminLogins;
 
-import java.util.InputMismatchException;
 import java.util.List;
 
 public class AdminLoginsDao {
@@ -21,26 +19,25 @@ public class AdminLoginsDao {
    * Default Constructor.
    */
   public AdminLoginsDao() {
-    try {
-      // it will check the hibernate.cfg.xml file and load it
-      // next it goes to all table files in the hibernate file and loads them
-      factory = new Configuration()
-              .configure("/hibernate_Admin.cfg.xml").buildSessionFactory();
-    } catch (ExceptionInInitializerError ex) {
-      throw new ExceptionInInitializerError(ex);
-    }
+    // it will check the hibernate.cfg.xml file and load it
+    // next it goes to all table files in the hibernate file and loads them
+    factory = new Configuration()
+            .configure("/hibernate_Admin.cfg.xml").buildSessionFactory();
   }
 
   public AdminLogins findAdminLoginsByEmail(String email) {
-    session = factory.openSession();
-    org.hibernate.query.Query query = session.createQuery("FROM AdminLogins WHERE email = :email");
-    query.setParameter("email", email);
-    List list = query.list();
-    session.close();
-    if (list.isEmpty()) {
-      return null;
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery("FROM AdminLogins WHERE email = :email");
+      query.setParameter("email", email);
+      List list = query.list();
+      if (list.isEmpty()) {
+        return null;
+      }
+      return (AdminLogins) list.get(0);
+    } finally {
+      session.close();
     }
-    return (AdminLogins) list.get(0);
   }
 
   public AdminLogins createAdminLogin(AdminLogins adminLogin) {
@@ -55,7 +52,7 @@ public class AdminLoginsDao {
         tx.commit();
       } catch (HibernateException e) {
         if (tx != null) tx.rollback();
-        throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
+        throw new HibernateException(e);
       } finally {
         session.close();
       }
@@ -65,17 +62,15 @@ public class AdminLoginsDao {
 
   public boolean updateAdminLogin(AdminLogins adminLogin) {
     Transaction tx = null;
-    boolean updated;
     if (findAdminLoginsByEmail(adminLogin.getEmail()) != null) {
       try {
         session = factory.openSession();
         tx = session.beginTransaction();
         session.saveOrUpdate(adminLogin);
         tx.commit();
-        updated = true;
       } catch (HibernateException e) {
         if (tx != null) tx.rollback();
-        throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
+        throw new HibernateException(e);
       } finally {
         session.close();
       }
@@ -83,16 +78,10 @@ public class AdminLoginsDao {
       throw new HibernateException("Admin Login with email: " + adminLogin.getEmail() +
               " not found.");
     }
-    return updated;
+    return true;
   }
 
   public boolean deleteAdminLogin(String email) {
-    boolean deleted = false;
-
-    if (email == null || email.trim().isEmpty()) {
-      throw new InputMismatchException("Email argument cannot be null or empty.");
-    }
-
     AdminLogins adminLogin = findAdminLoginsByEmail(email);
     if (adminLogin != null) {
       session = factory.openSession();
@@ -101,14 +90,15 @@ public class AdminLoginsDao {
         tx = session.beginTransaction();
         session.delete(adminLogin);
         tx.commit();
-        deleted = true;
       } catch (HibernateException e) {
         if (tx != null) tx.rollback();
-        throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
+        throw new HibernateException(e);
       } finally {
         session.close();
       }
+    } else {
+      throw new HibernateException("Admin Login does not exist.");
     }
-    return deleted;
+    return true;
   }
 }

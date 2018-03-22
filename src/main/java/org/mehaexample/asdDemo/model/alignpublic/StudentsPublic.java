@@ -2,9 +2,7 @@ package org.mehaexample.asdDemo.model.alignpublic;
 
 import java.sql.Blob;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class StudentsPublic {
   private int publicId;

@@ -2,9 +2,8 @@ package alignWebsite.alignadmin;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.hibernate.HibernateException;
+import org.junit.*;
 import org.mehaexample.asdDemo.dao.alignadmin.AdministratorsDao;
 import org.mehaexample.asdDemo.model.alignadmin.Administrators;
 
@@ -17,10 +16,40 @@ public class AdministratorsDaoTest {
 		administratorsDao = new AdministratorsDao();
 	}
 
-	@Test
+	@Before
+	public void addDatabase() {
+		Administrators newAdministrator = new Administrators("987654321", "catwoman@gmail.com",
+						"Cat", "Main", "Woman");
+		Administrators administrators = administratorsDao.addAdministrator(newAdministrator);
+	}
+
+	@After
+	public void deleteDatabase() {
+		administratorsDao.deleteAdministrator("987654321");
+	}
+
+	@Test(expected = IllegalArgumentException.class)
 	public void addNullAdministratorTest() {
-		Administrators administrators = administratorsDao.addAdministrator(null);
-		Assert.assertNull(administrators);
+		administratorsDao.addAdministrator(null);
+	}
+
+	@Test(expected = HibernateException.class)
+	public void addDuplicateAdminTest() {
+		Administrators newAdministrator = new Administrators("987654321", "catwoman@gmail.com",
+						"Cat", "Main", "Woman");
+		administratorsDao.addAdministrator(newAdministrator);
+	}
+
+	@Test(expected = HibernateException.class)
+	public void updateNonExistentAdminTest() {
+		Administrators newAdministrator = new Administrators("000011111", "cchent@gmail.com",
+						"Tai", "Main", "Chen");
+		administratorsDao.updateAdministratorRecord(newAdministrator);
+	}
+
+	@Test(expected = HibernateException.class)
+	public void deleteNonExistentAdminTest() {
+		administratorsDao.deleteAdministrator("00001111");
 	}
 
 	@Test
@@ -68,6 +97,18 @@ public class AdministratorsDaoTest {
 		Assert.assertTrue(administrator.toString().equals(newAdministrator.toString()));
 		administratorsDao.deleteAdministrator("123789456");
 
+	}
+
+	@Test
+	public void findAdministratorByEmail() {
+		Administrators newAdministrator = new Administrators("123789456", "john.stewart@gmail.com",
+						"John", "Main", "Stewart");
+
+		administratorsDao.addAdministrator(newAdministrator);
+		Administrators administrator = administratorsDao.findAdministratorByEmail("john.stewart@gmail.com");
+		Assert.assertTrue(administrator.toString().equals(newAdministrator.toString()));
+		Assert.assertTrue(administratorsDao.findAdministratorByEmail("test@gmail.com") == null);
+		administratorsDao.deleteAdministrator("123789456");
 	}
 
 	@Test

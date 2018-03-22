@@ -5,15 +5,14 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import org.mehaexample.asdDemo.Constants;
 import org.mehaexample.asdDemo.enums.Campus;
 import org.mehaexample.asdDemo.model.alignprivate.Electives;
 
 import java.util.List;
 
 public class ElectivesDao {
-  private static SessionFactory factory;
-  private static Session session;
+  private SessionFactory factory;
+  private Session session;
 
   private StudentsDao studentDao;
 
@@ -21,40 +20,37 @@ public class ElectivesDao {
    * Default Constructor.
    */
   public ElectivesDao() {
-//    coursesDao = new CoursesDao();
     studentDao = new StudentsDao();
-    try {
-      // it will check the hibernate.cfg.xml file and load it
-      // next it goes to all table files in the hibernate file and loads them
-      factory = new Configuration()
-              .configure().buildSessionFactory();
-    } catch (Throwable ex) {
-      System.err.println("Failed to create sessionFactory object." + ex);
-      throw new ExceptionInInitializerError(ex);
-
-    }
+    // it will check the hibernate.cfg.xml file and load it
+    // next it goes to all table files in the hibernate file and loads them
+    factory = new Configuration()
+            .configure().buildSessionFactory();
   }
 
   public List<Electives> getElectivesByNeuId(String neuId) {
-    session = factory.openSession();
-    org.hibernate.query.Query query = session.createQuery("from Electives where neuId = :neuId");
-    query.setParameter("neuId", neuId);
-    List<Electives> list = query.list();
-    session.close();
-    return list;
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery("from Electives where neuId = :neuId");
+      query.setParameter("neuId", neuId);
+      return (List<Electives>) query.list();
+    } finally {
+      session.close();
+    }
   }
 
   public Electives getElectiveById(int electiveId) {
-    session = factory.openSession();
-    org.hibernate.query.Query query = session.createQuery("from Electives where electiveId = :electiveId");
-    query.setParameter("electiveId", electiveId);
-    List<Electives> list = query.list();
-    session.close();
-    if (list.isEmpty()) {
-      return null;
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery("from Electives where electiveId = :electiveId");
+      query.setParameter("electiveId", electiveId);
+      List<Electives> list = query.list();
+      if (list.isEmpty()) {
+        return null;
+      }
+      return list.get(0);
+    } finally {
+      session.close();
     }
-    Electives elective = list.get(0);
-    return elective;
   }
 
   /**
@@ -78,29 +74,30 @@ public class ElectivesDao {
         tx.commit();
       } catch (HibernateException e) {
         if (tx != null) tx.rollback();
-        throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
+        throw new HibernateException(e);
       } finally {
         session.close();
       }
     } else {
-      System.out.println("The student with a given nuid doesn't exists");
-      return null;
+      throw new HibernateException("The student with a given nuid doesn't exists");
     }
     return elective;
   }
 
   public boolean updateElectives(Electives elective) {
+    if (getElectiveById(elective.getElectiveId()) == null) {
+      throw new HibernateException("Elective does not exist.");
+    }
+
     session = factory.openSession();
     Transaction tx = null;
-    System.out.println("updating electives in electives table...");
     try {
       tx = session.beginTransaction();
       session.saveOrUpdate(elective);
       tx.commit();
     } catch (HibernateException e) {
-      System.out.println("HibernateException: " + e);
       if (tx != null) tx.rollback();
-      throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
+      throw new HibernateException(e);
     } finally {
       session.close();
     }
@@ -108,19 +105,21 @@ public class ElectivesDao {
   }
 
   public boolean deleteElectiveRecord(int id) {
+    if (getElectiveById(id) == null) {
+      throw new HibernateException("Elective does not exist.");
+    }
+
     Transaction tx = null;
 
     try {
       session = factory.openSession();
       tx = session.beginTransaction();
       Electives electives = session.get(Electives.class, id);
-      System.out.println("Deleting elective for id = " + id);
       session.delete(electives);
       tx.commit();
     } catch (HibernateException e) {
-      System.out.println("exceptionnnnnn");
       if (tx != null) tx.rollback();
-      throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
+      throw new HibernateException(e);
     } finally {
       session.close();
     }
@@ -130,7 +129,6 @@ public class ElectivesDao {
 
   public boolean deleteElectivesByNeuId(String neuId) {
     Transaction tx = null;
-    boolean deleted = false;
 
     try {
       session = factory.openSession();
@@ -140,15 +138,14 @@ public class ElectivesDao {
       query.setParameter("neuId", neuId);
       query.executeUpdate();
       tx.commit();
-      deleted = true;
     } catch (HibernateException e) {
-      if (tx!=null) tx.rollback();
-      throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
+      if (tx != null) tx.rollback();
+      throw new HibernateException(e);
     } finally {
       session.close();
     }
 
-    return deleted;
+    return true;
   }
 
   public List<String> getTopTenElectives(Campus campus, Integer year) {
@@ -170,18 +167,20 @@ public class ElectivesDao {
     }
     hql.append("GROUP BY CourseId ");
     hql.append("ORDER BY Count(*) DESC ");
-    session = factory.openSession();
-    org.hibernate.query.Query query = session.createQuery(
-            hql.toString());
-    query.setMaxResults(10);
-    if (campus != null) {
-      query.setParameter("campus", campus);
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery(
+              hql.toString());
+      query.setMaxResults(10);
+      if (campus != null) {
+        query.setParameter("campus", campus);
+      }
+      if (year != null) {
+        query.setParameter("year", year);
+      }
+      return (List<String>) query.list();
+    } finally {
+      session.close();
     }
-    if (year != null) {
-      query.setParameter("year", year);
-    }
-    List<String> listOfElectives = query.list();
-    session.close();
-    return listOfElectives;
   }
 }

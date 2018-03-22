@@ -14,9 +14,7 @@ public class AdministratorNotes {
         this.desc = desc;
     }
 
-    public AdministratorNotes() {
-        super();
-    }
+    public AdministratorNotes() { }
 
     public int getAdministratorNoteId() {
         return administratorNoteId;

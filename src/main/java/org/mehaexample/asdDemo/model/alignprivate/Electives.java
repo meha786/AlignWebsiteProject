@@ -19,9 +19,7 @@ public class Electives {
     this.courseYear = courseYear;
   }
 
-  public Electives() {
-    super();
-  }
+  public Electives() { }
 
   public int getElectiveId() {
     return electiveId;

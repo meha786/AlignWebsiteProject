@@ -1,5 +1,6 @@
 package alignWebsite.alignprivate;
 
+import org.hibernate.HibernateException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -120,7 +121,19 @@ public class PriorEducationsDaoTest {
     List<PriorEducations> listOfPriorEducation = priorEducationsDao.getPriorEducationsByNeuId("001234567");
     assertTrue(listOfPriorEducation.get(0).getInstitutionName().equals("University of Washington"));
     assertTrue(listOfPriorEducation.get(0).getMajorName().equals("Computer Science"));
-    assertTrue(priorEducationsDao.getPriorEducationsByNeuId("000000000") == null);
+    assertTrue(priorEducationsDao.getPriorEducationsByNeuId("000000000").isEmpty());
+  }
+
+  @Test(expected = HibernateException.class)
+  public void deleteNonExistentPriorEducation() {
+    priorEducationsDao.deletePriorEducationById(-200);
+  }
+
+  @Test(expected = HibernateException.class)
+  public void updateNonExistentPriorEducation() {
+    PriorEducations newPriorEducation = new PriorEducations();
+    newPriorEducation.setPriorEducationId(-300);
+    priorEducationsDao.updatePriorEducation(newPriorEducation);
   }
 
   @Test
@@ -148,12 +161,9 @@ public class PriorEducationsDaoTest {
     foundPriorEducation.setGpa(3.99f);
     priorEducationsDao.updatePriorEducation(foundPriorEducation);
     assertTrue(priorEducationsDao.getPriorEducationsByNeuId("111234567").get(0).getGpa() == 3.99f);
-    newPriorEducation.setPriorEducationId(-100);
-    assertFalse(priorEducationsDao.updatePriorEducation(newPriorEducation));
 
     // delete the work experience
     priorEducationsDao.deletePriorEducationById(foundPriorEducation.getPriorEducationId());
     assertTrue(priorEducationsDao.getPriorEducationById(foundPriorEducation.getPriorEducationId()) == null);
-    assertFalse(priorEducationsDao.deletePriorEducationById(-100));
   }
 }

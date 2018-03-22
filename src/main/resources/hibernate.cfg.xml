@@ -30,7 +30,6 @@
 		<mapping resource="WorkExperiences.hbm.xml" />
 		<mapping resource="Electives.hbm.xml" />
 		<mapping resource="PriorEducations.hbm.xml" />
-		<mapping resource="Experiences.hbm.xml" />
 		<mapping resource="StudentLogins.hbm.xml" />
 		<mapping resource="ExtraExperiences.hbm.xml" />
 		<mapping resource="Projects.hbm.xml" />

@@ -1,5 +1,6 @@
 package alignWebsite.alignpublic;
 
+import org.hibernate.HibernateException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -45,10 +46,16 @@ public class WorkExperiencesPublicDaoTest {
     studentsPublicDao.deleteStudentByPublicId(5);
   }
 
+  @Test(expected = HibernateException.class)
+  public void deleteNonExistentWorkExperienceTest() {
+    assertTrue(workExperiencesPublicDao.deleteWorkExperienceById(-200));
+  }
+
   @Test
   public void findWorkExperienceByIdTest() {
     assertTrue(workExperiencesPublicDao.findWorkExperienceById(
             workExperience.getWorkExperienceId()).getCoop().equals("Google"));
+    assertTrue(workExperiencesPublicDao.findWorkExperienceById(-200) == null);
   }
 
   @Test

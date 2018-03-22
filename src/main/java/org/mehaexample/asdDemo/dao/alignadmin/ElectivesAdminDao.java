@@ -7,13 +7,12 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import org.mehaexample.asdDemo.Constants;
 import org.mehaexample.asdDemo.dao.alignprivate.StudentsDao;
 import org.mehaexample.asdDemo.model.alignadmin.ElectivesAdmin;
 
 public class ElectivesAdminDao {
-  private static SessionFactory factory;
-  private static Session session;
+  private SessionFactory factory;
+  private Session session;
 
   private StudentsDao studentDao;
 
@@ -22,36 +21,36 @@ public class ElectivesAdminDao {
    */
   public ElectivesAdminDao() {
     studentDao = new StudentsDao();
-    try {
-      // it will check the hibernate.cfg.xml file and load it
-      // next it goes to all table files in the hibernate file and loads them
-      factory = new Configuration()
-              .configure("/hibernate_Admin.cfg.xml").buildSessionFactory();
-    } catch (ExceptionInInitializerError ex) {
-      throw new ExceptionInInitializerError(ex);
-
-    }
+    // it will check the hibernate.cfg.xml file and load it
+    // next it goes to all table files in the hibernate file and loads them
+    factory = new Configuration()
+            .configure("/hibernate_Admin.cfg.xml").buildSessionFactory();
   }
 
   public List<ElectivesAdmin> getElectivesByNeuId(String neuId) {
-    session = factory.openSession();
-    org.hibernate.query.Query query = session.createQuery("from ElectivesAdmin where neuId = :neuId");
-    query.setParameter("neuId", neuId);
-    List<ElectivesAdmin> list = query.list();
-    session.close();
-    return list;
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery("from ElectivesAdmin where neuId = :neuId");
+      query.setParameter("neuId", neuId);
+      return (List<ElectivesAdmin>) query.list();
+    } finally {
+      session.close();
+    }
   }
 
   public ElectivesAdmin getElectiveById(int electiveId) {
-    session = factory.openSession();
-    org.hibernate.query.Query query = session.createQuery("from ElectivesAdmin where electiveId = :electiveId");
-    query.setParameter("electiveId", electiveId);
-    List<ElectivesAdmin> list = query.list();
-    session.close();
-    if (list.isEmpty()) {
-      return null;
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery("from ElectivesAdmin where electiveId = :electiveId");
+      query.setParameter("electiveId", electiveId);
+      List<ElectivesAdmin> list = query.list();
+      if (list.isEmpty()) {
+        return null;
+      }
+      return list.get(0);
+    } finally {
+      session.close();
     }
-    return list.get(0);
   }
 
   /**
@@ -62,7 +61,7 @@ public class ElectivesAdminDao {
    */
   public ElectivesAdmin addElective(ElectivesAdmin elective) {
     if (elective == null) {
-      return null;
+      throw new IllegalArgumentException("Elective argument cannot be null.");
     }
 
     Transaction tx = null;
@@ -75,7 +74,7 @@ public class ElectivesAdminDao {
         tx.commit();
       } catch (HibernateException e) {
         if (tx != null) tx.rollback();
-        throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
+        throw new HibernateException(e);
       } finally {
         session.close();
       }
@@ -86,60 +85,41 @@ public class ElectivesAdminDao {
   }
 
   public boolean updateElectives(ElectivesAdmin elective) {
-    session = factory.openSession();
+    if (getElectiveById(elective.getElectiveId()) == null) {
+      throw new HibernateException("Elective Id cannot be null.");
+    }
     Transaction tx = null;
     try {
+      session = factory.openSession();
       tx = session.beginTransaction();
       session.saveOrUpdate(elective);
       tx.commit();
+      return true;
     } catch (HibernateException e) {
       if (tx != null) tx.rollback();
-      throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
+      throw new HibernateException(e);
     } finally {
       session.close();
     }
-    return true;
   }
 
   public boolean deleteElectiveRecord(int id) {
+    ElectivesAdmin electives = getElectiveById(id);
+    if (electives == null) {
+      throw new HibernateException("Elective Id cannot be found.");
+    }
     Transaction tx = null;
-
     try {
       session = factory.openSession();
       tx = session.beginTransaction();
-      ElectivesAdmin electives = session.get(ElectivesAdmin.class, id);
       session.delete(electives);
       tx.commit();
+      return true;
     } catch (HibernateException e) {
       if (tx != null) tx.rollback();
-      throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
+      throw new HibernateException(e);
     } finally {
       session.close();
     }
-
-    return true;
-  }
-
-  public boolean deleteElectivesByNeuId(String neuId) {
-    Transaction tx = null;
-    boolean deleted = false;
-
-    try {
-      session = factory.openSession();
-      tx = session.beginTransaction();
-      org.hibernate.query.Query query = session.createQuery("DELETE FROM ElectivesAdmin " +
-              "WHERE neuId = :neuId ");
-      query.setParameter("neuId", neuId);
-      query.executeUpdate();
-      tx.commit();
-      deleted = true;
-    } catch (HibernateException e) {
-      if (tx!=null) tx.rollback();
-      throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
-    } finally {
-      session.close();
-    }
-
-    return deleted;
   }
 }

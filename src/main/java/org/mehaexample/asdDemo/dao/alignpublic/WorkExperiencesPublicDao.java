@@ -5,9 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import org.mehaexample.asdDemo.model.alignpublic.StudentsPublic;
 import org.mehaexample.asdDemo.model.alignpublic.TopCoops;
-import org.mehaexample.asdDemo.model.alignpublic.TopUndergradSchools;
 import org.mehaexample.asdDemo.model.alignpublic.WorkExperiencesPublic;
 
 import javax.persistence.TypedQuery;
@@ -18,14 +16,9 @@ public class WorkExperiencesPublicDao {
   private Session session;
 
   public WorkExperiencesPublicDao() {
-    try {
-      // it will check the hibernate.cfg.xml file and load it
-      // next it goes to all table files in the hibernate file and loads them
-      factory = new Configuration().configure("/hibernate_Public.cfg.xml").buildSessionFactory();
-    } catch (Throwable ex) {
-      System.err.println("Failed to create sessionFactory object." + ex);
-      throw new ExceptionInInitializerError(ex);
-    }
+    // it will check the hibernate.cfg.xml file and load it
+    // next it goes to all table files in the hibernate file and loads them
+    factory = new Configuration().configure("/hibernate_Public.cfg.xml").buildSessionFactory();
   }
 
   public WorkExperiencesPublic createWorkExperience(WorkExperiencesPublic workExperience) {
@@ -37,7 +30,7 @@ public class WorkExperiencesPublicDao {
       tx.commit();
     } catch (HibernateException e) {
       if (tx != null) tx.rollback();
-      throw new HibernateException("Connection error.");
+      throw new HibernateException(e);
     } finally {
       session.close();
     }
@@ -52,8 +45,6 @@ public class WorkExperiencesPublicDao {
               "FROM WorkExperiencesPublic WHERE workExperienceId = :workExperienceId ");
       query.setParameter("workExperienceId", workExperienceId);
       list = query.list();
-    } catch (HibernateException e) {
-      throw new HibernateException("Connection error.");
     } finally {
       session.close();
     }
@@ -74,9 +65,7 @@ public class WorkExperiencesPublicDao {
       TypedQuery<TopCoops> query = session.createQuery(hql, TopCoops.class);
       query.setMaxResults(numberOfResultsDesired);
       listOfTopCoops = query.getResultList();
-    } catch (HibernateException e) {
-      throw new HibernateException("Connection error.");
-    } finally{
+    } finally {
       session.close();
     }
     return listOfTopCoops;
@@ -92,9 +81,7 @@ public class WorkExperiencesPublicDao {
       session = factory.openSession();
       org.hibernate.query.Query query = session.createQuery(hql);
       listOfAllCoopCompanies = query.getResultList();
-    } catch (HibernateException e) {
-      throw new HibernateException("Connection error.");
-    } finally{
+    } finally {
       session.close();
     }
     return listOfAllCoopCompanies;
@@ -111,7 +98,7 @@ public class WorkExperiencesPublicDao {
         tx.commit();
       } catch (HibernateException e) {
         if (tx != null) tx.rollback();
-        throw new HibernateException("Connection error.");
+        throw new HibernateException(e);
       } finally {
         session.close();
       }
