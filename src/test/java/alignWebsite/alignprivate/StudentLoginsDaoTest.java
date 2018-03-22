@@ -1,9 +1,7 @@
 package alignWebsite.alignprivate;
 
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.hibernate.HibernateException;
+import org.junit.*;
 import org.mehaexample.asdDemo.dao.alignprivate.StudentLoginsDao;
 import org.mehaexample.asdDemo.dao.alignprivate.StudentsDao;
 import org.mehaexample.asdDemo.enums.*;
@@ -39,13 +37,56 @@ public class StudentLoginsDaoTest {
     studentsDao.addStudent(newStudent);
     studentsDao.addStudent(newStudent2);
     studentsDao.addStudent(newStudent3);
+
+    StudentLogins studentLogins = new StudentLogins("tomcat3@gmail.com",
+            "password",
+            "key",
+            Timestamp.valueOf("2017-09-23 10:10:10.0"),
+            false);
+    studentLoginsDao.createStudentLogin(studentLogins);
   }
 
   @AfterClass
   public static void deletePlaceholderDB() {
+    studentLoginsDao.deleteStudentLogin("tomcat3@gmail.com");
     studentsDao.deleteStudent("2222222");
     studentsDao.deleteStudent("1111111");
     studentsDao.deleteStudent("0000000");
+  }
+
+  @Test(expected = HibernateException.class)
+  public void addDuplicate() {
+    StudentLogins studentLogins = new StudentLogins("tomcat3@gmail.com",
+            "password",
+            "key",
+            Timestamp.valueOf("2017-09-23 10:10:10.0"),
+            false);
+    studentLoginsDao.createStudentLogin(studentLogins);
+  }
+
+  @Test(expected = HibernateException.class)
+  public void updateNonExistentStudentLogin() {
+    StudentLogins studentLogins = new StudentLogins("tomcattttttt@gmail.com",
+            "password",
+            "key",
+            Timestamp.valueOf("2017-09-23 10:10:10.0"),
+            false);
+    studentLoginsDao.updateStudentLogin(studentLogins);
+  }
+
+  @Test(expected = HibernateException.class)
+  public void deleteNonExistentStudentLoginEmail() {
+    studentLoginsDao.deleteStudentLogin("jdoe@gmail.com");
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void deleteNullArgument() {
+    studentLoginsDao.deleteStudentLogin(null);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void deleteEmptyArgument() {
+    studentLoginsDao.deleteStudentLogin("");
   }
 
   @Test

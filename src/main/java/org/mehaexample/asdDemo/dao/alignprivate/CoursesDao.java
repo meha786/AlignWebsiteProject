@@ -7,13 +7,12 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import org.mehaexample.asdDemo.Constants;
 import org.mehaexample.asdDemo.model.alignprivate.Courses;
 
 public class CoursesDao {
 
-  private static SessionFactory factory;
-  private static Session session;
+  private SessionFactory factory;
+  private Session session;
 
   /**
    * Default constructor.
@@ -21,12 +20,7 @@ public class CoursesDao {
    * next it goes to all table files in the hibernate file and loads them.
    */
   public CoursesDao() {
-    try {
-      factory = new Configuration().configure().buildSessionFactory();
-    } catch (Throwable ex) {
-      System.err.println("Failed to create sessionFactory object." + ex);
-      throw new ExceptionInInitializerError(ex);
-    }
+    factory = new Configuration().configure().buildSessionFactory();
   }
 
   /**
@@ -35,12 +29,13 @@ public class CoursesDao {
    * @return list of All companies from private database.
    */
   public List<Courses> getAllCourses() {
-    session = factory.openSession();
-    org.hibernate.query.Query query = session.createQuery("FROM Courses");
-    List<Courses> listOfCourses = query.list();
-
-    session.close();
-    return listOfCourses;
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery("FROM Courses");
+      return (List<Courses>) query.list();
+    } finally {
+      session.close();
+    }
   }
 
   /**
@@ -51,31 +46,18 @@ public class CoursesDao {
    * @return Course corresponding to the course Id, null otherwise.
    */
   public Courses getCourseById(String courseId) {
-    session = factory.openSession();
-    org.hibernate.query.Query query = session.createQuery("FROM Courses WHERE courseId = :courseId");
-    query.setParameter("courseId", courseId);
-    List listOfCourses = query.list();
-    session.close();
-    if (listOfCourses.isEmpty()) {
-      return null;
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery("FROM Courses WHERE courseId = :courseId");
+      query.setParameter("courseId", courseId);
+      List listOfCourses = query.list();
+      if (listOfCourses.isEmpty()) {
+        return null;
+      }
+      return (Courses) listOfCourses.get(0);
+    } finally {
+      session.close();
     }
-    return (Courses) listOfCourses.get(0);
-  }
-
-  /**
-   * Get a company from the private database from their name.
-   *
-   * @param courseName company Name that wants to be found.
-   * @return company if found, null if not found.
-   */
-  public List<Courses> getCoursesByName(String courseName) {
-    session = factory.openSession();
-    org.hibernate.query.Query query = session.createQuery("FROM Courses WHERE courseName = :courseName");
-    query.setParameter("courseName", courseName);
-    List<Courses> listOfCourses = query.list();
-    session.close();
-
-    return listOfCourses;
   }
 
   /**
@@ -90,20 +72,18 @@ public class CoursesDao {
     }
 
     if (getCourseById(course.getCourseId()) != null) {
-      return course;
+      throw new HibernateException("Course already exist.");
     }
 
     session = factory.openSession();
     Transaction tx = null;
-    System.out.println("saving " + course.getCourseName() + " in Courses table");
     try {
       tx = session.beginTransaction();
       session.save(course);
       tx.commit();
     } catch (HibernateException e) {
-      System.out.println("HibernateException: " + e);
       if (tx != null) tx.rollback();
-      throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
+      throw new HibernateException(e);
     } finally {
       session.close();
     }
@@ -119,31 +99,29 @@ public class CoursesDao {
    * @return true if course is deleted, false otherwise.
    */
   public boolean deleteCourseById(String courseId) {
-    boolean deleted = false;
-
-    if (courseId == null || courseId.isEmpty()) {
-      return deleted;
+    if (courseId == null || courseId.trim().isEmpty()) {
+      throw new IllegalArgumentException("Course Id argument cannot be empty / null.");
     }
+
 
     Courses course = getCourseById(courseId);
-    if (course != null) {
-      session = factory.openSession();
-      Transaction tx = null;
-      try {
-        tx = session.beginTransaction();
-        System.out.println("Deleting course with name = " + course.getCourseName());
-        session.delete(course);
-        tx.commit();
-        deleted = true;
-      } catch (HibernateException e) {
-        if (tx != null) tx.rollback();
-        throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
-      } finally {
-        session.close();
-      }
+    if (course == null) {
+      throw new HibernateException("Course Id cannot be found.");
+    }
+    session = factory.openSession();
+    Transaction tx = null;
+    try {
+      tx = session.beginTransaction();
+      session.delete(course);
+      tx.commit();
+    } catch (HibernateException e) {
+      if (tx != null) tx.rollback();
+      throw new HibernateException(e);
+    } finally {
+      session.close();
     }
 
-    return deleted;
+    return true;
   }
 
   /**
@@ -153,26 +131,24 @@ public class CoursesDao {
    * @return true if course is updated, false otherwise.
    */
   public boolean updateCourse(Courses course) {
-    boolean updated = false;
-
     if (getCourseById(course.getCourseId()) != null) {
       session = factory.openSession();
       Transaction tx = null;
-      System.out.println("updating company in Companies table...");
       try {
         tx = session.beginTransaction();
         session.saveOrUpdate(course);
         tx.commit();
-        updated = true;
       } catch (HibernateException e) {
         if (tx != null) tx.rollback();
-        throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
+        throw new HibernateException(e);
       } finally {
         session.close();
       }
+    } else {
+      throw new HibernateException("Course does not exist.");
     }
 
-    return updated;
+    return true;
   }
 
 }

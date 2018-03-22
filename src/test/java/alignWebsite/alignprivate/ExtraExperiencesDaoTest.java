@@ -1,5 +1,6 @@
 package alignWebsite.alignprivate;
 
+import org.hibernate.HibernateException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -55,6 +56,18 @@ public class ExtraExperiencesDaoTest {
         studentsDao.deleteStudent("111234567");
     }
 
+    @Test(expected = HibernateException.class)
+    public void deleteNonExistentExtraExp() {
+        extraExperiencesDao.deleteExtraExperienceById(-200);
+    }
+
+    @Test(expected = HibernateException.class)
+    public void updateNonExistentExtraExp() {
+        ExtraExperiences newExtraExperience = new ExtraExperiences();
+        newExtraExperience.setExtraExperienceId(-200);
+        extraExperiencesDao.updateExtraExperience(newExtraExperience);
+    }
+
     @Test
     public void getExtraExperienceById() {
         int tempId = extraExperiencesDao.getExtraExperiencesByNeuId("001234567").get(0).getExtraExperienceId();
@@ -96,12 +109,9 @@ public class ExtraExperiencesDaoTest {
         foundExtraExperience.setDescription("Description2");
         extraExperiencesDao.updateExtraExperience(foundExtraExperience);
         assertTrue(extraExperiencesDao.getExtraExperiencesByNeuId("111234567").get(0).getDescription().equals("Description2"));
-        newExtraExperience.setExtraExperienceId(-100);
-        assertFalse(extraExperiencesDao.updateExtraExperience(newExtraExperience));
 
         // delete the extra experience
         extraExperiencesDao.deleteExtraExperienceById(foundExtraExperience.getExtraExperienceId());
         assertTrue(extraExperiencesDao.getExtraExperienceById(foundExtraExperience.getExtraExperienceId()) == null);
-        assertFalse(extraExperiencesDao.deleteExtraExperienceById(-100));
     }
 }

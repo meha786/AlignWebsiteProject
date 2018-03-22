@@ -10,17 +10,11 @@ import java.util.List;
 
 public class GenderRatioDao {
   private SessionFactory factory;
-  private Session session;
 
   public GenderRatioDao() {
-    try {
-      // it will check the hibernate.cfg.xml file and load it
-      // next it goes to all table files in the hibernate file and loads them
-      factory = new Configuration()
-              .configure().buildSessionFactory();
-    } catch (Throwable ex) {
-      throw new ExceptionInInitializerError(ex);
-    }
+    // it will check the hibernate.cfg.xml file and load it
+    // next it goes to all table files in the hibernate file and loads them
+    factory = new Configuration().configure().buildSessionFactory();
   }
 
   public List<GenderRatio> getYearlyGenderRatio(Campus campus) {
@@ -31,11 +25,15 @@ public class GenderRatioDao {
             "WHERE s.campus = :campus " +
             "GROUP BY s.entryYear " +
             "ORDER BY s.entryYear ASC ";
-    session = factory.openSession();
-    org.hibernate.query.Query query = session.createQuery(hql);
-    query.setParameter("campus", campus);
-    List<GenderRatio> list = query.list();
-    session.close();
+    List<GenderRatio> list;
+    Session session = factory.openSession();
+    try {
+      org.hibernate.query.Query query = session.createQuery(hql);
+      query.setParameter("campus", campus);
+      list = query.list();
+    } finally {
+      session.close();
+    }
     return list;
   }
 }

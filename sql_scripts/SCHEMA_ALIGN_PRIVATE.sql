@@ -8,7 +8,6 @@ DROP TABLE IF EXISTS StudentLogins;
 DROP TABLE IF EXISTS PriorEducations;
 DROP TABLE IF EXISTS WorkExperiences;
 DROP TABLE IF EXISTS Electives;
-DROP TABLE IF EXISTS Experiences;
 DROP TABLE IF EXISTS ExtraExperiences;
 DROP TABLE IF EXISTS Projects;
 DROP TABLE IF EXISTS Students;
@@ -111,19 +110,6 @@ CREATE TABLE Electives (
 		FOREIGN KEY (CourseId)
 		REFERENCES Courses(CourseId)
         ON UPDATE CASCADE ON DELETE SET NULL
-);
-
-CREATE TABLE Experiences (
-	ExperienceId INT AUTO_INCREMENT,
-    NeuId VARCHAR(16),
-    Title VARCHAR(255),
-    Description VARCHAR(1250),
-    CONSTRAINT pk_Experiences_ExperienceId
-		PRIMARY KEY (ExperienceId),
-	CONSTRAINT fk_Experiences_NeuId
-		FOREIGN KEY (NeuId)
-        REFERENCES Students(NeuId)
-        ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE WorkExperiences (

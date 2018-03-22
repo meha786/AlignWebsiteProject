@@ -5,9 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import org.mehaexample.asdDemo.model.alignprivate.Students;
 import org.mehaexample.asdDemo.model.alignpublic.StudentsPublic;
-import org.mehaexample.asdDemo.model.alignpublic.TopCoops;
 import org.mehaexample.asdDemo.model.alignpublic.TopGradYears;
 
 import javax.persistence.TypedQuery;
@@ -18,14 +16,9 @@ public class StudentsPublicDao {
   private Session session;
 
   public StudentsPublicDao() {
-    try {
-      // it will check the hibernate.cfg.xml file and load it
-      // next it goes to all table files in the hibernate file and loads them
-      factory = new Configuration().configure("/hibernate_Public.cfg.xml").buildSessionFactory();
-    } catch (Throwable ex) {
-      System.err.println("Failed to create sessionFactory object." + ex);
-      throw new ExceptionInInitializerError(ex);
-    }
+    // it will check the hibernate.cfg.xml file and load it
+    // next it goes to all table files in the hibernate file and loads them
+    factory = new Configuration().configure("/hibernate_Public.cfg.xml").buildSessionFactory();
   }
 
   public StudentsPublic createStudent(StudentsPublic student) {
@@ -40,7 +33,7 @@ public class StudentsPublicDao {
         tx.commit();
       } catch (HibernateException e) {
         if (tx != null) tx.rollback();
-        throw new HibernateException("Connection error.");
+        throw new HibernateException(e);
       } finally {
         session.close();
       }
@@ -55,8 +48,6 @@ public class StudentsPublicDao {
       org.hibernate.query.Query query = session.createQuery("FROM StudentsPublic WHERE publicId = :publicId ");
       query.setParameter("publicId", publicId);
       list = query.list();
-    } catch (HibernateException e) {
-      throw new HibernateException("Connection error.");
     } finally {
       session.close();
     }
@@ -77,44 +68,38 @@ public class StudentsPublicDao {
       TypedQuery<TopGradYears> query = session.createQuery(hql, TopGradYears.class);
       query.setMaxResults(numberOfResultsDesired);
       listOfTopGradYears = query.getResultList();
-    } catch (HibernateException e) {
-      throw new HibernateException("Connection error.");
-    } finally{
+    } finally {
       session.close();
     }
     return listOfTopGradYears;
   }
 
   public List<Integer> getListOfAllGraduationYears() {
-    String hql = "SELECT s.graduationYear " +
-            "FROM StudentsPublic s " +
-            "GROUP BY s.graduationYear " +
-            "ORDER BY s.graduationYear ASC";
     List<Integer> listOfAllGraduationYears;
     try {
+      String hql = "SELECT s.graduationYear " +
+              "FROM StudentsPublic s " +
+              "GROUP BY s.graduationYear " +
+              "ORDER BY s.graduationYear ASC";
       session = factory.openSession();
       org.hibernate.query.Query query = session.createQuery(hql);
       listOfAllGraduationYears = query.getResultList();
-    } catch (HibernateException e) {
-      throw new HibernateException("Connection error.");
-    } finally{
+    } finally {
       session.close();
     }
     return listOfAllGraduationYears;
   }
 
   public List<StudentsPublic> getListOfAllStudents() {
-    String hql = "SELECT s " +
-            "FROM StudentsPublic s " +
-            "ORDER BY s.graduationYear DESC";
     List<StudentsPublic> listOfAllStudents;
     try {
+      String hql = "SELECT s " +
+              "FROM StudentsPublic s " +
+              "ORDER BY s.graduationYear DESC";
       session = factory.openSession();
       org.hibernate.query.Query query = session.createQuery(hql);
       listOfAllStudents = query.getResultList();
-    } catch (HibernateException e) {
-      throw new HibernateException("Connection error.");
-    } finally{
+    } finally {
       session.close();
     }
     return listOfAllStudents;
@@ -175,8 +160,6 @@ public class StudentsPublicDao {
         }
       }
       list = query.list();
-    } catch(HibernateException e) {
-      throw new HibernateException("Connection error.");
     } finally {
       session.close();
     }
@@ -194,7 +177,7 @@ public class StudentsPublicDao {
         tx.commit();
       } catch (HibernateException e) {
         if (tx != null) tx.rollback();
-        throw new HibernateException("Connection error.");
+        throw new HibernateException(e);
       } finally {
         session.close();
       }

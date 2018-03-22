@@ -16,9 +16,7 @@ public class Administrators {
 		this.lastName = lastName;
 	}
 
-	public Administrators() {
-		super();
-	}
+	public Administrators() { }
 
 	public String getAdministratorNeuId() {
 		return administratorNeuId;

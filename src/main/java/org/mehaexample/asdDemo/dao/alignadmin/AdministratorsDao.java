@@ -7,7 +7,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import org.mehaexample.asdDemo.Constants;
 import org.mehaexample.asdDemo.model.alignadmin.Administrators;
 
 public class AdministratorsDao {
@@ -20,15 +19,10 @@ public class AdministratorsDao {
    * Default Constructor.
    */
   public AdministratorsDao() {
-    try {
-      // it will check the hibernate.cfg.xml file and load it
-      // next it goes to all table files in the hibernate file and loads them
-      factory = new Configuration()
-              .configure("/hibernate_Admin.cfg.xml").buildSessionFactory();
-    } catch (ExceptionInInitializerError ex) {
-      throw new ExceptionInInitializerError(ex);
-
-    }
+    // it will check the hibernate.cfg.xml file and load it
+    // next it goes to all table files in the hibernate file and loads them
+    factory = new Configuration()
+            .configure("/hibernate_Admin.cfg.xml").buildSessionFactory();
   }
 
   /**
@@ -39,11 +33,9 @@ public class AdministratorsDao {
    */
   public Administrators addAdministrator(Administrators administrators) {
     if (administrators == null) {
-      return null;
+      throw new IllegalArgumentException("Administrator Argument cannot be null");
     }
-
     Transaction tx = null;
-
     if (ifAdminNuidExists(administrators.getAdministratorNeuId())) {
       throw new HibernateException(ADMIN_EXIST_ERROR);
     } else {
@@ -54,7 +46,7 @@ public class AdministratorsDao {
         tx.commit();
       } catch (HibernateException e) {
         if (tx != null) tx.rollback();
-        throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
+        throw new HibernateException(e);
       } finally {
         session.close();
       }
@@ -68,12 +60,13 @@ public class AdministratorsDao {
    * @return A list of Administrators
    */
   public List<Administrators> getAllAdminstrators() {
-    session = factory.openSession();
-    org.hibernate.query.Query query = session.createQuery("FROM Administrators");
-    List<Administrators> list = query.list();
-    session.close();
-
-    return list;
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery("FROM Administrators");
+      return (List<Administrators>) query.list();
+    } finally {
+      session.close();
+    }
   }
 
   /**
@@ -83,18 +76,41 @@ public class AdministratorsDao {
    * @return an Administrators object
    */
   public Administrators getAdministratorRecord(String adminNeuId) {
-    session = factory.openSession();
-
-    org.hibernate.query.Query query = session.createQuery("FROM Administrators"
-            + " WHERE administratorNeuId = :administratorNeuId ");
-    query.setParameter("administratorNeuId", adminNeuId);
-    List list = query.list();
-    session.close();
-
-    if (list.isEmpty()) {
-      return null;
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery("FROM Administrators"
+              + " WHERE administratorNeuId = :administratorNeuId ");
+      query.setParameter("administratorNeuId", adminNeuId);
+      List list = query.list();
+      if (list.isEmpty()) {
+        return null;
+      }
+      return (Administrators) list.get(0);
+    } finally {
+      session.close();
     }
-    return (Administrators) list.get(0);
+  }
+
+  /**
+   * Search a single Administrator record using adminNeuId.
+   *
+   * @param email administrator Email
+   * @return an Administrators object
+   */
+  public Administrators findAdministratorByEmail(String email) {
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery("FROM Administrators"
+              + " WHERE email = :email ");
+      query.setParameter("email", email);
+      List list = query.list();
+      if (list.isEmpty()) {
+        return null;
+      }
+      return (Administrators) list.get(0);
+    } finally {
+      session.close();
+    }
   }
 
   /**
@@ -105,10 +121,8 @@ public class AdministratorsDao {
    */
   public boolean updateAdministratorRecord(Administrators administrator) {
     Transaction tx = null;
-    boolean updated = false;
-
+    boolean updated;
     String administratorNeuId = administrator.getAdministratorNeuId();
-
     if (ifAdminNuidExists(administratorNeuId)) {
       try {
         session = factory.openSession();
@@ -118,14 +132,13 @@ public class AdministratorsDao {
         updated = true;
       } catch (HibernateException e) {
         if (tx != null) tx.rollback();
-        throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
+        throw new HibernateException(e);
       } finally {
         session.close();
       }
     } else {
-      throw new HibernateException("Student id does not exist.");
+      throw new HibernateException("Admin Id does not exist.");
     }
-
     return updated;
   }
 
@@ -137,29 +150,27 @@ public class AdministratorsDao {
    * @return true if delete successfully. Otherwise, false.
    */
   public boolean deleteAdministrator(String administratorNeuId) {
-    boolean deleted = false;
     if (administratorNeuId == null || administratorNeuId.isEmpty()) {
       return false;
     }
 
     Administrators admin = getAdministratorRecord(administratorNeuId);
-    Transaction tx = null;
-    if (admin != null) {
-      try {
-        session = factory.openSession();
-        tx = session.beginTransaction();
-        session.delete(admin);
-        tx.commit();
-        deleted = true;
-      } catch (HibernateException e) {
-        if (tx != null) tx.rollback();
-        throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
-      } finally {
-        session.close();
-      }
+    if (admin == null) {
+      throw new HibernateException("Admin Id does not exist.");
     }
-
-    return deleted;
+    Transaction tx = null;
+    try {
+      session = factory.openSession();
+      tx = session.beginTransaction();
+      session.delete(admin);
+      tx.commit();
+      return true;
+    } catch (HibernateException e) {
+      if (tx != null) tx.rollback();
+      throw new HibernateException(e);
+    } finally {
+      session.close();
+    }
   }
 
   /**
@@ -177,13 +188,11 @@ public class AdministratorsDao {
               + "WHERE administratorNeuId = :administratorNeuId");
       query.setParameter("administratorNeuId", adminNeuId);
       List list = query.list();
-
-      session.close();
       if (!list.isEmpty()) {
         find = true;
       }
-    } catch (HibernateException e) {
-      throw new HibernateException(Constants.DATABASE_CONNECTION_ERROR);
+    } finally {
+      session.close();
     }
 
     return find;

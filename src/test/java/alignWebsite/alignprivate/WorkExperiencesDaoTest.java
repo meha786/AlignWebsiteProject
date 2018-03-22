@@ -1,5 +1,6 @@
 package alignWebsite.alignprivate;
 
+import org.hibernate.HibernateException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -66,6 +67,18 @@ public class WorkExperiencesDaoTest {
     studentsDao.deleteStudent("111234567");
   }
 
+  @Test(expected = HibernateException.class)
+  public void deleteNonExistWorkExperience() {
+    workExperiencesDao.deleteWorkExperienceById(-200);
+  }
+
+  @Test(expected = HibernateException.class)
+  public void updateNonExistWorkExperience() {
+    WorkExperiences newWorkExperience = new WorkExperiences();
+    newWorkExperience.setWorkExperienceId(-300);
+    workExperiencesDao.updateWorkExperience(newWorkExperience);
+  }
+
   @Test
   public void getStudentsWorkingInACompanyTest() {
     List<StudentBasicInfo> list =
@@ -76,6 +89,9 @@ public class WorkExperiencesDaoTest {
 
     list = workExperiencesDao.getStudentsWorkingInACompany(Campus.SEATTLE, 2017, "Amazon");
     assertTrue(list.size() == 0);
+
+    list = workExperiencesDao.getStudentsWorkingInACompany(null, null, "Amazon");
+    assertTrue(list.size() == 1);
   }
 
   @Test
@@ -94,6 +110,9 @@ public class WorkExperiencesDaoTest {
     List<StudentCoopList> temp = workExperiencesDao.getStudentCoopCompanies(Campus.SEATTLE, null);
     assertTrue(temp.size() == 1);
     assertTrue(temp.get(0).getCompanies().size() == 2);
+
+    temp = workExperiencesDao.getStudentCoopCompanies(null, 2016);
+    assertTrue(temp.size() == 1);
 
     List<StudentCoopList> temp2 = workExperiencesDao.getStudentCoopCompanies(Campus.SEATTLE, 2016);
     assertTrue(temp2.size() == 1);
@@ -121,6 +140,9 @@ public class WorkExperiencesDaoTest {
     List<StudentCoopList> temp = workExperiencesDao.getStudentCurrentCompanies(Campus.SEATTLE, 2016);
     assertTrue(temp.size() == 1);
     assertTrue(temp.get(0).getCompanies().get(0).equals("Google"));
+
+    temp = workExperiencesDao.getStudentCurrentCompanies(null, null);
+    assertTrue(temp.size() == 1);
 
     List<StudentCoopList> temp2 = workExperiencesDao.getStudentCoopCompanies(Campus.SEATTLE, 2017);
     assertTrue(temp2.isEmpty());
@@ -155,10 +177,10 @@ public class WorkExperiencesDaoTest {
     newWorkExperience2.setCompanyName("Aaa");
     workExperiencesDao.createWorkExperience(newWorkExperience2);
 
+    temp = workExperiencesDao.getTopTenEmployers(null, 2016);
+    assertTrue(temp.size() == 2);
     temp = workExperiencesDao.getTopTenEmployers(Campus.SEATTLE, 2016);
     assertTrue(temp.size() == 2);
-//    assertTrue(temp.get(0).equals("Amazon"));
-//    assertTrue(temp.get(1).equals("Aaa"));
 
     temp = workExperiencesDao.getTopTenEmployers(Campus.BOSTON, 1994);
     assertTrue(temp.size() == 0);
@@ -208,12 +230,9 @@ public class WorkExperiencesDaoTest {
     foundWorkExperience.setDescription("Description2");
     workExperiencesDao.updateWorkExperience(foundWorkExperience);
     assertTrue(workExperiencesDao.getWorkExperiencesByNeuId("111234567").get(0).getDescription().equals("Description2"));
-    newWorkExperience.setWorkExperienceId(-100);
-    assertFalse(workExperiencesDao.updateWorkExperience(newWorkExperience));
 
     // delete the work experience
     workExperiencesDao.deleteWorkExperienceById(foundWorkExperience.getWorkExperienceId());
     assertTrue(workExperiencesDao.getWorkExperienceById(foundWorkExperience.getWorkExperienceId()) == null);
-    assertFalse(workExperiencesDao.deleteWorkExperienceById(-100));
   }
 }

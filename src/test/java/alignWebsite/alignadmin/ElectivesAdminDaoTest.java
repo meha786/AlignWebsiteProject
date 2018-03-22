@@ -1,5 +1,6 @@
 package alignWebsite.alignadmin;
 
+import org.hibernate.HibernateException;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -25,10 +26,28 @@ public class ElectivesAdminDaoTest {
     coursesDao = new CoursesDao();
   }
 
-  @Test
+  @Test(expected = IllegalArgumentException.class)
   public void addNullElectivesTest() {
-    ElectivesAdmin Electives = electivesAdminDao.addElective(null);
-    Assert.assertNull(Electives);
+    electivesAdminDao.addElective(null);
+  }
+
+  @Test(expected = HibernateException.class)
+  public void addElectiveWithNonExistentStudentId() {
+    ElectivesAdmin electivesAdmin = new ElectivesAdmin();
+    electivesAdmin.setNeuId("00001111");
+    electivesAdminDao.addElective(electivesAdmin);
+  }
+
+  @Test(expected = HibernateException.class)
+  public void updateElectiveWithNonExistentStudentId() {
+    ElectivesAdmin electivesAdmin = new ElectivesAdmin();
+    electivesAdmin.setNeuId("00001111");
+    electivesAdminDao.updateElectives(electivesAdmin);
+  }
+
+  @Test(expected = HibernateException.class)
+  public void deleteElectiveWithNonExistentStudentId() {
+    electivesAdminDao.deleteElectiveRecord(-200);
   }
 
   @Test
@@ -46,18 +65,17 @@ public class ElectivesAdminDaoTest {
     Courses newCourse = new Courses(tempId + "", "course2", "course description 2");
     Courses courses = coursesDao.createCourse(newCourse);
 
-//    Terms newTerm = new Terms(Term.FALL, tempId, TermType.QUARTER);
-//    Terms term = termsDao.addTerm(newTerm);
-
     ElectivesAdmin elective = new ElectivesAdmin();
     elective.setNeuId(newStudent.getNeuId());
     elective.setCourseId(newCourse.getCourseId());
-//    elective.setTerms(newTerm);
     elective.setRetake(false);
     elective.setGpa((float) 3.2);
     elective.setPlagiarism(false);
 
+    Assert.assertTrue(electivesAdminDao.getElectiveById(123321) == null);
+
     ElectivesAdmin electivesNew = electivesAdminDao.addElective(elective);
+    Assert.assertTrue(electivesAdminDao.getElectiveById(electivesNew.getElectiveId()).getNeuId().equals(newStudent.getNeuId()));
 
     electivesAdminDao.deleteElectiveRecord(electivesNew.getElectiveId());
     coursesDao.deleteCourseById(tempId + "");

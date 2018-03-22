@@ -7,12 +7,15 @@ public class AdminLogins {
   private String adminPassword;
   private String registrationKey;
   private Timestamp keyExpiration;
+  private boolean confirmed;
 
-  public AdminLogins(String email, String adminPassword, String registrationKey, Timestamp keyExpiration) {
+  public AdminLogins(String email, String adminPassword, String registrationKey,
+                     Timestamp keyExpiration, boolean confirmed) {
     this.email = email;
     this.adminPassword = adminPassword;
     this.registrationKey = registrationKey;
     this.keyExpiration = keyExpiration;
+    this.confirmed = confirmed;
   }
 
   public AdminLogins() { }
@@ -47,5 +50,13 @@ public class AdminLogins {
 
   public void setKeyExpiration(Timestamp keyExpiration) {
     this.keyExpiration = keyExpiration;
+  }
+
+  public boolean isConfirmed() {
+    return confirmed;
+  }
+
+  public void setConfirmed(boolean confirmed) {
+    this.confirmed = confirmed;
   }
 }

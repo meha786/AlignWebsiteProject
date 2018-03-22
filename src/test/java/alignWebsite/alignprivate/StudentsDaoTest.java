@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import org.hibernate.HibernateException;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -33,6 +35,46 @@ public class StudentsDaoTest {
     workExperiencesDao = new WorkExperiencesDao();
     electivesDao = new ElectivesDao();
     coursesDao = new CoursesDao();
+  }
+
+  @After
+  public void deleteForDuplicateDatabase() {
+    if (studentdao.ifNuidExists("10101010")) {
+      studentdao.deleteStudent("10101010");
+    }
+  }
+
+  @Test(expected = HibernateException.class)
+  public void deleteNonExistentNeuId() {
+    studentdao.deleteStudent("0101010101");
+  }
+
+  @Test(expected = HibernateException.class)
+  public void updateNonExistentStudent() {
+    Students student = new Students();
+    student.setNeuId("1010101010");
+    studentdao.updateStudentRecord(student);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void deleteWithNullArgument() {
+    studentdao.deleteStudent(null);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void deleteWithEmptyArgument() {
+    studentdao.deleteStudent("");
+  }
+
+  @Test(expected = HibernateException.class)
+  public void addDuplicateStudent() {
+    Students newStudent = new Students("10101010", "tomcat@gmail.com", "Tom", "",
+            "Cat", Gender.M, "F1", "1111111111",
+            "401 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2015,
+            Term.SPRING, 2017,
+            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
+    studentdao.addStudent(newStudent);
+    studentdao.addStudent(newStudent);
   }
 
   @Test
@@ -69,7 +111,7 @@ public class StudentsDaoTest {
 
     // no filter case
     Assert.assertTrue(studentdao.getAdminFilteredStudents(new HashMap<String, List<String>>()).size() == 3);
-    
+
     // first name = Tom
     List<String> firstName = new ArrayList<>();
     firstName.add("Tom");
@@ -130,8 +172,8 @@ public class StudentsDaoTest {
             EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
 
     Students student = studentdao.addStudent(newStudent);
-    Assert.assertTrue(studentdao.findStudentByEmail("tomcat@gmail.com").getNeuId().equals("0000000"));
-    Assert.assertTrue(studentdao.findStudentByEmail("tomcat2@gmail.com") == null);
+    Assert.assertTrue(studentdao.getStudentRecordByEmailId("tomcat@gmail.com").getNeuId().equals("0000000"));
+    Assert.assertTrue(studentdao.getStudentRecordByEmailId("tomcat2@gmail.com") == null);
     studentdao.deleteStudent("0000000");
   }
 
@@ -145,7 +187,6 @@ public class StudentsDaoTest {
 
     studentdao.addStudent(newStudent);
     Assert.assertTrue(studentdao.deleteStudent("0000000"));
-    Assert.assertTrue(!studentdao.deleteStudent("0000001"));
     Assert.assertTrue(!studentdao.ifNuidExists("0000000"));
   }
 
@@ -176,6 +217,7 @@ public class StudentsDaoTest {
     studentdao.addStudent(newStudent);
     Students student = studentdao.getStudentRecord("0000000");
     Assert.assertTrue(student.toString().equals(newStudent.toString()));
+    Assert.assertTrue(studentdao.searchStudentRecord("Tom").get(0).getNeuId().equals("0000000"));
     studentdao.deleteStudent("0000000");
 
   }
@@ -202,6 +244,8 @@ public class StudentsDaoTest {
     for (Students s : students) {
       Assert.assertTrue(s.getDegree().name().equals("MASTERS"));
     }
+
+    studentdao.deleteStudent("0000000");
   }
 
   @Test
@@ -222,104 +266,104 @@ public class StudentsDaoTest {
     Assert.assertTrue(student.getAddress().equals("225 Terry Ave"));
 
     studentdao.deleteStudent("0000000");
-    Assert.assertTrue(!studentdao.updateStudentRecord(student));
   }
 
-    @Test
-    public void getStudentFilteredStudents() throws Exception {
-      Students newStudent = new Students("0000000", "tomcat@gmail.com", "Tom", "",
-              "Cat", Gender.M, "F1", "1111111111",
-              "401 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2014,
-              Term.SPRING, 2017,
-              EnrollmentStatus.FULL_TIME, Campus.BOSTON, DegreeCandidacy.MASTERS, null, true);
-      Students newStudent2 = new Students("1111111", "jerrymouse@gmail.com", "Jerry", "",
-              "Mouse", Gender.M, "F1", "1111111111",
-              "225 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2015,
-              Term.FALL, 2016,
-              EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
-      Students newStudent3 = new Students("2222222", "tomcat3@gmail.com", "Tom", "",
-              "Dog", Gender.M, "F1", "1111111111",
-              "401 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2015,
-              Term.FALL, 2017,
-              EnrollmentStatus.FULL_TIME, Campus.SILICON_VALLEY, DegreeCandidacy.MASTERS, null, true);
-      studentdao.addStudent(newStudent);
-      studentdao.addStudent(newStudent2);
-      studentdao.addStudent(newStudent3);
 
-      // no filter case
-      Assert.assertTrue(studentdao.getStudentFilteredStudents(new HashMap<String, List<String>>()).size() == 3);
+  @Test
+  public void getStudentFilteredStudents() throws Exception {
+    Students newStudent = new Students("0000000", "tomcat@gmail.com", "Tom", "",
+            "Cat", Gender.M, "F1", "1111111111",
+            "401 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2014,
+            Term.SPRING, 2017,
+            EnrollmentStatus.FULL_TIME, Campus.BOSTON, DegreeCandidacy.MASTERS, null, true);
+    Students newStudent2 = new Students("1111111", "jerrymouse@gmail.com", "Jerry", "",
+            "Mouse", Gender.M, "F1", "1111111111",
+            "225 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2015,
+            Term.FALL, 2016,
+            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
+    Students newStudent3 = new Students("2222222", "tomcat3@gmail.com", "Tom", "",
+            "Dog", Gender.M, "F1", "1111111111",
+            "401 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2015,
+            Term.FALL, 2017,
+            EnrollmentStatus.FULL_TIME, Campus.SILICON_VALLEY, DegreeCandidacy.MASTERS, null, true);
+    studentdao.addStudent(newStudent);
+    studentdao.addStudent(newStudent2);
+    studentdao.addStudent(newStudent3);
 
-      Map<String, List<String>> map = new HashMap<>();
+    // no filter case
+    Assert.assertTrue(studentdao.getStudentFilteredStudents(new HashMap<String, List<String>>()).size() == 3);
 
-      // filter by start term
-      List<String> startTerms = new ArrayList<>();
-      startTerms.addAll(Arrays.asList(new String[] {"FALL2015"}));
-      List<String> endTerms = new ArrayList<>();
-      endTerms.addAll(Arrays.asList(new String[] {"FALL2017"}));
-      map.put("startTerm", startTerms);
-      map.put("endTerm", endTerms);
-      Assert.assertTrue(studentdao.getStudentFilteredStudents(map).size() == 1);
-      map.remove("startTerm");
-      map.remove("endTerm");
+    Map<String, List<String>> map = new HashMap<>();
 
-      // filter by campus
-      List<String> campuses = new ArrayList<>();
-      campuses.addAll(Arrays.asList(new String[] {"SEATTLE", "BOSTON"}));
-      map.put("campus", campuses);
-      Assert.assertTrue(studentdao.getStudentFilteredStudents(map).size() == 2);
-      map.remove("campus");
+    // filter by start term
+    List<String> startTerms = new ArrayList<>();
+    startTerms.addAll(Arrays.asList(new String[]{"FALL2015"}));
+    List<String> endTerms = new ArrayList<>();
+    endTerms.addAll(Arrays.asList(new String[]{"FALL2017"}));
+    map.put("startTerm", startTerms);
+    map.put("endTerm", endTerms);
+    Assert.assertTrue(studentdao.getStudentFilteredStudents(map).size() == 1);
+    map.remove("startTerm");
+    map.remove("endTerm");
 
-      // filter by work experience - company name
-      SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    // filter by campus
+    List<String> campuses = new ArrayList<>();
+    campuses.addAll(Arrays.asList(new String[]{"SEATTLE", "BOSTON"}));
+    map.put("campus", campuses);
+    Assert.assertTrue(studentdao.getStudentFilteredStudents(map).size() == 2);
+    map.remove("campus");
 
-      WorkExperiences newWorkExperience = new WorkExperiences("1111111", "Amazon",
-              dateFormat.parse("2017-06-01"), dateFormat.parse("2017-12-01"),
-              false, "Title", "Description");
-      workExperiencesDao.createWorkExperience(newWorkExperience);
+    // filter by work experience - company name
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-      newWorkExperience.setNeuId("2222222");
-      newWorkExperience.setCompanyName("Facebook");
-      workExperiencesDao.createWorkExperience(newWorkExperience);
+    WorkExperiences newWorkExperience = new WorkExperiences("1111111", "Amazon",
+            dateFormat.parse("2017-06-01"), dateFormat.parse("2017-12-01"),
+            false, "Title", "Description");
+    workExperiencesDao.createWorkExperience(newWorkExperience);
 
-      List<String> companies = new ArrayList<>();
-      companies.addAll(Arrays.asList(new String[] {"Amazon", "Facebook", "Google"}));
-      map.put("companyName", companies);
-      Assert.assertTrue(studentdao.getStudentFilteredStudents(map).size() == 2);
-      map.remove("companyName");
+    newWorkExperience.setNeuId("2222222");
+    newWorkExperience.setCompanyName("Facebook");
+    workExperiencesDao.createWorkExperience(newWorkExperience);
 
-      // filter by course name
-      Courses newCourse1 = new Courses("5800", "Algorithm", "Algorithm");
-      Courses newCourse2 = new Courses("5100", "AI", "AI");
-      coursesDao.createCourse(newCourse1);
-      coursesDao.createCourse(newCourse2);
+    List<String> companies = new ArrayList<>();
+    companies.addAll(Arrays.asList(new String[]{"Amazon", "Facebook", "Google"}));
+    map.put("companyName", companies);
+    Assert.assertTrue(studentdao.getStudentFilteredStudents(map).size() == 2);
+    map.remove("companyName");
 
-      Electives newElective1 = new Electives("1111111", "5800", "Course Name", Term.SPRING,
-              2018);
-      Electives newElective2 = new Electives("2222222", "5100", "Course Name2", Term.SPRING,
-              2018);
-      electivesDao.addElective(newElective1);
-      electivesDao.addElective(newElective2);
+    // filter by course name
+    Courses newCourse1 = new Courses("5800", "Algorithm", "Algorithm");
+    Courses newCourse2 = new Courses("5100", "AI", "AI");
+    coursesDao.createCourse(newCourse1);
+    coursesDao.createCourse(newCourse2);
 
-      List<String> courses = new ArrayList<>();
-      courses.addAll(Arrays.asList(new String[] {"Algorithm", "AI", "Database"}));
-      map.put("courseName", courses);
-      Assert.assertTrue(studentdao.getStudentFilteredStudents(map).size() == 2);
-      map.remove("courseName");
+    Electives newElective1 = new Electives("1111111", "5800", "Course Name", Term.SPRING,
+            2018);
+    Electives newElective2 = new Electives("2222222", "5100", "Course Name2", Term.SPRING,
+            2018);
+    electivesDao.addElective(newElective1);
+    electivesDao.addElective(newElective2);
 
-      // filter by company name, course name, campus
-      map.put("campus", campuses);
-      map.put("companyName", companies);
-      map.put("courseName", courses);
-      Assert.assertTrue(studentdao.getStudentFilteredStudents(map).size() == 1);
+    List<String> courses = new ArrayList<>();
+    courses.addAll(Arrays.asList(new String[]{"Algorithm", "AI", "Database"}));
+    map.put("courseName", courses);
+    Assert.assertTrue(studentdao.getStudentFilteredStudents(map).size() == 2);
+    map.remove("courseName");
 
-      workExperiencesDao.deleteWorkExperienceByNeuId("1111111");
-      workExperiencesDao.deleteWorkExperienceByNeuId("2222222");
-      coursesDao.deleteCourseById("5800");
-      coursesDao.deleteCourseById("5100");
-      electivesDao.deleteElectivesByNeuId("1111111");
-      electivesDao.deleteElectivesByNeuId("2222222");
-      studentdao.deleteStudent("2222222");
-      studentdao.deleteStudent("1111111");
-      studentdao.deleteStudent("0000000");
-    }
+    // filter by company name, course name, campus
+    map.put("campus", campuses);
+    map.put("companyName", companies);
+    map.put("courseName", courses);
+    Assert.assertTrue(studentdao.getStudentFilteredStudents(map).size() == 1);
+
+    workExperiencesDao.deleteWorkExperienceByNeuId("1111111");
+    workExperiencesDao.deleteWorkExperienceByNeuId("2222222");
+    coursesDao.deleteCourseById("5800");
+    coursesDao.deleteCourseById("5100");
+    electivesDao.deleteElectivesByNeuId("1111111");
+    electivesDao.deleteElectivesByNeuId("2222222");
+    studentdao.deleteStudent("2222222");
+    studentdao.deleteStudent("1111111");
+    studentdao.deleteStudent("0000000");
+  }
 }

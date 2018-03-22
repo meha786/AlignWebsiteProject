@@ -1,5 +1,6 @@
 package alignWebsite.alignpublic;
 
+import org.hibernate.HibernateException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -51,12 +52,18 @@ public class UndergraduatesPublicDaoTest {
     studentsPublicDao.deleteStudentByPublicId(5);
   }
 
+  @Test(expected = HibernateException.class)
+  public void deleteNonExistentUndergraduateTest() {
+    undergraduatesPublicDao.deleteUndergraduateById(-200);
+  }
+
   @Test
   public void findUndergraduateByIdTest() {
     assertTrue(undergraduatesPublicDao.findUndergraduateById(undergraduate.getUndergraduateId())
             .getUndergradDegree().equals("Chemistry"));
     assertTrue(undergraduatesPublicDao.findUndergraduateById(undergraduate.getUndergraduateId())
             .getUndergradSchool().equals("George Washington University"));
+    assertTrue(undergraduatesPublicDao.findUndergraduateById(-200) == null);
   }
 
   @Test
