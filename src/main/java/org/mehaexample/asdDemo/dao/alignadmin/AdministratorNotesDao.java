@@ -26,6 +26,18 @@ public class AdministratorNotesDao {
   }
 
   /**
+   * test constructor
+   */
+  public AdministratorNotesDao(boolean test) {
+    // it will check the hibernate.cfg.xml file and load it
+    // next it goes to all table files in the hibernate file and loads them
+    if (test) {
+      factory = new Configuration()
+              .configure("/hibernate_admin_test.cfg.xml").buildSessionFactory();
+    }
+  }
+
+  /**
    * Search for a list of Administrator Note by neu Id.
    *
    * @param neuId Student Neu Id

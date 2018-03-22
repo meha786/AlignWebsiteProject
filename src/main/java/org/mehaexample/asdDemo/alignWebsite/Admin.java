@@ -113,7 +113,7 @@ public class Admin{
 			companyList.add(company);
 			map.put("companyName",companyList);
 		}
-		ArrayList<Students> studentRecords = (ArrayList<Students>) studentDao.getAdminFilteredStudents(map);
+		ArrayList<Students> studentRecords = (ArrayList<Students>) studentDao.getAdminFilteredStudents(map, 1, 20);
 		JSONArray resultArray = new JSONArray();
 		
 		for(Students st : studentRecords) {

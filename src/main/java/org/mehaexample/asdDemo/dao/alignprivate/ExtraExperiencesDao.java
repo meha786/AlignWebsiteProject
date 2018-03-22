@@ -22,6 +22,12 @@ public class ExtraExperiencesDao {
     factory = new Configuration().configure().buildSessionFactory();
   }
 
+  public ExtraExperiencesDao(boolean test) {
+    if (test) {
+      factory = new Configuration().configure("/hibernate_private_test.cfg.xml").buildSessionFactory();
+    }
+  }
+
   /**
    * Find an Extra Experience by the Experience Id.
    * This method searches the extra experience from the private database.

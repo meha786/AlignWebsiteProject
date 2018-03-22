@@ -22,6 +22,12 @@ public class UndergraduatesPublicDao {
       factory = new Configuration().configure("/hibernate_Public.cfg.xml").buildSessionFactory();
   }
 
+  public UndergraduatesPublicDao(boolean test) {
+    if (test) {
+      factory = new Configuration().configure("/hibernate_public_test.cfg.xml").buildSessionFactory();
+    }
+  }
+
   public UndergraduatesPublic createUndergraduate(UndergraduatesPublic undergraduate) {
     Transaction tx = null;
     try {

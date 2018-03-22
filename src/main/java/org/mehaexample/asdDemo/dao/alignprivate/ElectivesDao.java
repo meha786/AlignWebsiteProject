@@ -27,6 +27,13 @@ public class ElectivesDao {
             .configure().buildSessionFactory();
   }
 
+  public ElectivesDao(boolean test) {
+    if (test) {
+      studentDao = new StudentsDao(true);
+      factory = new Configuration().configure("/hibernate_private_test.cfg.xml").buildSessionFactory();
+    }
+  }
+
   public List<Electives> getElectivesByNeuId(String neuId) {
     try {
       session = factory.openSession();

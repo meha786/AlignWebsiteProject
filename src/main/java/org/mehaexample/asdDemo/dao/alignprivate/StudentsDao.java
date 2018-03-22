@@ -28,6 +28,12 @@ public class StudentsDao {
     factory = new Configuration().configure().buildSessionFactory();
   }
 
+  public StudentsDao(boolean test) {
+    if (test) {
+      factory = new Configuration().configure("/hibernate_private_test.cfg.xml").buildSessionFactory();
+    }
+  }
+
   /**
    * This is the function to add a student into database.
    *
@@ -56,7 +62,7 @@ public class StudentsDao {
     return student;
   }
 
-  public List<Students> getAdminFilteredStudents(Map<String, List<String>> filters) {
+  public List<Students> getAdminFilteredStudents(Map<String, List<String>> filters, int begin, int end) {
     StringBuilder hql = new StringBuilder("SELECT Distinct(s) " +
             "FROM Students s LEFT OUTER JOIN WorkExperiences we " +
             "ON s.neuId = we.neuId");
@@ -95,6 +101,8 @@ public class StudentsDao {
     try {
       session = factory.openSession();
       org.hibernate.query.Query query = session.createQuery(hql.toString());
+      query.setFirstResult(begin - 1);
+      query.setMaxResults(end - begin + 1);
 
       for (String filter : filterKeys) {
         List<String> filterElements = filters.get(filter);
@@ -110,6 +118,7 @@ public class StudentsDao {
           }
         }
       }
+
       return (List<Students>) query.list();
     } finally {
       session.close();
@@ -123,7 +132,7 @@ public class StudentsDao {
    *                The value of map is a list of detail values.
    * @return a list of students filtered by specified map.
    */
-  public List<Students> getStudentFilteredStudents(Map<String, List<String>> filters) {
+  public List<Students> getStudentFilteredStudents(Map<String, List<String>> filters, int begin, int end) {
     StringBuilder hql = new StringBuilder("SELECT Distinct(s) FROM Students s ");
 
     if (filters.containsKey("companyName")) {
@@ -170,9 +179,13 @@ public class StudentsDao {
       }
     }
 
+    hql.append(" ORDER BY s.expectedLastYear DESC ");
+
     try {
       session = factory.openSession();
       org.hibernate.query.Query query = session.createQuery(hql.toString());
+      query.setFirstResult(begin - 1);
+      query.setMaxResults(end - begin + 1);
 
       for (String filter : filterKeys) {
         List<String> filterElements = filters.get(filter);

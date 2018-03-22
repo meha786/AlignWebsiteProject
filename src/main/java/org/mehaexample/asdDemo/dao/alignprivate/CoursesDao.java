@@ -23,6 +23,12 @@ public class CoursesDao {
     factory = new Configuration().configure().buildSessionFactory();
   }
 
+  public CoursesDao(boolean test) {
+    if (test) {
+      factory = new Configuration().configure("/hibernate_private_test.cfg.xml").buildSessionFactory();
+    }
+  }
+
   /**
    * Get list of all companies from the private database.
    *

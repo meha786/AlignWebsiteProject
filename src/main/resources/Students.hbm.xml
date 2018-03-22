@@ -15,7 +15,10 @@
 			<generator class="assigned" />
 		</id>
 
-		<property name="email" column="Email" type="string" />
+		<properties name="uq_Students_Email" unique="true">
+			<property name="email" column="Email" type="string" />
+		</properties>
+
 		<property name="firstName" column="FirstName" type="string" />
 		<property name="middleName" column="MiddleName" type="string" />
 		<property name="lastName" column="LastName" type="string" />
@@ -87,7 +90,6 @@
 		<property name="website" column="Website" type="string" />
 		<property name="skills" column="Skills" type="string" />
 		<property name="summary" column="Summary" type="string" />
-
 
 	</class>
 </hibernate-mapping>

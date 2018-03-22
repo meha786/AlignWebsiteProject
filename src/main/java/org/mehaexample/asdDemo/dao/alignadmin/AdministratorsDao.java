@@ -26,6 +26,17 @@ public class AdministratorsDao {
   }
 
   /**
+   * test constructor
+   * @param test
+   */
+  public AdministratorsDao(boolean test) {
+    if (test) {
+      factory = new Configuration()
+              .configure("/hibernate_admin_test.cfg.xml").buildSessionFactory();
+    }
+  }
+
+  /**
    * This is the function to add an Administrator into database.
    *
    * @param administrators administrator object.

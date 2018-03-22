@@ -24,8 +24,8 @@ public class UndergraduatesPublicDaoTest {
 
   @BeforeClass
   public static void init() {
-    undergraduatesPublicDao = new UndergraduatesPublicDao();
-    studentsPublicDao = new StudentsPublicDao();
+    undergraduatesPublicDao = new UndergraduatesPublicDao(true);
+    studentsPublicDao = new StudentsPublicDao(true);
     StudentsPublic studentsPublic = new StudentsPublic(
             5, "Josh", null, 2016);
     studentsPublicDao.createStudent(studentsPublic);

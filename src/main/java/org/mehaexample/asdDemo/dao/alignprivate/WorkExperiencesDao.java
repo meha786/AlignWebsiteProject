@@ -26,6 +26,12 @@ public class WorkExperiencesDao {
     factory = new Configuration().configure().buildSessionFactory();
   }
 
+  public WorkExperiencesDao(boolean test) {
+    if (test) {
+      factory = new Configuration().configure("/hibernate_private_test.cfg.xml").buildSessionFactory();
+    }
+  }
+
   /**
    * Find a Work Experience by the Work Experience Id.
    * This method searches the work experience from the private database.
@@ -42,8 +48,7 @@ public class WorkExperiencesDao {
       List<WorkExperiences> listOfWorkExperience = query.list();
       if (listOfWorkExperience.isEmpty())
         return null;
-      WorkExperiences workExperiences = listOfWorkExperience.get(0);
-      return workExperiences;
+      return listOfWorkExperience.get(0);
     } finally {
       session.close();
     }

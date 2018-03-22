@@ -28,9 +28,9 @@ public class StudentsPublicDaoTest {
 
   @BeforeClass
   public static void init() {
-    undergraduatesPublicDao = new UndergraduatesPublicDao();
-    workExperiencesPublicDao = new WorkExperiencesPublicDao();
-    studentsPublicDao = new StudentsPublicDao();
+    undergraduatesPublicDao = new UndergraduatesPublicDao(true);
+    workExperiencesPublicDao = new WorkExperiencesPublicDao(true);
+    studentsPublicDao = new StudentsPublicDao(true);
     StudentsPublic studentsPublic = new StudentsPublic(5, "Josh", null, 2016);
     studentsPublicDao.createStudent(studentsPublic);
     StudentsPublic studentsPublic2 = new StudentsPublic(6, "Chet", null, 2016);
@@ -52,6 +52,12 @@ public class StudentsPublicDaoTest {
     studentsPublicDao.deleteStudentByPublicId(6);
     studentsPublicDao.deleteStudentByPublicId(7);
   }
+
+  // need VPN for this
+//  @Test
+//  public void deploymentDatabaseConnectionTest() {
+//    new StudentsPublicDao();
+//  }
 
   @Test(expected = HibernateException.class)
   public void createDuplicateStudentTest() {
@@ -115,18 +121,21 @@ public class StudentsPublicDaoTest {
     filter.put("coop", coop);
     filter.put("graduationYear", graduationYear);
     filter.put("undergradDegree", undergradDegree);
-    List<StudentsPublic> listOfFilteredStudents = studentsPublicDao.getPublicFilteredStudents(filter);
+    List<StudentsPublic> listOfFilteredStudents = studentsPublicDao.getPublicFilteredStudents(filter, 1, 1);
     assertTrue(listOfFilteredStudents.size() == 1);
     assertTrue(listOfFilteredStudents.get(0).getFirstName().equals("Josh"));
 
-    listOfFilteredStudents = studentsPublicDao.getPublicFilteredStudents(new HashMap<String, List<String>>());
+    listOfFilteredStudents = studentsPublicDao.getPublicFilteredStudents(new HashMap<String, List<String>>(), 1, 3);
     assertTrue(listOfFilteredStudents.size() == 3);
+
+    listOfFilteredStudents = studentsPublicDao.getPublicFilteredStudents(new HashMap<String, List<String>>(), 2, 3);
+    assertTrue(listOfFilteredStudents.size() == 2);
 
     Map<String, List<String>> filter2 = new HashMap<>();
     List<String> graduationYear2 = new ArrayList<>();
     graduationYear2.add("2016");
     filter2.put("graduationYear", graduationYear2);
-    List<StudentsPublic> listOfFilteredStudents2 = studentsPublicDao.getPublicFilteredStudents(filter2);
+    List<StudentsPublic> listOfFilteredStudents2 = studentsPublicDao.getPublicFilteredStudents(filter2, 1, 2);
     assertTrue(listOfFilteredStudents2.size() == 2);
   }
 }

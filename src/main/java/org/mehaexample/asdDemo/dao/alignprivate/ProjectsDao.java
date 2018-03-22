@@ -22,6 +22,12 @@ public class ProjectsDao {
     factory = new Configuration().configure().buildSessionFactory();
   }
 
+  public ProjectsDao(boolean test) {
+    if (test) {
+      factory = new Configuration().configure("/hibernate_private_test.cfg.xml").buildSessionFactory();
+    }
+  }
+
   /**
    * Find a Project by the Project Id.
    * This method searches the project from the private database.

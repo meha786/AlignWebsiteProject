@@ -24,8 +24,8 @@ public class ExtraExperiencesDaoTest {
 
     @BeforeClass
     public static void init() {
-        extraExperiencesDao = new ExtraExperiencesDao();
-        studentsDao = new StudentsDao();
+        extraExperiencesDao = new ExtraExperiencesDao(true);
+        studentsDao = new StudentsDao(true);
     }
 
     @Before

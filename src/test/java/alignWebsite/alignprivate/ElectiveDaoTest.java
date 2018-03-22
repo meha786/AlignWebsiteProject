@@ -25,9 +25,9 @@ public class ElectiveDaoTest {
 
   @BeforeClass
   public static void init() {
-    electivesDao = new ElectivesDao();
-    studentsDao = new StudentsDao();
-    coursesDao = new CoursesDao();
+    electivesDao = new ElectivesDao(true);
+    studentsDao = new StudentsDao(true);
+    coursesDao = new CoursesDao(true);
   }
 
   @Test

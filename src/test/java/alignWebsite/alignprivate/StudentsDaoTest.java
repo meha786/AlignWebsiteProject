@@ -31,10 +31,10 @@ public class StudentsDaoTest {
 
   @BeforeClass
   public static void init() {
-    studentdao = new StudentsDao();
-    workExperiencesDao = new WorkExperiencesDao();
-    electivesDao = new ElectivesDao();
-    coursesDao = new CoursesDao();
+    studentdao = new StudentsDao(true);
+    workExperiencesDao = new WorkExperiencesDao(true);
+    electivesDao = new ElectivesDao(true);
+    coursesDao = new CoursesDao(true);
   }
 
   @After
@@ -43,6 +43,12 @@ public class StudentsDaoTest {
       studentdao.deleteStudent("10101010");
     }
   }
+
+  // need VPN for this
+//  @Test
+//  public void deploymentDatabaseConnectionTest() {
+//    new StudentsDao();
+//  }
 
   @Test(expected = HibernateException.class)
   public void deleteNonExistentNeuId() {
@@ -110,7 +116,7 @@ public class StudentsDaoTest {
     workExperiencesDao.createWorkExperience(newWorkExperience);
 
     // no filter case
-    Assert.assertTrue(studentdao.getAdminFilteredStudents(new HashMap<String, List<String>>()).size() == 3);
+    Assert.assertTrue(studentdao.getAdminFilteredStudents(new HashMap<String, List<String>>(), 1, 3).size() == 3);
 
     // first name = Tom
     List<String> firstName = new ArrayList<>();
@@ -120,10 +126,21 @@ public class StudentsDaoTest {
     Map<String, List<String>> filters = new HashMap<>();
     filters.put("firstName", firstName);
     filters.put("campus", campus);
-    List<Students> students = studentdao.getAdminFilteredStudents(filters);
+    List<Students> students = studentdao.getAdminFilteredStudents(filters, 1 , 2);
     Assert.assertTrue(students.size() == 2);
     Assert.assertTrue(students.get(0).getNeuId().equals("0000000"));
     Assert.assertTrue(students.get(1).getNeuId().equals("2222222"));
+
+    students = studentdao.getAdminFilteredStudents(filters, 1 , 1);
+    Assert.assertTrue(students.size() == 1);
+    Assert.assertTrue(students.get(0).getNeuId().equals("0000000"));
+
+    students = studentdao.getAdminFilteredStudents(filters, 2 , 2);
+    Assert.assertTrue(students.size() == 1);
+    Assert.assertTrue(students.get(0).getNeuId().equals("2222222"));
+
+    students = studentdao.getAdminFilteredStudents(filters, 1 , 10);
+    Assert.assertTrue(students.size() == 2);
 
     // first name = Tom or Jerry, and company = Amazon
     Map<String, List<String>> filters2 = new HashMap<>();
@@ -132,7 +149,7 @@ public class StudentsDaoTest {
     companyName.add("Amazon");
     filters2.put("firstName", firstName);
     filters2.put("companyName", companyName);
-    List<Students> students2 = studentdao.getAdminFilteredStudents(filters2);
+    List<Students> students2 = studentdao.getAdminFilteredStudents(filters2, 1, 1);
     Assert.assertTrue(students2.size() == 1);
     Assert.assertTrue(students2.get(0).getNeuId().equals("1111111"));
 
@@ -141,7 +158,7 @@ public class StudentsDaoTest {
     companyName2.add("Apple");
     Map<String, List<String>> filters3 = new HashMap<>();
     filters3.put("companyName", companyName2);
-    Assert.assertTrue(studentdao.getAdminFilteredStudents(filters3).isEmpty());
+    Assert.assertTrue(studentdao.getAdminFilteredStudents(filters3, 0, 2).isEmpty());
 
     workExperiencesDao.deleteWorkExperienceById(
             workExperiencesDao.getWorkExperiencesByNeuId("1111111").get(0).getWorkExperienceId());
@@ -291,7 +308,7 @@ public class StudentsDaoTest {
     studentdao.addStudent(newStudent3);
 
     // no filter case
-    Assert.assertTrue(studentdao.getStudentFilteredStudents(new HashMap<String, List<String>>()).size() == 3);
+    Assert.assertTrue(studentdao.getStudentFilteredStudents(new HashMap<String, List<String>>(), 1, 20).size() == 3);
 
     Map<String, List<String>> map = new HashMap<>();
 
@@ -302,7 +319,7 @@ public class StudentsDaoTest {
     endTerms.addAll(Arrays.asList(new String[]{"FALL2017"}));
     map.put("startTerm", startTerms);
     map.put("endTerm", endTerms);
-    Assert.assertTrue(studentdao.getStudentFilteredStudents(map).size() == 1);
+    Assert.assertTrue(studentdao.getStudentFilteredStudents(map, 1, 20).size() == 1);
     map.remove("startTerm");
     map.remove("endTerm");
 
@@ -310,7 +327,7 @@ public class StudentsDaoTest {
     List<String> campuses = new ArrayList<>();
     campuses.addAll(Arrays.asList(new String[]{"SEATTLE", "BOSTON"}));
     map.put("campus", campuses);
-    Assert.assertTrue(studentdao.getStudentFilteredStudents(map).size() == 2);
+    Assert.assertTrue(studentdao.getStudentFilteredStudents(map, 1, 20).size() == 2);
     map.remove("campus");
 
     // filter by work experience - company name
@@ -328,7 +345,7 @@ public class StudentsDaoTest {
     List<String> companies = new ArrayList<>();
     companies.addAll(Arrays.asList(new String[]{"Amazon", "Facebook", "Google"}));
     map.put("companyName", companies);
-    Assert.assertTrue(studentdao.getStudentFilteredStudents(map).size() == 2);
+    Assert.assertTrue(studentdao.getStudentFilteredStudents(map, 1, 20).size() == 2);
     map.remove("companyName");
 
     // filter by course name
@@ -347,14 +364,14 @@ public class StudentsDaoTest {
     List<String> courses = new ArrayList<>();
     courses.addAll(Arrays.asList(new String[]{"Algorithm", "AI", "Database"}));
     map.put("courseName", courses);
-    Assert.assertTrue(studentdao.getStudentFilteredStudents(map).size() == 2);
+    Assert.assertTrue(studentdao.getStudentFilteredStudents(map, 1, 20).size() == 2);
     map.remove("courseName");
 
     // filter by company name, course name, campus
     map.put("campus", campuses);
     map.put("companyName", companies);
     map.put("courseName", courses);
-    Assert.assertTrue(studentdao.getStudentFilteredStudents(map).size() == 1);
+    Assert.assertTrue(studentdao.getStudentFilteredStudents(map, 1, 20).size() == 1);
 
     workExperiencesDao.deleteWorkExperienceByNeuId("1111111");
     workExperiencesDao.deleteWorkExperienceByNeuId("2222222");
