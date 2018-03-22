@@ -21,6 +21,12 @@ public class WorkExperiencesPublicDao {
     factory = new Configuration().configure("/hibernate_Public.cfg.xml").buildSessionFactory();
   }
 
+  public WorkExperiencesPublicDao(boolean test) {
+    if (test) {
+      factory = new Configuration().configure("/hibernate_public_test.cfg.xml").buildSessionFactory();
+    }
+  }
+
   public WorkExperiencesPublic createWorkExperience(WorkExperiencesPublic workExperience) {
     Transaction tx = null;
     try {

@@ -23,8 +23,8 @@ public class ProjectsDaoTest {
 
   @BeforeClass
   public static void init() {
-    studentsDao = new StudentsDao();
-    projectsDao = new ProjectsDao();
+    studentsDao = new StudentsDao(true);
+    projectsDao = new ProjectsDao(true);
   }
 
   @Before

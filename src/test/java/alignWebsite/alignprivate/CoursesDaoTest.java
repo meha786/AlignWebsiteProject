@@ -13,7 +13,7 @@ public class CoursesDaoTest {
 
 	@BeforeClass
 	public static void init() {
-		coursesDao = new CoursesDao();
+		coursesDao = new CoursesDao(true);
 	}
 
 	@Before

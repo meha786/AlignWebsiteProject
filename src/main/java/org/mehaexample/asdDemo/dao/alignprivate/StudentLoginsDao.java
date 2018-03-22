@@ -22,6 +22,12 @@ public class StudentLoginsDao {
     factory = new Configuration().configure().buildSessionFactory();
   }
 
+  public StudentLoginsDao(boolean test) {
+    if (test) {
+      factory = new Configuration().configure("/hibernate_private_test.cfg.xml").buildSessionFactory();
+    }
+  }
+
   public StudentLogins findStudentLoginsByEmail(String email) {
     try {
       session = factory.openSession();

@@ -17,6 +17,13 @@ public class GenderRatioDao {
     factory = new Configuration().configure().buildSessionFactory();
   }
 
+  public GenderRatioDao(boolean test) {
+    if (test) {
+      factory = new Configuration()
+              .configure("/hibernate_private_test.cfg.xml").buildSessionFactory();
+    }
+  }
+
   public List<GenderRatio> getYearlyGenderRatio(Campus campus) {
     String hql = "SELECT NEW org.mehaexample.asdDemo.model.alignadmin.GenderRatio(s.entryYear, " +
             "COUNT(CASE s.gender WHEN 'M' THEN 1 ELSE NULL END), " +

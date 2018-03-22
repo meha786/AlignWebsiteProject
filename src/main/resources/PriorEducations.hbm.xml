@@ -4,25 +4,25 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name = "org.mehaexample.asdDemo.model.alignprivate.PriorEducations" table="PriorEducations">
+    <class name="org.mehaexample.asdDemo.model.alignprivate.PriorEducations" table="PriorEducations">
 
-               <meta attribute = "class-description">
+        <meta attribute="class-description">
             This class contains the Prior Education detail.
         </meta>
-        <id name = "priorEducationId" column="PriorEducationId" type="int">
+        <id name="priorEducationId" column="PriorEducationId" type="int">
             <generator class="native"/>
         </id>
 
-        <property name = "institutionName" column="InstitutionName" type="string" />
+        <property name="institutionName" column="InstitutionName" type="string"/>
 
-        <property name = "majorName" column="MajorName" type="string" />
+        <property name="majorName" column="MajorName" type="string"/>
 
-        <property name = "graduationDate" column="GraduationDate" type="date" />
+        <property name="graduationDate" column="GraduationDate" type="date"/>
 
-        <property name = "gpa" column="Gpa" type="float" />
+        <property name="gpa" column="Gpa" type="float"/>
 
-        <property name = "degreeCandidacy" column = "DegreeCandidacy">
-            <type name= "org.hibernate.type.EnumType">
+        <property name="degreeCandidacy" column="DegreeCandidacy">
+            <type name="org.hibernate.type.EnumType">
                 <param name="enumClass">org.mehaexample.asdDemo.enums.DegreeCandidacy</param>
                 <param name="type">12</param>
                 <param name="useNamed">true</param>
@@ -30,5 +30,6 @@
         </property>
 
         <property name = "neuId" column="NeuId" type="string" />
+
     </class>
 </hibernate-mapping>

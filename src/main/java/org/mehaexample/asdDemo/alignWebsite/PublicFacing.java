@@ -321,7 +321,7 @@ public class PublicFacing {
 			}
 			map.put("graduationYear",graduationyear);
 		}
-		List<StudentsPublic> studentRecords =  studentsPublicDao.getPublicFilteredStudents(map);
+		List<StudentsPublic> studentRecords =  studentsPublicDao.getPublicFilteredStudents(map, 1, 20);
 		JSONArray resultArray = new JSONArray();
 		
 		for(StudentsPublic st : studentRecords) {

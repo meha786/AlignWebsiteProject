@@ -21,9 +21,9 @@ public class ElectivesAdminDaoTest {
 
   @BeforeClass
   public static void init() {
-    electivesAdminDao = new ElectivesAdminDao();
-    studentsDao = new StudentsDao();
-    coursesDao = new CoursesDao();
+    electivesAdminDao = new ElectivesAdminDao(true);
+    studentsDao = new StudentsDao(true);
+    coursesDao = new CoursesDao(true);
   }
 
   @Test(expected = IllegalArgumentException.class)

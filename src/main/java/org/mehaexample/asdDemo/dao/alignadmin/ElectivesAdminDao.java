@@ -27,6 +27,14 @@ public class ElectivesAdminDao {
             .configure("/hibernate_Admin.cfg.xml").buildSessionFactory();
   }
 
+  public ElectivesAdminDao( boolean test) {
+    studentDao = new StudentsDao(true);
+    if (test) {
+      factory = new Configuration()
+              .configure("/hibernate_admin_test.cfg.xml").buildSessionFactory();
+    }
+  }
+
   public List<ElectivesAdmin> getElectivesByNeuId(String neuId) {
     try {
       session = factory.openSession();

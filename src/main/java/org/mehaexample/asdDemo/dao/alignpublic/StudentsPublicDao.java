@@ -21,6 +21,12 @@ public class StudentsPublicDao {
     factory = new Configuration().configure("/hibernate_Public.cfg.xml").buildSessionFactory();
   }
 
+  public StudentsPublicDao(boolean test) {
+    if (test) {
+      factory = new Configuration().configure("/hibernate_public_test.cfg.xml").buildSessionFactory();
+    }
+  }
+
   public StudentsPublic createStudent(StudentsPublic student) {
     Transaction tx = null;
     if (findStudentByPublicId(student.getPublicId()) != null) {
@@ -105,7 +111,7 @@ public class StudentsPublicDao {
     return listOfAllStudents;
   }
 
-  public List<StudentsPublic> getPublicFilteredStudents(Map<String, List<String>> filters) {
+  public List<StudentsPublic> getPublicFilteredStudents(Map<String, List<String>> filters, int begin, int end) {
     StringBuilder hql = new StringBuilder("SELECT Distinct(s) " +
             "FROM StudentsPublic s " +
             "LEFT OUTER JOIN WorkExperiencesPublic we ON s.publicId = we.publicId " +
@@ -148,6 +154,8 @@ public class StudentsPublicDao {
     try {
       session = factory.openSession();
       org.hibernate.query.Query query = session.createQuery(hql.toString());
+      query.setFirstResult(begin - 1);
+      query.setMaxResults(end - begin + 1);
 
       for (String filter : filterKeys) {
         List<String> filterElements = filters.get(filter);

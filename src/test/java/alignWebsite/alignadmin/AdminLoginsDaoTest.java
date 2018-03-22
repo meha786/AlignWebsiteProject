@@ -18,8 +18,8 @@ public class AdminLoginsDaoTest {
 
   @BeforeClass
   public static void init() {
-    adminLoginsDao = new AdminLoginsDao();
-    administratorsDao = new AdministratorsDao();
+    adminLoginsDao = new AdminLoginsDao(true);
+    administratorsDao = new AdministratorsDao(true);
 
     Administrators newAdministrator = new Administrators("00000000", "catwoman@gmail.com",
             "Cat", "Main", "Woman");

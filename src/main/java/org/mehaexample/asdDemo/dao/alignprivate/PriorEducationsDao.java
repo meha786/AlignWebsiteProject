@@ -23,6 +23,12 @@ public class PriorEducationsDao {
     factory = new Configuration().configure().buildSessionFactory();
   }
 
+  public PriorEducationsDao(boolean test) {
+    if (test) {
+      factory = new Configuration().configure("/hibernate_private_test.cfg.xml").buildSessionFactory();
+    }
+  }
+
   /**
    * Find a Prior Education by the Work Experience Id.
    * This method searches the work experience from the private database.

@@ -13,7 +13,7 @@ public class AdministratorsDaoTest {
 
 	@BeforeClass
 	public static void init() {
-		administratorsDao = new AdministratorsDao();
+		administratorsDao = new AdministratorsDao(true);
 	}
 
 	@Before
@@ -27,6 +27,12 @@ public class AdministratorsDaoTest {
 	public void deleteDatabase() {
 		administratorsDao.deleteAdministrator("987654321");
 	}
+
+	// need VPN for this
+//	@Test
+//	public void databaseDeploymentConnectionTest() {
+//		new AdministratorsDao();
+//	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void addNullAdministratorTest() {

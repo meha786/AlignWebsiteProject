@@ -25,6 +25,13 @@ public class AdminLoginsDao {
             .configure("/hibernate_Admin.cfg.xml").buildSessionFactory();
   }
 
+  public AdminLoginsDao(boolean test) {
+    if (test) {
+      factory = new Configuration()
+              .configure("/hibernate_admin_test.cfg.xml").buildSessionFactory();
+    }
+  }
+
   public AdminLogins findAdminLoginsByEmail(String email) {
     try {
       session = factory.openSession();

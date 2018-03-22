@@ -13,7 +13,7 @@
         </property>
 
         <property name="hibernate.connection.url">
-            jdbc:mariadb://asd3.ccs.neu.edu:3307
+            jdbc:mariadb://localhost:3307/alignprivate
         </property>
 
         <property name="hibernate.connection.username">
@@ -21,13 +21,17 @@
         </property>
 
         <property name="hibernate.connection.password">
-            123456
+            Turkey#786
         </property>
 
         <!-- List of XML mapping files -->
-        <!--<mapping resource="ElectivesAdmin.hbm.xml" />-->
-        <!--<mapping resource="Administrators.hbm.xml" />-->
-        <!--<mapping resource="AdministratorNotes.hbm.xml" />-->
-        <!--<mapping resource="AdminLogins.hbm.xml" />-->
+        <mapping resource="Students.hbm.xml" />
+        <mapping resource="Courses.hbm.xml" />
+        <mapping resource="WorkExperiences.hbm.xml" />
+        <mapping resource="Electives.hbm.xml" />
+        <mapping resource="PriorEducations.hbm.xml" />
+        <mapping resource="StudentLogins.hbm.xml" />
+        <mapping resource="ExtraExperiences.hbm.xml" />
+        <mapping resource="Projects.hbm.xml" />
     </session-factory>
 </hibernate-configuration>
