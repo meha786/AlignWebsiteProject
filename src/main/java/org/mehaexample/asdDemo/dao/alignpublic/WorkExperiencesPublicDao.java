@@ -18,12 +18,12 @@ public class WorkExperiencesPublicDao {
   public WorkExperiencesPublicDao() {
     // it will check the hibernate.cfg.xml file and load it
     // next it goes to all table files in the hibernate file and loads them
-    factory = new Configuration().configure("/hibernate_Public.cfg.xml").buildSessionFactory();
+    this.factory = PublicSessionFactory.getFactory();
   }
 
   public WorkExperiencesPublicDao(boolean test) {
     if (test) {
-      factory = new Configuration().configure("/hibernate_public_test.cfg.xml").buildSessionFactory();
+      this.factory = PublicTestSessionFactory.getFactory();
     }
   }
 

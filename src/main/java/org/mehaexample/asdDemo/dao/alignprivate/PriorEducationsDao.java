@@ -4,7 +4,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import org.mehaexample.asdDemo.enums.Campus;
 import org.mehaexample.asdDemo.model.alignprivate.PriorEducations;
 
@@ -20,12 +19,12 @@ public class PriorEducationsDao {
    * next it goes to all table files in the hibernate file and loads them.
    */
   public PriorEducationsDao() {
-    factory = new Configuration().configure().buildSessionFactory();
+    this.factory = StudentSessionFactory.getFactory();
   }
 
   public PriorEducationsDao(boolean test) {
     if (test) {
-      factory = new Configuration().configure("/hibernate_private_test.cfg.xml").buildSessionFactory();
+      this.factory = StudentTestSessionFactory.getFactory();
     }
   }
 

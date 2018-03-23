@@ -6,7 +6,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import org.mehaexample.asdDemo.model.alignprivate.Courses;
 
 public class CoursesDao {
@@ -20,12 +19,12 @@ public class CoursesDao {
    * next it goes to all table files in the hibernate file and loads them.
    */
   public CoursesDao() {
-    factory = new Configuration().configure().buildSessionFactory();
+    this.factory = StudentSessionFactory.getFactory();
   }
 
   public CoursesDao(boolean test) {
     if (test) {
-      factory = new Configuration().configure("/hibernate_private_test.cfg.xml").buildSessionFactory();
+      this.factory = StudentTestSessionFactory.getFactory();
     }
   }
 

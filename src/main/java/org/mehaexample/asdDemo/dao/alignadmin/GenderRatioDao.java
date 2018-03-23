@@ -2,7 +2,8 @@ package org.mehaexample.asdDemo.dao.alignadmin;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+import org.mehaexample.asdDemo.dao.alignprivate.StudentSessionFactory;
+import org.mehaexample.asdDemo.dao.alignprivate.StudentTestSessionFactory;
 import org.mehaexample.asdDemo.enums.Campus;
 import org.mehaexample.asdDemo.model.alignadmin.GenderRatio;
 
@@ -14,13 +15,12 @@ public class GenderRatioDao {
   public GenderRatioDao() {
     // it will check the hibernate.cfg.xml file and load it
     // next it goes to all table files in the hibernate file and loads them
-    factory = new Configuration().configure().buildSessionFactory();
+    this.factory = StudentSessionFactory.getFactory();
   }
 
   public GenderRatioDao(boolean test) {
     if (test) {
-      factory = new Configuration()
-              .configure("/hibernate_private_test.cfg.xml").buildSessionFactory();
+      this.factory = StudentTestSessionFactory.getFactory();
     }
   }
 

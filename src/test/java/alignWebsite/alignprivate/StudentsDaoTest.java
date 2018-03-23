@@ -84,6 +84,66 @@ public class StudentsDaoTest {
   }
 
   @Test
+  public void getTotalDropoutStudentsTest() {
+    Students newStudent = new Students("0000000", "tomcat@gmail.com", "Tom", "",
+            "Cat", Gender.M, "F1", "1111111111",
+            "401 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2015,
+            Term.SPRING, 2017,
+            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
+    Students newStudent2 = new Students("1111111", "jerrymouse@gmail.com", "Jerry", "",
+            "Mouse", Gender.M, "F1", "1111111111",
+            "225 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2014,
+            Term.SPRING, 2016,
+            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
+    Students newStudent3 = new Students("2222222", "tomcat3@gmail.com", "Tom", "",
+            "Dog", Gender.M, "F1", "1111111111",
+            "401 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2015,
+            Term.SPRING, 2017,
+            EnrollmentStatus.DROPPED_OUT, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
+    studentdao.addStudent(newStudent);
+    studentdao.addStudent(newStudent2);
+    studentdao.addStudent(newStudent3);
+
+    Assert.assertTrue(studentdao.getTotalDropOutStudents() == 1);
+
+    studentdao.deleteStudent("2222222");
+    studentdao.deleteStudent("1111111");
+    studentdao.deleteStudent("0000000");
+  }
+
+  @Test
+  public void getTotalStudentInACampusTest() {
+    Students newStudent = new Students("0000000", "tomcat@gmail.com", "Tom", "",
+            "Cat", Gender.M, "F1", "1111111111",
+            "401 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2015,
+            Term.SPRING, 2017,
+            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
+    Students newStudent2 = new Students("1111111", "jerrymouse@gmail.com", "Jerry", "",
+            "Mouse", Gender.M, "F1", "1111111111",
+            "225 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2014,
+            Term.SPRING, 2016,
+            EnrollmentStatus.FULL_TIME, Campus.BOSTON, DegreeCandidacy.MASTERS, null, true);
+    Students newStudent3 = new Students("2222222", "tomcat3@gmail.com", "Tom", "",
+            "Dog", Gender.M, "F1", "1111111111",
+            "401 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2015,
+            Term.SPRING, 2017,
+            EnrollmentStatus.DROPPED_OUT, Campus.CHARLOTTE, DegreeCandidacy.MASTERS, null, true);
+    studentdao.addStudent(newStudent);
+    studentdao.addStudent(newStudent2);
+    studentdao.addStudent(newStudent3);
+
+    Assert.assertTrue(studentdao.getTotalStudentsInACampus(Campus.SEATTLE) == 1);
+    Assert.assertTrue(studentdao.getTotalStudentsInACampus(Campus.BOSTON) == 1);
+    Assert.assertTrue(studentdao.getTotalStudentsInACampus(Campus.CHARLOTTE) == 1);
+    Assert.assertTrue(studentdao.getTotalStudentsInACampus(Campus.SILICON_VALLEY) == 0);
+    Assert.assertTrue(studentdao.getTotalStudents() == 3);
+
+    studentdao.deleteStudent("2222222");
+    studentdao.deleteStudent("1111111");
+    studentdao.deleteStudent("0000000");
+  }
+
+  @Test
   public void getAdminFilteredStudentsTest() throws ParseException {
     Students newStudent = new Students("0000000", "tomcat@gmail.com", "Tom", "",
             "Cat", Gender.M, "F1", "1111111111",
