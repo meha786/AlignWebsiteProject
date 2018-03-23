@@ -4,7 +4,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import org.mehaexample.asdDemo.enums.Campus;
 import org.mehaexample.asdDemo.model.alignprivate.StudentBasicInfo;
 import org.mehaexample.asdDemo.model.alignprivate.StudentCoopList;
@@ -23,12 +22,12 @@ public class WorkExperiencesDao {
    * next it goes to all table files in the hibernate file and loads them.
    */
   public WorkExperiencesDao() {
-    factory = new Configuration().configure().buildSessionFactory();
+    this.factory = StudentSessionFactory.getFactory();
   }
 
   public WorkExperiencesDao(boolean test) {
     if (test) {
-      factory = new Configuration().configure("/hibernate_private_test.cfg.xml").buildSessionFactory();
+      this.factory = StudentTestSessionFactory.getFactory();
     }
   }
 
@@ -95,6 +94,17 @@ public class WorkExperiencesDao {
     }
 
     return workExperience;
+  }
+
+  public int getTotalStudentsGotJob() {
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery(
+              "SELECT COUNT(DISTINCT we.neuId) FROM WorkExperiences we");
+      return ((Long) query.list().get(0)).intValue();
+    } finally {
+      session.close();
+    }
   }
 
   /**
