@@ -413,28 +413,27 @@ public class Admin{
 					entity("Company can't be null: ").build();
 		}
 
-//		if (year <0)
-//			studentsList = workExperiencesDao.getStudentsWorkingInACompany(camp, null, company);
-//		else
-//			studentsList = workExperiencesDao.getStudentsWorkingInACompany(camp, year, company);
-//
-//
-//		JSONArray resultArray = new JSONArray();
-//
-//		for(StudentBasicInfo st : studentsList) {
-//			JSONObject studentJson = new JSONObject();
-//			JSONObject eachStudentJson = new JSONObject(st);
-//			java.util.Set<String> keys = eachStudentJson.keySet();
-//			for(int i=0;i<keys.toArray().length; i++){
-//				studentJson.put(((String) keys.toArray()[i]).toLowerCase(), eachStudentJson.get((String) keys.toArray()[i]));
-//			}
-//			resultArray.put(studentJson);
-//		}
-//
-//		return Response.status(Response.Status.OK).
-//				entity(resultArray.toString()).build();  
+		if (year <=0)
+			studentsList = workExperiencesDao.getStudentsWorkingInACompany(campusEnum, null, company);
+		else
+			studentsList = workExperiencesDao.getStudentsWorkingInACompany(campusEnum, year, company);
+
+
+		JSONArray resultArray = new JSONArray();
+
+		for(StudentBasicInfo st : studentsList) {
+			JSONObject studentJson = new JSONObject();
+			JSONObject eachStudentJson = new JSONObject(st);
+			java.util.Set<String> keys = eachStudentJson.keySet();
+			for(int i=0;i<keys.toArray().length; i++){
+				studentJson.put(((String) keys.toArray()[i]).toLowerCase(), eachStudentJson.get((String) keys.toArray()[i]));
+			}
+			resultArray.put(studentJson);
+		}
+
+		return Response.status(Response.Status.OK).
+				entity(resultArray.toString()).build();  
 		
-		return null;
 	}
 
 	@POST
