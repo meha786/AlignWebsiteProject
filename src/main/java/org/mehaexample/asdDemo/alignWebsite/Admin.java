@@ -37,27 +37,29 @@ import org.mehaexample.asdDemo.model.alignprivate.WorkExperiences;
 import org.mehaexample.asdDemo.restModels.MailClient;
 import org.mehaexample.asdDemo.restModels.PasswordChangeObject;
 import org.mehaexample.asdDemo.restModels.PasswordCreateObject;
+import org.mehaexample.asdDemo.restModels.StudentsInCompany;
+import org.mehaexample.asdDemo.utils.StringUtils;
 
 @Path("admin-facing")
 public class Admin{
-	
+
 	// DAO methods
-	StudentsDao studentDao = new StudentsDao();
-	ElectivesAdminDao electiveDao = new ElectivesAdminDao();
-	GenderRatioDao genderRatioDao = new GenderRatioDao();
-	WorkExperiencesDao workExperiencesDao = new WorkExperiencesDao();
-	PriorEducationsDao priorEducationsDao = new PriorEducationsDao();
-	ElectivesDao electivesDao = new ElectivesDao();
-	AdminLoginsDao adminLoginsDao = new AdminLoginsDao();
+	StudentsDao studentDao = new StudentsDao(true);
+	ElectivesAdminDao electiveDao = new ElectivesAdminDao(true);
+	GenderRatioDao genderRatioDao = new GenderRatioDao(true);
+	WorkExperiencesDao workExperiencesDao = new WorkExperiencesDao(true);
+	PriorEducationsDao priorEducationsDao = new PriorEducationsDao(true);
+	ElectivesDao electivesDao = new ElectivesDao(true);
+	AdminLoginsDao adminLoginsDao = new AdminLoginsDao(true);
 	StudentLogins studentLogins = new StudentLogins();
 
 	/**
-     * This is the function to search for students
-     *	
-     *	http://localhost:8080/alignWebsite/webapi/admin-facing/students
-     * @param firstname
-     * @return the list of student profiles matching the fields.
-     */
+	 * This is the function to search for students
+	 *	
+	 *	http://localhost:8080/alignWebsite/webapi/admin-facing/students
+	 * @param firstname
+	 * @return the list of student profiles matching the fields.
+	 */
 	@POST
 	@Path("students")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -116,7 +118,7 @@ public class Admin{
 		}
 		ArrayList<Students> studentRecords = (ArrayList<Students>) studentDao.getAdminFilteredStudents(map, 1, 20);
 		JSONArray resultArray = new JSONArray();
-		
+
 		for(Students st : studentRecords) {
 			JSONObject studentJson = new JSONObject();
 			JSONObject eachStudentJson = new JSONObject(st);
@@ -125,17 +127,17 @@ public class Admin{
 				studentJson.put(((String) keys.toArray()[i]).toLowerCase(), eachStudentJson.get((String) keys.toArray()[i]));
 			}
 			resultArray.put(studentJson);
-	    }
+		}
 		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
 	}
-	
+
 	/**
-     * This is the function to search a student based on his/her nuid.
-     *	
-     *	http://localhost:8080/alignWebsite/webapi/admin/student/090
-     * @param nuid
-     * @return the student profile matching the nuid.
-     */
+	 * This is the function to search a student based on his/her nuid.
+	 *	
+	 *	http://localhost:8080/alignWebsite/webapi/admin/student/090
+	 * @param nuid
+	 * @return the student profile matching the nuid.
+	 */
 	@GET
 	@Path("students/{nuid}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -152,17 +154,17 @@ public class Admin{
 			return Response.status(Response.Status.OK).entity(jsonObj.toString()).build();
 		}
 	}
-	
+
 	// Data analytics methods
-	
+
 	/**
-     * This is the function to get the men to women ratio.
-     *	
-     *	http://localhost:8080/alignWebsite/webapi/admin/analytics/gender-ratio
-     * @param 
-     * @return the gender ratio is returned as string
+	 * This is the function to get the men to women ratio.
+	 *	
+	 *	http://localhost:8080/alignWebsite/webapi/admin/analytics/gender-ratio
+	 * @param 
+	 * @return the gender ratio is returned as string
 	 * @throws SQLException 
-     */
+	 */
 	@POST
 	@Path("analytics/gender-ratio")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -190,19 +192,19 @@ public class Admin{
 				studentJson.put(((String) keys.toArray()[i]).toLowerCase(), eachStudentJson.get((String) keys.toArray()[i]));
 			}
 			resultArray.put(studentJson);
-	    }
+		}
 		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
 	}
-	
+
 	/**
-     * This is the function to get the top 10 bachelor degrees.
-     *	
-     *	http://localhost:8080/alignWebsite/webapi/admin/analytics/topbachelordegrees
-     * @param 
-     * @return the list of top 10 bachelor degrees
+	 * This is the function to get the top 10 bachelor degrees.
+	 *	
+	 *	http://localhost:8080/alignWebsite/webapi/admin/analytics/topbachelordegrees
+	 * @param 
+	 * @return the list of top 10 bachelor degrees
 	 * @throws SQLException 
-     * 
-     */
+	 * 
+	 */
 	@POST
 	@Path("analytics/top-bachelor-degrees")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -222,19 +224,19 @@ public class Admin{
 		JSONArray resultArray = new JSONArray();
 		for(String deg : degrees) {
 			resultArray.put(deg);
-	    }
+		}
 		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
 	}
-	
+
 	/**
-     * This is the function to get the top 10 employers.
-     *	
-     *	http://localhost:8080/alignWebsite/webapi/admin/analytics/top-employers
-     * @param 
-     * @return the list of top 10 employers
+	 * This is the function to get the top 10 employers.
+	 *	
+	 *	http://localhost:8080/alignWebsite/webapi/admin/analytics/top-employers
+	 * @param 
+	 * @return the list of top 10 employers
 	 * @throws SQLException 
-     * 
-     */
+	 * 
+	 */
 	@POST
 	@Path("analytics/top-employers")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -271,20 +273,20 @@ public class Admin{
 		JSONArray resultArray = new JSONArray();
 		for(String emp : employers) {
 			resultArray.put(emp);
-	    }
+		}
 		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
 	}
 
-	
+
 	/**
-     * This is the function to get the top 10 electives.
-     *	
-     *	http://localhost:8080/alignWebsite/webapi/admin/analytics/topelectives
-     * @param 
-     * @return the list of top 10 electives
+	 * This is the function to get the top 10 electives.
+	 *	
+	 *	http://localhost:8080/alignWebsite/webapi/admin/analytics/topelectives
+	 * @param 
+	 * @return the list of top 10 electives
 	 * @throws SQLException 
-     * 
-     */
+	 * 
+	 */
 	@POST
 	@Path("analytics/top-electives")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -321,19 +323,19 @@ public class Admin{
 		JSONArray resultArray = new JSONArray();
 		for(String ele : electives) {
 			resultArray.put(ele);
-	    }
+		}
 		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
 	}
-	
+
 	/**
-     * This is the function to get the list of companies students worked for as coop.
-     *	
-     *	http://localhost:8080/alignWebsite/webapi/admin/analytics/coop-students
-     * @param 
-     * @return the list of top 10 electives
+	 * This is the function to get the list of companies students worked for as coop.
+	 *	
+	 *	http://localhost:8080/alignWebsite/webapi/admin/analytics/coop-students
+	 * @param 
+	 * @return the list of top 10 electives
 	 * @throws SQLException 
-     * 
-     */
+	 * 
+	 */
 	@POST
 	@Path("analytics/coop-students")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -367,7 +369,7 @@ public class Admin{
 			coopStudentsList = workExperiencesDao.getStudentCoopCompanies(camp,null);
 		else
 			coopStudentsList = workExperiencesDao.getStudentCoopCompanies(camp,year);
-		
+
 		JSONArray resultArray = new JSONArray();
 		for(StudentCoopList cl : coopStudentsList) {
 			JSONObject studentJson = new JSONObject();
@@ -377,12 +379,12 @@ public class Admin{
 				studentJson.put(((String) keys.toArray()[i]).toLowerCase(), eachStudentJson.get((String) keys.toArray()[i]));
 			}
 			resultArray.put(studentJson);
-	    }
+		}
 		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
 	}
-	
-	
-	
+
+
+
 	//====================================================================================
 
 	/**
@@ -392,6 +394,49 @@ public class Admin{
 	 * @param params
 	 * @return
 	 */
+
+	@POST
+	@Path("/analytics/company2")
+	public Response getStudentsWorkingForACompany2(StudentsInCompany studentsInCompany){
+
+		List<StudentBasicInfo> studentsList = new ArrayList();
+
+		String company = studentsInCompany.getCompany();
+		String camp = studentsInCompany.getCampus();
+		Campus campusEnum = studentsInCompany.getCampusAsEnum();
+		int year = studentsInCompany.getYear();
+		
+		System.out.println("compny = " + company + ", camp = " + camp + ", year = " + year + " , campus enum="+ campusEnum);  
+		// company can't have null value
+		if (StringUtils.isNullOrEmpty(company)){ 
+			return Response.status(Response.Status.BAD_REQUEST).
+					entity("Company can't be null: ").build();
+		}
+
+//		if (year <0)
+//			studentsList = workExperiencesDao.getStudentsWorkingInACompany(camp, null, company);
+//		else
+//			studentsList = workExperiencesDao.getStudentsWorkingInACompany(camp, year, company);
+//
+//
+//		JSONArray resultArray = new JSONArray();
+//
+//		for(StudentBasicInfo st : studentsList) {
+//			JSONObject studentJson = new JSONObject();
+//			JSONObject eachStudentJson = new JSONObject(st);
+//			java.util.Set<String> keys = eachStudentJson.keySet();
+//			for(int i=0;i<keys.toArray().length; i++){
+//				studentJson.put(((String) keys.toArray()[i]).toLowerCase(), eachStudentJson.get((String) keys.toArray()[i]));
+//			}
+//			resultArray.put(studentJson);
+//		}
+//
+//		return Response.status(Response.Status.OK).
+//				entity(resultArray.toString()).build();  
+		
+		return null;
+	}
+
 	@POST
 	@Path("/analytics/company")
 	public Response getStudentsWorkingForACompany(String params){
@@ -401,7 +446,9 @@ public class Admin{
 		int year;
 		String company = null;
 		List<StudentBasicInfo> studentsList = new ArrayList();
-		
+
+		System.out.println("prms = " + params);
+
 		// company can't have null value
 		if (!jsonObj.isNull("company")){
 			try {
@@ -419,21 +466,21 @@ public class Admin{
 			} catch(Exception e){
 				year = -1;
 			}
-			
+
 			company = (String) jsonObj.get("company");
-			
+
 			if (year <0)
 				studentsList = workExperiencesDao.getStudentsWorkingInACompany(camp, null, company);
 			else
 				studentsList = workExperiencesDao.getStudentsWorkingInACompany(camp, year, company);
-				
+
 		}else{
 			return Response.status(Response.Status.BAD_REQUEST).
 					entity("Company can't be null: ").build();
 		}
-		
+
 		JSONArray resultArray = new JSONArray();
-		
+
 		for(StudentBasicInfo st : studentsList) {
 			JSONObject studentJson = new JSONObject();
 			JSONObject eachStudentJson = new JSONObject(st);
@@ -442,13 +489,13 @@ public class Admin{
 				studentJson.put(((String) keys.toArray()[i]).toLowerCase(), eachStudentJson.get((String) keys.toArray()[i]));
 			}
 			resultArray.put(studentJson);
-	    }
-		
+		}
+
 		return Response.status(Response.Status.OK).
 				entity(resultArray.toString()).build();  
 	}
 
-	
+
 	/**
 	 * This is a function for retrieving the students working as full time
 	 * 
@@ -464,7 +511,7 @@ public class Admin{
 		Campus camp;
 		int year;
 		List<StudentCoopList> studentsList = new ArrayList();
-		
+
 		// company can't have null value
 		try {
 			campus = jsonObj.get("campus");
@@ -481,14 +528,14 @@ public class Admin{
 		} catch(Exception e){
 			year = -1;
 		}
-			
+
 		if (year <0)
 			studentsList = workExperiencesDao.getStudentCurrentCompanies(camp, null);
 		else
 			studentsList = workExperiencesDao.getStudentCurrentCompanies(camp, year);
-				
+
 		JSONArray resultArray = new JSONArray();
-		
+
 		for(StudentCoopList st : studentsList) {
 			JSONObject studentJson = new JSONObject();
 			JSONObject eachStudentJson = new JSONObject(st);
@@ -497,12 +544,12 @@ public class Admin{
 				studentJson.put(((String) keys.toArray()[i]).toLowerCase(), eachStudentJson.get((String) keys.toArray()[i]));
 			}
 			resultArray.put(studentJson);
-	    }
-		
+		}
+
 		return Response.status(Response.Status.OK).
 				entity(resultArray.toString()).build();  
 	}
-	
+
 	/**
 	 * This is a function to change an existing admin's password
 	 * 
@@ -579,6 +626,6 @@ public class Admin{
 
 		return UUID.randomUUID().toString();
 	}	
-	
-	
+
+
 }

@@ -24,14 +24,15 @@ import org.mehaexample.asdDemo.model.alignpublic.TopCoops;
 import org.mehaexample.asdDemo.model.alignpublic.TopGradYears;
 import org.mehaexample.asdDemo.model.alignpublic.TopUndergradDegrees;
 import org.mehaexample.asdDemo.model.alignpublic.TopUndergradSchools;
+import org.mehaexample.asdDemo.restModels.TopCoopsNumber;
 import org.mehaexample.asdDemo.restModels.TopUnderGradSchools;
 
 @Path("public-facing")
 public class PublicFacing {
 
-	UndergraduatesPublicDao undergraduatesPublicDao = new UndergraduatesPublicDao();
-	WorkExperiencesPublicDao workExperiencesPublicDao = new WorkExperiencesPublicDao();
-	StudentsPublicDao studentsPublicDao = new StudentsPublicDao();
+	UndergraduatesPublicDao undergraduatesPublicDao = new UndergraduatesPublicDao(true);
+	WorkExperiencesPublicDao workExperiencesPublicDao = new WorkExperiencesPublicDao(true);
+	StudentsPublicDao studentsPublicDao = new StudentsPublicDao(true);
 	
 	/**
 	 * This is the function to get top undergraduate schools.
@@ -47,11 +48,15 @@ public class PublicFacing {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getUndergradSchools2(TopUnderGradSchools topUnderGradSchools) throws SQLException{
-		
-		List<TopUndergradSchools> undergrad = new ArrayList();
-		int number = topUnderGradSchools.getNumber();
-		System.out.println("number= "+number);
 
+		List<TopUndergradSchools> undergrad = new ArrayList();
+
+		int number = topUnderGradSchools.getNumber();
+		if(number < 1){
+			return Response.status(Response.Status.BAD_REQUEST).
+					entity("The number can't be less than one").build();
+		}
+		
 		undergrad = undergraduatesPublicDao.getTopUndergradSchools(number);
 		JSONArray resultArray = new JSONArray();
 		for(TopUndergradSchools ungrad : undergrad) {
@@ -99,6 +104,22 @@ public class PublicFacing {
 	 * @param search
 	 * @return List of n top coops
 	 */
+	@POST
+	@Path("top-coops2")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getTopCoops2(TopCoopsNumber topCoopsNumber) throws SQLException{
+		List<TopCoops> coops = new ArrayList();
+		int number = topCoopsNumber.getNumber();
+
+		coops = workExperiencesPublicDao.getTopCoops(number);
+		JSONArray resultArray = new JSONArray();
+		for(TopCoops ungrad : coops) {
+			resultArray.put(ungrad);
+	    }
+		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
+	}
+	
 	@POST
 	@Path("top-coops")
 	@Consumes(MediaType.APPLICATION_JSON)

@@ -168,7 +168,7 @@
 					http://localhost:9000
 				</sonar.host.url>
 
-				<!--<sonar.exclusions>/src/main/java/org.mehaexample.asdDemo.model.*</sonar.exclusions>-->
+				<!--<sonar.exclusions>/src/main/java/org.mehaexample.asdDemo.model.*</sonar.exclusions> -->
 			</properties>
 		</profile>
 	</profiles>
