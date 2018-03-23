@@ -32,6 +32,12 @@ public class Students {
   private DegreeCandidacy degree;
   private Blob photo;
   private boolean visible;
+  private String linkedin;
+  private String facebook;
+  private String github;
+  private String website;
+  private String skills;
+  private String summary;
 
   public Students(String neuId, String email, String firstName, String middleName, String lastName, Gender gender,
                   String visa, String phoneNum, String address, String state, String city, String zip,
@@ -88,6 +94,42 @@ public class Students {
     this.degree = degree;
     this.photo = photo;
     this.visible = visible;
+  }
+
+  public Students(String neuId, String email, String firstName, String middleName, String lastName, Gender gender,
+                  String race, boolean scholarship, String visa, String phoneNum, String address, String state,
+                  String city, String zip, Term entryTerm, int entryYear, Term expectedLastTerm, int expectedLastYear,
+                  EnrollmentStatus enrollmentStatus, Campus campus, DegreeCandidacy degree, Blob photo, boolean visible,
+                  String linkedin, String facebook, String github, String website, String skills, String summary) {
+    this.neuId = neuId;
+    this.email = email;
+    this.firstName = firstName;
+    this.middleName = middleName;
+    this.lastName = lastName;
+    this.gender = gender;
+    this.race = race;
+    this.scholarship = scholarship;
+    this.visa = visa;
+    this.phoneNum = phoneNum;
+    this.address = address;
+    this.state = state;
+    this.city = city;
+    this.zip = zip;
+    this.entryTerm = entryTerm;
+    this.entryYear = entryYear;
+    this.expectedLastTerm = expectedLastTerm;
+    this.expectedLastYear = expectedLastYear;
+    this.enrollmentStatus = enrollmentStatus;
+    this.campus = campus;
+    this.degree = degree;
+    this.photo = photo;
+    this.visible = visible;
+    this.linkedin = linkedin;
+    this.facebook = facebook;
+    this.github = github;
+    this.website = website;
+    this.skills = skills;
+    this.summary = summary;
   }
 
   public Students() {
@@ -276,6 +318,54 @@ public class Students {
 
   public void setVisible(boolean visible) {
     this.visible = visible;
+  }
+
+  public String getLinkedin() {
+    return linkedin;
+  }
+
+  public void setLinkedin(String linkedin) {
+    this.linkedin = linkedin;
+  }
+
+  public String getFacebook() {
+    return facebook;
+  }
+
+  public void setFacebook(String facebook) {
+    this.facebook = facebook;
+  }
+
+  public String getGithub() {
+    return github;
+  }
+
+  public void setGithub(String github) {
+    this.github = github;
+  }
+
+  public String getWebsite() {
+    return website;
+  }
+
+  public void setWebsite(String website) {
+    this.website = website;
+  }
+
+  public String getSkills() {
+    return skills;
+  }
+
+  public void setSkills(String skills) {
+    this.skills = skills;
+  }
+
+  public String getSummary() {
+    return summary;
+  }
+
+  public void setSummary(String summary) {
+    this.summary = summary;
   }
 
   @Override

@@ -42,6 +42,7 @@ CREATE TABLE AdminLogins(
     AdminPassword VARCHAR(50) NOT NULL,
     RegistrationKey VARCHAR(255),
     KeyExpiration TIMESTAMP,
+    Confirmed BOOLEAN DEFAULT FALSE,
     CONSTRAINT pk_AdminLogins_Email
 		PRIMARY KEY (Email),
 	CONSTRAINT fk_AdminLogins_Email

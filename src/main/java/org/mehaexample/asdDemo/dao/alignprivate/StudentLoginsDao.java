@@ -7,7 +7,6 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.mehaexample.asdDemo.model.alignprivate.StudentLogins;
 
-import java.util.InputMismatchException;
 import java.util.List;
 
 public class StudentLoginsDao {
@@ -18,47 +17,49 @@ public class StudentLoginsDao {
    * Default Constructor.
    */
   public StudentLoginsDao() {
-    try {
-      // it will check the hibernate.cfg.xml file and load it
-      // next it goes to all table files in the hibernate file and loads them
-      factory = new Configuration().configure().buildSessionFactory();
-    } catch (Throwable ex) {
-      System.err.println("Failed to create sessionFactory object." + ex);
-      throw new ExceptionInInitializerError(ex);
+    // it will check the hibernate.cfg.xml file and load it
+    // next it goes to all table files in the hibernate file and loads them
+    factory = new Configuration().configure().buildSessionFactory();
+  }
+
+  public StudentLoginsDao(boolean test) {
+    if (test) {
+      factory = new Configuration().configure("/hibernate_private_test.cfg.xml").buildSessionFactory();
     }
   }
 
   public StudentLogins findStudentLoginsByEmail(String email) {
-    session = factory.openSession();
-    org.hibernate.query.Query query = session.createQuery("FROM StudentLogins WHERE email = :email ");
-    query.setParameter("email", email);
-    List list = query.list();
-    session.close();
-    if (list.isEmpty()) {
-      return null;
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery("FROM StudentLogins WHERE email = :email ");
+      query.setParameter("email", email);
+      List list = query.list();
+      if (list.isEmpty()) {
+        return null;
+      }
+      return (StudentLogins) list.get(0);
+    } finally {
+      session.close();
     }
-    return (StudentLogins) list.get(0);
   }
 
   public StudentLogins createStudentLogin(StudentLogins studentLogin) {
     Transaction tx = null;
-    if (findStudentLoginsByEmail(studentLogin.getEmail()) == null) {
-      System.out.println("Student Login already exists!");
-    } else {
-      System.out.println("Saving student login...");
-      try {
-        session = factory.openSession();
-        tx = session.beginTransaction();
-        session.save(studentLogin);
-        tx.commit();
-      } catch (HibernateException e) {
-        System.out.println("HibernateException: " + e);
-        if (tx != null) tx.rollback();
-        throw new HibernateException("Connecting went wrong, cannot save student login.");
-      } finally {
-        session.close();
-      }
+    if (findStudentLoginsByEmail(studentLogin.getEmail()) != null) {
+      throw new HibernateException("Student Login already exists.");
     }
+    try {
+      session = factory.openSession();
+      tx = session.beginTransaction();
+      session.save(studentLogin);
+      tx.commit();
+    } catch (HibernateException e) {
+      if (tx != null) tx.rollback();
+      throw new HibernateException(e);
+    } finally {
+      session.close();
+    }
+
     return studentLogin;
   }
 
@@ -66,13 +67,13 @@ public class StudentLoginsDao {
     Transaction tx = null;
     if (findStudentLoginsByEmail(studentLogin.getEmail()) != null) {
       try {
-        Session session = factory.openSession();
+        session = factory.openSession();
         tx = session.beginTransaction();
         session.saveOrUpdate(studentLogin);
         tx.commit();
       } catch (HibernateException e) {
         if (tx != null) tx.rollback();
-        throw new HibernateException("Connecting went wrong, cannot save student login.");
+        throw new HibernateException(e);
       } finally {
         session.close();
       }
@@ -85,7 +86,7 @@ public class StudentLoginsDao {
 
   public boolean deleteStudentLogin(String email) {
     if (email == null || email.trim().isEmpty()) {
-      throw new InputMismatchException("Email argument cannot be null or empty.");
+      throw new IllegalArgumentException("Email argument cannot be null or empty.");
     }
 
     StudentLogins studentLogin = findStudentLoginsByEmail(email);
@@ -98,7 +99,7 @@ public class StudentLoginsDao {
         tx.commit();
       } catch (HibernateException e) {
         if (tx != null) tx.rollback();
-        throw new HibernateException("Connecting went wrong, cannot save student login.");
+        throw new HibernateException(e);
       } finally {
         session.close();
       }

@@ -1,5 +1,6 @@
 package alignWebsite.alignprivate;
 
+import org.hibernate.HibernateException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -26,8 +27,8 @@ public class PriorEducationsDaoTest {
 
   @BeforeClass
   public static void init() {
-    priorEducationsDao = new PriorEducationsDao();
-    studentsDao = new StudentsDao();
+    priorEducationsDao = new PriorEducationsDao(true);
+    studentsDao = new StudentsDao(true);
   }
 
   @Before
@@ -66,44 +67,44 @@ public class PriorEducationsDaoTest {
 
   }
 
-//  @Test
-//  public void getTopTenBachelors() throws ParseException {
-//    List<String> temp = priorEducationsDao.getTopTenBachelors(null);
-////    assertTrue(temp.size() == 1);
-////    assertTrue(temp.get(0).equals("Computer Science"));
-//
-//    // add new prior education
-//    PriorEducations newPriorEducation = new PriorEducations();
-//    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//    newPriorEducation.setGraduationDate(dateFormat.parse("2015-01-01"));
-//    newPriorEducation.setGpa(3.50f);
-//    newPriorEducation.setDegreeCandidacy(DegreeCandidacy.BACHELORS);
-//    newPriorEducation.setNeuId("111234567");
-//    newPriorEducation.setMajorName("farming");
-//    newPriorEducation.setInstitutionName("Harvard University");
-//    priorEducationsDao.createPriorEducation(newPriorEducation);
-//
-//    // test using the newly created prior education
-//    temp = priorEducationsDao.getTopTenBachelors(null);
-////    assertTrue(temp.size() == 2);
-////    assertTrue(temp.get(0).equals("Computer Science"));
-//    assertTrue(temp.get(1).equals("farming"));
-//
-//    temp = priorEducationsDao.getTopTenBachelors(Campus.BOSTON);
-//    assertTrue(temp.size() == 1);
-//    assertTrue(temp.get(0).equals("farming"));
-//
-//    temp = priorEducationsDao.getTopTenBachelors(Campus.SEATTLE);
-//    assertTrue(temp.size() == 1);
+  @Test
+  public void getTopTenBachelors() throws ParseException {
+    List<String> temp = priorEducationsDao.getTopTenBachelors(null);
+    assertTrue(temp.size() == 1);
+    assertTrue(temp.get(0).equals("Computer Science"));
+
+    // add new prior education
+    PriorEducations newPriorEducation = new PriorEducations();
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    newPriorEducation.setGraduationDate(dateFormat.parse("2015-01-01"));
+    newPriorEducation.setGpa(3.50f);
+    newPriorEducation.setDegreeCandidacy(DegreeCandidacy.BACHELORS);
+    newPriorEducation.setNeuId("111234567");
+    newPriorEducation.setMajorName("farming");
+    newPriorEducation.setInstitutionName("Harvard University");
+    priorEducationsDao.createPriorEducation(newPriorEducation);
+
+    // test using the newly created prior education
+    temp = priorEducationsDao.getTopTenBachelors(null);
+    assertTrue(temp.size() == 2);
 //    assertTrue(temp.get(0).equals("Computer Science"));
-//
-//    temp = priorEducationsDao.getTopTenBachelors(Campus.CHARLOTTE);
-//    assertTrue(temp.isEmpty());
-//
-//    // delete new prior education
-//    priorEducationsDao.deletePriorEducationById(
-//            priorEducationsDao.getPriorEducationsByNeuId("111234567").get(0).getPriorEducationId());
-//  }
+//    assertTrue(temp.get(1).equals("farming"));
+
+    temp = priorEducationsDao.getTopTenBachelors(Campus.BOSTON);
+    assertTrue(temp.size() == 1);
+    assertTrue(temp.get(0).equals("farming"));
+
+    temp = priorEducationsDao.getTopTenBachelors(Campus.SEATTLE);
+    assertTrue(temp.size() == 1);
+    assertTrue(temp.get(0).equals("Computer Science"));
+
+    temp = priorEducationsDao.getTopTenBachelors(Campus.CHARLOTTE);
+    assertTrue(temp.isEmpty());
+
+    // delete new prior education
+    priorEducationsDao.deletePriorEducationById(
+            priorEducationsDao.getPriorEducationsByNeuId("111234567").get(0).getPriorEducationId());
+  }
 
   @Test
   public void getPriorEducationByIdTest() {
@@ -120,7 +121,19 @@ public class PriorEducationsDaoTest {
     List<PriorEducations> listOfPriorEducation = priorEducationsDao.getPriorEducationsByNeuId("001234567");
     assertTrue(listOfPriorEducation.get(0).getInstitutionName().equals("University of Washington"));
     assertTrue(listOfPriorEducation.get(0).getMajorName().equals("Computer Science"));
-    assertTrue(priorEducationsDao.getPriorEducationsByNeuId("000000000") == null);
+    assertTrue(priorEducationsDao.getPriorEducationsByNeuId("000000000").isEmpty());
+  }
+
+  @Test(expected = HibernateException.class)
+  public void deleteNonExistentPriorEducation() {
+    priorEducationsDao.deletePriorEducationById(-200);
+  }
+
+  @Test(expected = HibernateException.class)
+  public void updateNonExistentPriorEducation() {
+    PriorEducations newPriorEducation = new PriorEducations();
+    newPriorEducation.setPriorEducationId(-300);
+    priorEducationsDao.updatePriorEducation(newPriorEducation);
   }
 
   @Test
@@ -148,12 +161,9 @@ public class PriorEducationsDaoTest {
     foundPriorEducation.setGpa(3.99f);
     priorEducationsDao.updatePriorEducation(foundPriorEducation);
     assertTrue(priorEducationsDao.getPriorEducationsByNeuId("111234567").get(0).getGpa() == 3.99f);
-    newPriorEducation.setPriorEducationId(-100);
-    assertFalse(priorEducationsDao.updatePriorEducation(newPriorEducation));
 
     // delete the work experience
     priorEducationsDao.deletePriorEducationById(foundPriorEducation.getPriorEducationId());
     assertTrue(priorEducationsDao.getPriorEducationById(foundPriorEducation.getPriorEducationId()) == null);
-    assertFalse(priorEducationsDao.deletePriorEducationById(-100));
   }
 }

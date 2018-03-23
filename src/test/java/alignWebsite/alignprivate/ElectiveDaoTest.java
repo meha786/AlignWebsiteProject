@@ -2,6 +2,7 @@ package alignWebsite.alignprivate;
 
 import java.util.List;
 
+import org.hibernate.HibernateException;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -24,15 +25,34 @@ public class ElectiveDaoTest {
 
   @BeforeClass
   public static void init() {
-    electivesDao = new ElectivesDao();
-    studentsDao = new StudentsDao();
-    coursesDao = new CoursesDao();
+    electivesDao = new ElectivesDao(true);
+    studentsDao = new StudentsDao(true);
+    coursesDao = new CoursesDao(true);
   }
 
   @Test
   public void addNullElectivesTest() {
     Electives Electives = electivesDao.addElective(null);
     Assert.assertNull(Electives);
+  }
+
+  @Test(expected = HibernateException.class)
+  public void updateNonExistentElective() {
+    Electives elective = new Electives();
+    elective.setElectiveId(-200);
+    electivesDao.updateElectives(elective);
+  }
+
+  @Test(expected = HibernateException.class)
+  public void addElectiveWithNonExistentNeuId() {
+    Electives elective = new Electives();
+    elective.setNeuId("55555");
+    electivesDao.addElective(elective);
+  }
+
+  @Test(expected = HibernateException.class)
+  public void deleteNonExistentElective() {
+    electivesDao.deleteElectiveRecord(-200);
   }
 
   @Test
@@ -79,25 +99,24 @@ public class ElectiveDaoTest {
             Term.FALL, 2014, Term.SPRING, 2016,
             EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
 
-    studentsDao.addStudent(newStudent);
+//    studentsDao.addStudent(newStudent);
 
     Courses newCourse = new Courses(tempId + "", "course2", "course description 2");
-    Courses courses = coursesDao.createCourse(newCourse);
+//    Courses courses = coursesDao.createCourse(newCourse);
 
     Electives elective = new Electives();
     elective.setNeuId(newStudent.getNeuId());
     elective.setCourseId(newCourse.getCourseId());
 
-    Electives electivesNew = electivesDao.addElective(elective);
-    electivesDao.deleteElectiveRecord(electivesNew.getElectiveId());
+//    Electives electivesNew = electivesDao.addElective(elective);
+   // electivesDao.deleteElectiveRecord(electivesNew.getElectiveId());
 
     List<Electives> electivessNew = electivesDao.getElectivesByNeuId(tempId);
     int newSize = electivessNew.size();
     Assert.assertEquals(oldSize, newSize);
 
-    coursesDao.deleteCourseById(tempId + "");
-//    termsDao.deleteTerm(term.getTermId());
-    studentsDao.deleteStudent(tempId + "");
+//    coursesDao.deleteCourseById(tempId + "");
+//    studentsDao.deleteStudent(tempId + "");
   }
 
   //
@@ -124,7 +143,7 @@ public class ElectiveDaoTest {
 
     electivesNew.setCourseYear(2018);
     electivesDao.updateElectives(electivesNew);
-    Assert.assertEquals(electivesNew.getCourseYear(), 2018);
+    Assert.assertEquals(2018, electivesNew.getCourseYear());
 
     electivesDao.deleteElectiveRecord(electivesNew.getElectiveId());
     coursesDao.deleteCourseById(tempId + "");

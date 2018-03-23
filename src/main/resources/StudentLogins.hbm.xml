@@ -20,5 +20,7 @@
 
         <property name="keyExpiration" column="KeyExpiration" type="timestamp" />
 
+        <property name="confirmed" column="Confirmed" type="boolean" />
+
     </class>
 </hibernate-mapping>

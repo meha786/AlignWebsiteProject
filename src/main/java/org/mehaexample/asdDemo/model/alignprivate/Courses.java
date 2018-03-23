@@ -11,9 +11,7 @@ public class Courses {
 		this.description = description;
 	}
 
-	public Courses () {
-		super();
-	}
+	public Courses () { }
 
 	public String getCourseId() {
 		return courseId;

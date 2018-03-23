@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="alignWebsite:war" />
+      <artifact name="alignWebsite:war exploded" />
+    </artifacts-to-build>
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="af8b69a0-e09e-456d-8d16-17809598794a" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/alignWebsite/StudentResource.java" afterPath="$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/alignWebsite/StudentResource.java" />
-    </list>
+    <list default="true" id="ed7e8316-c018-4320-95c4-a8daab9b6992" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -12,41 +16,16 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/alignWebsite$All_in_alignWebsite__3_.coverage" NAME="All in alignWebsite (3) Coverage Results" MODIFIED="1521777072039" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+  </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Admin.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/alignWebsite/Admin.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="833">
-              <caret line="49" column="23" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="435" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
+    <leaf>
       <file leaf-file-name="StudentResource.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/alignWebsite/StudentResource.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="282">
-              <caret line="105" column="14" lean-forward="true" selection-start-line="105" selection-start-column="14" selection-end-line="105" selection-end-column="14" />
-              <folding>
-                <element signature="e#1282#1303#0" expanded="true" />
-                <element signature="e#1659#1667#0" expanded="true" />
-                <element signature="e#1946#1954#0" expanded="true" />
-                <element signature="e#2221#2229#0" expanded="true" />
-                <element signature="e#2488#2496#0" expanded="true" />
-                <element signature="e#2743#2751#0" expanded="true" />
-                <element signature="e#2994#3002#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="WorkExperiencesDao.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/dao/alignprivate/WorkExperiencesDao.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4182">
-              <caret line="258" column="53" lean-forward="false" selection-start-line="258" selection-start-column="53" selection-end-line="258" selection-end-column="53" />
+            <state relative-caret-position="2040">
+              <caret line="230" column="22" lean-forward="false" selection-start-line="230" selection-start-column="0" selection-end-line="230" selection-end-column="22" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -54,78 +33,91 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="ElectivesAdminDao.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/dao/alignadmin/ElectivesAdminDao.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="85">
+              <caret line="37" column="49" lean-forward="false" selection-start-line="37" selection-start-column="30" selection-end-line="37" selection-end-column="49" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ElectivesAdmin.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/model/alignadmin/ElectivesAdmin.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="754">
+              <caret line="87" column="21" lean-forward="false" selection-start-line="87" selection-start-column="15" selection-end-line="87" selection-end-column="21" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SCHEMA_ALIGN_ADMIN.sql" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sql_scripts/SCHEMA_ALIGN_ADMIN.sql">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-136">
+              <caret line="4" column="15" lean-forward="true" selection-start-line="4" selection-start-column="15" selection-end-line="4" selection-end-column="15" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Electives.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/model/alignprivate/Electives.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="289">
+              <caret line="63" column="26" lean-forward="false" selection-start-line="63" selection-start-column="13" selection-end-line="63" selection-end-column="26" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="StudentsDao.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/dao/alignprivate/StudentsDao.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6647">
-              <caret line="406" column="20" lean-forward="false" selection-start-line="406" selection-start-column="20" selection-end-line="406" selection-end-column="20" />
+            <state relative-caret-position="75">
+              <caret line="220" column="8" lean-forward="false" selection-start-line="220" selection-start-column="8" selection-end-line="220" selection-end-column="8" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="StudentPriorEducationResource.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/alignWebsite/StudentPriorEducationResource.java">
+      <file leaf-file-name="ExtraExperiences.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/model/alignprivate/ExtraExperiences.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="102">
+              <caret line="6" column="14" lean-forward="false" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="14" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="StudentLogins.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/model/alignprivate/StudentLogins.java">
+      <file leaf-file-name="ExtraExperiencesDao.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/dao/alignprivate/ExtraExperiencesDao.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="4" column="13" lean-forward="false" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+            <state relative-caret-position="289">
+              <caret line="92" column="26" lean-forward="false" selection-start-line="92" selection-start-column="11" selection-end-line="92" selection-end-column="26" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Students.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/model/alignprivate/Students.java">
+      <file leaf-file-name="Admin.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/alignWebsite/Admin.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1564">
-              <caret line="104" column="26" lean-forward="false" selection-start-line="104" selection-start-column="26" selection-end-line="104" selection-end-column="26" />
-              <folding>
-                <element signature="e#3215#3216#0" expanded="true" />
-                <element signature="e#3237#3238#0" expanded="true" />
-                <element signature="e#3277#3278#0" expanded="true" />
-                <element signature="e#3305#3306#0" expanded="true" />
-                <element signature="e#3335#3336#0" expanded="true" />
-                <element signature="e#3357#3358#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PublicFacing.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/alignWebsite/PublicFacing.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1428">
-              <caret line="84" column="34" lean-forward="false" selection-start-line="84" selection-start-column="34" selection-end-line="84" selection-end-column="34" />
+            <state relative-caret-position="-425">
+              <caret line="350" column="13" lean-forward="true" selection-start-line="350" selection-start-column="13" selection-end-line="350" selection-end-column="13" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ConnectionManager.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/scripts/ConnectionManager.java">
+      <file leaf-file-name="GenderRatioDao.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/dao/alignadmin/GenderRatioDao.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="697">
-              <caret line="44" column="95" lean-forward="false" selection-start-line="44" selection-start-column="78" selection-end-line="44" selection-end-column="95" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="hibernate.cfg.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="425">
-              <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+            <state relative-caret-position="459">
+              <caret line="33" column="23" lean-forward="false" selection-start-line="33" selection-start-column="23" selection-end-line="33" selection-end-column="23" />
               <folding />
             </state>
           </provider>
@@ -135,29 +127,27 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>getall</find>
-      <find>getStudentRecord</find>
-      <find>updateStudentRecord</find>
-      <find>getStudent</find>
       <find>getStudentFilteredStudents</find>
+      <find>gpa</find>
     </findStrings>
-  </component>
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/alignWebsite/Admin.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/hibernate_private_test.cfg.xml" />
+        <option value="$PROJECT_DIR$/src/main/resources/hibernate_Public.cfg.xml" />
+        <option value="$PROJECT_DIR$/src/main/resources/hibernate_public_test.cfg.xml" />
+        <option value="$PROJECT_DIR$/src/main/resources/hibernate_admin_test.cfg.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/dao/alignprivate/StudentsDao.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/alignWebsite/PublicFacing.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" />
-        <option value="$PROJECT_DIR$/src/test/java/alignWebsite/alignprivate/WorkExperiencesDaoTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/alignWebsite/alignadmin/GenderRatioDaoTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/alignWebsite/alignprivate/StudentsDaoTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/alignWebsite/alignprivate/ElectiveDaoTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/alignWebsite/alignprivate/PriorEducationsDaoTest.java" />
-        <option value="$PROJECT_DIR$/src/test/java/alignWebsite/alignprivate/StudentsDaoTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/dao/alignprivate/StudentsDao.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/dao/alignprivate/WorkExperiencesDao.java" />
+        <option value="$PROJECT_DIR$/src/test/java/alignWebsite/alignprivate/WorkExperiencesDaoTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/model/alignprivate/ExtraExperiences.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/alignWebsite/StudentResource.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/alignWebsite/Admin.java" />
       </list>
     </option>
   </component>
@@ -180,7 +170,6 @@
     <option name="width" value="924" />
     <option name="height" value="792" />
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
       <flattenPackages />
@@ -196,39 +185,40 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="alignWebsite" type="b2602c69:ProjectViewProjectNode" />
-              <item name="AlignWebsiteProject" type="462c0819:PsiDirectoryNode" />
+              <item name="AlignWebsiteProject-master" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="alignWebsite" type="b2602c69:ProjectViewProjectNode" />
-              <item name="AlignWebsiteProject" type="462c0819:PsiDirectoryNode" />
+              <item name="AlignWebsiteProject-master" type="462c0819:PsiDirectoryNode" />
               <item name="sql_scripts" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="alignWebsite" type="b2602c69:ProjectViewProjectNode" />
-              <item name="AlignWebsiteProject" type="462c0819:PsiDirectoryNode" />
+              <item name="AlignWebsiteProject-master" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="alignWebsite" type="b2602c69:ProjectViewProjectNode" />
-              <item name="AlignWebsiteProject" type="462c0819:PsiDirectoryNode" />
+              <item name="AlignWebsiteProject-master" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="alignWebsite" type="b2602c69:ProjectViewProjectNode" />
-              <item name="AlignWebsiteProject" type="462c0819:PsiDirectoryNode" />
+              <item name="AlignWebsiteProject-master" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="alignWebsite" type="b2602c69:ProjectViewProjectNode" />
-              <item name="AlignWebsiteProject" type="462c0819:PsiDirectoryNode" />
+              <item name="AlignWebsiteProject-master" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
@@ -236,7 +226,7 @@
             </path>
             <path>
               <item name="alignWebsite" type="b2602c69:ProjectViewProjectNode" />
-              <item name="AlignWebsiteProject" type="462c0819:PsiDirectoryNode" />
+              <item name="AlignWebsiteProject-master" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
@@ -245,7 +235,7 @@
             </path>
             <path>
               <item name="alignWebsite" type="b2602c69:ProjectViewProjectNode" />
-              <item name="AlignWebsiteProject" type="462c0819:PsiDirectoryNode" />
+              <item name="AlignWebsiteProject-master" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
@@ -255,7 +245,7 @@
             </path>
             <path>
               <item name="alignWebsite" type="b2602c69:ProjectViewProjectNode" />
-              <item name="AlignWebsiteProject" type="462c0819:PsiDirectoryNode" />
+              <item name="AlignWebsiteProject-master" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
@@ -266,7 +256,7 @@
             </path>
             <path>
               <item name="alignWebsite" type="b2602c69:ProjectViewProjectNode" />
-              <item name="AlignWebsiteProject" type="462c0819:PsiDirectoryNode" />
+              <item name="AlignWebsiteProject-master" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
@@ -277,7 +267,7 @@
             </path>
             <path>
               <item name="alignWebsite" type="b2602c69:ProjectViewProjectNode" />
-              <item name="AlignWebsiteProject" type="462c0819:PsiDirectoryNode" />
+              <item name="AlignWebsiteProject-master" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
@@ -285,22 +275,11 @@
               <item name="mehaexample" type="462c0819:PsiDirectoryNode" />
               <item name="asdDemo" type="462c0819:PsiDirectoryNode" />
               <item name="dao" type="462c0819:PsiDirectoryNode" />
-              <item name="alignprivate" type="462c0819:PsiDirectoryNode" />
+              <item name="alignadmin" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="alignWebsite" type="b2602c69:ProjectViewProjectNode" />
-              <item name="AlignWebsiteProject" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="org" type="462c0819:PsiDirectoryNode" />
-              <item name="mehaexample" type="462c0819:PsiDirectoryNode" />
-              <item name="asdDemo" type="462c0819:PsiDirectoryNode" />
-              <item name="enums" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="alignWebsite" type="b2602c69:ProjectViewProjectNode" />
-              <item name="AlignWebsiteProject" type="462c0819:PsiDirectoryNode" />
+              <item name="AlignWebsiteProject-master" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
@@ -311,7 +290,7 @@
             </path>
             <path>
               <item name="alignWebsite" type="b2602c69:ProjectViewProjectNode" />
-              <item name="AlignWebsiteProject" type="462c0819:PsiDirectoryNode" />
+              <item name="AlignWebsiteProject-master" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
@@ -319,62 +298,13 @@
               <item name="mehaexample" type="462c0819:PsiDirectoryNode" />
               <item name="asdDemo" type="462c0819:PsiDirectoryNode" />
               <item name="model" type="462c0819:PsiDirectoryNode" />
-              <item name="alignprivate" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="alignWebsite" type="b2602c69:ProjectViewProjectNode" />
-              <item name="AlignWebsiteProject" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="org" type="462c0819:PsiDirectoryNode" />
-              <item name="mehaexample" type="462c0819:PsiDirectoryNode" />
-              <item name="asdDemo" type="462c0819:PsiDirectoryNode" />
-              <item name="scripts" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="alignWebsite" type="b2602c69:ProjectViewProjectNode" />
-              <item name="AlignWebsiteProject" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="alignWebsite" type="b2602c69:ProjectViewProjectNode" />
-              <item name="AlignWebsiteProject" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="alignWebsite" type="b2602c69:ProjectViewProjectNode" />
-              <item name="AlignWebsiteProject" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="alignWebsite" type="b2602c69:ProjectViewProjectNode" />
-              <item name="AlignWebsiteProject" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="alignWebsite" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="alignWebsite" type="b2602c69:ProjectViewProjectNode" />
-              <item name="AlignWebsiteProject" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="alignWebsite" type="462c0819:PsiDirectoryNode" />
-              <item name="alignprivate" type="462c0819:PsiDirectoryNode" />
+              <item name="alignadmin" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
       <pane id="Scratches" />
-      <pane id="PackagesPane" />
       <pane id="Scope" />
     </panes>
   </component>
@@ -398,6 +328,26 @@
     </option>
   </component>
   <component name="RunManager" selected="Tomcat Server.Unnamed">
+    <configuration name="All in alignWebsite (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="alignWebsite" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="package" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+    </configuration>
     <configuration name="All in alignWebsite (2)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="alignWebsite" />
@@ -478,26 +428,6 @@
       <envs />
       <patterns />
     </configuration>
-    <configuration name="All in alignWebsite" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="alignWebsite" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="package" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-    </configuration>
     <configuration name="Unnamed" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 7.0.85" ALTERNATIVE_JRE_ENABLED="false">
       <option name="UPDATING_POLICY" value="restart-server" />
       <deployment>
@@ -508,8 +438,7 @@
         </file>
       </deployment>
       <server-settings>
-        <option name="BASE_DIRECTORY_NAME" value="Unnamed_alignWebsite_3" />
-        <option name="HTTP_PORT" value="8181" />
+        <option name="BASE_DIRECTORY_NAME" value="Unnamed_alignWebsite_4" />
       </server-settings>
       <predefined_log_file id="Tomcat" enabled="true" />
       <predefined_log_file id="Tomcat Catalina" enabled="true" />
@@ -518,7 +447,7 @@
       <predefined_log_file id="Tomcat Localhost Access" enabled="false" />
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="50079" />
+        <option name="DEBUG_PORT" value="50925" />
       </RunnerSettings>
       <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Cover">
         <option name="USE_ENV_VARIABLES" value="true" />
@@ -575,10 +504,10 @@
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="MAIN_CLASS_NAME" value="" />
-      <option name="VM_PARAMETERS" value="" />
-      <option name="PROGRAM_PARAMETERS" value="" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="ENABLE_SWING_INSPECTOR" value="false" />
@@ -649,19 +578,19 @@
     </configuration>
     <list size="6">
       <item index="0" class="java.lang.String" itemvalue="Tomcat Server.Unnamed" />
-      <item index="1" class="java.lang.String" itemvalue="JUnit.All in alignWebsite (2)" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.All in alignWebsite (3)" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.All in alignWebsite (4)" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.All in alignWebsite (5)" />
-      <item index="5" class="java.lang.String" itemvalue="JUnit.All in alignWebsite" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.All in alignWebsite (1)" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.All in alignWebsite (2)" />
+      <item index="3" class="java.lang.String" itemvalue="JUnit.All in alignWebsite (3)" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.All in alignWebsite (4)" />
+      <item index="5" class="java.lang.String" itemvalue="JUnit.All in alignWebsite (5)" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="JUnit.All in alignWebsite" />
-        <item index="1" class="java.lang.String" itemvalue="JUnit.All in alignWebsite (5)" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.All in alignWebsite (4)" />
-        <item index="3" class="java.lang.String" itemvalue="JUnit.All in alignWebsite (3)" />
-        <item index="4" class="java.lang.String" itemvalue="JUnit.All in alignWebsite (2)" />
+        <item index="0" class="java.lang.String" itemvalue="JUnit.All in alignWebsite (5)" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.All in alignWebsite (4)" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.All in alignWebsite (3)" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.All in alignWebsite (2)" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.All in alignWebsite (1)" />
       </list>
     </recent_temporary>
   </component>
@@ -670,83 +599,83 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="af8b69a0-e09e-456d-8d16-17809598794a" name="Default" comment="" />
-      <created>1521317151818</created>
+      <changelist id="ed7e8316-c018-4320-95c4-a8daab9b6992" name="Default" comment="" />
+      <created>1521757479114</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1521317151818</updated>
-      <workItem from="1521317155385" duration="18143000" />
-      <workItem from="1521340098284" duration="427000" />
+      <updated>1521757479114</updated>
+      <workItem from="1521757483746" duration="26165000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="All_in_alignWebsite - 2018.03.17 at 14h 28m 23s.xml">
+    <history-entry file="All_in_alignWebsite - 2018.03.22 at 19h 13m 27s.xml">
       <configuration name="All in alignWebsite" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="All_in_alignWebsite - 2018.03.17 at 15h 50m 32s.xml">
-      <configuration name="All in alignWebsite" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="All_in_alignWebsite_(1) - 2018.03.17 at 15h 38m 13s.xml">
+    <history-entry file="All_in_alignWebsite_(1) - 2018.03.22 at 19h 41m 19s.xml">
       <configuration name="All in alignWebsite (1)" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="All_in_alignWebsite_(2) - 2018.03.17 at 15h 39m 58s.xml">
+    <history-entry file="All_in_alignWebsite_(2) - 2018.03.22 at 20h 32m 07s.xml">
       <configuration name="All in alignWebsite (2)" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="All_in_alignWebsite_(3) - 2018.03.17 at 14h 23m 53s.xml">
+    <history-entry file="All_in_alignWebsite_(3) - 2018.03.22 at 17h 59m 59s.xml">
       <configuration name="All in alignWebsite (3)" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="All_in_alignWebsite_(3) - 2018.03.17 at 15h 44m 13s.xml">
+    <history-entry file="All_in_alignWebsite_(3) - 2018.03.22 at 20h 49m 13s.xml">
       <configuration name="All in alignWebsite (3)" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="All_in_alignWebsite_(4) - 2018.03.17 at 14h 25m 46s.xml">
+    <history-entry file="All_in_alignWebsite_(3) - 2018.03.22 at 20h 51m 19s.xml">
+      <configuration name="All in alignWebsite (3)" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="All_in_alignWebsite_(4) - 2018.03.22 at 19h 02m 47s.xml">
       <configuration name="All in alignWebsite (4)" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="All_in_alignWebsite_(4) - 2018.03.17 at 15h 46m 19s.xml">
+    <history-entry file="All_in_alignWebsite_(4) - 2018.03.22 at 21h 08m 28s.xml">
       <configuration name="All in alignWebsite (4)" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="All_in_alignWebsite_(5) - 2018.03.17 at 14h 27m 17s.xml">
+    <history-entry file="All_in_alignWebsite_(5) - 2018.03.22 at 19h 11m 41s.xml">
       <configuration name="All in alignWebsite (5)" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="All_in_alignWebsite_(5) - 2018.03.17 at 15h 49m 05s.xml">
+    <history-entry file="All_in_alignWebsite_(5) - 2018.03.23 at 15h 01m 35s.xml">
       <configuration name="All in alignWebsite (5)" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="18570000" />
+    <option name="totallyTimeSpent" value="26165000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1381" height="885" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980132" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980132" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32847682" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.41345426" sideWeight="0.5" order="4" side_tool="false" content_ui="combo" />
-      <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="8" side_tool="false" content_ui="combo" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980132" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980132" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980132" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32847682" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.0" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2494331" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -756,315 +685,51 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <option name="time" value="1" />
-    </breakpoint-manager>
+    <breakpoint-manager />
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/alignWebsite/Admin.java">
+    <entry file="file://$PROJECT_DIR$/sql_scripts/SCHEMA_ALIGN_PUBLIC.sql">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="833">
-          <caret line="49" column="23" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="435" selection-end-column="0" />
+        <state relative-caret-position="153">
+          <caret line="9" column="22" lean-forward="false" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/dao/alignprivate/WorkExperiencesDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4182">
-          <caret line="258" column="53" lean-forward="false" selection-start-line="258" selection-start-column="53" selection-end-line="258" selection-end-column="53" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/dao/alignprivate/StudentsDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6647">
-          <caret line="406" column="20" lean-forward="true" selection-start-line="406" selection-start-column="20" selection-end-line="406" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/alignWebsite/StudentPriorEducationResource.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/model/alignprivate/StudentLogins.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="13" lean-forward="false" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/model/alignprivate/Students.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1564">
-          <caret line="104" column="26" lean-forward="true" selection-start-line="104" selection-start-column="26" selection-end-line="104" selection-end-column="26" />
-          <folding>
-            <element signature="e#3215#3216#0" expanded="true" />
-            <element signature="e#3237#3238#0" expanded="true" />
-            <element signature="e#3277#3278#0" expanded="true" />
-            <element signature="e#3305#3306#0" expanded="true" />
-            <element signature="e#3335#3336#0" expanded="true" />
-            <element signature="e#3357#3358#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/alignWebsite/PublicFacing.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1428">
-          <caret line="84" column="34" lean-forward="false" selection-start-line="84" selection-start-column="34" selection-end-line="84" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/scripts/ConnectionManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="697">
-          <caret line="44" column="95" lean-forward="false" selection-start-line="44" selection-start-column="78" selection-end-line="44" selection-end-column="95" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="25" column="0" lean-forward="true" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/alignWebsite/StudentResource.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1972">
-          <caret line="134" column="20" lean-forward="false" selection-start-line="134" selection-start-column="20" selection-end-line="134" selection-end-column="20" />
-          <folding>
-            <element signature="e#1282#1303#0" expanded="true" />
-            <element signature="e#1659#1667#0" expanded="true" />
-            <element signature="e#1946#1954#0" expanded="true" />
-            <element signature="e#2221#2229#0" expanded="true" />
-            <element signature="e#2488#2496#0" expanded="true" />
-            <element signature="e#2743#2751#0" expanded="true" />
-            <element signature="e#2994#3002#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sql_scripts/SCHEMA_ALIGN_ADMIN.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/alignWebsites/tests/tools/TotalMaleStudentsExtractorTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/alignWebsite/alignprivate/ExperiencesDaoTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="130" column="35" lean-forward="false" selection-start-line="130" selection-start-column="14" selection-end-line="130" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/dao/alignprivate/ElectivesDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="36" column="44" lean-forward="false" selection-start-line="36" selection-start-column="25" selection-end-line="36" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/model/alignprivate/Electives.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="13" lean-forward="false" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/model/alignprivate/StudentCoopList.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="13" lean-forward="false" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/model/alignprivate/StudentBasicInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/scripts/TotalMaleStudentsDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="74" column="13" lean-forward="false" selection-start-line="74" selection-start-column="13" selection-end-line="74" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/scripts/TotalStudentsInAmazonDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="34" column="57" lean-forward="false" selection-start-line="34" selection-start-column="57" selection-end-line="34" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/scripts/TotalStudentsWithScholarshipDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="39" column="36" lean-forward="false" selection-start-line="39" selection-start-column="36" selection-end-line="39" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/StudentsPublic.hbm.xml" />
-    <entry file="file://$PROJECT_DIR$/src/main/resources/hibernate_Admin.cfg.xml" />
-    <entry file="file://$PROJECT_DIR$/src/main/resources/hibernate_Public.cfg.xml" />
-    <entry file="file://$PROJECT_DIR$/src/test/java/alignWebsites/tests/tools/LoadFromCsvTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/alignWebsites/tests/tools/TopFiveEmployersExtractorTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/alignWebsites/tests/tools/TotalFemaleStudentsExtractorTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/alignWebsites/tests/tools/TotalStudentsInCharlotteExtractorTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/alignWebsite/StudentExperienceResource.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/dao/alignadmin/AdministratorNotesDao.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/scripts/TotalStudentsInCharlotteDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="13" lean-forward="false" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/model/alignprivate/PriorEducations.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="6" column="13" lean-forward="false" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sql_scripts/SCHEMA_ALIGN_PRIVATE.sql">
+    <entry file="file://$PROJECT_DIR$/src/main/resources/hibernate_Public.cfg.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
           <caret line="16" column="19" lean-forward="false" selection-start-line="16" selection-start-column="19" selection-end-line="16" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/mariadb/jdbc/mariadb-java-client/1.1.7/mariadb-java-client-1.1.7.jar!/org/mariadb/jdbc/internal/mysql/MySQLProtocol.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="92">
-          <caret line="737" column="0" lean-forward="false" selection-start-line="737" selection-start-column="0" selection-end-line="737" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.8.1/junit-4.8.1.jar!/org/junit/Assert.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="92">
-          <caret line="38" column="0" lean-forward="false" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
-          <folding>
-            <element signature="e#1030#1031#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/alignWebsite/alignprivate/WorkExperiencesDaoTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="139">
-          <caret line="98" column="2" lean-forward="false" selection-start-line="98" selection-start-column="2" selection-end-line="98" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/model/alignprivate/Courses.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/scripts/TotalStudentsInBostonDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="13" lean-forward="false" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/alignWebsite/alignprivate/StudentsDaoTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2026">
-          <caret line="298" column="0" lean-forward="false" selection-start-line="298" selection-start-column="0" selection-end-line="298" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/alignWebsite/alignprivate/ElectiveDaoTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="232">
-          <caret line="186" column="11" lean-forward="false" selection-start-line="186" selection-start-column="11" selection-end-line="186" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/alignWebsite/alignprivate/PriorEducationsDaoTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="139">
-          <caret line="108" column="14" lean-forward="false" selection-start-line="108" selection-start-column="14" selection-end-line="108" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/alignWebsite/Admin.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="833">
-          <caret line="49" column="23" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="435" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/scripts/ConnectionManager.java">
+    <entry file="file://$PROJECT_DIR$/src/main/resources/Students.hbm.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="697">
-          <caret line="44" column="95" lean-forward="false" selection-start-line="44" selection-start-column="78" selection-end-line="44" selection-end-column="95" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml">
+    <entry file="file://$PROJECT_DIR$/src/main/resources/hibernate_public_test.cfg.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" column="36" lean-forward="false" selection-start-line="15" selection-start-column="36" selection-end-line="15" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/hibernate_private_test.cfg.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="354">
+          <caret line="23" column="16" lean-forward="false" selection-start-line="23" selection-start-column="16" selection-end-line="23" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/hibernate_admin_test.cfg.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="425">
           <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
@@ -1072,34 +737,107 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/alignWebsite/PublicFacing.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/alignWebsite/alignadmin/AdministratorsDaoTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1428">
-          <caret line="84" column="34" lean-forward="false" selection-start-line="84" selection-start-column="34" selection-end-line="84" selection-end-column="34" />
+        <state relative-caret-position="-289">
+          <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/model/alignprivate/StudentLogins.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/alignWebsite/alignadmin/ElectivesAdminDaoTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="13" lean-forward="false" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+        <state relative-caret-position="221">
+          <caret line="25" column="38" lean-forward="true" selection-start-line="25" selection-start-column="38" selection-end-line="25" selection-end-column="38" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/model/alignprivate/Students.java">
+    <entry file="file://$PROJECT_DIR$/sql_scripts/SCHEMA_ALIGN_PRIVATE.sql">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1564">
-          <caret line="104" column="26" lean-forward="false" selection-start-line="104" selection-start-column="26" selection-end-line="104" selection-end-column="26" />
-          <folding>
-            <element signature="e#3215#3216#0" expanded="true" />
-            <element signature="e#3237#3238#0" expanded="true" />
-            <element signature="e#3277#3278#0" expanded="true" />
-            <element signature="e#3305#3306#0" expanded="true" />
-            <element signature="e#3335#3336#0" expanded="true" />
-            <element signature="e#3357#3358#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="231">
+          <caret line="42" column="23" lean-forward="true" selection-start-line="42" selection-start-column="23" selection-end-line="42" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/alignWebsite/alignpublic/WorkExperiencesPublicDaoTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="159">
+          <caret line="49" column="14" lean-forward="false" selection-start-line="49" selection-start-column="14" selection-end-line="49" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/alignWebsite/alignadmin/GenderRatioDaoTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="353">
+          <caret line="61" column="0" lean-forward="true" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/alignWebsite/alignadmin/AdministratorNotesDaoTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="159">
+          <caret line="76" column="14" lean-forward="false" selection-start-line="76" selection-start-column="14" selection-end-line="76" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/alignWebsite/alignprivate/StudentsDaoTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="176" column="0" lean-forward="true" selection-start-line="176" selection-start-column="0" selection-end-line="176" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/dao/alignprivate/CoursesDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1836">
+          <caret line="117" column="26" lean-forward="true" selection-start-line="117" selection-start-column="26" selection-end-line="117" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/dao/alignprivate/ElectivesDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="45" column="3" lean-forward="true" selection-start-line="45" selection-start-column="3" selection-end-line="45" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/model/alignprivate/Courses.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="0" lean-forward="true" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/alignWebsite/alignprivate/ElectiveDaoTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="117">
+          <caret line="116" column="0" lean-forward="true" selection-start-line="116" selection-start-column="0" selection-end-line="116" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/alignWebsite/alignprivate/PriorEducationsDaoTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="159">
+          <caret line="90" column="2" lean-forward="false" selection-start-line="90" selection-start-column="2" selection-end-line="90" selection-end-column="2" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/alignWebsite/alignprivate/WorkExperiencesDaoTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="151">
+          <caret line="147" column="2" lean-forward="false" selection-start-line="147" selection-start-column="2" selection-end-line="147" selection-end-column="2" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1113,34 +851,119 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/dao/alignprivate/WorkExperiencesDao.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4182">
-          <caret line="258" column="53" lean-forward="false" selection-start-line="258" selection-start-column="53" selection-end-line="258" selection-end-column="53" />
+        <state relative-caret-position="-1632">
+          <caret line="62" column="51" lean-forward="true" selection-start-line="62" selection-start-column="51" selection-end-line="62" selection-end-column="51" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/model/alignprivate/WorkExperiences.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-208">
+          <caret line="25" column="25" lean-forward="false" selection-start-line="25" selection-start-column="25" selection-end-line="25" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/alignWebsite/PublicFacing.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5304">
+          <caret line="335" column="19" lean-forward="false" selection-start-line="335" selection-start-column="19" selection-end-line="335" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/model/alignprivate/Students.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="47">
+          <caret line="143" column="22" lean-forward="false" selection-start-line="143" selection-start-column="17" selection-end-line="143" selection-end-column="22" />
+          <folding>
+            <element signature="e#4760#4761#0" expanded="true" />
+            <element signature="e#4777#4778#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/model/alignprivate/Electives.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="63" column="26" lean-forward="false" selection-start-line="63" selection-start-column="13" selection-end-line="63" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/dao/alignprivate/StudentsDao.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6647">
-          <caret line="406" column="20" lean-forward="false" selection-start-line="406" selection-start-column="20" selection-end-line="406" selection-end-column="20" />
+        <state relative-caret-position="75">
+          <caret line="220" column="8" lean-forward="false" selection-start-line="220" selection-start-column="8" selection-end-line="220" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/dao/alignprivate/ExtraExperiencesDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="92" column="26" lean-forward="false" selection-start-line="92" selection-start-column="11" selection-end-line="92" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/model/alignprivate/ExtraExperiences.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="14" lean-forward="false" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/dao/alignadmin/GenderRatioDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="33" column="23" lean-forward="false" selection-start-line="33" selection-start-column="23" selection-end-line="33" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/dao/alignadmin/ElectivesAdminDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="37" column="49" lean-forward="false" selection-start-line="37" selection-start-column="30" selection-end-line="37" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/model/alignadmin/ElectivesAdmin.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="754">
+          <caret line="87" column="21" lean-forward="false" selection-start-line="87" selection-start-column="15" selection-end-line="87" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sql_scripts/SCHEMA_ALIGN_ADMIN.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-136">
+          <caret line="4" column="15" lean-forward="true" selection-start-line="4" selection-start-column="15" selection-end-line="4" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/alignWebsite/Admin.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-425">
+          <caret line="350" column="13" lean-forward="true" selection-start-line="350" selection-start-column="13" selection-end-line="350" selection-end-column="13" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/mehaexample/asdDemo/alignWebsite/StudentResource.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="282">
-          <caret line="105" column="14" lean-forward="true" selection-start-line="105" selection-start-column="14" selection-end-line="105" selection-end-column="14" />
+        <state relative-caret-position="2040">
+          <caret line="230" column="22" lean-forward="false" selection-start-line="230" selection-start-column="0" selection-end-line="230" selection-end-column="22" />
           <folding>
-            <element signature="e#1282#1303#0" expanded="true" />
-            <element signature="e#1659#1667#0" expanded="true" />
-            <element signature="e#1946#1954#0" expanded="true" />
-            <element signature="e#2221#2229#0" expanded="true" />
-            <element signature="e#2488#2496#0" expanded="true" />
-            <element signature="e#2743#2751#0" expanded="true" />
-            <element signature="e#2994#3002#0" expanded="true" />
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>

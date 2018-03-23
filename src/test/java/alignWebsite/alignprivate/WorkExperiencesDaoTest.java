@@ -1,5 +1,6 @@
 package alignWebsite.alignprivate;
 
+import org.hibernate.HibernateException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -28,18 +29,18 @@ public class WorkExperiencesDaoTest {
 
   @BeforeClass
   public static void init() {
-    workExperiencesDao = new WorkExperiencesDao();
-    studentsDao = new StudentsDao();
+    workExperiencesDao = new WorkExperiencesDao(true);
+    studentsDao = new StudentsDao(true);
   }
 
   @Before
   public void addDatabasePlaceholder() throws ParseException {
-    Students student = new Students("001234567","tomca@gmail.com", "Tom", "",
+    Students student = new Students("001234567","tomcattest@gmail.com", "Tom", "",
             "Cat", Gender.M, "F1", "1111111111",
             "401 Terry Ave", "WA", "Seattle", "98109",
             Term.FALL, 2014, Term.SPRING, 2016,
             EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS,null, true);
-    Students student2 = new Students("111234567","jerrymou@gmail.com", "Jerry", "",
+    Students student2 = new Students("111234567","jerrymousetest@gmail.com", "Jerry", "",
             "Mouse", Gender.M, "F1", "1111111111",
             "401 Terry Ave", "WA", "Seattle", "98109",
             Term.FALL, 2014, Term.SPRING, 2016,
@@ -66,6 +67,18 @@ public class WorkExperiencesDaoTest {
     studentsDao.deleteStudent("111234567");
   }
 
+  @Test(expected = HibernateException.class)
+  public void deleteNonExistWorkExperience() {
+    workExperiencesDao.deleteWorkExperienceById(-200);
+  }
+
+  @Test(expected = HibernateException.class)
+  public void updateNonExistWorkExperience() {
+    WorkExperiences newWorkExperience = new WorkExperiences();
+    newWorkExperience.setWorkExperienceId(-300);
+    workExperiencesDao.updateWorkExperience(newWorkExperience);
+  }
+
   @Test
   public void getStudentsWorkingInACompanyTest() {
     List<StudentBasicInfo> list =
@@ -76,6 +89,9 @@ public class WorkExperiencesDaoTest {
 
     list = workExperiencesDao.getStudentsWorkingInACompany(Campus.SEATTLE, 2017, "Amazon");
 //    assertTrue(list.size() == 0);
+
+    list = workExperiencesDao.getStudentsWorkingInACompany(null, null, "Amazon");
+//    assertTrue(list.size() == 1);
   }
 
   @Test
@@ -93,7 +109,10 @@ public class WorkExperiencesDaoTest {
 
     List<StudentCoopList> temp = workExperiencesDao.getStudentCoopCompanies(Campus.SEATTLE, null);
 //    assertTrue(temp.size() == 1);
-//    assertTrue(temp.get(0).getCompanies().size() == 2);
+    assertTrue(temp.get(0).getCompanies().size() == 2);
+
+    temp = workExperiencesDao.getStudentCoopCompanies(null, 2016);
+//    assertTrue(temp.size() == 1);
 
     List<StudentCoopList> temp2 = workExperiencesDao.getStudentCoopCompanies(Campus.SEATTLE, 2016);
 //    assertTrue(temp2.size() == 1);
@@ -122,49 +141,52 @@ public class WorkExperiencesDaoTest {
     assertTrue(temp.size() == 1);
     assertTrue(temp.get(0).getCompanies().get(0).equals("Google"));
 
+    temp = workExperiencesDao.getStudentCurrentCompanies(null, null);
+    assertTrue(temp.size() == 1);
+
     List<StudentCoopList> temp2 = workExperiencesDao.getStudentCoopCompanies(Campus.SEATTLE, 2017);
 //    assertTrue(temp2.isEmpty());
 
     workExperiencesDao.deleteWorkExperienceByNeuId("001234567");
   }
 
-//  @Test
-//  public void getTopTenEmployersTest() throws ParseException {
-//    List<String> temp = workExperiencesDao.getTopTenEmployers(null, null);
+  @Test
+  public void getTopTenEmployersTest() throws ParseException {
+    List<String> temp = workExperiencesDao.getTopTenEmployers(null, null);
 //    assertTrue(temp.size() == 1);
-//
-//    WorkExperiences newWorkExperience = new WorkExperiences();
-//    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//    newWorkExperience.setStartDate(dateFormat.parse("2018-06-01"));
-//    newWorkExperience.setEndDate(dateFormat.parse("2018-12-01"));
-//    newWorkExperience.setCurrentJob(false);
-//    newWorkExperience.setTitle("Title");
-//    newWorkExperience.setDescription("Description");
-//    newWorkExperience.setNeuId("001234567");
-//    newWorkExperience.setCompanyName("Amazon");
-//    workExperiencesDao.createWorkExperience(newWorkExperience);
-//
-//    WorkExperiences newWorkExperience2 = new WorkExperiences();
-//    SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
-//    newWorkExperience2.setStartDate(dateFormat2.parse("2018-06-01"));
-//    newWorkExperience2.setEndDate(dateFormat2.parse("2018-12-01"));
-//    newWorkExperience2.setCurrentJob(false);
-//    newWorkExperience2.setTitle("Title");
-//    newWorkExperience2.setDescription("Description");
-//    newWorkExperience2.setNeuId("111234567");
-//    newWorkExperience2.setCompanyName("Aaa");
-//    workExperiencesDao.createWorkExperience(newWorkExperience2);
-//
-//    temp = workExperiencesDao.getTopTenEmployers(Campus.SEATTLE, 2016);
+
+    WorkExperiences newWorkExperience = new WorkExperiences();
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    newWorkExperience.setStartDate(dateFormat.parse("2018-06-01"));
+    newWorkExperience.setEndDate(dateFormat.parse("2018-12-01"));
+    newWorkExperience.setCurrentJob(false);
+    newWorkExperience.setTitle("Title");
+    newWorkExperience.setDescription("Description");
+    newWorkExperience.setNeuId("001234567");
+    newWorkExperience.setCompanyName("Amazon");
+    workExperiencesDao.createWorkExperience(newWorkExperience);
+
+    WorkExperiences newWorkExperience2 = new WorkExperiences();
+    SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
+    newWorkExperience2.setStartDate(dateFormat2.parse("2018-06-01"));
+    newWorkExperience2.setEndDate(dateFormat2.parse("2018-12-01"));
+    newWorkExperience2.setCurrentJob(false);
+    newWorkExperience2.setTitle("Title");
+    newWorkExperience2.setDescription("Description");
+    newWorkExperience2.setNeuId("111234567");
+    newWorkExperience2.setCompanyName("Aaa");
+    workExperiencesDao.createWorkExperience(newWorkExperience2);
+
+    temp = workExperiencesDao.getTopTenEmployers(null, 2016);
 //    assertTrue(temp.size() == 2);
-//    assertTrue(temp.get(0).equals("Amazon"));
-//    assertTrue(temp.get(1).equals("Aaa"));
-//
-//    temp = workExperiencesDao.getTopTenEmployers(Campus.BOSTON, 1994);
-//    assertTrue(temp.size() == 0);
-//    temp = workExperiencesDao.getTopTenEmployers(Campus.BOSTON, null);
-//    assertTrue(temp.size() == 0);
-//  }
+    temp = workExperiencesDao.getTopTenEmployers(Campus.SEATTLE, 2016);
+//    assertTrue(temp.size() == 2);
+
+    temp = workExperiencesDao.getTopTenEmployers(Campus.BOSTON, 1994);
+    assertTrue(temp.size() == 0);
+    temp = workExperiencesDao.getTopTenEmployers(Campus.BOSTON, null);
+    assertTrue(temp.size() == 0);
+  }
 
   @Test
   public void getWorkExperienceIdTest() {
@@ -208,12 +230,9 @@ public class WorkExperiencesDaoTest {
     foundWorkExperience.setDescription("Description2");
     workExperiencesDao.updateWorkExperience(foundWorkExperience);
     assertTrue(workExperiencesDao.getWorkExperiencesByNeuId("111234567").get(0).getDescription().equals("Description2"));
-    newWorkExperience.setWorkExperienceId(-100);
-    assertFalse(workExperiencesDao.updateWorkExperience(newWorkExperience));
 
     // delete the work experience
     workExperiencesDao.deleteWorkExperienceById(foundWorkExperience.getWorkExperienceId());
     assertTrue(workExperiencesDao.getWorkExperienceById(foundWorkExperience.getWorkExperienceId()) == null);
-    assertFalse(workExperiencesDao.deleteWorkExperienceById(-100));
   }
 }

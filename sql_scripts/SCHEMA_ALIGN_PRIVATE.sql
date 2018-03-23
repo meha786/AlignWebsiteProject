@@ -8,7 +8,8 @@ DROP TABLE IF EXISTS StudentLogins;
 DROP TABLE IF EXISTS PriorEducations;
 DROP TABLE IF EXISTS WorkExperiences;
 DROP TABLE IF EXISTS Electives;
-DROP TABLE IF EXISTS Experiences;
+DROP TABLE IF EXISTS ExtraExperiences;
+DROP TABLE IF EXISTS Projects;
 DROP TABLE IF EXISTS Students;
 DROP TABLE IF EXISTS Courses;
 
@@ -24,7 +25,7 @@ CREATE TABLE Students (
     Scholarship BOOLEAN DEFAULT FALSE,
     Visa VARCHAR(5),
     Phone VARCHAR(25),
-	Address VARCHAR(255),
+	  Address VARCHAR(255),
     State VARCHAR(2),
     City VARCHAR(20),
     Zip VARCHAR(5),
@@ -37,6 +38,12 @@ CREATE TABLE Students (
     DegreeCandidacy ENUM('ASSOCIATE', 'BACHELORS', 'MASTERS', 'PHD') NOT NULL,
     Photo BLOB,
     Visible BOOLEAN DEFAULT TRUE,
+    Linkedin VARCHAR(50),
+    Facebook VARCHAR(50),
+    Github VARCHAR(50),
+    Website VARCHAR(50),
+    Skills VARCHAR(255),
+    Summary VARCHAR(255),
     CONSTRAINT pk_Students_NeuId
 		PRIMARY KEY (NeuId),
 	KEY PublicId (PublicId),
@@ -49,6 +56,7 @@ CREATE TABLE StudentLogins(
     StudentPassword VARCHAR(50) NOT NULL,
     RegistrationKey VARCHAR(255),
     KeyExpiration TIMESTAMP,
+    Confirmed BOOLEAN DEFAULT FALSE,
     CONSTRAINT pk_StudentLogins_Email
 		PRIMARY KEY (Email),
 	CONSTRAINT fk_StudentLogins_Email
@@ -104,19 +112,6 @@ CREATE TABLE Electives (
         ON UPDATE CASCADE ON DELETE SET NULL
 );
 
-CREATE TABLE Experiences (
-	ExperienceId INT AUTO_INCREMENT,
-    NeuId VARCHAR(16),
-    Title VARCHAR(255),
-    Description VARCHAR(1250),
-    CONSTRAINT pk_Experiences_ExperienceId
-		PRIMARY KEY (ExperienceId),
-	CONSTRAINT fk_Experiences_NeuId
-		FOREIGN KEY (NeuId)
-        REFERENCES Students(NeuId)
-        ON UPDATE CASCADE ON DELETE CASCADE
-);
-
 CREATE TABLE WorkExperiences (
 	WorkExperienceId INT AUTO_INCREMENT,
     NeuId VARCHAR(16),
@@ -131,6 +126,41 @@ CREATE TABLE WorkExperiences (
 	CONSTRAINT uq_WorkExperiences_WorkExperience
 		UNIQUE (NeuId, CompanyName, StartDate),
 	CONSTRAINT fk_WorkExperiences_NeuId
+		FOREIGN KEY (NeuId)
+        REFERENCES Students(NeuId)
+        ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE ExtraExperiences (
+	ExtraExperienceId INT AUTO_INCREMENT,
+    NeuId VARCHAR(16),
+    CompanyName VARCHAR(50),
+    StartDate DATE NOT NULL,
+    EndDate DATE,
+    Title VARCHAR(255) NOT NULL,
+    Description VARCHAR(1250),
+    CONSTRAINT pk_ExtraExperiences_ExtraExperienceId
+		PRIMARY KEY (ExtraExperienceId),
+	CONSTRAINT uq_ExtraExperiences_ExtraExperience
+		UNIQUE (NeuId, CompanyName, StartDate),
+	CONSTRAINT fk_ExtraExperiences_NeuId
+		FOREIGN KEY (NeuId)
+        REFERENCES Students(NeuId)
+        ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE Projects (
+	ProjectId INT AUTO_INCREMENT,
+    NeuId VARCHAR(16),
+    ProjectName VARCHAR(50),
+    StartDate DATE NOT NULL,
+    EndDate DATE,
+    Description VARCHAR(1250),
+    CONSTRAINT pk_Projects_ProjectId
+		PRIMARY KEY (ProjectId),
+	CONSTRAINT uq_Projects_Project
+		UNIQUE (NeuId, ProjectName, StartDate),
+	CONSTRAINT fk_Projects_NeuId
 		FOREIGN KEY (NeuId)
         REFERENCES Students(NeuId)
         ON UPDATE CASCADE ON DELETE CASCADE

@@ -7,6 +7,8 @@
           <element id="module-output" name="alignWebsite" />
         </element>
         <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: com.sun.mail:javax.mail:1.5.5" />
+          <element id="library" level="project" name="Maven: javax.activation:activation:1.1" />
           <element id="library" level="project" name="Maven: org.glassfish.jersey.containers:jersey-container-servlet-core:2.26" />
           <element id="library" level="project" name="Maven: org.glassfish.hk2.external:javax.inject:2.5.0-b42" />
           <element id="library" level="project" name="Maven: org.glassfish.jersey.core:jersey-common:2.26" />
@@ -19,6 +21,16 @@
           <element id="library" level="project" name="Maven: org.mariadb.jdbc:mariadb-java-client:1.1.7" />
           <element id="library" level="project" name="Maven: net.java.dev.jna:jna:3.3.0" />
           <element id="library" level="project" name="Maven: net.java.dev.jna:jna:platform:3.3.0" />
+          <element id="library" level="project" name="Maven: org.sonarsource.scanner.maven:sonar-maven-plugin:3.2" />
+          <element id="library" level="project" name="Maven: org.apache.maven.shared:maven-dependency-tree:2.2" />
+          <element id="library" level="project" name="Maven: org.codehaus.plexus:plexus-component-annotations:1.5.5" />
+          <element id="library" level="project" name="Maven: org.eclipse.aether:aether-util:0.9.0.M2" />
+          <element id="library" level="project" name="Maven: org.sonatype.plexus:plexus-sec-dispatcher:1.4" />
+          <element id="library" level="project" name="Maven: org.sonatype.plexus:plexus-cipher:1.4" />
+          <element id="library" level="project" name="Maven: org.codehaus.plexus:plexus-utils:3.0.22" />
+          <element id="library" level="project" name="Maven: org.sonarsource.scanner.api:sonar-scanner-api:2.8" />
+          <element id="library" level="project" name="Maven: commons-lang:commons-lang:2.6" />
+          <element id="library" level="project" name="Maven: com.google.code.findbugs:jsr305:2.0.3" />
           <element id="library" level="project" name="Maven: mysql:mysql-connector-java:5.1.36" />
           <element id="library" level="project" name="Maven: org.glassfish.jersey.inject:jersey-hk2:2.26" />
           <element id="library" level="project" name="Maven: org.glassfish.hk2:hk2-locator:2.5.0-b42" />

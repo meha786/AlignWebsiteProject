@@ -10,13 +10,12 @@ import org.mehaexample.asdDemo.model.alignprivate.StudentBasicInfo;
 import org.mehaexample.asdDemo.model.alignprivate.StudentCoopList;
 import org.mehaexample.asdDemo.model.alignprivate.WorkExperiences;
 
-
 import javax.persistence.TypedQuery;
 import java.util.List;
 
 public class WorkExperiencesDao {
-  private static SessionFactory factory;
-  private static Session session;
+  private SessionFactory factory;
+  private Session session;
 
   /**
    * Default constructor.
@@ -24,11 +23,12 @@ public class WorkExperiencesDao {
    * next it goes to all table files in the hibernate file and loads them.
    */
   public WorkExperiencesDao() {
-    try {
-      factory = new Configuration().configure().buildSessionFactory();
-    } catch (Throwable ex) {
-      System.err.println("Failed to create sessionFactory object." + ex);
-      throw new ExceptionInInitializerError(ex);
+    factory = new Configuration().configure().buildSessionFactory();
+  }
+
+  public WorkExperiencesDao(boolean test) {
+    if (test) {
+      factory = new Configuration().configure("/hibernate_private_test.cfg.xml").buildSessionFactory();
     }
   }
 
@@ -40,16 +40,18 @@ public class WorkExperiencesDao {
    * @return Work Experience if found.
    */
   public WorkExperiences getWorkExperienceById(int workExperienceId) {
-    session = factory.openSession();
-    org.hibernate.query.Query query = session.createQuery(
-            "FROM WorkExperiences WHERE workExperienceId = :workExperienceId");
-    query.setParameter("workExperienceId", workExperienceId);
-    List<WorkExperiences> listOfWorkExperience = query.list();
-    if (listOfWorkExperience.size() == 0)
-      return null;
-    WorkExperiences workExperiences = listOfWorkExperience.get(0);
-    session.close();
-    return workExperiences;
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery(
+              "FROM WorkExperiences WHERE workExperienceId = :workExperienceId");
+      query.setParameter("workExperienceId", workExperienceId);
+      List<WorkExperiences> listOfWorkExperience = query.list();
+      if (listOfWorkExperience.isEmpty())
+        return null;
+      return listOfWorkExperience.get(0);
+    } finally {
+      session.close();
+    }
   }
 
   /**
@@ -59,13 +61,15 @@ public class WorkExperiencesDao {
    * @return List of Work Experiences.
    */
   public List<WorkExperiences> getWorkExperiencesByNeuId(String neuId) {
-    session = factory.openSession();
-    org.hibernate.query.Query query = session.createQuery(
-            "FROM WorkExperiences WHERE neuId = :neuId");
-    query.setParameter("neuId", neuId);
-    List<WorkExperiences> listOfWorkExperience = query.list();
-    session.close();
-    return listOfWorkExperience;
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery(
+              "FROM WorkExperiences WHERE neuId = :neuId");
+      query.setParameter("neuId", neuId);
+      return (List<WorkExperiences>) query.list();
+    } finally {
+      session.close();
+    }
   }
 
   /**
@@ -77,18 +81,15 @@ public class WorkExperiencesDao {
    * @return newly created WorkExperience if success. Otherwise, return null;
    */
   public WorkExperiences createWorkExperience(WorkExperiences workExperience) {
-    session = factory.openSession();
     Transaction tx = null;
     try {
+      session = factory.openSession();
       tx = session.beginTransaction();
-      System.out.println("saving work experience"
-              + " in Work Experiences table");
       session.save(workExperience);
       tx.commit();
     } catch (HibernateException e) {
-      System.out.println("HibernateException: " + e);
       if (tx != null) tx.rollback();
-      workExperience = null;
+      throw new HibernateException(e);
     } finally {
       session.close();
     }
@@ -103,31 +104,29 @@ public class WorkExperiencesDao {
    * @return true if work experience is deleted, false otherwise.
    */
   public boolean deleteWorkExperienceById(int workExperienceId) {
-    boolean deleted = false;
     WorkExperiences workExperiences = getWorkExperienceById(workExperienceId);
     if (workExperiences != null) {
       session = factory.openSession();
       Transaction tx = null;
       try {
         tx = session.beginTransaction();
-        System.out.println("Deleting work experience with id = " + workExperiences.getWorkExperienceId());
         session.delete(workExperiences);
         tx.commit();
-        deleted = true;
       } catch (HibernateException e) {
         if (tx != null) tx.rollback();
-        e.printStackTrace();
+        throw new HibernateException(e);
       } finally {
         session.close();
       }
+    } else {
+      throw new HibernateException("work experience id does not exist");
     }
 
-    return deleted;
+    return true;
   }
 
   public boolean deleteWorkExperienceByNeuId(String neuId) {
     Transaction tx = null;
-    boolean deleted = false;
 
     try {
       session = factory.openSession();
@@ -137,15 +136,14 @@ public class WorkExperiencesDao {
       query.setParameter("neuId", neuId);
       query.executeUpdate();
       tx.commit();
-      deleted = true;
     } catch (HibernateException e) {
-      if (tx!=null) tx.rollback();
-      e.printStackTrace();
+      if (tx != null) tx.rollback();
+      throw new HibernateException(e);
     } finally {
       session.close();
     }
 
-    return deleted;
+    return true;
   }
 
   /**
@@ -155,26 +153,23 @@ public class WorkExperiencesDao {
    * @return true if the work experience is updated, false otherwise.
    */
   public boolean updateWorkExperience(WorkExperiences workExperience) {
-    boolean updated = false;
-
     if (getWorkExperienceById(workExperience.getWorkExperienceId()) != null) {
       session = factory.openSession();
       Transaction tx = null;
       try {
         tx = session.beginTransaction();
-        System.out.println("updating work experience in Work Experiences table...");
         session.saveOrUpdate(workExperience);
         tx.commit();
-        updated = true;
       } catch (HibernateException e) {
-        System.out.println("HibernateException: " + e);
         if (tx != null) tx.rollback();
+        throw new HibernateException(e);
       } finally {
         session.close();
       }
+    } else {
+      throw new HibernateException("Work Experience ID does not exist");
     }
-
-    return updated;
+    return true;
   }
 
   public List<String> getTopTenEmployers(Campus campus, Integer year) {
@@ -196,19 +191,21 @@ public class WorkExperiencesDao {
     }
     hql.append("GROUP BY s.neuId ");
     hql.append("ORDER BY Count(DISTINCT s.neuId) DESC ");
-    session = factory.openSession();
-    org.hibernate.query.Query query = session.createQuery(
-            hql.toString());
-    query.setMaxResults(10);
-    if (campus != null) {
-      query.setParameter("campus", campus);
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery(
+              hql.toString());
+      query.setMaxResults(10);
+      if (campus != null) {
+        query.setParameter("campus", campus);
+      }
+      if (year != null) {
+        query.setParameter("year", year);
+      }
+      return (List<String>) query.list();
+    } finally {
+      session.close();
     }
-    if (year != null) {
-      query.setParameter("year", year);
-    }
-    List<String> listOfWorkExperience = query.list();
-    session.close();
-    return listOfWorkExperience;
   }
 
   public List<StudentCoopList> getStudentCoopCompanies(Campus campus, Integer year) {
@@ -229,31 +226,36 @@ public class WorkExperiencesDao {
       }
       hql.append("s.expectedLastYear = :year ");
     }
-    session = factory.openSession();
-    TypedQuery<StudentCoopList> query = session.createQuery(hql.toString(), StudentCoopList.class);
-    if (campus != null) {
-      query.setParameter("campus", campus);
+    try {
+      session = factory.openSession();
+      TypedQuery<StudentCoopList> query = session.createQuery(hql.toString(), StudentCoopList.class);
+      if (campus != null) {
+        query.setParameter("campus", campus);
+      }
+      if (year != null) {
+        query.setParameter("year", year);
+      }
+      List<StudentCoopList> studentCoopLists = query.getResultList();
+
+      for (StudentCoopList student : studentCoopLists) {
+        student.setCompanies(getCompaniesByNeuId(student.getNeuId()));
+      }
+      return studentCoopLists;
+    } finally {
+      session.close();
     }
-    if (year != null) {
-      query.setParameter("year", year);
-    }
-    List<StudentCoopList> studentCoopLists = query.getResultList();
-    session.close();
-    
-    for (StudentCoopList student : studentCoopLists) {
-      student.setCompanies(getCompaniesByNeuId(student.getNeuId()));
-    }
-    return studentCoopLists;
   }
-  
+
   private List<String> getCompaniesByNeuId(String neuId) {
-    session = factory.openSession();
-    org.hibernate.query.Query query = session.createQuery(
-            "SELECT we.companyName FROM WorkExperiences we WHERE we.neuId = :neuId");
-    query.setParameter("neuId", neuId);
-    List<String> companies = query.list();
-    session.close();
-    return companies;
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery(
+              "SELECT we.companyName FROM WorkExperiences we WHERE we.neuId = :neuId");
+      query.setParameter("neuId", neuId);
+      return (List<String>) query.list();
+    } finally {
+      session.close();
+    }
   }
 
   public List<StudentBasicInfo> getStudentsWorkingInACompany(Campus campus, Integer year, String companyName) {
@@ -268,18 +270,20 @@ public class WorkExperiencesDao {
     if (year != null) {
       hql.append("AND s.expectedLastYear = :year ");
     }
-    session = factory.openSession();
-    TypedQuery<StudentBasicInfo> query = session.createQuery(hql.toString(), StudentBasicInfo.class);
-    query.setParameter("companyName", companyName);
-    if (campus != null) {
-      query.setParameter("campus", campus);
+    try {
+      session = factory.openSession();
+      TypedQuery<StudentBasicInfo> query = session.createQuery(hql.toString(), StudentBasicInfo.class);
+      query.setParameter("companyName", companyName);
+      if (campus != null) {
+        query.setParameter("campus", campus);
+      }
+      if (year != null) {
+        query.setParameter("year", year);
+      }
+      return query.getResultList();
+    } finally {
+      session.close();
     }
-    if (year != null) {
-      query.setParameter("year", year);
-    }
-    List<StudentBasicInfo> listOfStudents = query.getResultList();
-    session.close();
-    return listOfStudents;
   }
 
   public List<StudentCoopList> getStudentCurrentCompanies(Campus campus, Integer year) {
@@ -295,30 +299,35 @@ public class WorkExperiencesDao {
       hql.append("AND ");
       hql.append("s.expectedLastYear = :year ");
     }
-    session = factory.openSession();
-    TypedQuery<StudentCoopList> query = session.createQuery(hql.toString(), StudentCoopList.class);
-    if (campus != null) {
-      query.setParameter("campus", campus);
-    }
-    if (year != null) {
-      query.setParameter("year", year);
-    }
-    List<StudentCoopList> studentCoopLists = query.getResultList();
-    session.close();
+    try {
+      session = factory.openSession();
+      TypedQuery<StudentCoopList> query = session.createQuery(hql.toString(), StudentCoopList.class);
+      if (campus != null) {
+        query.setParameter("campus", campus);
+      }
+      if (year != null) {
+        query.setParameter("year", year);
+      }
+      List<StudentCoopList> studentCoopLists = query.getResultList();
 
-    for (StudentCoopList student : studentCoopLists) {
-      student.setCompanies(getCurrentCompaniesByNeuId(student.getNeuId()));
+      for (StudentCoopList student : studentCoopLists) {
+        student.setCompanies(getCurrentCompaniesByNeuId(student.getNeuId()));
+      }
+      return studentCoopLists;
+    } finally {
+      session.close();
     }
-    return studentCoopLists;
   }
 
   private List<String> getCurrentCompaniesByNeuId(String neuId) {
-    session = factory.openSession();
-    org.hibernate.query.Query query = session.createQuery(
-            "SELECT we.companyName FROM WorkExperiences we WHERE we.currentJob = true AND we.neuId = :neuId");
-    query.setParameter("neuId", neuId);
-    List<String> companies = query.list();
-    session.close();
-    return companies;
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery(
+              "SELECT we.companyName FROM WorkExperiences we WHERE we.currentJob = true AND we.neuId = :neuId");
+      query.setParameter("neuId", neuId);
+      return (List<String>) query.list();
+    } finally {
+      session.close();
+    }
   }
 }

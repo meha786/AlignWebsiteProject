@@ -1,0 +1,168 @@
+package org.mehaexample.asdDemo.dao.alignprivate;
+
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+import org.mehaexample.asdDemo.model.alignprivate.Projects;
+
+import java.util.List;
+
+public class ProjectsDao {
+  private SessionFactory factory;
+  private Session session;
+
+  /**
+   * Default constructor.
+   * it will check the Hibernate.cfg.xml file and load it
+   * next it goes to all table files in the hibernate file and loads them.
+   */
+  public ProjectsDao() {
+    factory = new Configuration().configure().buildSessionFactory();
+  }
+
+  public ProjectsDao(boolean test) {
+    if (test) {
+      factory = new Configuration().configure("/hibernate_private_test.cfg.xml").buildSessionFactory();
+    }
+  }
+
+  /**
+   * Find a Project by the Project Id.
+   * This method searches the project from the private database.
+   *
+   * @param projectId project Id in private database.
+   * @return Project if found.
+   */
+  public Projects getProjectById(int projectId) {
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery(
+              "FROM Projects WHERE projectId = :projectId");
+      query.setParameter("projectId", projectId);
+      List<Projects> listOfProjects = query.list();
+      if (listOfProjects.isEmpty())
+        return null;
+      return listOfProjects.get(0);
+    } finally {
+      session.close();
+    }
+  }
+
+  /**
+   * Find project records of a student in private DB.
+   *
+   * @param neuId the neu Id of a student; not null.
+   * @return List of Projects.
+   */
+  public List<Projects> getProjectsByNeuId(String neuId) {
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery(
+              "FROM Projects WHERE neuId = :neuId");
+      query.setParameter("neuId", neuId);
+      return (List<Projects>) query.list();
+    } finally {
+      session.close();
+    }
+  }
+
+  /**
+   * Create a project in the private database.
+   *
+   * @param project the project object to be created; not null.
+   * @return newly created project if success. Otherwise, return null;
+   */
+  public Projects createProject(Projects project) {
+    session = factory.openSession();
+    Transaction tx = null;
+    try {
+      tx = session.beginTransaction();
+      session.save(project);
+      tx.commit();
+    } catch (HibernateException e) {
+      if (tx != null) tx.rollback();
+      throw new HibernateException(e);
+    } finally {
+      session.close();
+    }
+
+    return project;
+  }
+
+  /**
+   * Delete a project in the private database.
+   *
+   * @param projectId the project Id to be deleted.
+   * @return true if project is deleted, false otherwise.
+   */
+  public boolean deleteProjectById(int projectId) {
+    Projects project = getProjectById(projectId);
+    if (project == null) {
+      throw new HibernateException("Project Id cannot be found.");
+    }
+    session = factory.openSession();
+    Transaction tx = null;
+    try {
+      tx = session.beginTransaction();
+      session.delete(project);
+      tx.commit();
+    } catch (HibernateException e) {
+      if (tx != null) tx.rollback();
+      throw new HibernateException(e);
+    } finally {
+      session.close();
+    }
+
+    return true;
+  }
+
+  public boolean deleteProjectsByNeuId(String neuId) {
+    Transaction tx = null;
+
+    try {
+      session = factory.openSession();
+      tx = session.beginTransaction();
+      org.hibernate.query.Query query = session.createQuery("DELETE FROM Projects " +
+              "WHERE neuId = :neuId ");
+      query.setParameter("neuId", neuId);
+      query.executeUpdate();
+      tx.commit();
+    } catch (HibernateException e) {
+      if (tx != null) tx.rollback();
+      throw new HibernateException(e);
+    } finally {
+      session.close();
+    }
+
+    return true;
+  }
+
+  /**
+   * Update a project in the private DB.
+   *
+   * @param project project object; not null.
+   * @return true if the project is updated, false otherwise.
+   */
+  public boolean updateProject(Projects project) {
+
+    if (getProjectById(project.getProjectId()) == null) {
+      throw new HibernateException("Project does not exist.");
+    }
+    session = factory.openSession();
+    Transaction tx = null;
+    try {
+      tx = session.beginTransaction();
+      session.saveOrUpdate(project);
+      tx.commit();
+    } catch (HibernateException e) {
+      if (tx != null) tx.rollback();
+      throw new HibernateException(e);
+    } finally {
+      session.close();
+    }
+
+    return true;
+  }
+}
