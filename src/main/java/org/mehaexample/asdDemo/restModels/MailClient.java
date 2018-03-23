@@ -1,4 +1,4 @@
-package org.mehaexample.asdDemo.model.alignprivate;
+package org.mehaexample.asdDemo.restModels;
 
 import java.util.*;
 import javax.mail.*;
@@ -27,7 +27,7 @@ public class MailClient
         };
         Session session = Session.getInstance(props, auth);
 
-        String resetLink = "http://localhost:8080/alignWebsite/webapi/admin-facing/password-reset";
+        String resetLink = "http://localhost:8080/alignWebsite/webapi/create-password-link";
         sendEmail(session, toEmail,"Password Reset Email Northeastern Account", 
         		"Your Registration key is: " + registrationKey + "and reset link is " + resetLink);
 
@@ -53,7 +53,7 @@ public class MailClient
         };
         Session session = Session.getInstance(props, auth);
 
-        String resetLink = "http://localhost:8080/alignWebsite/webapi/registration";
+        String resetLink = "http://localhost:8080/alignWebsite/webapi/registration-link";
         sendEmail(session, toEmail,"Registration Email Northeastern Account", 
         		"Your Registration key is: " + registrationKey + "and Registration link is " + resetLink);
 

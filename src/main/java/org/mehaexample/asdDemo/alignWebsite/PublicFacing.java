@@ -24,6 +24,7 @@ import org.mehaexample.asdDemo.model.alignpublic.TopCoops;
 import org.mehaexample.asdDemo.model.alignpublic.TopGradYears;
 import org.mehaexample.asdDemo.model.alignpublic.TopUndergradDegrees;
 import org.mehaexample.asdDemo.model.alignpublic.TopUndergradSchools;
+import org.mehaexample.asdDemo.restModels.TopUnderGradSchools;
 
 @Path("public-facing")
 public class PublicFacing {
@@ -40,21 +41,48 @@ public class PublicFacing {
 	 * @param search
 	 * @return List of n top undergraduate schools
 	 */
+	
+	@POST
+	@Path("top-undergradschools2")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getUndergradSchools2(TopUnderGradSchools topUnderGradSchools) throws SQLException{
+		
+		List<TopUndergradSchools> undergrad = new ArrayList();
+		int number = topUnderGradSchools.getNumber();
+		System.out.println("number= "+number);
+
+		undergrad = undergraduatesPublicDao.getTopUndergradSchools(number);
+		JSONArray resultArray = new JSONArray();
+		for(TopUndergradSchools ungrad : undergrad) {
+			resultArray.put(ungrad);
+	    }
+		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
+	}
+
 	@POST
 	@Path("top-undergradschools")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getUndergradSchools(String para) throws SQLException{
+		System.out.println("par= "+para);
+
 		JSONObject jsonObj = new JSONObject(para);
 		List<TopUndergradSchools> undergrad = new ArrayList();
 		int number = 10;
 		if (!jsonObj.isNull("number")){
 			try{
-				number = (int) jsonObj.get("number");
+				System.out.println("yo= "+number);
+
+				number = (int) jsonObj.getInt("number");
+				System.out.println("noooo= "+number);
+
 			} catch(Exception e) {
-				return Response.status(Response.Status.BAD_REQUEST).entity("Bad Request").build();
+				return Response.status(Response.Status.BAD_REQUEST).entity("Bad Request" + e).build();
 			}
 		}
+		
+		System.out.println("nums= "+number);
 		undergrad = undergraduatesPublicDao.getTopUndergradSchools(number);
 		JSONArray resultArray = new JSONArray();
 		for(TopUndergradSchools ungrad : undergrad) {

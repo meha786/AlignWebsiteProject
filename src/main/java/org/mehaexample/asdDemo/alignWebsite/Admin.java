@@ -29,13 +29,14 @@ import org.mehaexample.asdDemo.enums.Campus;
 import org.mehaexample.asdDemo.model.alignadmin.AdminLogins;
 import org.mehaexample.asdDemo.model.alignadmin.ElectivesAdmin;
 import org.mehaexample.asdDemo.model.alignadmin.GenderRatio;
-import org.mehaexample.asdDemo.model.alignadmin.PasswordChangeObject;
-import org.mehaexample.asdDemo.model.alignprivate.MailClient;
 import org.mehaexample.asdDemo.model.alignprivate.StudentBasicInfo;
 import org.mehaexample.asdDemo.model.alignprivate.StudentCoopList;
 import org.mehaexample.asdDemo.model.alignprivate.StudentLogins;
 import org.mehaexample.asdDemo.model.alignprivate.Students;
 import org.mehaexample.asdDemo.model.alignprivate.WorkExperiences;
+import org.mehaexample.asdDemo.restModels.MailClient;
+import org.mehaexample.asdDemo.restModels.PasswordChangeObject;
+import org.mehaexample.asdDemo.restModels.PasswordCreateObject;
 
 @Path("admin-facing")
 public class Admin{
@@ -273,7 +274,7 @@ public class Admin{
 	    }
 		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
 	}
-	
+
 	
 	/**
      * This is the function to get the top 10 electives.
@@ -382,6 +383,8 @@ public class Admin{
 	
 	
 	
+	//====================================================================================
+
 	/**
 	 * This is a function for retrieving the students working in a given company
 	 * 
@@ -503,7 +506,7 @@ public class Admin{
 	/**
 	 * This is a function to change an existing admin's password
 	 * 
-	 * http://localhost:8080/alignWebsite/webapi/admin-facing/password-change
+	 * http://localhost:8080/alignWebsite/webapi/password-changes
 	 * @param passwordChangeObject
 	 * @return 200 if password changed successfully else return 404
 	 */
@@ -517,10 +520,8 @@ public class Admin{
 
 		if(adminLogins == null){
 			return Response.status(Response.Status.NOT_FOUND).
-					entity("Email doesn't exist: " + passwordChangeObject.getEmail()).build();
+					entity("Email doesn't exist: Invalid Email" + passwordChangeObject.getEmail()).build();
 		}
-
-		System.out.println("yo " + passwordChangeObject.getOldPassword() + adminLogins.getAdminPassword() );
 
 		if(adminLogins.getAdminPassword().equals(passwordChangeObject.getOldPassword())){
 			adminLogins.setAdminPassword(passwordChangeObject.getNewPassword());
@@ -530,7 +531,7 @@ public class Admin{
 					entity("Password Changed Succesfully!" ).build();
 		}else{
 			return Response.status(Response.Status.BAD_REQUEST).
-					entity("Incorrect Password: ").build();
+					entity("Password Entered was Incorrect: ").build();
 		}
 	}
 
@@ -544,9 +545,9 @@ public class Admin{
 	@Path("/password-reset")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response sendEmailForPasswordResetAdmin(String jsonInput){
+	public Response sendEmailForPasswordResetAdmin(String adminEmailInput){
 
-		JSONObject jsonObj = new JSONObject(jsonInput);
+		JSONObject jsonObj = new JSONObject(adminEmailInput);
 
 		if (jsonObj.isNull("email")){
 			return Response.status(Response.Status.BAD_REQUEST).
@@ -572,12 +573,12 @@ public class Admin{
 			return Response.status(Response.Status.OK).
 					entity("Password Reset link sent succesfully!" ).build(); 	
 		}
-
 	}
 
 	private String createRegistrationKey() {
 
-		//make it 6 digit?
 		return UUID.randomUUID().toString();
 	}	
+	
+	
 }

@@ -15,12 +15,15 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.json.JSONObject;
 import org.mehaexample.asdDemo.dao.alignprivate.StudentLoginsDao;
 import org.mehaexample.asdDemo.dao.alignprivate.StudentsDao;
 import org.mehaexample.asdDemo.model.alignadmin.AdminLogins;
-import org.mehaexample.asdDemo.model.alignprivate.MailClient;
 import org.mehaexample.asdDemo.model.alignprivate.StudentLogins;
 import org.mehaexample.asdDemo.model.alignprivate.Students;
+import org.mehaexample.asdDemo.restModels.MailClient;
+import org.mehaexample.asdDemo.restModels.PasswordChangeObject;
+import org.mehaexample.asdDemo.restModels.PasswordCreateObject;
 
 @Path("student-facing")
 public class StudentResource {
@@ -62,7 +65,7 @@ public class StudentResource {
 		Students studentRecord = studentDao.getStudentRecord(nuid);
 		return studentRecord;
 	}
-	
+
 	/**
 	 * Delete a student
 	 * 
@@ -85,7 +88,7 @@ public class StudentResource {
 			System.out.println("This nuid doesn't exist");
 		}
 	}
-	
+
 	/**
 	 * Fetch the student details by email id
 	 * 
@@ -102,22 +105,22 @@ public class StudentResource {
 		return studentRecord; 
 	}
 
-/**------------------------------------------------------------------------------------------------*/
+	/**------------------------------------------------------------------------------------------------*/
 
-//	//  webapi/student-facing/students/change-password/{NUID}
-//	@POST
-//	@Path("/{changePassword}")
-//	@Consumes(MediaType.APPLICATION_JSON)
-//	public boolean chnagePassword(PasswordChangeModel passwordModel){
-//		boolean exists = studentDao.ifEmailExists(passwordModel.getEmail());
-//		
-////		if(passwordDao.getOldPassword(passwordModel.getEmail()).equals(passwordModel.getOldPwd())) {
-////			passwordDao.updatePassword(passwordModel);
-////		}
-//		
-//		return true;
-//	}
-	
+	//	//  webapi/student-facing/students/change-password/{NUID}
+	//	@POST
+	//	@Path("/{changePassword}")
+	//	@Consumes(MediaType.APPLICATION_JSON)
+	//	public boolean chnagePassword(PasswordChangeModel passwordModel){
+	//		boolean exists = studentDao.ifEmailExists(passwordModel.getEmail());
+	//		
+	////		if(passwordDao.getOldPassword(passwordModel.getEmail()).equals(passwordModel.getOldPwd())) {
+	////			passwordDao.updatePassword(passwordModel);
+	////		}
+	//		
+	//		return true;
+	//	}
+
 	// webapi/student-facing/students/reset-password/{NUID}
 	@POST
 	@Path("/{resetPassword}")
@@ -127,7 +130,7 @@ public class StudentResource {
 		// get the email of student from db
 		// send an email with the link
 	}
-	
+
 	//  webapi/student-facing/students/registration
 	@POST
 	@Path("/{registerStudent}")
@@ -136,16 +139,16 @@ public class StudentResource {
 		// check if the student data is present in align db
 		// register the student.
 	}
-	
+
 	/**-----------------------------------------------------**/
-//	@POST 
-//	@Path("/{VerifyStudentLogin2FA}")
-//	@Consumes(MediaType.APPLICATION_JSON)
-//	public void VerifyStudentLogin2FA(){
-//		// check if password entered is correct from db
-//		// if it is correct, send him an email 
-//	}
-	
+	//	@POST 
+	//	@Path("/{VerifyStudentLogin2FA}")
+	//	@Consumes(MediaType.APPLICATION_JSON)
+	//	public void VerifyStudentLogin2FA(){
+	//		// check if password entered is correct from db
+	//		// if it is correct, send him an email 
+	//	}
+
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String saveStudentForm(Students student){
@@ -196,13 +199,13 @@ public class StudentResource {
 	@Path("/search/{firstName}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Students> getStudentRecordByFirstName(@PathParam("firstName") String firstName){
-		
+
 		if(firstName == null || firstName.isEmpty()){
 			return null;	
 		}
-		
+
 		List<Students> studentList = studentDao.searchStudentRecord(firstName);
-		
+
 		if(studentList.size() == 0){
 			return new ArrayList<>();
 		}
@@ -210,53 +213,155 @@ public class StudentResource {
 	}
 
 
-	// student opt-in/opt-out
-	@PUT
-	@Path("/opt-in/{nuid}")
-    @Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-    public void updateStudentOptIn(@PathParam("nuid") String nuid , Students student) {
-		System.out.println("update opt-in field for nuid=" + nuid);
-    }	
-	
-	
-	// Send registration email
 	/**
+	 * Send registration email to the student only if he/she is present in the align database
 	 * 
+	 * http://localhost:8080/alignWebsite/webapi/student-facing/registration
 	 * @param adminEmail
 	 * @return
 	 */
 	@POST
-	@Path("/{email}/registration")
-    @Consumes(MediaType.APPLICATION_JSON)
+	@Path("/registration")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	// Send email to admin’s northeastern ID to reset the password.
-	public Response sendRegistrationEmail(@PathParam("email") String studentEmail){
-		
-		// check student record student table
-		//if he is registered?
-		StudentLogins studentLogin = studentLoginsDao.findStudentLoginsByEmail(studentEmail);
-		
-		if(studentLogin == null){
+	public Response sendRegistrationEmail(String studentEmailJson){
+
+		JSONObject jsonObj = new JSONObject(studentEmailJson);
+
+		if (jsonObj.isNull("email")){
+			return Response.status(Response.Status.BAD_REQUEST).
+					entity("Email Id can't be null").build();
+		}else{
+			String studentEmail = (String) jsonObj.get("email");
+
+			System.out.println("Student Email: " + studentEmail); 
+
+			// check if the student is already registered
+			StudentLogins studentLogin = studentLoginsDao.findStudentLoginsByEmail(studentEmail);
+
+			if(studentLogin == null){
+				// generate registration key 
+				String registrationKey = createRegistrationKey(); 
+
+				// after generation, send email
+				MailClient.sendRegistrationEmail(studentEmail, registrationKey);
+
+				return Response.status(Response.Status.OK).
+						entity("Registration link sent succesfully to " + studentEmail).build(); 
+
+			}else{
+				return Response.status(Response.Status.NOT_ACCEPTABLE).
+						entity("Student is Already Registered!" + studentEmail).build();
+			} 
+
+		}
+
+	}
+
+	/**
+	 * This is a function to change an existing students password
+	 * 
+	 * http://localhost:8080/alignWebsite/webapi/student-facing/password-change
+	 * @param passwordChangeObject
+	 * @return 200 if password changed successfully else return 404
+	 */
+	@POST
+	@Path("/password-change")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response changeUserPassword(PasswordChangeObject passwordChangeObject){
+
+		StudentLogins studentLogins = studentLoginsDao.findStudentLoginsByEmail(passwordChangeObject.getEmail());
+
+		if(studentLogins == null){
+			return Response.status(Response.Status.NOT_FOUND).
+					entity("This Email doesn't exist: " + passwordChangeObject.getEmail()).build();
+		}
+
+		if(studentLogins.getStudentPassword().equals(passwordChangeObject.getOldPassword())){
+			studentLogins.setStudentPassword(passwordChangeObject.getNewPassword());
+			studentLoginsDao.updateStudentLogin(studentLogins);
+
+			return Response.status(Response.Status.OK).
+					entity("Password Changed Succesfully!" ).build();
+		}else{
+			return Response.status(Response.Status.BAD_REQUEST).
+					entity("Incorrect Password: ").build();
+		}
+	}
+
+	/**
+	 * This function sends email to Student's northeastern ID to reset the password.
+	 * 
+	 * @param adminEmail
+	 * @return 200 if password changed successfully else return 404
+	 */
+	@POST
+	@Path("/password-reset")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response sendEmailForPasswordResetStudent(String jsonInput){
+
+		JSONObject jsonObj = new JSONObject(jsonInput);
+
+
+		if (jsonObj.isNull("email")){
+			return Response.status(Response.Status.BAD_REQUEST).
+					entity("Email Id can't be null").build();
+		}else{
+			String studentEmail = (String) jsonObj.get("email");
+
+			StudentLogins studentLogins = studentLoginsDao.findStudentLoginsByEmail(studentEmail);
+
+			// or invalid entry
+			if(studentLogins == null){
+				return Response.status(Response.Status.NOT_FOUND).
+						entity("Email doesn't exist: " + studentLogins).build();
+			}
+
 			// generate registration key 
 			String registrationKey = createRegistrationKey(); 
-			 
+
+			System.out.println("Registration key: " + registrationKey);
 			// after generation, send email
-			MailClient.sendRegistrationEmail(studentEmail, registrationKey);
-			
+			MailClient.sendPasswordResetEmail(studentEmail, registrationKey);
+
 			return Response.status(Response.Status.OK).
-					  entity("Registration link sent succesfully!" + studentEmail).build(); 
-			 
-		}else{
-			 return Response.status(Response.Status.NOT_ACCEPTABLE).
-					  entity("Student is Already Registered!" + studentEmail).build();
-		} 
+					entity("Password Reset link sent succesfully!" ).build(); 	
+		}
+
 	}
+
+//	/**
+//	 * This function creates the password and registers the student
+//	 * 
+//	 * @param passwordCreateObject
+//	 * @return 200 if password changed successfully else return 404
+//	 */
+//	@POST
+//	@Path("/create-password")
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public Response createPassword(PasswordCreateObject passwordCreateObject){
+//		String email = passwordCreateObject.getEmail();
+//		String password = passwordCreateObject.getPassword();
+//		String registrationKey = passwordCreateObject.getRegistrationKey();
+//		System.out.println(email + password + registrationKey); 
+//
+//		StudentLogins studentLogins = new StudentLogins();
+//		studentLogins.setEmail(email); 
+//		studentLogins.setStudentPassword(password); 
+//		studentLogins.setRegistrationKey(registrationKey);
+//		
+//		StudentLogins studentLogin = studentLoginsDao.createStudentLogin(studentLogins);
+//		
+//		return Response.status(Response.Status.OK).
+//				entity("Student registered successfully!" ).build(); 
+//	}
 
 	private String createRegistrationKey() {
 
 		return UUID.randomUUID().toString();
-	}
-	
-	
+	}	
 }

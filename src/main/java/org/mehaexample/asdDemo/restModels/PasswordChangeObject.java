@@ -1,4 +1,4 @@
-package org.mehaexample.asdDemo.model.alignadmin;
+package org.mehaexample.asdDemo.restModels;
 
 public class PasswordChangeObject {
 	 private String oldPassword; 
