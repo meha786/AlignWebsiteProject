@@ -213,9 +213,9 @@ public class Admin{
 		if (!jsonObj.isNull("campus")){
 			try{
 				campus = jsonObj.get("campus");
-				degrees = priorEducationsDao.getTopTenBachelors(Campus.valueOf(campus.toString().toUpperCase()));
+//				degrees = priorEducationsDao.getTopTenBachelors(Campus.valueOf(campus.toString().toUpperCase()));
 			} catch(Exception e){
-				degrees = priorEducationsDao.getTopTenBachelors(null);
+//				degrees = priorEducationsDao.getTopTenBachelors(null);
 			}
 		}
 		JSONArray resultArray = new JSONArray();
@@ -263,10 +263,10 @@ public class Admin{
 		} catch(Exception e){
 			year = -1;
 		}
-		if (year <0)
-			employers = workExperiencesDao.getTopTenEmployers(camp,null);
-		else
-			employers = workExperiencesDao.getTopTenEmployers(camp,year);
+//		if (year <0)
+//			employers = workExperiencesDao.getTopTenEmployers(camp,null);
+//		else
+//			employers = workExperiencesDao.getTopTenEmployers(camp,year);
 		JSONArray resultArray = new JSONArray();
 		for(String emp : employers) {
 			resultArray.put(emp);
@@ -313,10 +313,10 @@ public class Admin{
 		} catch(Exception e){
 			year = -1;
 		}
-		if (year <0)
-			electives = electivesDao.getTopTenElectives(camp,null);
-		else
-			electives = electivesDao.getTopTenElectives(camp,year);
+//		if (year <0)
+//			electives = electivesDao.getTopTenElectives(camp,null);
+//		else
+//			electives = electivesDao.getTopTenElectives(camp,year);
 		JSONArray resultArray = new JSONArray();
 		for(String ele : electives) {
 			resultArray.put(ele);

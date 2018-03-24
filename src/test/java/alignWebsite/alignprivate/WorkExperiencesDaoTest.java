@@ -12,6 +12,7 @@ import org.mehaexample.asdDemo.enums.DegreeCandidacy;
 import org.mehaexample.asdDemo.enums.EnrollmentStatus;
 import org.mehaexample.asdDemo.enums.Gender;
 import org.mehaexample.asdDemo.enums.Term;
+import org.mehaexample.asdDemo.model.alignadmin.TopEmployer;
 import org.mehaexample.asdDemo.model.alignprivate.StudentBasicInfo;
 import org.mehaexample.asdDemo.model.alignprivate.StudentCoopList;
 import org.mehaexample.asdDemo.model.alignprivate.Students;
@@ -179,7 +180,7 @@ public class WorkExperiencesDaoTest {
 
   @Test
   public void getTopTenEmployersTest() throws ParseException {
-    List<String> temp = workExperiencesDao.getTopTenEmployers(null, null);
+    List<TopEmployer> temp = workExperiencesDao.getTopTenEmployers(null, null);
     assertTrue(temp.size() == 1);
 
     WorkExperiences newWorkExperience = new WorkExperiences();

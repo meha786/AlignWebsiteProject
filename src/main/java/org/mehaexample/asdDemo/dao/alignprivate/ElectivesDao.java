@@ -5,8 +5,11 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.mehaexample.asdDemo.enums.Campus;
+import org.mehaexample.asdDemo.model.alignadmin.TopElective;
+import org.mehaexample.asdDemo.model.alignadmin.TopEmployer;
 import org.mehaexample.asdDemo.model.alignprivate.Electives;
 
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 public class ElectivesDao {
@@ -153,8 +156,9 @@ public class ElectivesDao {
     return true;
   }
 
-  public List<String> getTopTenElectives(Campus campus, Integer year) {
-    StringBuilder hql = new StringBuilder("SELECT e.courseId AS CourseId " +
+  public List<TopElective> getTopTenElectives(Campus campus, Integer year) {
+    StringBuilder hql = new StringBuilder("SELECT NEW org.mehaexample.asdDemo.model.alignadmin.TopElective( " +
+            "e.courseName, Count(*) ) " +
             "FROM Students s INNER JOIN Electives e " +
             "ON s.neuId = e.neuId ");
     boolean first = true;
@@ -170,12 +174,11 @@ public class ElectivesDao {
       }
       hql.append("s.expectedLastYear = :year ");
     }
-    hql.append("GROUP BY CourseId ");
+    hql.append("GROUP BY e.courseName ");
     hql.append("ORDER BY Count(*) DESC ");
     try {
       session = factory.openSession();
-      org.hibernate.query.Query query = session.createQuery(
-              hql.toString());
+      TypedQuery<TopElective> query = session.createQuery(hql.toString(), TopElective.class);
       query.setMaxResults(10);
       if (campus != null) {
         query.setParameter("campus", campus);
@@ -183,7 +186,7 @@ public class ElectivesDao {
       if (year != null) {
         query.setParameter("year", year);
       }
-      return (List<String>) query.list();
+      return query.getResultList();
     } finally {
       session.close();
     }

@@ -12,6 +12,8 @@ import org.mehaexample.asdDemo.enums.DegreeCandidacy;
 import org.mehaexample.asdDemo.enums.EnrollmentStatus;
 import org.mehaexample.asdDemo.enums.Gender;
 import org.mehaexample.asdDemo.enums.Term;
+import org.mehaexample.asdDemo.model.alignadmin.StudentBachelorInstitution;
+import org.mehaexample.asdDemo.model.alignadmin.TopBachelor;
 import org.mehaexample.asdDemo.model.alignprivate.PriorEducations;
 import org.mehaexample.asdDemo.model.alignprivate.Students;
 
@@ -69,9 +71,9 @@ public class PriorEducationsDaoTest {
 
   @Test
   public void getTopTenBachelors() throws ParseException {
-    List<String> temp = priorEducationsDao.getTopTenBachelors(null);
+    List<TopBachelor> temp = priorEducationsDao.getTopTenBachelors(null, null);
     assertTrue(temp.size() == 1);
-    assertTrue(temp.get(0).equals("Computer Science"));
+    assertTrue(temp.get(0).getDegree().equals("Computer Science"));
 
     // add new prior education
     PriorEducations newPriorEducation = new PriorEducations();
@@ -85,21 +87,65 @@ public class PriorEducationsDaoTest {
     priorEducationsDao.createPriorEducation(newPriorEducation);
 
     // test using the newly created prior education
-    temp = priorEducationsDao.getTopTenBachelors(null);
+    temp = priorEducationsDao.getTopTenBachelors(null, null);
     assertTrue(temp.size() == 2);
-    assertTrue(temp.get(0).equals("Computer Science"));
-    assertTrue(temp.get(1).equals("farming"));
+    assertTrue(temp.get(0).getDegree().equals("Computer Science"));
+    assertTrue(temp.get(0).getTotalStudents() == 1);
+    assertTrue(temp.get(1).getDegree().equals("farming"));
+    assertTrue(temp.get(1).getTotalStudents() == 1);
 
-    temp = priorEducationsDao.getTopTenBachelors(Campus.BOSTON);
+    temp = priorEducationsDao.getTopTenBachelors(Campus.BOSTON, 2016);
     assertTrue(temp.size() == 1);
-    assertTrue(temp.get(0).equals("farming"));
+    assertTrue(temp.get(0).getDegree().equals("farming"));
 
-    temp = priorEducationsDao.getTopTenBachelors(Campus.SEATTLE);
+    temp = priorEducationsDao.getTopTenBachelors(Campus.SEATTLE, 2016);
     assertTrue(temp.size() == 1);
-    assertTrue(temp.get(0).equals("Computer Science"));
+    assertTrue(temp.get(0).getDegree().equals("Computer Science"));
 
-    temp = priorEducationsDao.getTopTenBachelors(Campus.CHARLOTTE);
+    temp = priorEducationsDao.getTopTenBachelors(Campus.SEATTLE, 2000);
+    assertTrue(temp.size() == 0);
+
+    temp = priorEducationsDao.getTopTenBachelors(Campus.CHARLOTTE, 2016);
     assertTrue(temp.isEmpty());
+
+    // delete new prior education
+    priorEducationsDao.deletePriorEducationById(
+            priorEducationsDao.getPriorEducationsByNeuId("111234567").get(0).getPriorEducationId());
+  }
+
+  @Test
+  public void getListOfBachelorInstitutionsTest() throws ParseException {
+    List<StudentBachelorInstitution> temp = priorEducationsDao.getListOfBachelorInstitutions(null, null);
+    assertTrue(temp.size() == 1);
+
+    // add new prior education
+    PriorEducations newPriorEducation = new PriorEducations();
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    newPriorEducation.setGraduationDate(dateFormat.parse("2015-01-01"));
+    newPriorEducation.setGpa(3.50f);
+    newPriorEducation.setDegreeCandidacy(DegreeCandidacy.BACHELORS);
+    newPriorEducation.setNeuId("111234567");
+    newPriorEducation.setMajorName("farming");
+    newPriorEducation.setInstitutionName("Harvard University");
+    priorEducationsDao.createPriorEducation(newPriorEducation);
+
+    // test using the newly created prior educationgetListOfBachelorInstitutions
+    temp = priorEducationsDao.getListOfBachelorInstitutions(null, null);
+    assertTrue(temp.size() == 2);
+    assertTrue(temp.get(0).getTotalStudents() == 1);
+    assertTrue(temp.get(1).getTotalStudents() == 1);
+
+    temp = priorEducationsDao.getListOfBachelorInstitutions(Campus.BOSTON, 2016);
+    assertTrue(temp.size() == 1);
+
+    temp = priorEducationsDao.getListOfBachelorInstitutions(Campus.SEATTLE, 2016);
+    assertTrue(temp.size() == 1);
+
+    temp = priorEducationsDao.getListOfBachelorInstitutions(Campus.SEATTLE, 2017);
+    assertTrue(temp.isEmpty());
+
+    temp = priorEducationsDao.getListOfBachelorInstitutions(Campus.SEATTLE, 2000);
+    assertTrue(temp.size() == 0);
 
     // delete new prior education
     priorEducationsDao.deletePriorEducationById(

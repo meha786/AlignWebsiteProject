@@ -5,8 +5,11 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.mehaexample.asdDemo.enums.Campus;
+import org.mehaexample.asdDemo.model.alignadmin.StudentBachelorInstitution;
+import org.mehaexample.asdDemo.model.alignadmin.TopBachelor;
 import org.mehaexample.asdDemo.model.alignprivate.PriorEducations;
 
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 public class PriorEducationsDao {
@@ -147,25 +150,60 @@ public class PriorEducationsDao {
     return true;
   }
 
-  public List<String> getTopTenBachelors(Campus campus) {
-    StringBuilder hql = new StringBuilder("SELECT pe.majorName AS MajorName " +
+  public List<TopBachelor> getTopTenBachelors(Campus campus, Integer year) {
+    StringBuilder hql = new StringBuilder("SELECT NEW org.mehaexample.asdDemo.model.alignadmin.TopBachelor( " +
+            "pe.majorName, Count(*) ) " +
             "FROM Students s INNER JOIN PriorEducations pe " +
             "ON s.neuId = pe.neuId " +
             "WHERE pe.degreeCandidacy = 'BACHELORS' ");
     if (campus != null) {
       hql.append("AND s.campus = :campus ");
     }
-    hql.append("GROUP BY MajorName ");
+    if (year != null) {
+      hql.append("AND s.expectedLastYear = :year ");
+    }
+    hql.append("GROUP BY pe.majorName ");
     hql.append("ORDER BY Count(*) DESC ");
     try {
       session = factory.openSession();
-      org.hibernate.query.Query query = session.createQuery(
-              hql.toString());
+      TypedQuery<TopBachelor> query = session.createQuery(hql.toString(), TopBachelor.class);
       query.setMaxResults(10);
       if (campus != null) {
         query.setParameter("campus", campus);
       }
-      return (List<String>) query.list();
+      if (year != null) {
+        query.setParameter("year", year);
+      }
+      return query.getResultList();
+    } finally {
+      session.close();
+    }
+  }
+
+  public List<StudentBachelorInstitution> getListOfBachelorInstitutions(Campus campus, Integer year) {
+    StringBuilder hql = new StringBuilder("SELECT NEW org.mehaexample.asdDemo.model.alignadmin.StudentBachelorInstitution( " +
+            "pe.institutionName, Count(*) ) " +
+            "FROM Students s INNER JOIN PriorEducations pe " +
+            "ON s.neuId = pe.neuId " +
+            "WHERE pe.degreeCandidacy = 'BACHELORS' ");
+    if (campus != null) {
+      hql.append("AND s.campus = :campus ");
+    }
+    if (year != null) {
+      hql.append("AND s.expectedLastYear = :year ");
+    }
+    hql.append("GROUP BY pe.institutionName ");
+    hql.append("ORDER BY Count(*) DESC ");
+    try {
+      session = factory.openSession();
+      TypedQuery<StudentBachelorInstitution> query = session.createQuery(hql.toString(), StudentBachelorInstitution.class);
+      if (campus != null) {
+        query.setParameter("campus", campus);
+      }
+      if (year != null) {
+        query.setParameter("year", year);
+      }
+      return query.getResultList();
     } finally {
       session.close();
     }
