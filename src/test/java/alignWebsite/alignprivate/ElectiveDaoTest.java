@@ -14,6 +14,7 @@ import org.mehaexample.asdDemo.enums.DegreeCandidacy;
 import org.mehaexample.asdDemo.enums.EnrollmentStatus;
 import org.mehaexample.asdDemo.enums.Gender;
 import org.mehaexample.asdDemo.enums.Term;
+import org.mehaexample.asdDemo.model.alignadmin.TopElective;
 import org.mehaexample.asdDemo.model.alignprivate.Courses;
 import org.mehaexample.asdDemo.model.alignprivate.Electives;
 import org.mehaexample.asdDemo.model.alignprivate.Students;
@@ -169,13 +170,14 @@ public class ElectiveDaoTest {
 
     Electives elective = new Electives();
     elective.setNeuId(newStudent.getNeuId());
+    elective.setCourseName(newCourse.getCourseName());
     elective.setCourseId(newCourse.getCourseId());
     elective.setCourseTerm(Term.SPRING);
     elective.setCourseYear(2017);
 
     Electives electivesNew = electivesDao.addElective(elective);
 
-    List<String> temp = electivesDao.getTopTenElectives(Campus.SEATTLE, 2016);
+    List<TopElective> temp = electivesDao.getTopTenElectives(Campus.SEATTLE, 2016);
     Assert.assertTrue(temp.size() == 1);
     temp = electivesDao.getTopTenElectives(null, 2016);
     Assert.assertTrue(temp.size() == 1);
@@ -192,6 +194,7 @@ public class ElectiveDaoTest {
 
     Electives elective2 = new Electives();
     elective2.setNeuId(newStudent.getNeuId());
+    elective.setCourseName(newCourse2.getCourseName());
     elective2.setCourseId(newCourse2.getCourseId());
     elective2.setCourseTerm(Term.SPRING);
     elective2.setCourseYear(2017);
@@ -199,8 +202,10 @@ public class ElectiveDaoTest {
 
     temp = electivesDao.getTopTenElectives(Campus.SEATTLE, 2016);
     Assert.assertTrue(temp.size() == 2);
+    temp = electivesDao.getTopTenElectives(Campus.SEATTLE, 2017);
+    Assert.assertTrue(temp.isEmpty());
     temp = electivesDao.getTopTenElectives(Campus.BOSTON, 2017);
-    Assert.assertTrue(temp.size() == 0);
+    Assert.assertTrue(temp.isEmpty());
 
     electivesDao.deleteElectiveRecord(electivesNew2.getElectiveId());
     electivesDao.deleteElectiveRecord(electivesNew.getElectiveId());
