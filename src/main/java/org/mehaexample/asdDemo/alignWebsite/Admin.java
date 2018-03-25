@@ -38,6 +38,7 @@ import org.mehaexample.asdDemo.restModels.MailClient;
 import org.mehaexample.asdDemo.restModels.PasswordChangeObject;
 import org.mehaexample.asdDemo.restModels.PasswordCreateObject;
 import org.mehaexample.asdDemo.restModels.StudentsInCompany;
+import org.mehaexample.asdDemo.restModels.StudentsWorkingFullTime;
 import org.mehaexample.asdDemo.utils.StringUtils;
 
 @Path("admin-facing")
@@ -394,10 +395,9 @@ public class Admin{
 	 * @param params
 	 * @return
 	 */
-
 	@POST
-	@Path("/analytics/company2")
-	public Response getStudentsWorkingForACompany2(StudentsInCompany studentsInCompany){
+	@Path("/analytics/company")
+	public Response getStudentsWorkingForACompany(StudentsInCompany studentsInCompany){
 
 		List<StudentBasicInfo> studentsList = new ArrayList();
 
@@ -418,82 +418,9 @@ public class Admin{
 		else
 			studentsList = workExperiencesDao.getStudentsWorkingInACompany(campusEnum, year, company);
 
-
-		JSONArray resultArray = new JSONArray();
-
-		for(StudentBasicInfo st : studentsList) {
-			JSONObject studentJson = new JSONObject();
-			JSONObject eachStudentJson = new JSONObject(st);
-			java.util.Set<String> keys = eachStudentJson.keySet();
-			for(int i=0;i<keys.toArray().length; i++){
-				studentJson.put(((String) keys.toArray()[i]).toLowerCase(), eachStudentJson.get((String) keys.toArray()[i]));
-			}
-			resultArray.put(studentJson);
-		}
-
 		return Response.status(Response.Status.OK).
-				entity(resultArray.toString()).build();  
-		
+				entity(studentsList).build();  	
 	}
-
-	@POST
-	@Path("/analytics/company")
-	public Response getStudentsWorkingForACompany(String params){
-		JSONObject jsonObj = new JSONObject(params);
-		Object campus = null;
-		Campus camp;
-		int year;
-		String company = null;
-		List<StudentBasicInfo> studentsList = new ArrayList();
-
-		System.out.println("prms = " + params);
-
-		// company can't have null value
-		if (!jsonObj.isNull("company")){
-			try {
-				campus = jsonObj.get("campus");
-				camp = Campus.valueOf(campus.toString().toUpperCase());
-			} catch(Exception e){
-				camp = null;
-			}
-			try{
-				if (!jsonObj.isNull("year")){
-					year = Integer.valueOf(jsonObj.get("year").toString());
-				} else {
-					year = -1;
-				}
-			} catch(Exception e){
-				year = -1;
-			}
-
-			company = (String) jsonObj.get("company");
-
-			if (year <0)
-				studentsList = workExperiencesDao.getStudentsWorkingInACompany(camp, null, company);
-			else
-				studentsList = workExperiencesDao.getStudentsWorkingInACompany(camp, year, company);
-
-		}else{
-			return Response.status(Response.Status.BAD_REQUEST).
-					entity("Company can't be null: ").build();
-		}
-
-		JSONArray resultArray = new JSONArray();
-
-		for(StudentBasicInfo st : studentsList) {
-			JSONObject studentJson = new JSONObject();
-			JSONObject eachStudentJson = new JSONObject(st);
-			java.util.Set<String> keys = eachStudentJson.keySet();
-			for(int i=0;i<keys.toArray().length; i++){
-				studentJson.put(((String) keys.toArray()[i]).toLowerCase(), eachStudentJson.get((String) keys.toArray()[i]));
-			}
-			resultArray.put(studentJson);
-		}
-
-		return Response.status(Response.Status.OK).
-				entity(resultArray.toString()).build();  
-	}
-
 
 	/**
 	 * This is a function for retrieving the students working as full time
@@ -504,49 +431,35 @@ public class Admin{
 	 */
 	@POST
 	@Path("/analytics/working")
-	public Response getStudentWorkingFullTime(String params){
-		JSONObject jsonObj = new JSONObject(params);
-		Object campus = null;
-		Campus camp;
-		int year;
+	public Response getStudentWorkingFullTime(StudentsWorkingFullTime studentsWorkingFullTime){
+		
 		List<StudentCoopList> studentsList = new ArrayList();
-
-		// company can't have null value
-		try {
-			campus = jsonObj.get("campus");
-			camp = Campus.valueOf(campus.toString().toUpperCase());
-		} catch(Exception e){
-			camp = null;
-		}
-		try{
-			if (!jsonObj.isNull("year")){
-				year = Integer.valueOf(jsonObj.get("year").toString());
-			} else {
-				year = -1;
-			}
-		} catch(Exception e){
-			year = -1;
-		}
+				
+		Campus campus = studentsWorkingFullTime.getCampusAsEnum();
+		int year = studentsWorkingFullTime.getYear();
 
 		if (year <0)
-			studentsList = workExperiencesDao.getStudentCurrentCompanies(camp, null);
+			studentsList = workExperiencesDao.getStudentCurrentCompanies(campus, null);
 		else
-			studentsList = workExperiencesDao.getStudentCurrentCompanies(camp, year);
+			studentsList = workExperiencesDao.getStudentCurrentCompanies(campus, year);
 
-		JSONArray resultArray = new JSONArray();
+//		JSONArray resultArray = new JSONArray();
 
-		for(StudentCoopList st : studentsList) {
-			JSONObject studentJson = new JSONObject();
-			JSONObject eachStudentJson = new JSONObject(st);
-			java.util.Set<String> keys = eachStudentJson.keySet();
-			for(int i=0;i<keys.toArray().length; i++){
-				studentJson.put(((String) keys.toArray()[i]).toLowerCase(), eachStudentJson.get((String) keys.toArray()[i]));
-			}
-			resultArray.put(studentJson);
-		}
-
+//		for(StudentCoopList st : studentsList) {
+//			JSONObject studentJson = new JSONObject();
+//			JSONObject eachStudentJson = new JSONObject(st);
+//			java.util.Set<String> keys = eachStudentJson.keySet();
+//			for(int i=0;i<keys.toArray().length; i++){
+//				studentJson.put(((String) keys.toArray()[i]).toLowerCase(), eachStudentJson.get((String) keys.toArray()[i]));
+//			}
+//			resultArray.put(studentJson);
+//		}
+//
+//		return Response.status(Response.Status.OK).
+//				entity(resultArray.toString()).build();  
+		
 		return Response.status(Response.Status.OK).
-				entity(resultArray.toString()).build();  
+				entity(studentsList).build();
 	}
 
 	/**

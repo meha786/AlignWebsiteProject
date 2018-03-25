@@ -42,7 +42,6 @@ public class PublicFacing {
 	 * @param search
 	 * @return List of n top undergraduate schools
 	 */
-	
 	@POST
 	@Path("top-undergradschools2")
 	@Consumes(MediaType.APPLICATION_JSON)

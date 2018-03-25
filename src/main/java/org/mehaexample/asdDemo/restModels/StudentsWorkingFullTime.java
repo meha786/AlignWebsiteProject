@@ -3,19 +3,17 @@ package org.mehaexample.asdDemo.restModels;
 import org.mehaexample.asdDemo.enums.Campus;
 import org.mehaexample.asdDemo.utils.StringUtils;
 
-public class StudentsInCompany {
+public class StudentsWorkingFullTime {
 	private String campus;
 	private int year;
-	private String company;
 	
-	public StudentsInCompany(String campus, int year, String company) {
+	public StudentsWorkingFullTime(String campus, int year) {
 		super();
 		this.campus = campus;
 		this.year = year;
-		this.company = company;
 	}
 
-	public StudentsInCompany() {
+	public StudentsWorkingFullTime() {
 		super();
 	}
 	
@@ -41,13 +39,5 @@ public class StudentsInCompany {
 
 	public void setYear(int year) {
 		this.year = year;
-	}
-
-	public String getCompany() {
-		return company;
-	}
-
-	public void setCompany(String company) {
-		this.company = company;
 	}
 }
