@@ -1,21 +1,29 @@
 package org.mehaexample.asdDemo.alignWebsite;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.jose4j.jwe.ContentEncryptionAlgorithmIdentifiers;
+import org.jose4j.jwe.JsonWebEncryption;
+import org.jose4j.jwe.KeyManagementAlgorithmIdentifiers;
+import org.jose4j.keys.AesKey;
 import org.json.JSONObject;
 import org.mehaexample.asdDemo.dao.alignadmin.AdminLoginsDao;
 import org.mehaexample.asdDemo.dao.alignadmin.ElectivesAdminDao;
@@ -28,6 +36,7 @@ import org.mehaexample.asdDemo.enums.Campus;
 import org.mehaexample.asdDemo.model.alignadmin.AdminLogins;
 import org.mehaexample.asdDemo.model.alignadmin.ElectivesAdmin;
 import org.mehaexample.asdDemo.model.alignadmin.GenderRatio;
+import org.mehaexample.asdDemo.model.alignadmin.LoginObject;
 import org.mehaexample.asdDemo.model.alignadmin.PasswordChangeObject;
 import org.mehaexample.asdDemo.model.alignadmin.TopBachelor;
 import org.mehaexample.asdDemo.model.alignadmin.TopElective;
@@ -39,6 +48,7 @@ import org.mehaexample.asdDemo.model.alignprivate.StudentCoopList;
 import org.mehaexample.asdDemo.model.alignprivate.StudentLogins;
 import org.mehaexample.asdDemo.model.alignprivate.Students;
 import org.mehaexample.asdDemo.model.alignprivate.WorkExperiences;
+
 
 @Path("admin-facing")
 public class Admin{
@@ -420,6 +430,56 @@ public class Admin{
 					entity("Incorrect Password: ").build();
 		}
 	}
+	
+	/**
+	 * This is a function to change an existing admin's password
+	 * 
+	 * http://localhost:8080/alignWebsite/webapi/admin-facing/login
+	 * @param passwordChangeObject
+	 * @return 200 + token if logged in successfully else return 404
+	 */
+	@POST
+	@Path("/login")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loginUser(@Context HttpServletRequest request,LoginObject loginInput){
+		AdminLogins adminLogins = adminLoginsDao.findAdminLoginsByEmail(loginInput.getUsername());
+		if(adminLogins == null){
+			return Response.status(Response.Status.NOT_FOUND).
+					entity("User doesn't exist: " + loginInput.getUsername()).build();
+		}
+		if(adminLogins.getAdminPassword().equals(loginInput.getPassword())){
+			try {
+				JSONObject jsonObj = new JSONObject();
+				Timestamp keyExpiration = new Timestamp(System.currentTimeMillis()+15*60*1000);
+				adminLogins.setKeyExpiration(keyExpiration);
+				adminLoginsDao.updateAdminLogin(adminLogins);
+				String ip = request.getRemoteAddr();
+				JsonWebEncryption senderJwe = new JsonWebEncryption();
+				senderJwe.setPlaintext(adminLogins.getEmail()+"*#*"+ip+"*#*"+keyExpiration.toString());
+				senderJwe.setAlgorithmHeaderValue(KeyManagementAlgorithmIdentifiers.DIRECT);
+				senderJwe.setEncryptionMethodHeaderParameter(ContentEncryptionAlgorithmIdentifiers.AES_128_CBC_HMAC_SHA_256);
+				
+				String secretKey = ip+"sEcR3t_nsA-K3y";
+				byte[] key = secretKey.getBytes();
+				key = Arrays.copyOf(key, 32);
+				AesKey keyMain = new AesKey(key);
+				senderJwe.setKey(keyMain);
+				String compactSerialization = senderJwe.getCompactSerialization();
+				jsonObj.put("token", compactSerialization);
+				
+				return Response.status(Response.Status.OK).
+						entity(jsonObj.toString()).build();
+			} catch (Exception e) {
+				e.printStackTrace();
+				return Response.status(Response.Status.INTERNAL_SERVER_ERROR).
+						entity("Internal Server Error").build();
+			}
+		}else{
+			return Response.status(Response.Status.UNAUTHORIZED).
+					entity("Incorrect Password").build();
+		}
+	}
 
 	/**
 	 * This function sends email to admin’s northeastern ID to reset the password.
@@ -463,7 +523,6 @@ public class Admin{
 	}
 
 	private String createRegistrationKey() {
-
 		//make it 6 digit?
 		return UUID.randomUUID().toString();
 	}	
