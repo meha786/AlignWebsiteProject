@@ -17,6 +17,11 @@ public class SingleValueAggregatedDataDao {
   private static final String TOTAL_STUDENTS_IN_SEATTLE = "TotalStudentsInSeattle";
   private static final String TOTAL_STUDENTS_IN_SILICON_VALLEY = "TotalStudentsInSiliconValley";
   private static final String TOTAL_STUDENTS_IN_CHARLOTTE = "TotalStudentsInCharlotte";
+  private static final String TOTAL_MALE_STUDENTS = "TotalMaleStudents";
+  private static final String TOTAL_FEMALE_STUDENTS = "TotalFemaleStudents";
+  private static final String TOTAL_FULL_TIME_STUDENTS = "TotalFullTimeStudents";
+  private static final String TOTAL_PART_TIME_STUDENTS = "TotalPartTimeStudents";
+  private static final String TOTAL_STUDENTS_WITH_SCHOLARSHIP = "TotalStudentsWithScholarship";
 
   private SessionFactory factory;
   private Session session;
@@ -37,6 +42,26 @@ public class SingleValueAggregatedDataDao {
 
   public int getTotalStudents() {
     return findValueByKey(TOTAL_STUDENTS);
+  }
+
+  public int getTotalStudentsWithScholarship() {
+    return findValueByKey(TOTAL_STUDENTS_WITH_SCHOLARSHIP);
+  }
+
+  public int getTotalMaleStudents() {
+    return findValueByKey(TOTAL_MALE_STUDENTS);
+  }
+
+  public int getTotalFemaleStudents() {
+    return findValueByKey(TOTAL_FEMALE_STUDENTS);
+  }
+
+  public int getTotalFullTimeStudents() {
+    return findValueByKey(TOTAL_FULL_TIME_STUDENTS);
+  }
+
+  public int getTotalPartTimeStudents() {
+    return findValueByKey(TOTAL_PART_TIME_STUDENTS);
   }
 
   public int getTotalDroppedOutStudents() {
@@ -81,6 +106,26 @@ public class SingleValueAggregatedDataDao {
 
   public SingleValueAggregatedData findTotalStudentsData() {
     return findDataByKey(TOTAL_STUDENTS);
+  }
+
+  public SingleValueAggregatedData findTotalStudentsWithScholarshipData() {
+    return findDataByKey(TOTAL_STUDENTS_WITH_SCHOLARSHIP);
+  }
+
+  public SingleValueAggregatedData findTotalMaleStudentsData() {
+    return findDataByKey(TOTAL_MALE_STUDENTS);
+  }
+
+  public SingleValueAggregatedData findTotalFemaleStudentsData() {
+    return findDataByKey(TOTAL_FEMALE_STUDENTS);
+  }
+
+  public SingleValueAggregatedData findTotalFullTimeStudentsData() {
+    return findDataByKey(TOTAL_FULL_TIME_STUDENTS);
+  }
+
+  public SingleValueAggregatedData findTotalPartTimeStudentsData() {
+    return findDataByKey(TOTAL_PART_TIME_STUDENTS);
   }
 
   public SingleValueAggregatedData findTotalDroppedOutStudentsData() {

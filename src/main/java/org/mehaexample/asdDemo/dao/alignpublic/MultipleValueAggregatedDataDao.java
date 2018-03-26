@@ -4,13 +4,18 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.mehaexample.asdDemo.model.alignpublic.DataCount;
 import org.mehaexample.asdDemo.model.alignpublic.MultipleValueAggregatedData;
 
 import java.util.List;
 
 public class MultipleValueAggregatedDataDao {
   public static final String LIST_OF_EMPLOYERS = "ListOfEmployers";
+  public static final String LIST_OF_RACES = "ListOfRaces";
   public static final String LIST_OF_BACHELOR_DEGREES = "ListOfBachelorDegrees";
+  public static final String LIST_OF_STUDENTS_STATES = "ListOfStudentsStates";
+  public static final String LIST_OF_UNDERGRADUATE_MAJORS = "ListOfUndergraduateMajors";
+  public static final String LIST_OF_HIGHEST_DEGREES = "ListOfHighestDegrees";
 
   private SessionFactory factory;
   private Session session;
@@ -67,12 +72,60 @@ public class MultipleValueAggregatedDataDao {
     }
   }
 
+  public List<DataCount> getListOfRacesCount() {
+    return findDataCountByTerm(LIST_OF_RACES);
+  }
+
+  public List<DataCount> getListOfStudentsStatesCount() {
+    return findDataCountByTerm(LIST_OF_STUDENTS_STATES);
+  }
+
+  public List<DataCount> getListOfUndergraduateMajorsCount() {
+    return findDataCountByTerm(LIST_OF_UNDERGRADUATE_MAJORS);
+  }
+
+  public List<DataCount> getListOfHighestDegreesCount() {
+    return findDataCountByTerm(LIST_OF_HIGHEST_DEGREES);
+  }
+
+  private List<DataCount> findDataCountByTerm(String analyticTerm) {
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery(
+              "SELECT NEW org.mehaexample.asdDemo.model.alignpublic.DataCount( " +
+                      "analyticKey, analyticValue ) " +
+                      "FROM MultipleValueAggregatedData " +
+                      "WHERE analyticTerm = :analyticTerm " +
+                      "ORDER BY analyticValue DESC ");
+      query.setParameter("analyticTerm", analyticTerm);
+      return (List<DataCount>) query.list();
+    } finally {
+      session.close();
+    }
+  }
+
   public boolean deleteListOfEmployers() {
     return deleteDataByTerm(LIST_OF_EMPLOYERS);
   }
 
   public boolean deleteListOfBachelorDegrees() {
     return deleteDataByTerm(LIST_OF_BACHELOR_DEGREES);
+  }
+
+  public boolean deleteListOfRacesCounts() {
+    return deleteDataByTerm(LIST_OF_RACES);
+  }
+
+  public boolean deleteListOfStudentsStatesCounts() {
+    return deleteDataByTerm(LIST_OF_STUDENTS_STATES);
+  }
+
+  public boolean deleteListOfUndergraduateMajorsCounts() {
+    return deleteDataByTerm(LIST_OF_UNDERGRADUATE_MAJORS);
+  }
+
+  public boolean deleteListOfHighestDegreesCounts() {
+    return deleteDataByTerm(LIST_OF_HIGHEST_DEGREES);
   }
 
   private List<MultipleValueAggregatedData> findDataByTerm(String analyticTerm) {
