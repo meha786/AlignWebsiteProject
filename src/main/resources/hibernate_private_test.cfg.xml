@@ -33,5 +33,6 @@
         <mapping resource="StudentLogins.hbm.xml" />
         <mapping resource="ExtraExperiences.hbm.xml" />
         <mapping resource="Projects.hbm.xml" />
+        <mapping resource="Privacies.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>
