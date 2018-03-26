@@ -24,11 +24,12 @@ import org.mehaexample.asdDemo.model.alignprivate.Students;
 import org.mehaexample.asdDemo.restModels.MailClient;
 import org.mehaexample.asdDemo.restModels.PasswordChangeObject;
 import org.mehaexample.asdDemo.restModels.PasswordCreateObject;
+import org.mehaexample.asdDemo.restModels.EmailToRegister;
 
 @Path("student-facing")
-public class StudentResource {
-	StudentsDao studentDao = new StudentsDao();
-	StudentLoginsDao studentLoginsDao = new StudentLoginsDao(); 
+public class StudentFacing {
+	StudentsDao studentDao = new StudentsDao(true);
+	StudentLoginsDao studentLoginsDao = new StudentLoginsDao(true); 
 	/**
 	 * Method handling HTTP GET requests. The returned object will be sent
 	 * to the client as "APPLICATION_JSON" media type.
@@ -212,7 +213,59 @@ public class StudentResource {
 		return studentList; 
 	}
 
+	// ====================================================================================================================
 
+	/**
+	 * Send registration email to the student only if he/she is present in the align database
+	 * 
+	 * http://localhost:8080/alignWebsite/webapi/student-facing/registration
+	 * @param adminEmail
+	 * @return
+	 */
+	@POST
+	@Path("/registration2")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	// Send email to admin’s northeastern ID to reset the password.
+	public Response sendRegistrationEmail2(EmailToRegister emailToRegister){
+
+	String studentEmail = emailToRegister.getEmail();
+	
+		if (studentEmail == null){
+			return Response.status(Response.Status.BAD_REQUEST).
+					entity("Email Id can't be null").build();
+		}else{
+			// check if student exists in the student database
+			Students student = studentDao.getStudentRecordByEmailId(studentEmail);
+			
+			if(student == null){
+				return Response.status(Response.Status.BAD_REQUEST).
+						entity("Student should be an Align Student!").build();
+			}
+
+			// check if the student is already registered
+			StudentLogins studentLogin = studentLoginsDao.findStudentLoginsByEmail(studentEmail);
+
+			if(studentLogin == null){
+				// generate registration key 
+				String registrationKey = createRegistrationKey(); 
+
+				// after generation, send email
+				MailClient.sendRegistrationEmail(studentEmail, registrationKey);
+
+				return Response.status(Response.Status.OK).
+						entity("Registration link sent succesfully to " + studentEmail).build(); 
+
+			}else{
+				return Response.status(Response.Status.NOT_ACCEPTABLE).
+						entity("Student is Already Registered!" + studentEmail).build();
+			} 
+
+		}
+
+	}
+
+	
 	/**
 	 * Send registration email to the student only if he/she is present in the align database
 	 * 

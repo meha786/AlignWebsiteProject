@@ -32,7 +32,6 @@ import org.mehaexample.asdDemo.restModels.TopUnderGradSchools;
 
 @Path("public-facing")
 public class PublicFacing {
-
 	UndergraduatesPublicDao undergraduatesPublicDao = new UndergraduatesPublicDao(true);
 	WorkExperiencesPublicDao workExperiencesPublicDao = new WorkExperiencesPublicDao(true);
 	StudentsPublicDao studentsPublicDao = new StudentsPublicDao(true);
@@ -463,7 +462,7 @@ public class PublicFacing {
      * @return the list of student profiles matching the fields.
      */
 	@POST
-	@Path("students-criteria2")
+	@Path("students-search2")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response searchStudent2(StudentSerachCriteria studentSerachCriteria){
@@ -509,7 +508,7 @@ public class PublicFacing {
      * @return the list of student profiles matching the fields.
      */
 	@POST
-	@Path("students-criteria")
+	@Path("students-search")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response searchStudent(String search){

@@ -42,7 +42,7 @@ import org.mehaexample.asdDemo.restModels.StudentsWorkingFullTime;
 import org.mehaexample.asdDemo.utils.StringUtils;
 
 @Path("admin-facing")
-public class Admin{
+public class AdminFacing{
 
 	// DAO methods
 	StudentsDao studentDao = new StudentsDao(true);
@@ -462,6 +462,8 @@ public class Admin{
 				entity(studentsList).build();
 	}
 
+	// =============================================================================================================
+	
 	/**
 	 * This is a function to change an existing admin's password
 	 * 
