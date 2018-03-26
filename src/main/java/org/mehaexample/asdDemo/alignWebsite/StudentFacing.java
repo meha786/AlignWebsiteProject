@@ -26,6 +26,7 @@ import org.mehaexample.asdDemo.restModels.MailClient;
 import org.mehaexample.asdDemo.restModels.PasswordChangeObject;
 import org.mehaexample.asdDemo.restModels.PasswordCreateObject;
 import org.mehaexample.asdDemo.restModels.PasswordResetObject;
+import org.mehaexample.asdDemo.utils.StringUtils;
 import org.mehaexample.asdDemo.restModels.EmailToRegister;
 
 @Path("student-facing")
@@ -289,8 +290,14 @@ public class StudentFacing {
 					entity("This Email doesn't exist: " + passwordChangeObject.getEmail()).build();
 		}
 
-		if(studentLogins.getStudentPassword().equals(passwordChangeObject.getOldPassword())){
-			studentLogins.setStudentPassword(passwordChangeObject.getNewPassword());
+		String enteredPassword = passwordChangeObject.getOldPassword();
+	    String enteredHashedPassword = StringUtils.createHash(enteredPassword);
+
+		if(studentLogins.getStudentPassword().equals(enteredHashedPassword)){
+			
+		    String hashNewPassword = StringUtils.createHash(enteredPassword);
+
+			studentLogins.setStudentPassword(hashNewPassword);
 			studentLoginsDao.updateStudentLogin(studentLogins);
 
 			return Response.status(Response.Status.OK).
@@ -370,17 +377,24 @@ public class StudentFacing {
 		Timestamp databaseTimestamp = studentLoginsExisting.getKeyExpiration();
 		
 		// override existing values for testing
-		databaseTimestamp = new Timestamp(System.currentTimeMillis()+3600);
+		databaseTimestamp = new Timestamp(System.currentTimeMillis()+3600*1000);
 		databaseRegistrationKey = "122345";
 		
+		if(studentLoginsExisting.isConfirmed() == false) {
+			return Response.status(Response.Status.OK).
+					entity("Password Already created. Consider resetting it" ).build();
+		}
+		
 		// check if the entered registration key matches 
-		if(databaseRegistrationKey.equals(registrationKey)){
+		if((databaseRegistrationKey.equals(registrationKey))){
 			// if registration key matches, then check if its valid or not
 			Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
 
 			// check if the database time is after the current time
 			if(databaseTimestamp.after(currentTimestamp)){
-				studentLoginsExisting.setStudentPassword(password); 
+				String hashedPassword = StringUtils.createHash(password);
+				studentLoginsExisting.setStudentPassword(hashedPassword);
+				studentLoginsExisting.setConfirmed(true);
 				boolean studentLoginUpdatedWithPassword = studentLoginsDao.updateStudentLogin(studentLoginsExisting);
 				if(studentLoginUpdatedWithPassword) {
 					return Response.status(Response.Status.OK).
