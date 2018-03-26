@@ -70,9 +70,24 @@ public class StudentsPublicDaoTest {
     studentsPublicDao.deleteStudentByPublicId(-200);
   }
 
+  @Test(expected = HibernateException.class)
+  public void updateNonExistentStudentTest() {
+    StudentsPublic sp = new StudentsPublic();
+    sp.setPublicId(-200);
+    studentsPublicDao.updateStudent(sp);
+  }
+
   @Test
-  public void findStudentByPublicIdTest() {
+  public void findStudentByPublicIdAndUpdateTest() {
     StudentsPublic studentsPublic = studentsPublicDao.findStudentByPublicId(5);
+    assertTrue(studentsPublic.getFirstName().equals("Josh"));
+    studentsPublic.setFirstName("Joshua");
+    studentsPublicDao.updateStudent(studentsPublic);
+    studentsPublic = studentsPublicDao.findStudentByPublicId(5);
+    assertTrue(studentsPublic.getFirstName().equals("Joshua"));
+    studentsPublic.setFirstName("Josh");
+    studentsPublicDao.updateStudent(studentsPublic);
+    studentsPublic = studentsPublicDao.findStudentByPublicId(5);
     assertTrue(studentsPublic.getFirstName().equals("Josh"));
     assertTrue(studentsPublic.getUndergraduates().get(0).getUndergradSchool().equals("UCLA"));
     assertTrue(studentsPublic.getWorkExperiences().get(0).getPublicId() == 5);

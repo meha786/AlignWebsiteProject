@@ -127,6 +127,28 @@ public class UndergraduatesPublicDao {
     return listOfAllSchools;
   }
 
+//  public boolean updateUndergraduate(UndergraduatesPublic undergraduate) {
+//    if (findUndergraduateById(undergraduate.getUndergraduateId()) == null) {
+//      throw new HibernateException("Cannot find Undergraduate with that undergraduate Id");
+//    }
+//
+//    Transaction tx = null;
+//
+//    try {
+//      session = factory.openSession();
+//      tx = session.beginTransaction();
+//      session.saveOrUpdate(undergraduate);
+//      tx.commit();
+//    } catch (HibernateException e) {
+//      if (tx != null) tx.rollback();
+//      throw new HibernateException(e);
+//    } finally {
+//      session.close();
+//    }
+//
+//    return true;
+//  }
+
   public boolean deleteUndergraduateById(int publicId) {
     UndergraduatesPublic undergraduate = findUndergraduateById(publicId);
     if (undergraduate != null) {
