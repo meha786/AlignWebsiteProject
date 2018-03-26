@@ -9,25 +9,20 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.mehaexample.asdDemo.dao.alignprivate.CoursesDao;
-import org.mehaexample.asdDemo.dao.alignprivate.ElectivesDao;
-import org.mehaexample.asdDemo.dao.alignprivate.StudentsDao;
-import org.mehaexample.asdDemo.dao.alignprivate.WorkExperiencesDao;
+import org.mehaexample.asdDemo.dao.alignprivate.*;
 import org.mehaexample.asdDemo.enums.Campus;
 import org.mehaexample.asdDemo.enums.DegreeCandidacy;
 import org.mehaexample.asdDemo.enums.EnrollmentStatus;
 import org.mehaexample.asdDemo.enums.Gender;
 import org.mehaexample.asdDemo.enums.Term;
-import org.mehaexample.asdDemo.model.alignprivate.Courses;
-import org.mehaexample.asdDemo.model.alignprivate.Electives;
-import org.mehaexample.asdDemo.model.alignprivate.Students;
-import org.mehaexample.asdDemo.model.alignprivate.WorkExperiences;
+import org.mehaexample.asdDemo.model.alignprivate.*;
 
 public class StudentsDaoTest {
   private static StudentsDao studentdao;
   private static WorkExperiencesDao workExperiencesDao;
   private static ElectivesDao electivesDao;
   private static CoursesDao coursesDao;
+  private static PriorEducationsDao priorEducationsDao;
 
   @BeforeClass
   public static void init() {
@@ -35,6 +30,7 @@ public class StudentsDaoTest {
     workExperiencesDao = new WorkExperiencesDao(true);
     electivesDao = new ElectivesDao(true);
     coursesDao = new CoursesDao(true);
+    priorEducationsDao = new PriorEducationsDao(true);
   }
 
   @After
@@ -164,8 +160,20 @@ public class StudentsDaoTest {
     studentdao.addStudent(newStudent2);
     studentdao.addStudent(newStudent3);
 
-    WorkExperiences newWorkExperience = new WorkExperiences();
+    // add prior education
+    PriorEducations newPriorEducation = new PriorEducations();
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    newPriorEducation.setGraduationDate(dateFormat.parse("2015-01-01"));
+    newPriorEducation.setGpa(3.50f);
+    newPriorEducation.setDegreeCandidacy(DegreeCandidacy.BACHELORS);
+    newPriorEducation.setNeuId(newStudent.getNeuId());
+    newPriorEducation.setMajorName("Computer Science");
+    newPriorEducation.setInstitutionName("University of Washington");
+
+    priorEducationsDao.createPriorEducation(newPriorEducation);
+
+    WorkExperiences newWorkExperience = new WorkExperiences();
+    dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     newWorkExperience.setStartDate(dateFormat.parse("2017-06-01"));
     newWorkExperience.setEndDate(dateFormat.parse("2017-12-01"));
     newWorkExperience.setCurrentJob(false);
@@ -202,6 +210,19 @@ public class StudentsDaoTest {
     students = studentdao.getAdminFilteredStudents(filters, 1 , 10);
     Assert.assertTrue(students.size() == 2);
 
+    List<String> majorName = new ArrayList<>();
+    majorName.add("computer science");
+    List<String> institutionName = new ArrayList<>();
+    institutionName.add("university of washington");
+    List<String> gender = new ArrayList<>();
+    gender.add("M");
+    filters.put("majorName", majorName);
+    filters.put("institutionName", institutionName);
+    filters.put("gender", gender);
+    students = studentdao.getAdminFilteredStudents(filters, 1 , 10);
+    Assert.assertTrue(students.size() == 1);
+    Assert.assertTrue(students.get(0).getLastName().equals("Cat"));
+
     // first name = Tom or Jerry, and company = Amazon
     Map<String, List<String>> filters2 = new HashMap<>();
     firstName.add("Jerry");
@@ -220,6 +241,8 @@ public class StudentsDaoTest {
     filters3.put("companyName", companyName2);
     Assert.assertTrue(studentdao.getAdminFilteredStudents(filters3, 0, 2).isEmpty());
 
+    priorEducationsDao.deletePriorEducationById(
+            priorEducationsDao.getPriorEducationsByNeuId(newStudent.getNeuId()).get(0).getPriorEducationId());
     workExperiencesDao.deleteWorkExperienceById(
             workExperiencesDao.getWorkExperiencesByNeuId("1111111").get(0).getWorkExperienceId());
     studentdao.deleteStudent("2222222");

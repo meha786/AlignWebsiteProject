@@ -87,8 +87,9 @@ public class StudentsDao {
 
   public List<Students> getAdminFilteredStudents(Map<String, List<String>> filters, int begin, int end) {
     StringBuilder hql = new StringBuilder("SELECT Distinct(s) " +
-            "FROM Students s LEFT OUTER JOIN WorkExperiences we " +
-            "ON s.neuId = we.neuId");
+            "FROM Students s " +
+            "LEFT OUTER JOIN WorkExperiences we ON s.neuId = we.neuId " +
+            "LEFT OUTER JOIN PriorEducations pe ON s.neuId = pe.neuId ");
     Set<String> filterKeys = filters.keySet();
     if (!filters.isEmpty()) {
       hql.append(" WHERE ");
@@ -108,8 +109,10 @@ public class StudentsDao {
         if (first) {
           first = false;
         }
-        if (filter.equals("companyName")) {
+        if (filter.equalsIgnoreCase("companyName")) {
           hql.append("we.").append(filter).append(" = :").append(filter).append(i);
+        } else if (filter.equalsIgnoreCase("majorName") || filter.equalsIgnoreCase("institutionName")) {
+          hql.append("pe.").append(filter).append(" = :").append(filter).append(i);
         } else {
           hql.append("s.").append(filter).append(" = :").append(filter).append(i);
         }
@@ -135,6 +138,8 @@ public class StudentsDao {
           } else {
             if (filter.trim().equalsIgnoreCase("CAMPUS")) {
               query.setParameter(filter + i, Campus.valueOf(filterElements.get(i).trim().toUpperCase()));
+            } else if (filter.trim().equalsIgnoreCase("GENDER")) {
+              query.setParameter(filter + i, Gender.valueOf(filterElements.get(i).trim().toUpperCase()));
             } else {
               query.setParameter(filter + i, filterElements.get(i));
             }

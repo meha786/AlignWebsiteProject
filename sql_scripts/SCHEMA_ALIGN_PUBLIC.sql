@@ -6,6 +6,32 @@ USE AlignPublic;
 DROP TABLE IF EXISTS WorkExperiences;
 DROP TABLE IF EXISTS Undergraduates;
 DROP TABLE IF EXISTS Students;
+DROP TABLE IF EXISTS SingleValueAggregatedData;
+DROP TABLE IF EXISTS MultipleValueAggregatedData;
+
+CREATE TABLE SingleValueAggregatedData(
+	AnalyticKey VARCHAR(255),
+    AnalyticValue INT DEFAULT 0,
+    CONSTRAINT pk_SingleValueData_AnalyticKey
+		PRIMARY KEY (AnalyticKey)
+);
+
+INSERT IGNORE INTO SingleValueAggregatedData (AnalyticKey) VALUE ("TotalGraduatedStudents");
+INSERT IGNORE INTO SingleValueAggregatedData (AnalyticKey) VALUE ("TotalStudents");
+INSERT IGNORE INTO SingleValueAggregatedData (AnalyticKey) VALUE ("TotalStudentsDroppedOut");
+INSERT IGNORE INTO SingleValueAggregatedData (AnalyticKey) VALUE ("TotalStudentsGotJob");
+INSERT IGNORE INTO SingleValueAggregatedData (AnalyticKey) VALUE ("TotalStudentsInBoston");
+INSERT IGNORE INTO SingleValueAggregatedData (AnalyticKey) VALUE ("TotalStudentsInSeattle");
+INSERT IGNORE INTO SingleValueAggregatedData (AnalyticKey) VALUE ("TotalStudentsInSiliconValley");
+INSERT IGNORE INTO SingleValueAggregatedData (AnalyticKey) VALUE ("TotalStudentsInCharlotte");
+
+CREATE TABLE MultipleValueAggregatedData(
+    AnalyticTerm VARCHAR(255),
+	AnalyticKey VARCHAR(255),
+    AnalyticValue INT DEFAULT 0,
+    CONSTRAINT pk_MultiValueData_Data
+		PRIMARY KEY (AnalyticTerm, AnalyticKey)
+);
  
 CREATE TABLE Students(
 	PublicId INT NOT NULL,
