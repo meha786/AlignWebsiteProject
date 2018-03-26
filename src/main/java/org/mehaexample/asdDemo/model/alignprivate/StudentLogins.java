@@ -6,6 +6,7 @@ public class StudentLogins {
   private String email;
   private String studentPassword;
   private String registrationKey;
+  private Timestamp loginTime;
   private Timestamp keyExpiration;
   private boolean confirmed;
 
@@ -42,6 +43,14 @@ public class StudentLogins {
 
   public void setRegistrationKey(String registrationKey) {
     this.registrationKey = registrationKey;
+  }
+
+  public Timestamp getLoginTime() {
+    return loginTime;
+  }
+
+  public void setLoginTime(Timestamp loginTime) {
+    this.loginTime = loginTime;
   }
 
   public Timestamp getKeyExpiration() {
