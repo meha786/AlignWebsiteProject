@@ -283,6 +283,8 @@ public class StudentFacing {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response changeUserPassword(PasswordChangeObject passwordChangeObject){
 
+		System.out.println("--" + passwordChangeObject.getEmail()+","+passwordChangeObject.getOldPassword());
+		
 		StudentLogins studentLogins = studentLoginsDao.findStudentLoginsByEmail(passwordChangeObject.getEmail());
 
 		if(studentLogins == null){
@@ -292,10 +294,10 @@ public class StudentFacing {
 
 		String enteredPassword = passwordChangeObject.getOldPassword();
 	    String enteredHashedPassword = StringUtils.createHash(enteredPassword);
-
+System.out.println("hash = " + enteredHashedPassword +" and existing pwd = " + studentLogins.getStudentPassword());
 		if(studentLogins.getStudentPassword().equals(enteredHashedPassword)){
 			
-		    String hashNewPassword = StringUtils.createHash(enteredPassword);
+		    String hashNewPassword = StringUtils.createHash(passwordChangeObject.getNewPassword());
 
 			studentLogins.setStudentPassword(hashNewPassword);
 			studentLoginsDao.updateStudentLogin(studentLogins);
