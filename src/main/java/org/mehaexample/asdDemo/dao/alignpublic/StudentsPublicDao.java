@@ -112,6 +112,20 @@ public class StudentsPublicDao {
   }
 
   public List<StudentsPublic> getPublicFilteredStudents(Map<String, List<String>> filters, int begin, int end) {
+	  System.out.println("===========================================================");
+
+	  for(String key: filters.keySet()){
+			System.out.println("filters-Key: " + key );
+			
+			List<String> values = filters.get(key);
+			
+			for(String s: values){
+				System.out.print(", " + s); 
+			}
+			
+		}
+	  System.out.println("===========================================================");
+
     StringBuilder hql = new StringBuilder("SELECT Distinct(s) " +
             "FROM StudentsPublic s " +
             "LEFT OUTER JOIN WorkExperiencesPublic we ON s.publicId = we.publicId " +

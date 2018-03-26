@@ -24,7 +24,10 @@ import org.mehaexample.asdDemo.model.alignpublic.TopCoops;
 import org.mehaexample.asdDemo.model.alignpublic.TopGradYears;
 import org.mehaexample.asdDemo.model.alignpublic.TopUndergradDegrees;
 import org.mehaexample.asdDemo.model.alignpublic.TopUndergradSchools;
+import org.mehaexample.asdDemo.restModels.StudentSerachCriteria;
 import org.mehaexample.asdDemo.restModels.TopCoopsNumber;
+import org.mehaexample.asdDemo.restModels.TopGraduationYearsNumber;
+import org.mehaexample.asdDemo.restModels.TopUnderGradDegreesNumber;
 import org.mehaexample.asdDemo.restModels.TopUnderGradSchools;
 
 @Path("public-facing")
@@ -57,11 +60,8 @@ public class PublicFacing {
 		}
 		
 		undergrad = undergraduatesPublicDao.getTopUndergradSchools(number);
-		JSONArray resultArray = new JSONArray();
-		for(TopUndergradSchools ungrad : undergrad) {
-			resultArray.put(ungrad);
-	    }
-		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
+		
+		return Response.status(Response.Status.OK).entity(undergrad).build();
 	}
 
 	@POST
@@ -95,6 +95,7 @@ public class PublicFacing {
 		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
 	}
 
+//	==========================================================================================================
 	/**
 	 * This is the function to get top coops.
 	 *	The body should be in the JSON format like below:
@@ -112,11 +113,8 @@ public class PublicFacing {
 		int number = topCoopsNumber.getNumber();
 
 		coops = workExperiencesPublicDao.getTopCoops(number);
-		JSONArray resultArray = new JSONArray();
-		for(TopCoops ungrad : coops) {
-			resultArray.put(ungrad);
-	    }
-		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
+
+		return Response.status(Response.Status.OK).entity(coops).build();
 	}
 	
 	@POST
@@ -140,6 +138,30 @@ public class PublicFacing {
 			resultArray.put(ungrad);
 	    }
 		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
+	}
+	
+//	==========================================================================================================
+
+	/**
+	 * This is the function to get top undergraduate degrees.
+	 *	The body should be in the JSON format like below:
+	 *	
+	 *	http://localhost:8080/alignWebsite/webapi/public-facing/top-undergraddegrees
+	 * @param search
+	 * @return List of n top undergraduate degrees
+	 */
+	@POST
+	@Path("top-undergraddegrees2")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getUndergradDegrees2(TopUnderGradDegreesNumber topUnderGradDegreesNumber) throws SQLException{
+		
+		List<TopUndergradDegrees> degrees = new ArrayList();
+		int number = topUnderGradDegreesNumber.getNumber();
+		
+		degrees = undergraduatesPublicDao.getTopUndergradDegrees(number);
+
+		return Response.status(Response.Status.OK).entity(degrees).build();
 	}
 	
 	/**
@@ -173,6 +195,30 @@ public class PublicFacing {
 		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
 	}
 	
+//	==========================================================================================================
+
+	/**
+	 * This is the function to get top graduation years.
+	 *	The body should be in the JSON format like below:
+	 *	
+	 *	http://localhost:8080/alignWebsite/webapi/public-facing/top-graduationyears
+	 * @param search
+	 * @return List of n top graduation years
+	 */
+	@POST
+	@Path("top-graduationyears2")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getTopGraduationYears2(TopGraduationYearsNumber topGraduationYearsNumber) throws SQLException{
+
+		List<TopGradYears> gradYears = new ArrayList();
+		int number = topGraduationYearsNumber.getNumber();
+		
+		gradYears = studentsPublicDao.getTopGraduationYears(number);
+		
+		return Response.status(Response.Status.OK).entity(gradYears).build();
+	}
+	
 	/**
 	 * This is the function to get top graduation years.
 	 *	The body should be in the JSON format like below:
@@ -204,6 +250,22 @@ public class PublicFacing {
 		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
 	}
 	
+//	==========================================================================================================
+	
+	/**
+	 * This is a function to get all undergrad schools
+	 * 
+	 * http://localhost:8080/alignWebsite/webapi/public-facing/all-schools
+	 * @return List of UnderGradSchools
+	 */
+	@GET
+	@Path("all-schools2")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllSchools2(){
+		List<String>  allUnderGradSchools = undergraduatesPublicDao.getListOfAllSchools();
+		
+		return Response.status(Response.Status.OK).entity(allUnderGradSchools).build();	
+	}
 	
 	/**
 	 * This is a function to get all undergrad schools
@@ -223,6 +285,23 @@ public class PublicFacing {
 		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();	
 	}
 	
+//	==========================================================================================================
+
+	/**
+	* This is a function to get list of ALL Coop companies
+	* 
+	* http://localhost:8080/alignWebsite/webapi/public-facing/all-coops
+	* @return List of UnderGradSchools
+	*/
+	@GET
+	@Path("/all-coops2")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllCoopCompanies2(){
+		List<String> listOfAllCoopCompanies = workExperiencesPublicDao.getListOfAllCoopCompanies();
+		
+		return Response.status(Response.Status.OK).entity(listOfAllCoopCompanies).build();	
+	}
+	
 	/**
 	* This is a function to get list of ALL Coop companies
 	* 
@@ -239,6 +318,27 @@ public class PublicFacing {
 			resultArray.put(gs);
 	    }
 		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();	
+	}
+	
+//	==========================================================================================================
+
+	/**
+	 * This is the function to get all undergraduate degrees.
+	 *	The body should be in the JSON format like below:
+	 *	
+	 *	http://localhost:8080/alignWebsite/webapi/public-facing/all-undergraddegrees
+	 * @param search
+	 * @return List of all undergraduate degrees
+	 */
+	@GET
+	@Path("all-undergraddegrees2")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllUndergradDegrees2() throws SQLException{
+		List<String> degrees = new ArrayList();
+		
+		degrees = undergraduatesPublicDao.getListOfAllUndergraduateDegrees();
+		
+		return Response.status(Response.Status.OK).entity(degrees).build();
 	}
 	
 	/**
@@ -263,6 +363,26 @@ public class PublicFacing {
 		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
 	}
 	
+//	==========================================================================================================
+
+	/**
+	 * This is the function to get all graduate years.
+	 *	The body should be in the JSON format like below:
+	 *	
+	 *	http://localhost:8080/alignWebsite/webapi/public-facing/all-grad-years
+	 * @param search
+	 * @return List of all graduate years
+	 */
+	@GET
+	@Path("all-grad-years2")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllGradYears2() throws SQLException{
+		List<Integer> years = new ArrayList();
+		
+		years = studentsPublicDao.getListOfAllGraduationYears();
+		
+		return Response.status(Response.Status.OK).entity(years).build();
+	}
 	
 	/**
 	 * This is the function to get all graduate years.
@@ -286,6 +406,25 @@ public class PublicFacing {
 		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
 	}
 	
+//	==========================================================================================================
+
+	/**
+	 * This is the function to get all students.
+	 *	The body should be in the JSON format like below:
+	 *	
+	 *	http://localhost:8080/alignWebsite/webapi/public-facing/students
+	 * @param search
+	 * @return List of all students
+	 */
+	@GET
+	@Path("students2")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllStudents2() throws SQLException{
+		List<StudentsPublic> studentList = new ArrayList();
+		studentList = studentsPublicDao.getListOfAllStudents();
+		
+		return Response.status(Response.Status.OK).entity(studentList).build();
+	}
 	
 	/**
 	 * This is the function to get all students.
@@ -314,6 +453,8 @@ public class PublicFacing {
 		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
 	}
 	
+//	==========================================================================================================
+
 	/**
      * This is the function to search for students
      *	
@@ -322,7 +463,53 @@ public class PublicFacing {
      * @return the list of student profiles matching the fields.
      */
 	@POST
-	@Path("students")
+	@Path("students-criteria2")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response searchStudent2(StudentSerachCriteria studentSerachCriteria){
+		Map<String, List<String>> searchCriteriaMap = new HashMap<>();
+
+		if(studentSerachCriteria.getCoops().size() > 0){
+			searchCriteriaMap.put("coop", studentSerachCriteria.getCoops());
+		}
+		
+		if(studentSerachCriteria.getUndergraddegree().size() > 0){
+			searchCriteriaMap.put("undergradDegree", studentSerachCriteria.getUndergraddegree());
+		}
+
+		if(studentSerachCriteria.getUndergradschool().size() > 0){
+			searchCriteriaMap.put("undergradSchool", studentSerachCriteria.getUndergradschool());
+		}
+
+		if(studentSerachCriteria.getGraduationyear().size() > 0){
+			searchCriteriaMap.put("graduationYear", studentSerachCriteria.getGraduationyear());
+		}
+
+		for(String key: searchCriteriaMap.keySet()){
+			System.out.println("Key: " + key );
+			
+			List<String> values = searchCriteriaMap.get(key);
+			
+			for(String s: values){
+				System.out.print(", " + s); 
+			}
+			
+		}
+		
+		List<StudentsPublic> studentRecords =  studentsPublicDao.getPublicFilteredStudents(searchCriteriaMap, 1, 20);
+	
+		return Response.status(Response.Status.OK).entity(studentRecords).build();
+	}
+	
+	/**
+     * This is the function to search for students
+     *	
+     *	http://localhost:8080/alignWebsite/webapi/public-facing/students
+     * @param firstname
+     * @return the list of student profiles matching the fields.
+     */
+	@POST
+	@Path("students-criteria")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response searchStudent(String search){
@@ -368,6 +555,17 @@ public class PublicFacing {
 				graduationyear.add((String) cp);
 			}
 			map.put("graduationYear",graduationyear);
+		}
+		
+		for(String key: map.keySet()){
+			System.out.println("Key: " + key );
+			
+			List<String> values = map.get(key);
+			
+			for(String s: values){
+				System.out.print(", " + s); 
+			}
+			
 		}
 		List<StudentsPublic> studentRecords =  studentsPublicDao.getPublicFilteredStudents(map, 1, 20);
 		JSONArray resultArray = new JSONArray();
