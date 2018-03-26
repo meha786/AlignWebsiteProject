@@ -24,6 +24,7 @@ import org.mehaexample.asdDemo.model.alignprivate.Students;
 import org.mehaexample.asdDemo.restModels.MailClient;
 import org.mehaexample.asdDemo.restModels.PasswordChangeObject;
 import org.mehaexample.asdDemo.restModels.PasswordCreateObject;
+import org.mehaexample.asdDemo.restModels.PasswordResetObject;
 import org.mehaexample.asdDemo.restModels.EmailToRegister;
 
 @Path("student-facing")
@@ -223,11 +224,11 @@ public class StudentFacing {
 	 * @return
 	 */
 	@POST
-	@Path("/registration2")
+	@Path("/registration")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	// Send email to admin’s northeastern ID to reset the password.
-	public Response sendRegistrationEmail2(EmailToRegister emailToRegister){
+	public Response sendRegistrationEmail(EmailToRegister emailToRegister){
 
 	String studentEmail = emailToRegister.getEmail();
 	
@@ -235,9 +236,10 @@ public class StudentFacing {
 			return Response.status(Response.Status.BAD_REQUEST).
 					entity("Email Id can't be null").build();
 		}else{
-			// check if student exists in the student database
+			
 			Students student = studentDao.getStudentRecordByEmailId(studentEmail);
 			
+			// check if the student record exists in the student database
 			if(student == null){
 				return Response.status(Response.Status.BAD_REQUEST).
 						entity("Student should be an Align Student!").build();
@@ -257,53 +259,7 @@ public class StudentFacing {
 						entity("Registration link sent succesfully to " + studentEmail).build(); 
 
 			}else{
-				return Response.status(Response.Status.NOT_ACCEPTABLE).
-						entity("Student is Already Registered!" + studentEmail).build();
-			} 
-
-		}
-
-	}
-
-	
-	/**
-	 * Send registration email to the student only if he/she is present in the align database
-	 * 
-	 * http://localhost:8080/alignWebsite/webapi/student-facing/registration
-	 * @param adminEmail
-	 * @return
-	 */
-	@POST
-	@Path("/registration")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	// Send email to admin’s northeastern ID to reset the password.
-	public Response sendRegistrationEmail(String studentEmailJson){
-
-		JSONObject jsonObj = new JSONObject(studentEmailJson);
-
-		if (jsonObj.isNull("email")){
-			return Response.status(Response.Status.BAD_REQUEST).
-					entity("Email Id can't be null").build();
-		}else{
-			String studentEmail = (String) jsonObj.get("email");
-
-			System.out.println("Student Email: " + studentEmail); 
-
-			// check if the student is already registered
-			StudentLogins studentLogin = studentLoginsDao.findStudentLoginsByEmail(studentEmail);
-
-			if(studentLogin == null){
-				// generate registration key 
-				String registrationKey = createRegistrationKey(); 
-
-				// after generation, send email
-				MailClient.sendRegistrationEmail(studentEmail, registrationKey);
-
-				return Response.status(Response.Status.OK).
-						entity("Registration link sent succesfully to " + studentEmail).build(); 
-
-			}else{
+				
 				return Response.status(Response.Status.NOT_ACCEPTABLE).
 						entity("Student is Already Registered!" + studentEmail).build();
 			} 
@@ -354,20 +310,18 @@ public class StudentFacing {
 	@Path("/password-reset")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response sendEmailForPasswordResetStudent(String jsonInput){
+	public Response sendEmailForPasswordResetStudent2(PasswordResetObject passwordResetObject){
 
-		JSONObject jsonObj = new JSONObject(jsonInput);
-
-
-		if (jsonObj.isNull("email")){
+	String studentEmail = passwordResetObject.getEmail();
+	
+		if (studentEmail == null){
 			return Response.status(Response.Status.BAD_REQUEST).
 					entity("Email Id can't be null").build();
 		}else{
-			String studentEmail = (String) jsonObj.get("email");
 
 			StudentLogins studentLogins = studentLoginsDao.findStudentLoginsByEmail(studentEmail);
 
-			// or invalid entry
+			// Check if student has Registered or not
 			if(studentLogins == null){
 				return Response.status(Response.Status.NOT_FOUND).
 						entity("Email doesn't exist: " + studentLogins).build();
@@ -385,7 +339,7 @@ public class StudentFacing {
 		}
 
 	}
-
+	
 //	/**
 //	 * This function creates the password and registers the student
 //	 * 
