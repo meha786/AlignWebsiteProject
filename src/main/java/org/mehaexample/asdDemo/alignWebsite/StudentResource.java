@@ -27,7 +27,7 @@ public class StudentResource {
     CoursesDao coursesDao = new CoursesDao(true);
     WorkExperiencesDao workExperiencesDao = new WorkExperiencesDao(true);
     ExtraExperiencesDao extraExperiencesDao = new ExtraExperiencesDao(true);
-
+    ProjectsDao projectsDao = new ProjectsDao(true);
 
     /**
      * uopdate student details.
@@ -150,6 +150,30 @@ public class StudentResource {
         return Response.status(Response.Status.OK).entity("Experience deleted successfully").build();
     }
 
+    @DELETE
+    @Path("/students/{nuId}/project/{Id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteProject(@PathParam("nuId") String neuId, @PathParam("Id") Integer ProjectId, Students student) {
+
+        List<Projects> projectsList;
+        if (!studentDao.ifNuidExists(neuId)) {
+            return Response.status(Response.Status.NOT_FOUND).entity("No Student record exists with given ID").build();
+        } else {
+            projectsList = projectsDao.getProjectsByNeuId(neuId);
+            for (int i = 0; i < projectsList.size(); i++) {
+                if (projectsList.get(i).getProjectId() == ProjectId) {
+                    projectsDao.deleteProjectById(ProjectId);
+                    return Response.status(Response.Status.OK).entity("Project deleted successfully").build();
+                } else {
+                    return Response.status(Response.Status.NOT_FOUND).entity("No project record exists with given ID").build();
+                }
+            }
+        }
+        return Response.status(Response.Status.OK).entity("Project deleted successfully").build();
+    }
+
+
     /**
      * @param neuId
      * @param extraExperienceId
@@ -179,42 +203,45 @@ public class StudentResource {
         return Response.status(Response.Status.OK).entity("Experience updated successfully").build();
     }
 
-//    @POST
-//    @Path("/students/{nuId}/extraexperiences")
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response AddExtraExperience(@PathParam("nuId") String neuId, ExtraExperiences extraExperiences) {
-//        List<ExtraExperiences> extraExperiencesList;
-//        System.out.println(neuId);
-//        extraExperiences.setNeuId(neuId);
-//        extraExperiencesDao.createExtraExperience(extraExperiences);
-//
-//        int id = extraExperiences.getExtraExperienceId();
-//
-//        extraExperiencesList = extraExperiencesDao.getExtraExperiencesByNeuId(neuId);
-//
-//        for (int i = 0; i < extraExperiencesList.size(); i++) {
-//            if (extraExperiencesList.get(i).getExtraExperienceId() == id) {
-//                return Response.status(Response.Status.OK).entity("Experience added successfully :)").build();
-//            } else {
-//                return Response.status(Response.Status.NOT_FOUND).entity("Experience not added successfully").build();
-//            }
-//        }
-//        return Response.status(Response.Status.OK).entity("Experience added successfully").build();
-//    }
+    @PUT
+    @Path("/students/{nuId}/projects/{Id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateProject(@PathParam("nuId") String neuId, @PathParam("Id") Integer ProjectId, Students student) {
+
+        List<Projects> projectsList;
+        if (!studentDao.ifNuidExists(neuId)) {
+            return Response.status(Response.Status.NOT_FOUND).entity("No Student record exists with given ID").build();
+        } else {
+            projectsList = projectsDao.getProjectsByNeuId(neuId);
+            for (int i = 0; i < projectsList.size(); i++) {
+                if (projectsList.get(i).getProjectId() == ProjectId) {
+                    projectsDao.updateProject(projectsList.get(i));
+                    return Response.status(Response.Status.OK).entity("Project updated successfully :)").build();
+                } else {
+                    return Response.status(Response.Status.NOT_FOUND).entity("No Project record exists with given ID").build();
+                }
+            }
+        }
+        return Response.status(Response.Status.OK).entity("Project updated successfully").build();
+    }
+
 
     @POST
     @Path("/students/{nuId}/extraexperiences")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response AddExtraExperience(@PathParam("nuId") String neuId, ExtraExperiences extraExperiences) {
-//        List<ExtraExperiences> extraExperiencesList;
+        if (!studentDao.ifNuidExists(neuId)) {
+            return Response.status(Response.Status.NOT_FOUND).entity("No Student record exists with given ID").build();
+        }
+        extraExperiences = new ExtraExperiences();
+
         Date Enddate = new Date("09/09/2018");
         Date Startdate = new Date("09/12/2018");
-//
-//        System.out.println(neuId);
-        extraExperiences.setExtraExperienceId(90);
-        extraExperiences.setNeuId("080");
+
+        extraExperiences.setExtraExperienceId(89);
+        extraExperiences.setNeuId(neuId);
         extraExperiences.setCompanyName("zillow");
         extraExperiences.setEndDate(Enddate);
         extraExperiences.setStartDate(Startdate);
@@ -222,18 +249,35 @@ public class StudentResource {
         extraExperiences.setDescription("intern");
 
         extraExperiencesDao.createExtraExperience(extraExperiences);
-//        int id = extraExperiences.getExtraExperienceId();
-//        extraExperiencesList = extraExperiencesDao.getExtraExperiencesByNeuId(neuId);
-//
-//        for (int i = 0; i < extraExperiencesList.size(); i++) {
-//            if (extraExperiencesList.get(i).getExtraExperienceId() == id) {
-//                return Response.status(Response.Status.OK).entity("Experience added successfully :)").build();
-//            } else {
-//                return Response.status(Response.Status.NOT_FOUND).entity("Experience not added successfully").build();
-//            }
-//        }
         return Response.status(Response.Status.OK).entity("Experience added successfully").build();
     }
+
+    @POST
+    @Path("/students/{nuId}/projects")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response AddProject(@PathParam("nuId") String neuId, Projects project) {
+
+        if (!studentDao.ifNuidExists(neuId)) {
+            return Response.status(Response.Status.NOT_FOUND).entity("No Student record exists with given ID").build();
+        }
+
+        project = new Projects();
+
+        Date Enddate = new Date("09/09/2018");
+        Date Startdate = new Date("09/12/2018");
+
+        project.setProjectId(89);
+        project.setNeuId(neuId);
+        project.setProjectName("ASD align project");
+        project.setEndDate(Enddate);
+        project.setStartDate(Startdate);
+        project.setDescription("align website backend team");
+
+        projectsDao.createProject(project);
+        return Response.status(Response.Status.OK).entity("Project added successfully").build();
+    }
+
 
     /**
      * retrive student details by NUID
@@ -250,9 +294,16 @@ public class StudentResource {
         if (!studentDao.ifNuidExists(nuid)) {
             return Response.status(Response.Status.NOT_FOUND).entity("No Student record exists with given ID").build();
         } else {
+
             Students studentRecord = studentDao.getStudentRecord(nuid);
+            List<WorkExperiences> workExperiencesRecord = workExperiencesDao.getWorkExperiencesByNeuId(nuid);
+            List<Projects> projects = projectsDao.getProjectsByNeuId(nuid);
+            List<ExtraExperiences> extraExperiences = extraExperiencesDao.getExtraExperiencesByNeuId(nuid);
             JSONObject jsonObj = new JSONObject(studentRecord);
             jsonObj.put("student", studentRecord);
+            jsonObj.put("workexperience", workExperiencesRecord);
+            jsonObj.put("project", projects);
+            jsonObj.put("experience", extraExperiences);
             return Response.status(Response.Status.OK).entity(jsonObj.toString()).build();
         }
     }
