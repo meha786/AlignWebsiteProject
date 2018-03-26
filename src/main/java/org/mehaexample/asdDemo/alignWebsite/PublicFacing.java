@@ -63,38 +63,6 @@ public class PublicFacing {
 		return Response.status(Response.Status.OK).entity(undergrad).build();
 	}
 
-	@POST
-	@Path("top-undergradschools")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getUndergradSchools(String para) throws SQLException{
-		System.out.println("par= "+para);
-
-		JSONObject jsonObj = new JSONObject(para);
-		List<TopUndergradSchools> undergrad = new ArrayList();
-		int number = 10;
-		if (!jsonObj.isNull("number")){
-			try{
-				System.out.println("yo= "+number);
-
-				number = (int) jsonObj.getInt("number");
-				System.out.println("noooo= "+number);
-
-			} catch(Exception e) {
-				return Response.status(Response.Status.BAD_REQUEST).entity("Bad Request" + e).build();
-			}
-		}
-		
-		System.out.println("nums= "+number);
-		undergrad = undergraduatesPublicDao.getTopUndergradSchools(number);
-		JSONArray resultArray = new JSONArray();
-		for(TopUndergradSchools ungrad : undergrad) {
-			resultArray.put(ungrad);
-	    }
-		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
-	}
-
-//	==========================================================================================================
 	/**
 	 * This is the function to get top coops.
 	 *	The body should be in the JSON format like below:
@@ -116,31 +84,6 @@ public class PublicFacing {
 		return Response.status(Response.Status.OK).entity(coops).build();
 	}
 	
-	@POST
-	@Path("top-coops")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getTopCoops(String para) throws SQLException{
-		JSONObject jsonObj = new JSONObject(para);
-		List<TopCoops> coops = new ArrayList();
-		int number = 10;
-		if (!jsonObj.isNull("number")){
-			try{
-				number = (int) jsonObj.get("number");
-			} catch(Exception e) {
-				return Response.status(Response.Status.BAD_REQUEST).entity("Bad Request").build();
-			}
-		}
-		coops = workExperiencesPublicDao.getTopCoops(number);
-		JSONArray resultArray = new JSONArray();
-		for(TopCoops ungrad : coops) {
-			resultArray.put(ungrad);
-	    }
-		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
-	}
-	
-//	==========================================================================================================
-
 	/**
 	 * This is the function to get top undergraduate degrees.
 	 *	The body should be in the JSON format like below:

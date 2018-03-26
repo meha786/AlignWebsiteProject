@@ -1,5 +1,6 @@
 package org.mehaexample.asdDemo.alignWebsite;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -230,15 +231,15 @@ public class StudentFacing {
 	// Send email to admin’s northeastern ID to reset the password.
 	public Response sendRegistrationEmail(EmailToRegister emailToRegister){
 
-	String studentEmail = emailToRegister.getEmail();
-	
+		String studentEmail = emailToRegister.getEmail();
+
 		if (studentEmail == null){
 			return Response.status(Response.Status.BAD_REQUEST).
 					entity("Email Id can't be null").build();
 		}else{
-			
+
 			Students student = studentDao.getStudentRecordByEmailId(studentEmail);
-			
+
 			// check if the student record exists in the student database
 			if(student == null){
 				return Response.status(Response.Status.BAD_REQUEST).
@@ -259,7 +260,7 @@ public class StudentFacing {
 						entity("Registration link sent succesfully to " + studentEmail).build(); 
 
 			}else{
-				
+
 				return Response.status(Response.Status.NOT_ACCEPTABLE).
 						entity("Student is Already Registered!" + studentEmail).build();
 			} 
@@ -312,8 +313,8 @@ public class StudentFacing {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response sendEmailForPasswordResetStudent2(PasswordResetObject passwordResetObject){
 
-	String studentEmail = passwordResetObject.getEmail();
-	
+		String studentEmail = passwordResetObject.getEmail();
+
 		if (studentEmail == null){
 			return Response.status(Response.Status.BAD_REQUEST).
 					entity("Email Id can't be null").build();
@@ -339,33 +340,64 @@ public class StudentFacing {
 		}
 
 	}
-	
-//	/**
-//	 * This function creates the password and registers the student
-//	 * 
-//	 * @param passwordCreateObject
-//	 * @return 200 if password changed successfully else return 404
-//	 */
-//	@POST
-//	@Path("/create-password")
-//	@Consumes(MediaType.APPLICATION_JSON)
-//	@Produces(MediaType.APPLICATION_JSON)
-//	public Response createPassword(PasswordCreateObject passwordCreateObject){
-//		String email = passwordCreateObject.getEmail();
-//		String password = passwordCreateObject.getPassword();
-//		String registrationKey = passwordCreateObject.getRegistrationKey();
-//		System.out.println(email + password + registrationKey); 
-//
-//		StudentLogins studentLogins = new StudentLogins();
-//		studentLogins.setEmail(email); 
-//		studentLogins.setStudentPassword(password); 
-//		studentLogins.setRegistrationKey(registrationKey);
-//		
-//		StudentLogins studentLogin = studentLoginsDao.createStudentLogin(studentLogins);
-//		
-//		return Response.status(Response.Status.OK).
-//				entity("Student registered successfully!" ).build(); 
-//	}
+
+	/**
+	 * This function creates the password and registers the student
+	 * 
+	 * @param passwordCreateObject
+	 * @return 200 if password changed successfully else return 404
+	 */
+	@POST
+	@Path("/create-password")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response createPassword(PasswordCreateObject passwordCreateObject){
+		String email = passwordCreateObject.getEmail();
+		String password = passwordCreateObject.getPassword();
+		String registrationKey = passwordCreateObject.getRegistrationKey();
+		System.out.println(email + password + registrationKey); 
+
+		// check if the student 
+		
+		// get the current student login
+		StudentLogins studentLoginsExisting = studentLoginsDao.findStudentLoginsByEmail(email);
+		if(studentLoginsExisting == null) {
+			return Response.status(Response.Status.BAD_REQUEST).
+					entity("Invalid Student details. Student does not exist" ).build();
+		}
+		
+		String databaseRegistrationKey = studentLoginsExisting.getRegistrationKey();
+		Timestamp databaseTimestamp = studentLoginsExisting.getKeyExpiration();
+		
+		// override existing values for testing
+		databaseTimestamp = new Timestamp(System.currentTimeMillis()+3600);
+		databaseRegistrationKey = "122345";
+		
+		// check if the entered registration key matches 
+		if(databaseRegistrationKey.equals(registrationKey)){
+			// if registration key matches, then check if its valid or not
+			Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+
+			// check if the database time is after the current time
+			if(databaseTimestamp.after(currentTimestamp)){
+				studentLoginsExisting.setStudentPassword(password); 
+				boolean studentLoginUpdatedWithPassword = studentLoginsDao.updateStudentLogin(studentLoginsExisting);
+				if(studentLoginUpdatedWithPassword) {
+					return Response.status(Response.Status.OK).
+							entity("Student registered successfully!" ).build();
+				} else {
+					return Response.status(Response.Status.INTERNAL_SERVER_ERROR).
+							entity("Database exception thrown" ).build();
+				}
+			} else {
+				return Response.status(Response.Status.OK).
+						entity(" Registration key expired successfully!" ).build();
+			}
+		} else {
+			return Response.status(Response.Status.BAD_REQUEST).
+					entity("Invalid registration key" ).build();
+		}
+	}
 
 	private String createRegistrationKey() {
 

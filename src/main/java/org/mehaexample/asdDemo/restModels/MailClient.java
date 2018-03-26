@@ -27,7 +27,7 @@ public class MailClient
         };
         Session session = Session.getInstance(props, auth);
 
-        String resetLink = "http://localhost:8080/alignWebsite/webapi/create-password-link";
+        String resetLink = "http://localhost:8080/alignWebsite/webapi/create-password";
         sendEmail(session, toEmail,"Password Reset Email Northeastern Account", 
         		"Hello! \n \n" +
         		"Your Registration key is: " + registrationKey + "\n" +
@@ -56,7 +56,7 @@ public class MailClient
         };
         Session session = Session.getInstance(props, auth);
 
-        String resetLink = "http://localhost:8080/alignWebsite/webapi/registration-link";
+        String resetLink = "http://localhost:8080/alignWebsite/webapi/create-password";
         sendEmail(session, toEmail,"Registration Email Northeastern Account",
         		"Hello! \n \n" +
         		"Your Registration key is: " + registrationKey + "\n" +
