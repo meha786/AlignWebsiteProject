@@ -13,7 +13,7 @@
         </property>
 
         <property name="hibernate.connection.url">
-            jdbc:mariadb://asd3.ccs.neu.edu:3309
+            jdbc:mariadb://asd3.ccs.neu.edu:3309/AlignPublic
         </property>
 
         <property name="hibernate.connection.username">
@@ -25,10 +25,10 @@
         </property>
 
         <!-- List of XML mapping files -->
-        <!--<mapping resource="WorkExperiencesPublic.hbm.xml" />-->
-        <!--<mapping resource="UndergraduatesPublic.hbm.xml" />-->
-        <!--<mapping resource="StudentsPublic.hbm.xml" />-->
-        <!--<mapping resource="SingleValueAggregatedData.hbm.xml" />-->
-        <!--<mapping resource="MultipleValueAggregatedData.hbm.xml" />-->
+        <mapping resource="WorkExperiencesPublic.hbm.xml" />
+        <mapping resource="UndergraduatesPublic.hbm.xml" />
+        <mapping resource="StudentsPublic.hbm.xml" />
+        <mapping resource="SingleValueAggregatedData.hbm.xml" />
+        <mapping resource="MultipleValueAggregatedData.hbm.xml" />
     </session-factory>
 </hibernate-configuration>

@@ -31,6 +31,11 @@ public class StudentsPublicDaoTest {
     undergraduatesPublicDao = new UndergraduatesPublicDao(true);
     workExperiencesPublicDao = new WorkExperiencesPublicDao(true);
     studentsPublicDao = new StudentsPublicDao(true);
+
+//    undergraduatesPublicDao = new UndergraduatesPublicDao();
+//    workExperiencesPublicDao = new WorkExperiencesPublicDao();
+//    studentsPublicDao = new StudentsPublicDao();
+
     StudentsPublic studentsPublic = new StudentsPublic(5, "Josh", null, 2016);
     studentsPublicDao.createStudent(studentsPublic);
     StudentsPublic studentsPublic2 = new StudentsPublic(6, "Chet", null, 2016);

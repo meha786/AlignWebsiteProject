@@ -13,7 +13,7 @@
 		</property>
 
 		<property name="hibernate.connection.url">
-			jdbc:mariadb://asd3.ccs.neu.edu:3308
+			jdbc:mariadb://asd3.ccs.neu.edu:3308/AlignPrivate
 		</property>
 
 		<property name="hibernate.connection.username">
@@ -25,13 +25,14 @@
 		</property>
 
 		<!-- List of XML mapping files -->
-		<!--<mapping resource="Students.hbm.xml" />-->
-		<!--<mapping resource="Courses.hbm.xml" />-->
-		<!--<mapping resource="WorkExperiences.hbm.xml" />-->
-		<!--<mapping resource="Electives.hbm.xml" />-->
-		<!--<mapping resource="PriorEducations.hbm.xml" />-->
-		<!--<mapping resource="StudentLogins.hbm.xml" />-->
-		<!--<mapping resource="ExtraExperiences.hbm.xml" />-->
-		<!--<mapping resource="Projects.hbm.xml" />-->
+		<mapping resource="Students.hbm.xml" />
+		<mapping resource="Courses.hbm.xml" />
+		<mapping resource="WorkExperiences.hbm.xml" />
+		<mapping resource="Electives.hbm.xml" />
+		<mapping resource="PriorEducations.hbm.xml" />
+		<mapping resource="StudentLogins.hbm.xml" />
+		<mapping resource="ExtraExperiences.hbm.xml" />
+		<mapping resource="Projects.hbm.xml" />
+		<mapping resource="Privacies.hbm.xml"/>
 	</session-factory>
 </hibernate-configuration>

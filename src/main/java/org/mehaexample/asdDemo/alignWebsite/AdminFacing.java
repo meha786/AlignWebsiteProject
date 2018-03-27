@@ -1,5 +1,6 @@
 package org.mehaexample.asdDemo.alignWebsite;
 
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.crypto.SecretKeyFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -50,6 +52,8 @@ import org.mehaexample.asdDemo.restModels.PasswordChangeObject;
 import org.mehaexample.asdDemo.restModels.PasswordResetObject;
 import org.mehaexample.asdDemo.utils.MailClient;
 import org.mehaexample.asdDemo.utils.StringUtils;
+
+import com.lambdaworks.crypto.SCryptUtil;
 
 import com.lambdaworks.crypto.SCryptUtil;
 
@@ -400,7 +404,7 @@ public class AdminFacing{
 		return Response.status(Response.Status.OK).
 				entity(studentsList).build();  
 	}
-
+	
 	/**
 	 * This is a function to change an existing admin's password
 	 * 

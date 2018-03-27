@@ -24,6 +24,10 @@ public class ElectivesAdminDaoTest {
     electivesAdminDao = new ElectivesAdminDao(true);
     studentsDao = new StudentsDao(true);
     coursesDao = new CoursesDao(true);
+
+//    electivesAdminDao = new ElectivesAdminDao();
+//    studentsDao = new StudentsDao();
+//    coursesDao = new CoursesDao();
   }
 
   @Test(expected = IllegalArgumentException.class)
