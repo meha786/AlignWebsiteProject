@@ -391,10 +391,10 @@ public class StudentFacing {
 		}
 
 		String enteredOldPassword = passwordChangeObject.getOldPassword();
-//		String convertOldPasswordToHash = StringUtils.createHash(enteredOldPassword);
-		
+		//		String convertOldPasswordToHash = StringUtils.createHash(enteredOldPassword);
+
 		String enteredNewPassword = passwordChangeObject.getNewPassword();
-//		String convertNewPasswordToHash = StringUtils.createHash(enteredNewPassword);
+		//		String convertNewPasswordToHash = StringUtils.createHash(enteredNewPassword);
 
 		if(enteredOldPassword.equals(enteredNewPassword)){
 
@@ -406,7 +406,7 @@ public class StudentFacing {
 		}
 
 		String convertOldPasswordToHash = StringUtils.createHash(enteredOldPassword);
-		
+
 		// check if the entered old password is correct
 		if(studentLogins.getStudentPassword().equals(convertOldPasswordToHash)){
 
@@ -446,8 +446,15 @@ public class StudentFacing {
 
 			// Check if student has Registered or not
 			if(studentLogins == null){
+
 				return Response.status(Response.Status.NOT_FOUND).
 						entity("Email doesn't exist: " + studentLogins).build();
+			}
+
+			if(studentLogins.isConfirmed() == false){
+
+				return Response.status(Response.Status.NOT_FOUND).
+						entity("Password can't be reset....Please create password and register first: ").build();
 			}
 
 			// generate registration key 
