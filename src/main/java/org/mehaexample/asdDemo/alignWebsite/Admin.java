@@ -38,6 +38,7 @@ import org.mehaexample.asdDemo.model.alignadmin.AdminLogins;
 import org.mehaexample.asdDemo.model.alignadmin.ElectivesAdmin;
 import org.mehaexample.asdDemo.model.alignadmin.GenderRatio;
 import org.mehaexample.asdDemo.model.alignadmin.LoginObject;
+import org.mehaexample.asdDemo.model.alignadmin.StudentBachelorInstitution;
 import org.mehaexample.asdDemo.model.alignadmin.TopBachelor;
 import org.mehaexample.asdDemo.model.alignadmin.TopElective;
 import org.mehaexample.asdDemo.model.alignadmin.TopEmployer;
@@ -435,6 +436,38 @@ public class Admin{
 		}
 		return Response.status(Response.Status.OK).
 				entity(studentsList).build();  
+	}
+	
+	/**
+	 * This is a function for retrieving the students working as full time
+	 * 
+	 * http://localhost:8080/alignWebsite/webapi/admin-facing/analytics/undergrad-institutions
+	 * @param params
+	 * @return
+	 */
+	@POST
+	@Path("/analytics/undergrad-institutions")
+	public Response getStudentundergradInstitutuins(ParamsObject input){
+		List<StudentBachelorInstitution> instList = new ArrayList<StudentBachelorInstitution>();
+		if (input.getCampus()!=null && input.getYear()!=null){
+			try{
+				instList = priorEducationsDao.
+						getListOfBachelorInstitutions(Campus.valueOf(input.getCampus().toUpperCase()),Integer.valueOf(input.getYear()));
+			} catch(Exception e){
+				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist or year should be integer.").build();
+			}
+		} else if (input.getCampus()!=null && input.getYear()==null){
+			try{
+				instList = priorEducationsDao.
+						getListOfBachelorInstitutions(Campus.valueOf(input.getCampus().toUpperCase()),null);
+			} catch(Exception e){
+				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist.").build();
+			}
+		} else if (input.getCampus()==null){
+			return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Campus cannot be null.").build();
+		}
+		return Response.status(Response.Status.OK).
+				entity(instList).build();  
 	}
 	
 	/**
