@@ -42,6 +42,7 @@ public class StudentLoginsDaoTest {
             "password",
             "key",
             Timestamp.valueOf("2017-09-23 10:10:10.0"),
+            Timestamp.valueOf("2017-09-23 10:10:10.0"),
             false);
     studentLoginsDao.createStudentLogin(studentLogins);
   }
@@ -60,6 +61,7 @@ public class StudentLoginsDaoTest {
             "password",
             "key",
             Timestamp.valueOf("2017-09-23 10:10:10.0"),
+            Timestamp.valueOf("2017-09-23 10:10:10.0"),
             false);
     studentLoginsDao.createStudentLogin(studentLogins);
   }
@@ -69,6 +71,7 @@ public class StudentLoginsDaoTest {
     StudentLogins studentLogins = new StudentLogins("tomcattttttt@gmail.com",
             "password",
             "key",
+            Timestamp.valueOf("2017-09-23 10:10:10.0"),
             Timestamp.valueOf("2017-09-23 10:10:10.0"),
             false);
     studentLoginsDao.updateStudentLogin(studentLogins);
@@ -94,6 +97,7 @@ public class StudentLoginsDaoTest {
     StudentLogins studentLogins = new StudentLogins("tomcat@gmail.com",
             "password",
             "key",
+            Timestamp.valueOf("2017-09-23 10:10:10.0"),
             Timestamp.valueOf("2017-09-23 10:10:10.0"),
             false);
     studentLoginsDao.createStudentLogin(studentLogins);

@@ -10,11 +10,12 @@ public class StudentLogins {
   private Timestamp keyExpiration;
   private boolean confirmed;
 
-  public StudentLogins(String email, String studentPassword, String registrationKey,
+  public StudentLogins(String email, String studentPassword, String registrationKey, Timestamp loginTime,
                        Timestamp keyExpiration, boolean confirmed) {
     this.email = email;
     this.studentPassword = studentPassword;
     this.registrationKey = registrationKey;
+    this.loginTime = loginTime;
     this.keyExpiration = keyExpiration;
     this.confirmed = confirmed;
   }

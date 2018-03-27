@@ -36,6 +36,7 @@ public class AdminLoginsDaoTest {
             "password",
             "key",
             Timestamp.valueOf("2017-09-23 10:10:10.0"),
+            Timestamp.valueOf("2017-09-23 10:10:10.0"),
             false);
     adminLoginsDao.createAdminLogin(adminLogins);
   }
@@ -54,6 +55,7 @@ public class AdminLoginsDaoTest {
             "password",
             "key",
             Timestamp.valueOf("2017-09-23 10:10:10.0"),
+            Timestamp.valueOf("2017-09-23 10:10:10.0"),
             false);
     adminLoginsDao.createAdminLogin(adminLogins);
   }
@@ -63,6 +65,7 @@ public class AdminLoginsDaoTest {
     AdminLogins adminLogins = new AdminLogins("catwoman12@gmail.com",
             "password",
             "key",
+            Timestamp.valueOf("2017-09-23 10:10:10.0"),
             Timestamp.valueOf("2017-09-23 10:10:10.0"),
             false);
     adminLoginsDao.updateAdminLogin(adminLogins);
@@ -78,6 +81,7 @@ public class AdminLoginsDaoTest {
     AdminLogins adminLogins = new AdminLogins("catwoman@gmail.com",
             "password",
             "key",
+            Timestamp.valueOf("2017-09-23 10:10:10.0"),
             Timestamp.valueOf("2017-09-23 10:10:10.0"),
             false);
     adminLoginsDao.createAdminLogin(adminLogins);

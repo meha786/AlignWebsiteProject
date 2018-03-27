@@ -10,11 +10,12 @@ public class AdminLogins {
   private Timestamp keyExpiration;
   private boolean confirmed;
 
-  public AdminLogins(String email, String adminPassword, String registrationKey,
+  public AdminLogins(String email, String adminPassword, String registrationKey, Timestamp loginTime,
                      Timestamp keyExpiration, boolean confirmed) {
     this.email = email;
     this.adminPassword = adminPassword;
     this.registrationKey = registrationKey;
+    this.loginTime = loginTime;
     this.keyExpiration = keyExpiration;
     this.confirmed = confirmed;
   }
