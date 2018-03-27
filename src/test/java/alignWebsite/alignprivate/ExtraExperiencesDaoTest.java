@@ -26,6 +26,9 @@ public class ExtraExperiencesDaoTest {
     public static void init() {
         extraExperiencesDao = new ExtraExperiencesDao(true);
         studentsDao = new StudentsDao(true);
+
+//        extraExperiencesDao = new ExtraExperiencesDao();
+//        studentsDao = new StudentsDao();
     }
 
     @Before

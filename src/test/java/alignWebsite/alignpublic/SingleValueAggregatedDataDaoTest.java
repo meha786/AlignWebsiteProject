@@ -13,6 +13,8 @@ public class SingleValueAggregatedDataDaoTest {
   @BeforeClass
   public static void init() {
     dataDao = new SingleValueAggregatedDataDao(true);
+
+//    dataDao = new SingleValueAggregatedDataDao();
   }
 
   @Test(expected = HibernateException.class)

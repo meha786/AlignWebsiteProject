@@ -14,6 +14,8 @@ public class CoursesDaoTest {
 	@BeforeClass
 	public static void init() {
 		coursesDao = new CoursesDao(true);
+
+//		coursesDao = new CoursesDao();
 	}
 
 	@Before
