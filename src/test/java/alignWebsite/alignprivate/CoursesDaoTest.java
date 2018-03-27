@@ -4,12 +4,14 @@ import java.util.List;
 
 import org.hibernate.HibernateException;
 import org.junit.*;
+import org.mehaexample.asdDemo.alignWebsite.StudentResource;
 import org.mehaexample.asdDemo.dao.alignprivate.CoursesDao;
 import org.mehaexample.asdDemo.model.alignprivate.Courses;
 
 public class CoursesDaoTest {
 
 	private static CoursesDao coursesDao;
+	private static StudentResource studentResource;
 
 	@BeforeClass
 	public static void init() {
@@ -50,6 +52,8 @@ public class CoursesDaoTest {
 		coursesDao.deleteCourseById(null);
 	}
 
+
+
 	@Test(expected = IllegalArgumentException.class)
 	public void deleteEmptyArgument() {
 		coursesDao.deleteCourseById("");
@@ -60,6 +64,7 @@ public class CoursesDaoTest {
 		Courses Courses = coursesDao.createCourse(null);
 		Assert.assertNull(Courses);
 	}
+
 
 	@Test
 	public void addAndUpdateCourseTest() {
