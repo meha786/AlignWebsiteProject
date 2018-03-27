@@ -329,10 +329,6 @@ public class StudentFacing {
 		String databaseRegistrationKey = studentLoginsExisting.getRegistrationKey();
 		Timestamp databaseTimestamp = studentLoginsExisting.getKeyExpiration();
 
-		// override existing values for testing
-		databaseTimestamp = new Timestamp(System.currentTimeMillis()+3600*1000);
-		// databaseRegistrationKey = "a96f192f-554f-4d7f-8759-dedbebe92405";
-
 		if(studentLoginsExisting.isConfirmed() == true) {
 			return Response.status(Response.Status.OK).
 					entity("Password Already created. Consider resetting it" ).build();
