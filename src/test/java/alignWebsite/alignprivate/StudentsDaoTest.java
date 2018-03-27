@@ -222,9 +222,12 @@ public class StudentsDaoTest {
     institutionName.add("university of washington");
     List<String> gender = new ArrayList<>();
     gender.add("M");
+    List<String> degreeCandidacy = new ArrayList<>();
+    degreeCandidacy.add("BACHELORS");
     filters.put("majorName", majorName);
     filters.put("institutionName", institutionName);
     filters.put("gender", gender);
+    filters.put("degreeCandidacy", degreeCandidacy);
     students = studentdao.getAdminFilteredStudents(filters, 1 , 10);
     Assert.assertTrue(students.size() == 1);
     Assert.assertTrue(students.get(0).getLastName().equals("Cat"));

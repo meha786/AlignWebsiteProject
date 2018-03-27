@@ -111,7 +111,9 @@ public class StudentsDao {
         }
         if (filter.equalsIgnoreCase("companyName")) {
           hql.append("we.").append(filter).append(" = :").append(filter).append(i);
-        } else if (filter.equalsIgnoreCase("majorName") || filter.equalsIgnoreCase("institutionName")) {
+        } else if (filter.equalsIgnoreCase("majorName")
+                || filter.equalsIgnoreCase("institutionName")
+                || filter.equalsIgnoreCase("degreeCandidacy")) {
           hql.append("pe.").append(filter).append(" = :").append(filter).append(i);
         } else {
           hql.append("s.").append(filter).append(" = :").append(filter).append(i);
@@ -140,6 +142,8 @@ public class StudentsDao {
               query.setParameter(filter + i, Campus.valueOf(filterElements.get(i).trim().toUpperCase()));
             } else if (filter.trim().equalsIgnoreCase("GENDER")) {
               query.setParameter(filter + i, Gender.valueOf(filterElements.get(i).trim().toUpperCase()));
+            } else if (filter.trim().equalsIgnoreCase("DegreeCandidacy")) {
+              query.setParameter(filter + i, DegreeCandidacy.valueOf(filterElements.get(i).trim().toUpperCase()));
             } else {
               query.setParameter(filter + i, filterElements.get(i));
             }
