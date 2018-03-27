@@ -546,43 +546,31 @@ public class Admin{
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response changeUserPassword(PasswordChangeObject passwordChangeObject){
-
-		// check if the admin login exists already or not
-
+		
 		AdminLogins adminLogins = adminLoginsDao.findAdminLoginsByEmail(passwordChangeObject.getEmail());
 
 		if(adminLogins == null){
 			return Response.status(Response.Status.NOT_FOUND).
-					entity("Email doesn't exist: Invalid Email" + passwordChangeObject.getEmail()).build();
+					entity("Email doesn't exist: " + passwordChangeObject.getEmail()).build();
 		}
 
-		if(adminLogins.isConfirmed() == false){
-
-			return Response.status(Response.Status.NOT_ACCEPTABLE).
-					entity("Please create the password before reseting it! " + passwordChangeObject.getEmail()).build();
-		}
-
-		String enteredOldPassword = passwordChangeObject.getOldPassword();
-
-		String enteredNewPassword = passwordChangeObject.getNewPassword();
-
-		if(enteredOldPassword.equals(enteredNewPassword)){
-
-			System.out.println("entered: " + enteredOldPassword);
-			System.out.println("database: " + enteredNewPassword);
-
-			return Response.status(Response.Status.NOT_ACCEPTABLE).
-					entity("The New Password can't be same as Old passoword ").build();
-		}
-
-		String convertOldPasswordToHash = StringUtils.createHash(enteredOldPassword);
-
-		// check if the entered old password is correct
-		if(adminLogins.getAdminPassword().equals(convertOldPasswordToHash)){
-
-			String hashNewPassword = StringUtils.createHash(passwordChangeObject.getNewPassword());
-
-			adminLogins.setAdminPassword(hashNewPassword);
+        boolean matched = false;
+        try{
+        	String reqPass = passwordChangeObject.getOldPassword();
+    		String saltStr = passwordChangeObject.getEmail().substring(0, passwordChangeObject.getEmail().length()/2);
+    		String originalPassword = reqPass+saltStr;
+        	matched = SCryptUtil.check(originalPassword,adminLogins.getAdminPassword());
+        } catch (Exception e){
+        	return Response.status(Response.Status.UNAUTHORIZED).
+					entity("Incorrect Password").build();
+        }
+        
+		if(matched){
+			String newPass = passwordChangeObject.getNewPassword();
+    		String saltnewStr = passwordChangeObject.getEmail().substring(0, passwordChangeObject.getEmail().length()/2);
+    		String updatePassword = newPass+saltnewStr;
+            String generatedSecuredPasswordHash = SCryptUtil.scrypt(updatePassword, 16, 16, 16);
+            adminLogins.setAdminPassword(generatedSecuredPasswordHash);
 			adminLoginsDao.updateAdminLogin(adminLogins);
 
 			return Response.status(Response.Status.OK).
