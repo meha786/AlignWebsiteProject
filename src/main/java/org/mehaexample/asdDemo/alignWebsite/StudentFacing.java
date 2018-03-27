@@ -2,6 +2,8 @@ package org.mehaexample.asdDemo.alignWebsite;
 
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -18,11 +20,20 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.json.JSONObject;
+import org.mehaexample.asdDemo.dao.alignprivate.CoursesDao;
+import org.mehaexample.asdDemo.dao.alignprivate.ElectivesDao;
+import org.mehaexample.asdDemo.dao.alignprivate.ExtraExperiencesDao;
+import org.mehaexample.asdDemo.dao.alignprivate.ProjectsDao;
 import org.mehaexample.asdDemo.dao.alignprivate.StudentLoginsDao;
 import org.mehaexample.asdDemo.dao.alignprivate.StudentsDao;
-import org.mehaexample.asdDemo.model.alignadmin.AdminLogins;
+import org.mehaexample.asdDemo.dao.alignprivate.WorkExperiencesDao;
+import org.mehaexample.asdDemo.model.alignprivate.Courses;
+import org.mehaexample.asdDemo.model.alignprivate.Electives;
+import org.mehaexample.asdDemo.model.alignprivate.ExtraExperiences;
+import org.mehaexample.asdDemo.model.alignprivate.Projects;
 import org.mehaexample.asdDemo.model.alignprivate.StudentLogins;
 import org.mehaexample.asdDemo.model.alignprivate.Students;
+import org.mehaexample.asdDemo.model.alignprivate.WorkExperiences;
 import org.mehaexample.asdDemo.restModels.PasswordChangeObject;
 import org.mehaexample.asdDemo.restModels.PasswordCreateObject;
 import org.mehaexample.asdDemo.restModels.PasswordResetObject;
@@ -32,190 +43,269 @@ import org.mehaexample.asdDemo.restModels.EmailToRegister;
 
 @Path("student-facing")
 public class StudentFacing {
-	StudentsDao studentDao = new StudentsDao(true);
-	StudentLoginsDao studentLoginsDao = new StudentLoginsDao(true); 
-	/**
-	 * Method handling HTTP GET requests. The returned object will be sent
-	 * to the client as "APPLICATION_JSON" media type.
-	 *
-	 * @return String that will be returned as a APPLICATION_JSON response.
-	 */
+    StudentsDao studentDao = new StudentsDao(true);
+    ElectivesDao electivesDao = new ElectivesDao(true);
+    CoursesDao coursesDao = new CoursesDao(true);
+    WorkExperiencesDao workExperiencesDao = new WorkExperiencesDao(true);
+    ExtraExperiencesDao extraExperiencesDao = new ExtraExperiencesDao(true);
+    ProjectsDao projectsDao = new ProjectsDao(true);
+    StudentLoginsDao studentLoginsDao = new StudentLoginsDao(); 
+    String nuIdNotFound = "No Student record exists with given ID";
+    String workExperienceRecord = "WorkExperienceRecoed";
+    String studentData = "studentRecord";
+    String projectRecord = "ProjectRecord";
+    String extraExperienceRecord = "extraExperienceRecord";
+    
+    
 
-	/**
-	 * Get all the students
-	 *  
-	 * @return list of all students.
-	 * http://localhost:8080/alignWebsite/webapi/studentresource/all
-	 */
-	@GET
-	@Path("/all")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<Students> getAllStudents() {
-		List<Students> list = studentDao.getAllStudents();
-		return list;
-	}
-
-	/**
-	 * Fetch the student details by nuid
-	 * 
-	 * @param nuid
-	 * @return a student object
-	 * http://localhost:8080/alignWebsite/webapi/studentresource/id/211234549
-	 */
-	@GET
-	@Path("/id/{nuid}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Students getStudentRecord(@PathParam("nuid") String nuid){
-		System.out.println("getting student for nuid = " + nuid);
-		Students studentRecord = studentDao.getStudentRecord(nuid);
-		return studentRecord;
-	}
-
-	/**
-	 * Delete a student
-	 * 
-	 * @param firstName
-	 * @return String
-	 * http://localhost:8080/alignWebsite/webapi/studentresource/211232248
-	 */
-	@DELETE
-	@Path("{neuid}")
-	@Produces({ MediaType.APPLICATION_JSON})
-	public void deleteStudentByNUID(@PathParam("neuid") String neuid)
-	{      
-		Students student = new Students();
-
-		System.out.println("nuid to be deleted is: " + neuid);
-		boolean exists = studentDao.ifNuidExists(neuid);
-		if(exists == true){
-			studentDao.deleteStudent(neuid);
-		}else{
-			System.out.println("This nuid doesn't exist");
-		}
-	}
-
-	/**
-	 * Fetch the student details by email id
-	 * 
-	 * @param emailId
-	 * @return a student record
-	 * http://localhost:8080/alignWebsite/webapi/studentresource/email/alvin.straws@husky.neu.edu
-	 */
-	@GET
-	@Path("/email/{emailId}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Students getStudentRecordByEmailId(@PathParam("emailId") String emailId){
-		System.out.println("get by email : " + emailId);
-		Students studentRecord = studentDao.getStudentRecordByEmailId(emailId);
-		return studentRecord; 
-	}
-
-	/**------------------------------------------------------------------------------------------------*/
-
-	//	//  webapi/student-facing/students/change-password/{NUID}
-	//	@POST
-	//	@Path("/{changePassword}")
-	//	@Consumes(MediaType.APPLICATION_JSON)
-	//	public boolean chnagePassword(PasswordChangeModel passwordModel){
-	//		boolean exists = studentDao.ifEmailExists(passwordModel.getEmail());
-	//		
-	////		if(passwordDao.getOldPassword(passwordModel.getEmail()).equals(passwordModel.getOldPwd())) {
-	////			passwordDao.updatePassword(passwordModel);
-	////		}
-	//		
-	//		return true;
-	//	}
-
-	// webapi/student-facing/students/reset-password/{NUID}
-	@POST
-	@Path("/{resetPassword}")
-	@Consumes(MediaType.TEXT_PLAIN)
-	public void resetPassword(String nuid) {
-		// check if nuid is valid
-		// get the email of student from db
-		// send an email with the link
-	}
-
-	//  webapi/student-facing/students/registration
-	@POST
-	@Path("/{registerStudent}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public void registerStudent(Students student) {
-		// check if the student data is present in align db
-		// register the student.
-	}
-
-	/**-----------------------------------------------------**/
-	//	@POST 
-	//	@Path("/{VerifyStudentLogin2FA}")
-	//	@Consumes(MediaType.APPLICATION_JSON)
-	//	public void VerifyStudentLogin2FA(){
-	//		// check if password entered is correct from db
-	//		// if it is correct, send him an email 
-	//	}
-
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	public String saveStudentForm(Students student){
-		boolean exists = studentDao.ifNuidExists(student.getNeuId());
-		if(exists == false){			
-			studentDao.addStudent(student);	
-
-			return "Added Student sucessfully!";
-		}else{
-
-			return "The entered NUID exists already";
-		}
-	}
-
-	/**
-	 * Edit the fields of a student 
-	 * 
-	 * @param neuid
-	 * @return a student record
-	 * http://localhost:8080/alignWebsite/webapi/studentresource/id/0000002
-	 */
-	@PUT
-	@Path("/id/{neuId}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.TEXT_PLAIN)
-	public String updateStudentRecord(@PathParam("neuId") String neuId , Students student) {
-		if(student == null){
-			return "Student cant be null";
-		}
-
-		if(!student.getNeuId().equals(neuId)){
-			return "NeuId Cant be updated";
-		}
-
-		studentDao.updateStudentRecord(student);
-
-		return "Student record updated successfully";
-	}
-
-	/**
-	 * Search for other students
-	 * 
-	 * @param firstName
-	 * @return list of students with matched first name
-	 * http://localhost:8080/alignWebsite/webapi/studentresource/search/Tom21
-	 */
-	@GET
-	@Path("/search/{firstName}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<Students> getStudentRecordByFirstName(@PathParam("firstName") String firstName){
-
-		if(firstName == null || firstName.isEmpty()){
-			return null;	
-		}
-
-		List<Students> studentList = studentDao.searchStudentRecord(firstName);
-
-		if(studentList.size() == 0){
-			return new ArrayList<>();
-		}
-		return studentList; 
-	}
+    /**
+     * uopdate student details.
+     * <p>
+     * http://localhost:8181/webapi/student-facing/students/{NUID}
+     *
+     * @param neuId
+     * @param student
+     * @return
+     */
+    @PUT
+    @Path("/students/{nuId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateStudentRecord(@PathParam("nuId") String neuId, Students student) {
+        if (!studentDao.ifNuidExists(neuId)) {
+            return Response.status(Response.Status.NOT_FOUND).entity(nuIdNotFound).build();
+        }
+        studentDao.updateStudentRecord(student);
+        return Response.status(Response.Status.OK).entity("Student record updated successfully").build();
+    }
+    
+    
+    @GET
+    @Path("/students/{nuId}/courses")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getStudentCourses(@PathParam("nuId") String neuId) {
+        ArrayList<String> courses = new ArrayList<>();
+        if (!studentDao.ifNuidExists(neuId)) {
+            return Response.status(Response.Status.NOT_FOUND).entity(nuIdNotFound).build();
+        } else {
+            List<Electives> electives;
+            electives = electivesDao.getElectivesByNeuId(neuId);
+            for (int i = 0; i < electives.size(); i++) {
+                Electives elective = electivesDao.getElectiveById(electives.get(i).getElectiveId());
+                Courses course = coursesDao.getCourseById(elective.getCourseId());
+                courses.add(course.getCourseName());
+            }
+        }
+        return Response.status(Response.Status.OK).entity(courses).build();
+    }
+    
+    
+    @GET
+    @Path("/students/{nuId}/workexperiences")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getStudentWorkExperience(@PathParam("nuId") String neuId, Students student) {
+        List<WorkExperiences> workExperiencesList;
+        if (!studentDao.ifNuidExists(neuId)) {
+            return Response.status(Response.Status.NOT_FOUND).entity(nuIdNotFound).build();
+        } else {
+            workExperiencesList = workExperiencesDao.getWorkExperiencesByNeuId(neuId);
+        }
+        JSONObject jsonObj = new JSONObject(workExperiencesList);
+        jsonObj.put(workExperienceRecord, workExperiencesList);
+        return Response.status(Response.Status.OK).entity(jsonObj.toString()).build();
+    }
+    
+    
+    /**
+     * @param neuId
+     * @param student
+     * @return
+     */
+    @GET
+    @Path("/students/{nuId}/extraexperiences")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getStudentExtraExperience(@PathParam("nuId") String neuId, Students student) {
+        List<ExtraExperiences> extraExperiencesList;
+        if (!studentDao.ifNuidExists(neuId)) {
+            return Response.status(Response.Status.NOT_FOUND).entity(nuIdNotFound).build();
+        } else {
+            extraExperiencesList = extraExperiencesDao.getExtraExperiencesByNeuId(neuId);
+        }
+        JSONObject jsonObj = new JSONObject(extraExperiencesList);
+        jsonObj.put(extraExperienceRecord, extraExperiencesList);
+        return Response.status(Response.Status.OK).entity(jsonObj.toString()).build();
+    }
+    
+    
+    /**
+     * @param neuId
+     * @param extraExperienceId
+     * @return
+     */
+    @DELETE
+    @Path("/students/{nuId}/extraexperiences/{Id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteExtraExperience(@PathParam("nuId") String neuId, @PathParam("Id") Integer extraExperienceId) {
+        List<ExtraExperiences> extraExperiencesList;
+        if (!studentDao.ifNuidExists(neuId)) {
+            return Response.status(Response.Status.NOT_FOUND).entity(nuIdNotFound).build();
+        } else {
+            extraExperiencesList = extraExperiencesDao.getExtraExperiencesByNeuId(neuId);
+            for (int i = 0; i < extraExperiencesList.size(); i++) {
+                if (extraExperiencesList.get(i).getExtraExperienceId() == extraExperienceId) {
+                    extraExperiencesDao.deleteExtraExperienceById(extraExperienceId);
+                    return Response.status(Response.Status.OK).entity("Experience deleted successfully").build();
+                } else {
+                    return Response.status(Response.Status.NOT_FOUND).entity("No Experience record exists with given ID").build();
+                }
+            }
+        }
+        return Response.status(Response.Status.OK).entity("Experience deleted successfully").build();
+    }
+    
+    
+    @DELETE
+    @Path("/students/{nuId}/project/{Id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteProject(@PathParam("nuId") String neuId, @PathParam("Id") Integer projectId) {
+        List<Projects> projectsList;
+        if (!studentDao.ifNuidExists(neuId)) {
+            return Response.status(Response.Status.NOT_FOUND).entity(nuIdNotFound).build();
+        } else {
+            projectsList = projectsDao.getProjectsByNeuId(neuId);
+            for (int i = 0; i < projectsList.size(); i++) {
+                if (projectsList.get(i).getProjectId() == projectId) {
+                    projectsDao.deleteProjectById(projectId);
+                    return Response.status(Response.Status.OK).entity("Project deleted successfully").build();
+                } else {
+                    return Response.status(Response.Status.NOT_FOUND).entity("No project record exists with given ID").build();
+                }
+            }
+        }
+        return Response.status(Response.Status.OK).entity("Project deleted successfully").build();
+    }
+    
+    
+    /**
+     * @param neuId
+     * @param extraExperienceId
+     * @return
+     */
+    @PUT
+    @Path("/students/{nuId}/extraexperiences/{Id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateExtraExperience(@PathParam("nuId") String neuId, @PathParam("Id") Integer extraExperienceId) {
+        List<ExtraExperiences> extraExperiencesList;
+        if (!studentDao.ifNuidExists(neuId)) {
+            return Response.status(Response.Status.NOT_FOUND).entity(nuIdNotFound).build();
+        } else {
+            extraExperiencesList = extraExperiencesDao.getExtraExperiencesByNeuId(neuId);
+            for (int i = 0; i < extraExperiencesList.size(); i++) {
+                if (extraExperiencesList.get(i).getExtraExperienceId() == extraExperienceId) {
+                    extraExperiencesDao.updateExtraExperience(extraExperiencesList.get(i));
+                    return Response.status(Response.Status.OK).entity("Experience updated successfully :)").build();
+                } else {
+                    return Response.status(Response.Status.NOT_FOUND).entity("No Experience record exists with given ID").build();
+                }
+            }
+        }
+        return Response.status(Response.Status.OK).entity("Experience updated successfully").build();
+    }
+    
+    
+    @PUT
+    @Path("/students/{nuId}/projects/{Id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateProject(@PathParam("nuId") String neuId, @PathParam("Id") Integer projectId) {
+        List<Projects> projectsList;
+        if (!studentDao.ifNuidExists(neuId)) {
+            return Response.status(Response.Status.NOT_FOUND).entity(nuIdNotFound).build();
+        } else {
+            projectsList = projectsDao.getProjectsByNeuId(neuId);
+            for (int i = 0; i < projectsList.size(); i++) {
+                if (projectsList.get(i).getProjectId() == projectId) {
+                    projectsDao.updateProject(projectsList.get(i));
+                    return Response.status(Response.Status.OK).entity("Project updated successfully :)").build();
+                } else {
+                    return Response.status(Response.Status.NOT_FOUND).entity("No Project record exists with given ID").build();
+                }
+            }
+        }
+        return Response.status(Response.Status.OK).entity("Project updated successfully").build();
+    }
+    @POST
+    @Path("/students/{nuId}/extraexperiences")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addExtraExperience(@PathParam("nuId") String neuId, ExtraExperiences extraExperiences) throws ParseException {
+        if (!studentDao.ifNuidExists(neuId)) {
+            return Response.status(Response.Status.NOT_FOUND).entity(nuIdNotFound).build();
+        }
+        extraExperiences = new ExtraExperiences();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        extraExperiences.setExtraExperienceId(89);
+        extraExperiences.setNeuId(neuId);
+        extraExperiences.setCompanyName("zillow");
+        extraExperiences.setEndDate(dateFormat.parse("2017-06-01"));
+        extraExperiences.setStartDate(dateFormat.parse("2017-12-01"));
+        extraExperiences.setTitle("SDE");
+        extraExperiences.setDescription("intern");
+        extraExperiencesDao.createExtraExperience(extraExperiences);
+        return Response.status(Response.Status.OK).entity("Experience added successfully").build();
+    }
+    @POST
+    @Path("/students/{nuId}/projects")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addProject(@PathParam("nuId") String neuId, Projects project) throws ParseException {
+        if (!studentDao.ifNuidExists(neuId)) {
+            return Response.status(Response.Status.NOT_FOUND).entity(nuIdNotFound).build();
+        }
+        project = new Projects();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        project.setProjectId(89);
+        project.setNeuId(neuId);
+        project.setProjectName("ASD align project");
+        project.setEndDate(dateFormat.parse("2017-06-01"));
+        project.setStartDate(dateFormat.parse("2017-12-01"));
+        project.setDescription("align website backend team");
+        projectsDao.createProject(project);
+        return Response.status(Response.Status.OK).entity("Project added successfully").build();
+    }
+    /**
+     * retrive student details by NUID
+     * <p>
+     * http://localhost:8080/webapi/student-facing/students/{NUID}
+     *
+     * @param nuid
+     * @return a student object
+     */
+    @GET
+    @Path("students/{nuid}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getStudentProfile(@PathParam("nuid") String nuid) {
+        if (!studentDao.ifNuidExists(nuid)) {
+            return Response.status(Response.Status.NOT_FOUND).entity(nuIdNotFound).build();
+        } else {
+            Students studentRecord = studentDao.getStudentRecord(nuid);
+            List<WorkExperiences> workExperiencesRecord = workExperiencesDao.getWorkExperiencesByNeuId(nuid);
+            List<Projects> projects = projectsDao.getProjectsByNeuId(nuid);
+            List<ExtraExperiences> extraExperiences = extraExperiencesDao.getExtraExperiencesByNeuId(nuid);
+            JSONObject jsonObj = new JSONObject(studentRecord);
+            jsonObj.put(studentData, studentRecord);
+            jsonObj.put(workExperienceRecord, workExperiencesRecord);
+            jsonObj.put(projectRecord, projects);
+            jsonObj.put("experience", extraExperiences);
+            return Response.status(Response.Status.OK).entity(jsonObj.toString()).build();
+        }
+    }
 
 	// ====================================================================================================================
 
@@ -489,7 +579,6 @@ public class StudentFacing {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).
 					entity("Something Went Wrong" + studentEmail).build();
 		}
-
 	}
 
 	private String createRegistrationKey() {
