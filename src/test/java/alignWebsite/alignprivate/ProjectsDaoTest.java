@@ -25,6 +25,9 @@ public class ProjectsDaoTest {
   public static void init() {
     studentsDao = new StudentsDao(true);
     projectsDao = new ProjectsDao(true);
+
+//    studentsDao = new StudentsDao();
+//    projectsDao = new ProjectsDao();
   }
 
   @Before

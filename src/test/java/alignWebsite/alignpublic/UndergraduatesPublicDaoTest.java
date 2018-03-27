@@ -26,6 +26,10 @@ public class UndergraduatesPublicDaoTest {
   public static void init() {
     undergraduatesPublicDao = new UndergraduatesPublicDao(true);
     studentsPublicDao = new StudentsPublicDao(true);
+
+//    undergraduatesPublicDao = new UndergraduatesPublicDao();
+//    studentsPublicDao = new StudentsPublicDao();
+
     StudentsPublic studentsPublic = new StudentsPublic(
             5, "Josh", null, 2016);
     studentsPublicDao.createStudent(studentsPublic);

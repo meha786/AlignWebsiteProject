@@ -21,6 +21,9 @@ public class AdminLoginsDaoTest {
     adminLoginsDao = new AdminLoginsDao(true);
     administratorsDao = new AdministratorsDao(true);
 
+//    adminLoginsDao = new AdminLoginsDao();
+//    administratorsDao = new AdministratorsDao();
+
     Administrators newAdministrator = new Administrators("00000000", "catwoman@gmail.com",
             "Cat", "Main", "Woman");
     Administrators newAdministrator2 = new Administrators("11111111", "catwoman2@gmail.com",
