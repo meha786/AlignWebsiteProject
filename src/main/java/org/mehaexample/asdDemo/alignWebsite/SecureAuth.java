@@ -27,6 +27,7 @@ public class SecureAuth implements ContainerRequestFilter{
 
 	private static final String AUTHOIRIZATION_HEADER = "token";
 	private static final String LOGIN_URL = "login";
+	private static final String REGISTER_URL = "register";
 	
 	@Context
     private HttpServletRequest sr;
@@ -36,7 +37,9 @@ public class SecureAuth implements ContainerRequestFilter{
 	@Override
 	public void filter(ContainerRequestContext requestContext)
 			throws IOException {
-		if(!requestContext.getUriInfo().getPath().contains(LOGIN_URL)){
+	if(!requestContext.getUriInfo().getPath().contains(LOGIN_URL) && 
+	   !requestContext.getUriInfo().getPath().contains(REGISTER_URL)){
+	try {	
 		List<String> authHeader =  requestContext.getHeaders().get(AUTHOIRIZATION_HEADER);
 		if(authHeader.size() > 0){
 			try {
@@ -60,32 +63,41 @@ public class SecureAuth implements ContainerRequestFilter{
 			String email = tokenData.nextToken();
 			String ipAddress = tokenData.nextToken();
 			String timeValid = tokenData.nextToken();
-			
+			String tokenCheck = timeValid.substring(0,timeValid.length()-6);
 			AdminLogins adminLogins = adminLoginsDao.findAdminLoginsByEmail(email);
-			
 			if(adminLogins == null){
 				requestContext.abortWith(Response.status(Response.Status.NOT_ACCEPTABLE).
 						entity("Token not valid. Please login again.").build());
-			} else if(ip.equals(ipAddress)) {
+			}
+			String loginTime = adminLogins.getLoginTime().toString();
+			String expireTime = adminLogins.getKeyExpiration().toString();
+			Timestamp valid = Timestamp.valueOf(timeValid);
+			Timestamp expire = Timestamp.valueOf(expireTime);
+			String timeLogin = loginTime.substring(0,loginTime.length()-4);
+			if(ip.equals(ipAddress) && timeLogin.equals(tokenCheck) && valid.before(expire)) {
 				Timestamp keyExpiration = new Timestamp(System.currentTimeMillis()+15*60*1000);
 				adminLogins.setKeyExpiration(keyExpiration);
 				adminLoginsDao.updateAdminLogin(adminLogins);
 				return;
 			} else {
 				requestContext.abortWith(Response.status(Response.Status.NOT_ACCEPTABLE).
-						entity("Token not valid. Please login again.").build());
+						entity("Token expired. Please login again.").build());
 			}
-			
 			} catch (Exception e) {
 				requestContext.abortWith(Response.status(Response.Status.NOT_ACCEPTABLE).
-						entity("Token not valid. Please login again.").build());
+						entity("Token Tampered. Please login again.").build());
 			}
 		} else {
 			requestContext.abortWith(Response.status(Response.Status.NOT_ACCEPTABLE).
-					entity("Token not valid. Please login again.").build());
+					entity("Please include authentication token in the Header.").build()); 
 		}
-	} else {
-		return;
-	}
+		}
+		catch (Exception e) {
+			requestContext.abortWith(Response.status(Response.Status.BAD_REQUEST).
+					entity("Bad Request.").build());
+		}
+		} else {
+			return;
+		}
 	}
 }

@@ -83,6 +83,12 @@
             <version>0.6.3</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.lambdaworks</groupId>
+            <artifactId>scrypt</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/javax.mail/javax.mail-api -->
         <dependency>
             <groupId>com.sun.mail</groupId>
@@ -104,14 +110,6 @@
             <artifactId>mariadb-java-client</artifactId>
             <version>1.1.7</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.sonarsource.scanner.maven/sonar-maven-plugin -->
-        <dependency>
-            <groupId>org.sonarsource.scanner.maven</groupId>
-            <artifactId>sonar-maven-plugin</artifactId>
-            <version>3.2</version>
-        </dependency>
-
 
         <dependency>
             <groupId>mysql</groupId>
@@ -168,20 +166,6 @@
     </properties>
 
     <profiles>
-        <profile>
-            <id>sonar</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <!-- Optional URL to server. Default value is http://localhost:9000 -->
-                <sonar.host.url>
-                    http://localhost:9000
-                </sonar.host.url>
-
-                <!--<sonar.exclusions>/src/main/java/org.mehaexample.asdDemo.model.*</sonar.exclusions>-->
-            </properties>
-        </profile>
 
         <profile>
             <id>dev_env_config</id>

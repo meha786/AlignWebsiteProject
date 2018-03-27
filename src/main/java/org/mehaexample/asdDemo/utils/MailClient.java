@@ -1,4 +1,4 @@
-package org.mehaexample.asdDemo.model.alignprivate;
+package org.mehaexample.asdDemo.utils;
 
 import java.util.*;
 import javax.mail.*;
@@ -27,10 +27,13 @@ public class MailClient
         };
         Session session = Session.getInstance(props, auth);
 
-        String resetLink = "http://localhost:8080/alignWebsite/webapi/admin-facing/password-reset";
+        String resetLink = "http://localhost:8080/alignWebsite/webapi/student-facing/password-create";
         sendEmail(session, toEmail,"Password Reset Email Northeastern Account", 
-        		"Your Registration key is: " + registrationKey + "and reset link is " + resetLink);
-
+        		"Hello! \n \n" +
+        		"Your Registration key is: " + registrationKey + "\n" +
+        		"Password Reset link: " + resetLink + "\n" +
+        		"Thanks," + "\n" + 
+        		"Neu Team");
     }
 
 	public static void sendRegistrationEmail(String toEmail, String registrationKey) {
@@ -53,10 +56,13 @@ public class MailClient
         };
         Session session = Session.getInstance(props, auth);
 
-        String resetLink = "http://localhost:8080/alignWebsite/webapi/registration";
-        sendEmail(session, toEmail,"Registration Email Northeastern Account", 
-        		"Your Registration key is: " + registrationKey + "and Registration link is " + resetLink);
-
+        String resetLink = "http://localhost:8080/alignWebsite/webapi/student-facing/password-create";
+        sendEmail(session, toEmail,"Registration Email Northeastern Account",
+        		"Hello! \n \n" +
+        		"Your Registration key is: " + registrationKey + "\n" +
+        		"Registeration link: " + resetLink + "\n" +
+        		"Thanks," + "\n" + 
+        		"Neu Team");
     }
 	
     private static void sendEmail(Session session, String toEmail, String subject, String body){
