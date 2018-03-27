@@ -18,12 +18,12 @@ public class StudentsPublicDao {
   public StudentsPublicDao() {
     // it will check the hibernate.cfg.xml file and load it
     // next it goes to all table files in the hibernate file and loads them
-    factory = new Configuration().configure("/hibernate_Public.cfg.xml").buildSessionFactory();
+    this.factory = PublicSessionFactory.getFactory();
   }
 
   public StudentsPublicDao(boolean test) {
     if (test) {
-      factory = new Configuration().configure("/hibernate_public_test.cfg.xml").buildSessionFactory();
+      this.factory = PublicTestSessionFactory.getFactory();
     }
   }
 
@@ -186,6 +186,28 @@ public class StudentsPublicDao {
       session.close();
     }
     return list;
+  }
+
+  public boolean updateStudent(StudentsPublic student) {
+    if (findStudentByPublicId(student.getPublicId()) == null) {
+      throw new HibernateException("Cannot find student with that public Id");
+    }
+
+    Transaction tx = null;
+
+    try {
+      session = factory.openSession();
+      tx = session.beginTransaction();
+      session.saveOrUpdate(student);
+      tx.commit();
+    } catch (HibernateException e) {
+      if (tx != null) tx.rollback();
+      throw new HibernateException(e);
+    } finally {
+      session.close();
+    }
+
+    return true;
   }
 
   public boolean deleteStudentByPublicId(int publicId) {

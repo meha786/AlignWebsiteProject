@@ -4,8 +4,9 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import org.mehaexample.asdDemo.enums.Campus;
+import org.mehaexample.asdDemo.model.alignadmin.TopBachelor;
+import org.mehaexample.asdDemo.model.alignadmin.TopEmployer;
 import org.mehaexample.asdDemo.model.alignprivate.StudentBasicInfo;
 import org.mehaexample.asdDemo.model.alignprivate.StudentCoopList;
 import org.mehaexample.asdDemo.model.alignprivate.WorkExperiences;
@@ -23,12 +24,12 @@ public class WorkExperiencesDao {
    * next it goes to all table files in the hibernate file and loads them.
    */
   public WorkExperiencesDao() {
-    factory = new Configuration().configure().buildSessionFactory();
+    this.factory = StudentSessionFactory.getFactory();
   }
 
   public WorkExperiencesDao(boolean test) {
     if (test) {
-      factory = new Configuration().configure("/hibernate_private_test.cfg.xml").buildSessionFactory();
+      this.factory = StudentTestSessionFactory.getFactory();
     }
   }
 
@@ -95,6 +96,17 @@ public class WorkExperiencesDao {
     }
 
     return workExperience;
+  }
+
+  public int getTotalStudentsGotJob() {
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery(
+              "SELECT COUNT(DISTINCT we.neuId) FROM WorkExperiences we");
+      return ((Long) query.list().get(0)).intValue();
+    } finally {
+      session.close();
+    }
   }
 
   /**
@@ -172,8 +184,9 @@ public class WorkExperiencesDao {
     return true;
   }
 
-  public List<String> getTopTenEmployers(Campus campus, Integer year) {
-    StringBuilder hql = new StringBuilder("SELECT we.companyName AS CompanyName " +
+  public List<TopEmployer> getTopTenEmployers(Campus campus, Integer year) {
+    StringBuilder hql = new StringBuilder("SELECT NEW org.mehaexample.asdDemo.model.alignadmin.TopEmployer( " +
+            "we.companyName, Count(*) ) " +
             "FROM Students s INNER JOIN WorkExperiences we " +
             "ON s.neuId = we.neuId ");
     boolean first = true;
@@ -190,11 +203,10 @@ public class WorkExperiencesDao {
       hql.append("s.expectedLastYear = :year ");
     }
     hql.append("GROUP BY s.neuId ");
-    hql.append("ORDER BY Count(DISTINCT s.neuId) DESC ");
+    hql.append("ORDER BY Count(*) DESC ");
     try {
       session = factory.openSession();
-      org.hibernate.query.Query query = session.createQuery(
-              hql.toString());
+      TypedQuery<TopEmployer> query = session.createQuery(hql.toString(), TopEmployer.class);
       query.setMaxResults(10);
       if (campus != null) {
         query.setParameter("campus", campus);
@@ -202,7 +214,7 @@ public class WorkExperiencesDao {
       if (year != null) {
         query.setParameter("year", year);
       }
-      return (List<String>) query.list();
+      return query.getResultList();
     } finally {
       session.close();
     }

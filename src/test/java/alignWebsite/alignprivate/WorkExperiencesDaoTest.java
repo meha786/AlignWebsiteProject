@@ -12,6 +12,7 @@ import org.mehaexample.asdDemo.enums.DegreeCandidacy;
 import org.mehaexample.asdDemo.enums.EnrollmentStatus;
 import org.mehaexample.asdDemo.enums.Gender;
 import org.mehaexample.asdDemo.enums.Term;
+import org.mehaexample.asdDemo.model.alignadmin.TopEmployer;
 import org.mehaexample.asdDemo.model.alignprivate.StudentBasicInfo;
 import org.mehaexample.asdDemo.model.alignprivate.StudentCoopList;
 import org.mehaexample.asdDemo.model.alignprivate.Students;
@@ -151,8 +152,35 @@ public class WorkExperiencesDaoTest {
   }
 
   @Test
+  public void getTotalStudentsGotJobTest() throws ParseException {
+    WorkExperiences newWorkExperience = new WorkExperiences();
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    newWorkExperience.setStartDate(dateFormat.parse("2018-06-01"));
+    newWorkExperience.setEndDate(dateFormat.parse("2018-12-01"));
+    newWorkExperience.setCurrentJob(false);
+    newWorkExperience.setTitle("Title");
+    newWorkExperience.setDescription("Description");
+    newWorkExperience.setNeuId("001234567");
+    newWorkExperience.setCompanyName("Amazon");
+    workExperiencesDao.createWorkExperience(newWorkExperience);
+
+    WorkExperiences newWorkExperience2 = new WorkExperiences();
+    SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
+    newWorkExperience2.setStartDate(dateFormat2.parse("2018-06-01"));
+    newWorkExperience2.setEndDate(dateFormat2.parse("2018-12-01"));
+    newWorkExperience2.setCurrentJob(false);
+    newWorkExperience2.setTitle("Title");
+    newWorkExperience2.setDescription("Description");
+    newWorkExperience2.setNeuId("111234567");
+    newWorkExperience2.setCompanyName("Aaa");
+    workExperiencesDao.createWorkExperience(newWorkExperience2);
+
+    assertTrue(workExperiencesDao.getTotalStudentsGotJob() == 2);
+  }
+
+  @Test
   public void getTopTenEmployersTest() throws ParseException {
-    List<String> temp = workExperiencesDao.getTopTenEmployers(null, null);
+    List<TopEmployer> temp = workExperiencesDao.getTopTenEmployers(null, null);
     assertTrue(temp.size() == 1);
 
     WorkExperiences newWorkExperience = new WorkExperiences();

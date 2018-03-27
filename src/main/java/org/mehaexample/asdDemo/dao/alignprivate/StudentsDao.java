@@ -7,9 +7,9 @@ import java.util.Set;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import org.mehaexample.asdDemo.enums.Campus;
 import org.mehaexample.asdDemo.enums.DegreeCandidacy;
+import org.mehaexample.asdDemo.enums.EnrollmentStatus;
 import org.mehaexample.asdDemo.enums.Gender;
 import org.mehaexample.asdDemo.model.alignprivate.Students;
 import org.hibernate.Session;
@@ -25,12 +25,12 @@ public class StudentsDao {
   public StudentsDao() {
     // it will check the hibernate.cfg.xml file and load it
     // next it goes to all table files in the hibernate file and loads them
-    factory = new Configuration().configure().buildSessionFactory();
+    this.factory = StudentSessionFactory.getFactory();
   }
 
   public StudentsDao(boolean test) {
     if (test) {
-      factory = new Configuration().configure("/hibernate_private_test.cfg.xml").buildSessionFactory();
+      this.factory = StudentTestSessionFactory.getFactory();
     }
   }
 
@@ -62,10 +62,34 @@ public class StudentsDao {
     return student;
   }
 
+  public int getTotalStudentsInACampus(Campus campus) {
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery(
+              "SELECT COUNT(*) FROM Students WHERE campus = :campus");
+      query.setParameter("campus", campus);
+      return ((Long) query.list().get(0)).intValue();
+    } finally {
+      session.close();
+    }
+  }
+
+  public int getTotalStudents() {
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery(
+              "SELECT COUNT(*) FROM Students");
+      return ((Long) query.list().get(0)).intValue();
+    } finally {
+      session.close();
+    }
+  }
+
   public List<Students> getAdminFilteredStudents(Map<String, List<String>> filters, int begin, int end) {
     StringBuilder hql = new StringBuilder("SELECT Distinct(s) " +
-            "FROM Students s LEFT OUTER JOIN WorkExperiences we " +
-            "ON s.neuId = we.neuId");
+            "FROM Students s " +
+            "LEFT OUTER JOIN WorkExperiences we ON s.neuId = we.neuId " +
+            "LEFT OUTER JOIN PriorEducations pe ON s.neuId = pe.neuId ");
     Set<String> filterKeys = filters.keySet();
     if (!filters.isEmpty()) {
       hql.append(" WHERE ");
@@ -85,8 +109,10 @@ public class StudentsDao {
         if (first) {
           first = false;
         }
-        if (filter.equals("companyName")) {
+        if (filter.equalsIgnoreCase("companyName")) {
           hql.append("we.").append(filter).append(" = :").append(filter).append(i);
+        } else if (filter.equalsIgnoreCase("majorName") || filter.equalsIgnoreCase("institutionName")) {
+          hql.append("pe.").append(filter).append(" = :").append(filter).append(i);
         } else {
           hql.append("s.").append(filter).append(" = :").append(filter).append(i);
         }
@@ -112,6 +138,8 @@ public class StudentsDao {
           } else {
             if (filter.trim().equalsIgnoreCase("CAMPUS")) {
               query.setParameter(filter + i, Campus.valueOf(filterElements.get(i).trim().toUpperCase()));
+            } else if (filter.trim().equalsIgnoreCase("GENDER")) {
+              query.setParameter(filter + i, Gender.valueOf(filterElements.get(i).trim().toUpperCase()));
             } else {
               query.setParameter(filter + i, filterElements.get(i));
             }
@@ -120,6 +148,18 @@ public class StudentsDao {
       }
 
       return (List<Students>) query.list();
+    } finally {
+      session.close();
+    }
+  }
+
+  public int getTotalDropOutStudents() {
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery(
+              "SELECT COUNT(*) FROM Students WHERE enrollmentStatus = :enrollmentStatus");
+      query.setParameter("enrollmentStatus", EnrollmentStatus.DROPPED_OUT);
+      return ((Long) query.list().get(0)).intValue();
     } finally {
       session.close();
     }

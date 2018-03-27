@@ -1,22 +1,29 @@
 package org.mehaexample.asdDemo.alignWebsite;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.json.JSONArray;
+import org.jose4j.jwe.ContentEncryptionAlgorithmIdentifiers;
+import org.jose4j.jwe.JsonWebEncryption;
+import org.jose4j.jwe.KeyManagementAlgorithmIdentifiers;
+import org.jose4j.keys.AesKey;
 import org.json.JSONObject;
 import org.mehaexample.asdDemo.dao.alignadmin.AdminLoginsDao;
 import org.mehaexample.asdDemo.dao.alignadmin.ElectivesAdminDao;
@@ -29,6 +36,14 @@ import org.mehaexample.asdDemo.enums.Campus;
 import org.mehaexample.asdDemo.model.alignadmin.AdminLogins;
 import org.mehaexample.asdDemo.model.alignadmin.ElectivesAdmin;
 import org.mehaexample.asdDemo.model.alignadmin.GenderRatio;
+
+import org.mehaexample.asdDemo.model.alignadmin.LoginObject;
+import org.mehaexample.asdDemo.model.alignadmin.PasswordChangeObject;
+import org.mehaexample.asdDemo.model.alignadmin.TopBachelor;
+import org.mehaexample.asdDemo.model.alignadmin.TopElective;
+import org.mehaexample.asdDemo.model.alignadmin.TopEmployer;
+import org.mehaexample.asdDemo.model.alignadmin.paramsObject;
+import org.mehaexample.asdDemo.model.alignprivate.MailClient;
 import org.mehaexample.asdDemo.model.alignprivate.StudentBasicInfo;
 import org.mehaexample.asdDemo.model.alignprivate.StudentCoopList;
 import org.mehaexample.asdDemo.model.alignprivate.StudentLogins;
@@ -41,6 +56,7 @@ import org.mehaexample.asdDemo.restModels.StudentsInCompany;
 import org.mehaexample.asdDemo.restModels.StudentsWorkingFullTime;
 import org.mehaexample.asdDemo.utils.MailClient;
 import org.mehaexample.asdDemo.utils.StringUtils;
+
 
 @Path("admin-facing")
 public class AdminFacing{
@@ -66,73 +82,63 @@ public class AdminFacing{
 	@Path("students")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response searchStudent(String search){
-		JSONObject jsonObj = new JSONObject(search);
+	public Response searchStudent(paramsObject input){
 		Map<String,List<String>> map = new HashMap<String,List<String>>();
-		String firstname = "";
-		String lastname = "";
-		String email = "";
-		String degreeyear = "";
-		String enrollmentstatus = "";
-		String campus = "";
-		String company = "";
-		if (!jsonObj.isNull("firstname")){
-			firstname = jsonObj.get("firstname").toString();
+		int begin = 1;
+		int end = 20;
+		if (input.getFirstname()!=null){
+			System.out.println("got firstname"+input.getFirstname());
 			ArrayList<String> firstnameList = new ArrayList<String>();
-			firstnameList.add(firstname);
+			firstnameList.add(input.getFirstname());
 			map.put("firstName",firstnameList);
 		}
-		if (!jsonObj.isNull("lastname")){
-			lastname = jsonObj.get("lastname").toString();
+		if (input.getLastname()!=null){
 			ArrayList<String> lastnameList = new ArrayList<String>();
-			lastnameList.add(lastname);
+			lastnameList.add(input.getLastname());
 			map.put("lastName",lastnameList);
 		}
-		if (!jsonObj.isNull("email")){
-			email = jsonObj.get("email").toString();
+		if (input.getEmail()!=null){
 			ArrayList<String> emailList = new ArrayList<String>();
-			emailList.add(email);
+			emailList.add(input.getEmail());
 			map.put("email",emailList);
 		}
-		if (!jsonObj.isNull("degreeyear")){
-			degreeyear = jsonObj.get("degreeyear").toString();
+		if (input.getDegreeyear()!=null){
 			ArrayList<String> degreeyearList = new ArrayList<String>();
-			degreeyearList.add(degreeyear);
+			degreeyearList.add(input.getDegreeyear());
 			map.put("expectedLastYear",degreeyearList);
 		}
-		if (!jsonObj.isNull("enrollmentstatus")){
-			enrollmentstatus = jsonObj.get("enrollmentstatus").toString();
+		if (input.getEnrollmentstatus()!=null){
 			ArrayList<String> enrollmentstatusList = new ArrayList<String>();
-			enrollmentstatusList.add(enrollmentstatus);
+			enrollmentstatusList.add(input.getEnrollmentstatus());
 			map.put("enrollmentStatus",enrollmentstatusList);
 		}
-		if (!jsonObj.isNull("campus")){
-			campus = jsonObj.get("campus").toString();
+		if (input.getCampus()!=null){
 			ArrayList<String> campusList = new ArrayList<String>();
-			campusList.add(campus);
+			campusList.add(input.getCampus());
 			map.put("campus",campusList);
 		}
-		if (!jsonObj.isNull("company")){
-			company = jsonObj.get("company").toString();
+		if (input.getCompany()!=null){
 			ArrayList<String> companyList = new ArrayList<String>();
-			companyList.add(company);
+			companyList.add(input.getCompany());
 			map.put("companyName",companyList);
 		}
-		ArrayList<Students> studentRecords = (ArrayList<Students>) studentDao.getAdminFilteredStudents(map, 1, 20);
-		JSONArray resultArray = new JSONArray();
 
-		for(Students st : studentRecords) {
-			JSONObject studentJson = new JSONObject();
-			JSONObject eachStudentJson = new JSONObject(st);
-			java.util.Set<String> keys = eachStudentJson.keySet();
-			for(int i=0;i<keys.toArray().length; i++){
-				studentJson.put(((String) keys.toArray()[i]).toLowerCase(), eachStudentJson.get((String) keys.toArray()[i]));
-			}
-			resultArray.put(studentJson);
+		try{
+		if (input.getBeginindex()!=null){
+			begin = Integer.valueOf(input.getBeginindex());
 		}
-		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
+		if (input.getEndindex()!=null){
+			end = Integer.valueOf(input.getEndindex());
+		}
+		}
+		catch(Exception e) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("please specify begin and end index.").build();
+		}
+		ArrayList<Students> studentRecords = (ArrayList<Students>) studentDao.getAdminFilteredStudents(map, begin, end);
+		return Response.status(Response.Status.OK).entity(studentRecords).build();
 	}
-
+	
+	
 	/**
 	 * This is the function to search a student based on his/her nuid.
 	 *	
@@ -171,31 +177,20 @@ public class AdminFacing{
 	@Path("analytics/gender-ratio")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getGenderRatio(String para) throws SQLException{
-		JSONObject jsonObj = new JSONObject(para);
-		Object campus ="";
-		List<GenderRatio> ratio = new ArrayList();
-		if (!jsonObj.isNull("campus")){
+	public Response getGenderRatio(paramsObject input) throws SQLException{
+		
+		List<GenderRatio> ratio = new ArrayList<GenderRatio>();
+		if (input.getCampus()!=null){
 			try{
-				campus = jsonObj.get("campus");
-				ratio = genderRatioDao.getYearlyGenderRatio(Campus.valueOf(campus.toString().toUpperCase()));
+				ratio = genderRatioDao.getYearlyGenderRatio(Campus.valueOf(input.getCampus().toUpperCase()));
 			} catch(Exception e){
 				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist").build();
 			}
 		} else {
 			return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus field cannot be null").build();
 		}
-		JSONArray resultArray = new JSONArray();
-		for(GenderRatio gr : ratio) {
-			JSONObject studentJson = new JSONObject();
-			JSONObject eachStudentJson = new JSONObject(gr);
-			java.util.Set<String> keys = eachStudentJson.keySet();
-			for(int i=0;i<keys.toArray().length; i++){
-				studentJson.put(((String) keys.toArray()[i]).toLowerCase(), eachStudentJson.get((String) keys.toArray()[i]));
-			}
-			resultArray.put(studentJson);
-		}
-		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
+
+		return Response.status(Response.Status.OK).entity(ratio).build();
 	}
 
 	/**
@@ -211,23 +206,31 @@ public class AdminFacing{
 	@Path("analytics/top-bachelor-degrees")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getTopBachelorDegree(String para) throws SQLException{
-		JSONObject jsonObj = new JSONObject(para);
-		Object campus ="";
-		List<String> degrees = new ArrayList();
-		if (!jsonObj.isNull("campus")){
+	public Response getTopBachelorDegree(paramsObject input) throws SQLException{
+		List<TopBachelor> degrees = new ArrayList<TopBachelor>();
+		if (input.getCampus()!=null && input.getYear()!=null){
 			try{
-				campus = jsonObj.get("campus");
-				degrees = priorEducationsDao.getTopTenBachelors(Campus.valueOf(campus.toString().toUpperCase()));
+				degrees = priorEducationsDao.getTopTenBachelors(Campus.valueOf(input.getCampus().toUpperCase()),Integer.valueOf(input.getYear()));
 			} catch(Exception e){
-				degrees = priorEducationsDao.getTopTenBachelors(null);
+				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist or year should be integer.").build();
 			}
+		} else if (input.getCampus()!=null && input.getYear()==null){
+			try{
+				degrees = priorEducationsDao.getTopTenBachelors(Campus.valueOf(input.getCampus().toUpperCase()),null);
+			} catch(Exception e){
+				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist.").build();
+			}
+		} else if (input.getCampus()==null && input.getYear()!=null){
+			try{
+				degrees = priorEducationsDao.getTopTenBachelors(null,Integer.valueOf(input.getYear()));
+			} catch(Exception e){
+				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist or year should be integer.").build();
+			}
+		} else if (input.getCampus()==null && input.getYear()==null){
+			degrees = priorEducationsDao.getTopTenBachelors(null,null);
 		}
-		JSONArray resultArray = new JSONArray();
-		for(String deg : degrees) {
-			resultArray.put(deg);
-		}
-		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
+
+		return Response.status(Response.Status.OK).entity(degrees).build();
 	}
 
 	/**
@@ -243,43 +246,33 @@ public class AdminFacing{
 	@Path("analytics/top-employers")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getTopEmployers(String para) throws SQLException{
-		JSONObject jsonObj = new JSONObject(para);
-		Object campus = null;
-		Campus camp;
-		int year;
-		List<String> employers = new ArrayList();
-		try{
-			if (!jsonObj.isNull("campus")){
-				campus = jsonObj.get("campus");
-				camp = Campus.valueOf(campus.toString().toUpperCase());
-			} else {
-				camp = null;
+	public Response getTopEmployers(paramsObject input) throws SQLException{
+		List<TopEmployer> employers = new ArrayList<TopEmployer>();
+		if (input.getCampus()!=null && input.getYear()!=null){
+			try{
+				employers = workExperiencesDao.getTopTenEmployers(Campus.valueOf(input.getCampus().toUpperCase()),Integer.valueOf(input.getYear()));
+			} catch(Exception e){
+				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist or year should be integer.").build();
 			}
-		} catch(Exception e){
-			camp = null;
-		}
-		try{
-			if (!jsonObj.isNull("year")){
-				year = Integer.valueOf(jsonObj.get("year").toString());
-			} else {
-				year = -1;
+		} else if (input.getCampus()!=null && input.getYear()==null){
+			try{
+				employers = workExperiencesDao.getTopTenEmployers(Campus.valueOf(input.getCampus().toUpperCase()),null);
+			} catch(Exception e){
+				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist.").build();
 			}
-		} catch(Exception e){
-			year = -1;
-		}
-		if (year <0)
-			employers = workExperiencesDao.getTopTenEmployers(camp,null);
-		else
-			employers = workExperiencesDao.getTopTenEmployers(camp,year);
-		JSONArray resultArray = new JSONArray();
-		for(String emp : employers) {
-			resultArray.put(emp);
-		}
-		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
+
+		}else if (input.getCampus()==null && input.getYear()!=null){
+			try{
+				employers = workExperiencesDao.getTopTenEmployers(null,Integer.valueOf(input.getYear()));
+			} catch(Exception e){
+				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist.").build();
+			}
+		} else if (input.getCampus()==null && input.getYear()==null){
+			employers = workExperiencesDao.getTopTenEmployers(null,null);
+		} 
+		return Response.status(Response.Status.OK).entity(employers).build();
 	}
-
-
+	
 	/**
 	 * This is the function to get the top 10 electives.
 	 *	
@@ -293,40 +286,31 @@ public class AdminFacing{
 	@Path("analytics/top-electives")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getTopElectives(String para) throws SQLException{
-		JSONObject jsonObj = new JSONObject(para);
-		Object campus =null;
-		Campus camp;
-		int year;
-		List<String> electives = new ArrayList();
-		try{
-			if (!jsonObj.isNull("campus")){
-				campus = jsonObj.get("campus");
-				camp = Campus.valueOf(campus.toString().toUpperCase());
-			} else {
-				camp = null;
+	public Response getTopElectives(paramsObject input) throws SQLException{
+		List<TopElective> electives = new ArrayList<TopElective>();
+		if (input.getCampus()!=null && input.getYear()!=null){
+			try{
+				electives = electivesDao.getTopTenElectives(Campus.valueOf(input.getCampus().toUpperCase()),Integer.valueOf(input.getYear()));
+			} catch(Exception e){
+				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist or year should be integer.").build();
 			}
-		} catch(Exception e){
-			camp = null;
-		}
-		try{
-			if (!jsonObj.isNull("year")){
-				year = Integer.valueOf(jsonObj.get("year").toString());
-			} else {
-				year = -1;
+		} else if (input.getCampus()!=null && input.getYear()==null){
+			try{
+				electives = electivesDao.getTopTenElectives(Campus.valueOf(input.getCampus().toUpperCase()),null);
+			} catch(Exception e){
+				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist.").build();
 			}
-		} catch(Exception e){
-			year = -1;
+		} else if (input.getCampus()==null && input.getYear()!=null){
+			try{
+				electives = electivesDao.getTopTenElectives(null,Integer.valueOf(input.getYear()));
+			} catch(Exception e){
+				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("year should be integer.").build();
+			}
+		} else if (input.getCampus()==null && input.getYear()==null){
+			electives = electivesDao.getTopTenElectives(null,null);
 		}
-		if (year <0)
-			electives = electivesDao.getTopTenElectives(camp,null);
-		else
-			electives = electivesDao.getTopTenElectives(camp,year);
-		JSONArray resultArray = new JSONArray();
-		for(String ele : electives) {
-			resultArray.put(ele);
-		}
-		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
+
+		return Response.status(Response.Status.OK).entity(electives).build();
 	}
 
 	/**
@@ -342,53 +326,27 @@ public class AdminFacing{
 	@Path("analytics/coop-students")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getCoopStudents(String para) throws SQLException{
-		JSONObject jsonObj = new JSONObject(para);
-		Object campus =null;
-		Campus camp;
-		int year;
-		List<StudentCoopList> coopStudentsList = new ArrayList();
-		try{
-			if (!jsonObj.isNull("campus")){
-				campus = jsonObj.get("campus");
-				camp = Campus.valueOf(campus.toString().toUpperCase());
-			} else {
-				camp = null;
+	public Response getCoopStudents(paramsObject input) throws SQLException{
+		List<StudentCoopList> coopStudentsList = new ArrayList<StudentCoopList>();
+		if (input.getCampus()!=null && input.getYear()!=null){
+			try{
+				coopStudentsList = workExperiencesDao.getStudentCoopCompanies(Campus.valueOf(input.getCampus().toUpperCase()),Integer.valueOf(input.getYear()));
+			} catch(Exception e){
+				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist or year should be integer.").build();
 			}
-		} catch(Exception e){
-			camp = null;
-		}
-		try{
-			if (!jsonObj.isNull("year")){
-				year = Integer.valueOf(jsonObj.get("year").toString());
-			} else {
-				year = -1;
+		} else if (input.getCampus()!=null && input.getYear()==null){
+			try{
+				coopStudentsList = workExperiencesDao.getStudentCoopCompanies(Campus.valueOf(input.getCampus().toUpperCase()),null);
+			} catch(Exception e){
+				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist.").build();
 			}
-		} catch(Exception e){
-			year = -1;
+		} else if (input.getCampus()==null){
+			return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Campus cannot be null.").build();
 		}
-		if (year <0)
-			coopStudentsList = workExperiencesDao.getStudentCoopCompanies(camp,null);
-		else
-			coopStudentsList = workExperiencesDao.getStudentCoopCompanies(camp,year);
 
-		JSONArray resultArray = new JSONArray();
-		for(StudentCoopList cl : coopStudentsList) {
-			JSONObject studentJson = new JSONObject();
-			JSONObject eachStudentJson = new JSONObject(cl);
-			java.util.Set<String> keys = eachStudentJson.keySet();
-			for(int i=0;i<keys.toArray().length; i++){
-				studentJson.put(((String) keys.toArray()[i]).toLowerCase(), eachStudentJson.get((String) keys.toArray()[i]));
-			}
-			resultArray.put(studentJson);
-		}
-		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
+		return Response.status(Response.Status.OK).entity(coopStudentsList).build();
 	}
-
-
-
-	//====================================================================================
-
+	
 	/**
 	 * This is a function for retrieving the students working in a given company
 	 * 
@@ -398,29 +356,26 @@ public class AdminFacing{
 	 */
 	@POST
 	@Path("/analytics/company")
-	public Response getStudentsWorkingForACompany(StudentsInCompany studentsInCompany){
-
-		List<StudentBasicInfo> studentsList = new ArrayList();
-
-		String company = studentsInCompany.getCompany();
-		String camp = studentsInCompany.getCampus();
-		Campus campusEnum = studentsInCompany.getCampusAsEnum();
-		int year = studentsInCompany.getYear();
-		
-		System.out.println("compny = " + company + ", camp = " + camp + ", year = " + year + " , campus enum="+ campusEnum);  
-		// company can't have null value
-		if (StringUtils.isNullOrEmpty(company)){ 
-			return Response.status(Response.Status.BAD_REQUEST).
-					entity("Company can't be null: ").build();
+	public Response getStudentsWorkingForACompany(paramsObject input){
+		List<StudentBasicInfo> studentsList = new ArrayList<StudentBasicInfo>();
+		if (input.getCampus()!=null && input.getCompany()!=null && input.getYear()!=null){
+			try{
+				studentsList = workExperiencesDao.getStudentsWorkingInACompany(Campus.valueOf(input.getCampus().toUpperCase()),Integer.valueOf(input.getYear()),input.getCompany());
+			} catch(Exception e){
+				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist or year should be integer.").build();
+			}
+		} else if (input.getCampus()!=null && input.getCompany()!=null && input.getYear()==null){
+			try{
+				studentsList = workExperiencesDao.getStudentsWorkingInACompany(Campus.valueOf(input.getCampus().toUpperCase()),null,input.getCompany());
+			} catch(Exception e){
+				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist.").build();
+			}
+		} else if (input.getCampus()==null || input.getCompany()==null){
+			return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Campus and Company cannot be null.").build();
 		}
-
-		if (year <=0)
-			studentsList = workExperiencesDao.getStudentsWorkingInACompany(campusEnum, null, company);
-		else
-			studentsList = workExperiencesDao.getStudentsWorkingInACompany(campusEnum, year, company);
-
+		
 		return Response.status(Response.Status.OK).
-				entity(studentsList).build();  	
+				entity(studentsList).build();  
 	}
 
 	/**
@@ -432,21 +387,29 @@ public class AdminFacing{
 	 */
 	@POST
 	@Path("/analytics/working")
-	public Response getStudentWorkingFullTime(StudentsWorkingFullTime studentsWorkingFullTime){
-		
-		List<StudentCoopList> studentsList = new ArrayList();
-				
-		Campus campus = studentsWorkingFullTime.getCampusAsEnum();
-		int year = studentsWorkingFullTime.getYear();
-
-		if (year <0)
-			studentsList = workExperiencesDao.getStudentCurrentCompanies(campus, null);
-		else
-			studentsList = workExperiencesDao.getStudentCurrentCompanies(campus, year); 
-		
+	public Response getStudentWorkingFullTime(paramsObject input){
+		List<StudentCoopList> studentsList = new ArrayList<StudentCoopList>();
+		if (input.getCampus()!=null && input.getYear()!=null){
+			try{
+				studentsList = workExperiencesDao.
+						getStudentCurrentCompanies(Campus.valueOf(input.getCampus().toUpperCase()),Integer.valueOf(input.getYear()));
+			} catch(Exception e){
+				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist or year should be integer.").build();
+			}
+		} else if (input.getCampus()!=null && input.getYear()==null){
+			try{
+				studentsList = workExperiencesDao.
+						getStudentCurrentCompanies(Campus.valueOf(input.getCampus().toUpperCase()),null);
+			} catch(Exception e){
+				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist.").build();
+			}
+		} else if (input.getCampus()==null){
+			return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Campus cannot be null.").build();
+		}
 		return Response.status(Response.Status.OK).
-				entity(studentsList).build();
+				entity(studentsList).build();  
 	}
+	
 	
 	/**
 	 * This is a function to change an existing admin's password
@@ -462,6 +425,7 @@ public class AdminFacing{
 	public Response changeUserPassword(PasswordChangeObject passwordChangeObject){
 
 		// check if the admin login exists already or not
+
 		AdminLogins adminLogins = adminLoginsDao.findAdminLoginsByEmail(passwordChangeObject.getEmail());
 
 		if(adminLogins == null){
@@ -478,6 +442,56 @@ public class AdminFacing{
 		}else{
 			return Response.status(Response.Status.BAD_REQUEST).
 					entity("Password Entered was Incorrect: ").build();
+		}
+	}
+	
+	/**
+	 * This is a function to change an existing admin's password
+	 * 
+	 * http://localhost:8080/alignWebsite/webapi/admin-facing/login
+	 * @param passwordChangeObject
+	 * @return 200 + token if logged in successfully else return 404
+	 */
+	@POST
+	@Path("/login")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loginUser(@Context HttpServletRequest request,LoginObject loginInput){
+		AdminLogins adminLogins = adminLoginsDao.findAdminLoginsByEmail(loginInput.getUsername());
+		if(adminLogins == null){
+			return Response.status(Response.Status.NOT_FOUND).
+					entity("User doesn't exist: " + loginInput.getUsername()).build();
+		}
+		if(adminLogins.getAdminPassword().equals(loginInput.getPassword())){
+			try {
+				JSONObject jsonObj = new JSONObject();
+				Timestamp keyExpiration = new Timestamp(System.currentTimeMillis()+15*60*1000);
+				adminLogins.setKeyExpiration(keyExpiration);
+				adminLoginsDao.updateAdminLogin(adminLogins);
+				String ip = request.getRemoteAddr();
+				JsonWebEncryption senderJwe = new JsonWebEncryption();
+				senderJwe.setPlaintext(adminLogins.getEmail()+"*#*"+ip+"*#*"+keyExpiration.toString());
+				senderJwe.setAlgorithmHeaderValue(KeyManagementAlgorithmIdentifiers.DIRECT);
+				senderJwe.setEncryptionMethodHeaderParameter(ContentEncryptionAlgorithmIdentifiers.AES_128_CBC_HMAC_SHA_256);
+				
+				String secretKey = ip+"sEcR3t_nsA-K3y";
+				byte[] key = secretKey.getBytes();
+				key = Arrays.copyOf(key, 32);
+				AesKey keyMain = new AesKey(key);
+				senderJwe.setKey(keyMain);
+				String compactSerialization = senderJwe.getCompactSerialization();
+				jsonObj.put("token", compactSerialization);
+				
+				return Response.status(Response.Status.OK).
+						entity(jsonObj.toString()).build();
+			} catch (Exception e) {
+				e.printStackTrace();
+				return Response.status(Response.Status.INTERNAL_SERVER_ERROR).
+						entity("Internal Server Error").build();
+			}
+		}else{
+			return Response.status(Response.Status.UNAUTHORIZED).
+					entity("Incorrect Password").build();
 		}
 	}
 
