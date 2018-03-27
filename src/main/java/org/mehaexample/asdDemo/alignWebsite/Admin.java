@@ -59,7 +59,7 @@ import com.lambdaworks.crypto.SCryptUtil;
 
 
 @Path("admin-facing")
-public class AdminFacing{
+public class Admin{
 
 	// DAO methods
 	StudentsDao studentDao = new StudentsDao(true);
