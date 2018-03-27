@@ -29,6 +29,7 @@ import org.mehaexample.asdDemo.dao.alignadmin.AdminLoginsDao;
 import org.mehaexample.asdDemo.dao.alignadmin.ElectivesAdminDao;
 import org.mehaexample.asdDemo.dao.alignadmin.GenderRatioDao;
 import org.mehaexample.asdDemo.dao.alignprivate.ElectivesDao;
+import org.mehaexample.asdDemo.dao.alignprivate.ExtraExperiencesDao;
 import org.mehaexample.asdDemo.dao.alignprivate.PriorEducationsDao;
 import org.mehaexample.asdDemo.dao.alignprivate.StudentsDao;
 import org.mehaexample.asdDemo.dao.alignprivate.WorkExperiencesDao;
@@ -41,6 +42,7 @@ import org.mehaexample.asdDemo.model.alignadmin.TopBachelor;
 import org.mehaexample.asdDemo.model.alignadmin.TopElective;
 import org.mehaexample.asdDemo.model.alignadmin.TopEmployer;
 import org.mehaexample.asdDemo.model.alignadmin.ParamsObject;
+import org.mehaexample.asdDemo.model.alignprivate.ExtraExperiences;
 import org.mehaexample.asdDemo.model.alignprivate.StudentBasicInfo;
 import org.mehaexample.asdDemo.model.alignprivate.StudentCoopList;
 import org.mehaexample.asdDemo.model.alignprivate.StudentLogins;
@@ -65,6 +67,7 @@ public class Admin{
 	PriorEducationsDao priorEducationsDao = new PriorEducationsDao(true);
 	ElectivesDao electivesDao = new ElectivesDao(true);
 	AdminLoginsDao adminLoginsDao = new AdminLoginsDao(true);
+	ExtraExperiencesDao extraExperiencesDao = new ExtraExperiencesDao(true);
 	StudentLogins studentLogins = new StudentLogins();
 
 	/**
@@ -156,16 +159,10 @@ public class Admin{
 		if (input.getEndindex()!=null){
 			end = Integer.valueOf(input.getEndindex());
 		}
-		if (input.getBeginindex()!=null){
-			begin = Integer.valueOf(input.getBeginindex());
-		}
-		if (input.getEndindex()!=null){
-			end = Integer.valueOf(input.getEndindex());
-		}
 		studentRecords = (ArrayList<Students>) studentDao.getAdminFilteredStudents(map, begin, end);
 		}
 		catch(Exception e) {
-			System.out.println(e);
+			e.printStackTrace();
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("please specify begin and end index.").build();
 		}
 		return Response.status(Response.Status.OK).entity(studentRecords).build();
@@ -191,6 +188,8 @@ public class Admin{
 			jsonObj.put("company", workEx);
 			ArrayList<ElectivesAdmin> electives = (ArrayList<ElectivesAdmin>) electiveDao.getElectivesByNeuId(nuid);
 			jsonObj.put("courses", electives);
+			List<ExtraExperiences> coop = extraExperiencesDao.getExtraExperiencesByNeuId(nuid);
+			jsonObj.put("coopexperience", coop);
 			return Response.status(Response.Status.OK).entity(jsonObj.toString()).build();
 		}
 	}
