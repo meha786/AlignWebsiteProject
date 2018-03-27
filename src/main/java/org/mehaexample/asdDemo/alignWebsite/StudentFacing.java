@@ -277,7 +277,7 @@ public class StudentFacing {
 
 			boolean success = false;
 			if(studentLogin == null){
-				
+
 				StudentLogins studentLoginUpdatedWithoutPassword = studentLoginsDao.createStudentLogin(studentLoginsNew);
 				if(studentLoginUpdatedWithoutPassword != null) {
 					success = true;
@@ -376,8 +376,7 @@ public class StudentFacing {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response changeUserPassword(PasswordChangeObject passwordChangeObject){
 
-		System.out.println("--" + passwordChangeObject.getEmail()+","+passwordChangeObject.getOldPassword());
-
+		// check if the student login exists i.e the request is made by already registered student
 		StudentLogins studentLogins = studentLoginsDao.findStudentLoginsByEmail(passwordChangeObject.getEmail());
 
 		if(studentLogins == null){
@@ -388,23 +387,28 @@ public class StudentFacing {
 		if(studentLogins.isConfirmed() == false){
 
 			return Response.status(Response.Status.NOT_ACCEPTABLE).
-					entity("Please create the password before resetting it! " + passwordChangeObject.getEmail()).build();
+					entity("Please create the password before reseting it! " + passwordChangeObject.getEmail()).build();
 		}
 
-		String enteredPassword = passwordChangeObject.getOldPassword();
-		String enteredHashedPassword = StringUtils.createHash(enteredPassword);
+		String enteredOldPassword = passwordChangeObject.getOldPassword();
+//		String convertOldPasswordToHash = StringUtils.createHash(enteredOldPassword);
+		
+		String enteredNewPassword = passwordChangeObject.getNewPassword();
+//		String convertNewPasswordToHash = StringUtils.createHash(enteredNewPassword);
 
-		//	    if(enteredHashedPassword.equals(studentLogins.getStudentPassword())){
-		//	    	
-		//	    	System.out.println("entered: " + enteredHashedPassword);
-		//	    	System.out.println("database: " + studentLogins.getStudentPassword());
-		//
-		//	    	return Response.status(Response.Status.NOT_ACCEPTABLE).
-		//					entity("The New Password can't be same as Old passoword ").build();
-		//	    }
+		if(enteredOldPassword.equals(enteredNewPassword)){
 
-		System.out.println("hash = " + enteredHashedPassword +" and existing pwd = " + studentLogins.getStudentPassword());
-		if(studentLogins.getStudentPassword().equals(enteredHashedPassword)){
+			System.out.println("entered: " + enteredOldPassword);
+			System.out.println("database: " + enteredNewPassword);
+
+			return Response.status(Response.Status.NOT_ACCEPTABLE).
+					entity("The New Password can't be same as Old passoword ").build();
+		}
+
+		String convertOldPasswordToHash = StringUtils.createHash(enteredOldPassword);
+		
+		// check if the entered old password is correct
+		if(studentLogins.getStudentPassword().equals(convertOldPasswordToHash)){
 
 			String hashNewPassword = StringUtils.createHash(passwordChangeObject.getNewPassword());
 
