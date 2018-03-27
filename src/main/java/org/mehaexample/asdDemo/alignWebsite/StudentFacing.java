@@ -1,5 +1,6 @@
 package org.mehaexample.asdDemo.alignWebsite;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +23,10 @@ import org.mehaexample.asdDemo.dao.alignprivate.StudentsDao;
 import org.mehaexample.asdDemo.model.alignadmin.AdminLogins;
 import org.mehaexample.asdDemo.model.alignprivate.StudentLogins;
 import org.mehaexample.asdDemo.model.alignprivate.Students;
-import org.mehaexample.asdDemo.restModels.MailClient;
 import org.mehaexample.asdDemo.restModels.PasswordChangeObject;
 import org.mehaexample.asdDemo.restModels.PasswordCreateObject;
 import org.mehaexample.asdDemo.restModels.PasswordResetObject;
+import org.mehaexample.asdDemo.utils.MailClient;
 import org.mehaexample.asdDemo.utils.StringUtils;
 import org.mehaexample.asdDemo.restModels.EmailToRegister;
 
@@ -244,7 +245,7 @@ public class StudentFacing {
 			// check if the student record exists in the student database
 			if(student == null){
 				return Response.status(Response.Status.BAD_REQUEST).
-						entity("Student should be an Align Student!").build();
+						entity("To Register should be an Align Student!").build();
 			}
 
 			// check if the student is already registered
@@ -254,12 +255,26 @@ public class StudentFacing {
 				// generate registration key 
 				String registrationKey = createRegistrationKey(); 
 
+				StudentLogins studentLoginsExisting = new StudentLogins();
+
+				Timestamp keyExpirationTime = new Timestamp(System.currentTimeMillis()+ 15*60*1000);
+
+				studentLoginsExisting.setEmail(studentEmail); 
+				studentLoginsExisting.setStudentPassword("waitingForCreatePassword");
+				studentLoginsExisting.setConfirmed(false);
+				studentLoginsExisting.setRegistrationKey(registrationKey);
+				studentLoginsExisting.setKeyExpiration(keyExpirationTime);
+
+				StudentLogins studentLoginUpdatedWithoutPassword = studentLoginsDao.createStudentLogin(studentLoginsExisting);
+
 				// after generation, send email
 				MailClient.sendRegistrationEmail(studentEmail, registrationKey);
 
-				return Response.status(Response.Status.OK).
-						entity("Registration link sent succesfully to " + studentEmail).build(); 
+				if(studentLoginUpdatedWithoutPassword != null){
 
+					return Response.status(Response.Status.OK).
+							entity("Registration link sent succesfully to " + studentEmail).build();
+				}
 			}else{
 
 				return Response.status(Response.Status.NOT_ACCEPTABLE).
@@ -267,7 +282,72 @@ public class StudentFacing {
 			} 
 
 		}
+		
+		return null;
+	}
 
+	/**
+	 * This function creates the password and registers the student
+	 * 
+	 * @param passwordCreateObject
+	 * @return 200 if password changed successfully else return 404
+	 */
+	@POST
+	@Path("/password-create")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response createPassword(PasswordCreateObject passwordCreateObject){
+		String email = passwordCreateObject.getEmail();
+		String password = passwordCreateObject.getPassword();
+		String registrationKey = passwordCreateObject.getRegistrationKey();
+		System.out.println(email + password + registrationKey); 
+
+		// before create password, a student login should exist
+		StudentLogins studentLoginsExisting = studentLoginsDao.findStudentLoginsByEmail(email);
+		if(studentLoginsExisting == null) {
+			return Response.status(Response.Status.BAD_REQUEST).
+					entity("Invalid Student details. Student does not exist" ).build();
+		}
+
+		String databaseRegistrationKey = studentLoginsExisting.getRegistrationKey();
+		Timestamp databaseTimestamp = studentLoginsExisting.getKeyExpiration();
+
+		// override existing values for testing
+		databaseTimestamp = new Timestamp(System.currentTimeMillis()+3600*1000);
+		databaseRegistrationKey = "a96f192f-554f-4d7f-8759-dedbebe92405";
+
+		if(studentLoginsExisting.isConfirmed() == true) {
+			return Response.status(Response.Status.OK).
+					entity("Password Already created. Consider resetting it" ).build();
+		}
+
+		// check if the entered registration key matches 
+		if((databaseRegistrationKey.equals(registrationKey))){
+
+			// if registration key matches, then check if its valid or not
+			Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+
+			// check if the database time is after the current time
+			if(databaseTimestamp.after(currentTimestamp)){
+				String hashedPassword = StringUtils.createHash(password);
+				studentLoginsExisting.setStudentPassword(hashedPassword);
+				studentLoginsExisting.setConfirmed(true);
+				boolean studentLoginUpdatedWithPassword = studentLoginsDao.updateStudentLogin(studentLoginsExisting);
+				if(studentLoginUpdatedWithPassword) {
+					return Response.status(Response.Status.OK).
+							entity("Student registered successfully!" ).build();
+				} else {
+					return Response.status(Response.Status.INTERNAL_SERVER_ERROR).
+							entity("Database exception thrown" ).build();
+				}
+			} else {
+				return Response.status(Response.Status.OK).
+						entity(" Registration key expired!" ).build();
+			}
+		} else {
+			return Response.status(Response.Status.BAD_REQUEST).
+					entity("Invalid registration key" ).build();
+		}
 	}
 
 	/**
@@ -284,7 +364,7 @@ public class StudentFacing {
 	public Response changeUserPassword(PasswordChangeObject passwordChangeObject){
 
 		System.out.println("--" + passwordChangeObject.getEmail()+","+passwordChangeObject.getOldPassword());
-		
+
 		StudentLogins studentLogins = studentLoginsDao.findStudentLoginsByEmail(passwordChangeObject.getEmail());
 
 		if(studentLogins == null){
@@ -292,12 +372,28 @@ public class StudentFacing {
 					entity("This Email doesn't exist: " + passwordChangeObject.getEmail()).build();
 		}
 
+		if(studentLogins.isConfirmed() == false){
+
+			return Response.status(Response.Status.NOT_ACCEPTABLE).
+					entity("Please create the password before resetting it! " + passwordChangeObject.getEmail()).build();
+		}
+
 		String enteredPassword = passwordChangeObject.getOldPassword();
-	    String enteredHashedPassword = StringUtils.createHash(enteredPassword);
-System.out.println("hash = " + enteredHashedPassword +" and existing pwd = " + studentLogins.getStudentPassword());
+		String enteredHashedPassword = StringUtils.createHash(enteredPassword);
+
+		//	    if(enteredHashedPassword.equals(studentLogins.getStudentPassword())){
+		//	    	
+		//	    	System.out.println("entered: " + enteredHashedPassword);
+		//	    	System.out.println("database: " + studentLogins.getStudentPassword());
+		//
+		//	    	return Response.status(Response.Status.NOT_ACCEPTABLE).
+		//					entity("The New Password can't be same as Old passoword ").build();
+		//	    }
+
+		System.out.println("hash = " + enteredHashedPassword +" and existing pwd = " + studentLogins.getStudentPassword());
 		if(studentLogins.getStudentPassword().equals(enteredHashedPassword)){
-			
-		    String hashNewPassword = StringUtils.createHash(passwordChangeObject.getNewPassword());
+
+			String hashNewPassword = StringUtils.createHash(passwordChangeObject.getNewPassword());
 
 			studentLogins.setStudentPassword(hashNewPassword);
 			studentLoginsDao.updateStudentLogin(studentLogins);
@@ -348,71 +444,6 @@ System.out.println("hash = " + enteredHashedPassword +" and existing pwd = " + s
 					entity("Password Reset link sent succesfully!" ).build(); 	
 		}
 
-	}
-
-	/**
-	 * This function creates the password and registers the student
-	 * 
-	 * @param passwordCreateObject
-	 * @return 200 if password changed successfully else return 404
-	 */
-	@POST
-	@Path("/create-password")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response createPassword(PasswordCreateObject passwordCreateObject){
-		String email = passwordCreateObject.getEmail();
-		String password = passwordCreateObject.getPassword();
-		String registrationKey = passwordCreateObject.getRegistrationKey();
-		System.out.println(email + password + registrationKey); 
-
-		// check if the student 
-		
-		// get the current student login
-		StudentLogins studentLoginsExisting = studentLoginsDao.findStudentLoginsByEmail(email);
-		if(studentLoginsExisting == null) {
-			return Response.status(Response.Status.BAD_REQUEST).
-					entity("Invalid Student details. Student does not exist" ).build();
-		}
-		
-		String databaseRegistrationKey = studentLoginsExisting.getRegistrationKey();
-		Timestamp databaseTimestamp = studentLoginsExisting.getKeyExpiration();
-		
-		// override existing values for testing
-		databaseTimestamp = new Timestamp(System.currentTimeMillis()+3600*1000);
-		databaseRegistrationKey = "122345";
-		
-		if(studentLoginsExisting.isConfirmed() == false) {
-			return Response.status(Response.Status.OK).
-					entity("Password Already created. Consider resetting it" ).build();
-		}
-		
-		// check if the entered registration key matches 
-		if((databaseRegistrationKey.equals(registrationKey))){
-			// if registration key matches, then check if its valid or not
-			Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
-
-			// check if the database time is after the current time
-			if(databaseTimestamp.after(currentTimestamp)){
-				String hashedPassword = StringUtils.createHash(password);
-				studentLoginsExisting.setStudentPassword(hashedPassword);
-				studentLoginsExisting.setConfirmed(true);
-				boolean studentLoginUpdatedWithPassword = studentLoginsDao.updateStudentLogin(studentLoginsExisting);
-				if(studentLoginUpdatedWithPassword) {
-					return Response.status(Response.Status.OK).
-							entity("Student registered successfully!" ).build();
-				} else {
-					return Response.status(Response.Status.INTERNAL_SERVER_ERROR).
-							entity("Database exception thrown" ).build();
-				}
-			} else {
-				return Response.status(Response.Status.OK).
-						entity(" Registration key expired successfully!" ).build();
-			}
-		} else {
-			return Response.status(Response.Status.BAD_REQUEST).
-					entity("Invalid registration key" ).build();
-		}
 	}
 
 	private String createRegistrationKey() {

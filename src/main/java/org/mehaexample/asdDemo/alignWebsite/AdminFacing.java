@@ -34,11 +34,12 @@ import org.mehaexample.asdDemo.model.alignprivate.StudentCoopList;
 import org.mehaexample.asdDemo.model.alignprivate.StudentLogins;
 import org.mehaexample.asdDemo.model.alignprivate.Students;
 import org.mehaexample.asdDemo.model.alignprivate.WorkExperiences;
-import org.mehaexample.asdDemo.restModels.MailClient;
 import org.mehaexample.asdDemo.restModels.PasswordChangeObject;
 import org.mehaexample.asdDemo.restModels.PasswordCreateObject;
+import org.mehaexample.asdDemo.restModels.PasswordResetObject;
 import org.mehaexample.asdDemo.restModels.StudentsInCompany;
 import org.mehaexample.asdDemo.restModels.StudentsWorkingFullTime;
+import org.mehaexample.asdDemo.utils.MailClient;
 import org.mehaexample.asdDemo.utils.StringUtils;
 
 @Path("admin-facing")
@@ -441,28 +442,11 @@ public class AdminFacing{
 		if (year <0)
 			studentsList = workExperiencesDao.getStudentCurrentCompanies(campus, null);
 		else
-			studentsList = workExperiencesDao.getStudentCurrentCompanies(campus, year);
-
-//		JSONArray resultArray = new JSONArray();
-
-//		for(StudentCoopList st : studentsList) {
-//			JSONObject studentJson = new JSONObject();
-//			JSONObject eachStudentJson = new JSONObject(st);
-//			java.util.Set<String> keys = eachStudentJson.keySet();
-//			for(int i=0;i<keys.toArray().length; i++){
-//				studentJson.put(((String) keys.toArray()[i]).toLowerCase(), eachStudentJson.get((String) keys.toArray()[i]));
-//			}
-//			resultArray.put(studentJson);
-//		}
-//
-//		return Response.status(Response.Status.OK).
-//				entity(resultArray.toString()).build();  
+			studentsList = workExperiencesDao.getStudentCurrentCompanies(campus, year); 
 		
 		return Response.status(Response.Status.OK).
 				entity(studentsList).build();
 	}
-
-	// =============================================================================================================
 	
 	/**
 	 * This is a function to change an existing admin's password
@@ -477,6 +461,7 @@ public class AdminFacing{
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response changeUserPassword(PasswordChangeObject passwordChangeObject){
 
+		// check if the admin login exists already or not
 		AdminLogins adminLogins = adminLoginsDao.findAdminLoginsByEmail(passwordChangeObject.getEmail());
 
 		if(adminLogins == null){
@@ -506,19 +491,18 @@ public class AdminFacing{
 	@Path("/password-reset")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response sendEmailForPasswordResetAdmin(String adminEmailInput){
+	public Response sendEmailForPasswordResetAdmin(PasswordResetObject passwordResetObject){
 
-		JSONObject jsonObj = new JSONObject(adminEmailInput);
-
-		if (jsonObj.isNull("email")){
+		String adminEmail = passwordResetObject.getEmail();
+		
+		if (adminEmail == null){
 			return Response.status(Response.Status.BAD_REQUEST).
 					entity("Email Id can't be null").build();
 		}else{
-			String adminEmail = (String) jsonObj.get("email");
 
+			// Check if the admin is registered already
 			AdminLogins adminLogins = adminLoginsDao.findAdminLoginsByEmail(adminEmail);
 
-			// or invalid entry
 			if(adminLogins == null){
 				return Response.status(Response.Status.NOT_FOUND).
 						entity("Email doesn't exist: " + adminEmail).build();
