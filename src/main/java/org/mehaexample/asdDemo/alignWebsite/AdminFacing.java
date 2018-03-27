@@ -117,12 +117,12 @@ public class AdminFacing{
 		}
 
 		try{
-		if (input.getBeginindex()!=null){
-			begin = Integer.valueOf(input.getBeginindex());
-		}
-		if (input.getEndindex()!=null){
-			end = Integer.valueOf(input.getEndindex());
-		}
+			if (input.getBeginindex()!=null){
+				begin = Integer.valueOf(input.getBeginindex());
+			}
+			if (input.getEndindex()!=null){
+				end = Integer.valueOf(input.getEndindex());
+			}
 		}
 		catch(Exception e) {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("please specify begin and end index.").build();
@@ -130,8 +130,8 @@ public class AdminFacing{
 		ArrayList<Students> studentRecords = (ArrayList<Students>) studentDao.getAdminFilteredStudents(map, begin, end);
 		return Response.status(Response.Status.OK).entity(studentRecords).build();
 	}
-	
-	
+
+
 	/**
 	 * This is the function to search a student based on his/her nuid.
 	 *	
@@ -171,7 +171,7 @@ public class AdminFacing{
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getGenderRatio(ParamsObject input) throws SQLException{
-		
+
 		List<GenderRatio> ratio = new ArrayList<GenderRatio>();
 		if (input.getCampus()!=null){
 			try{
@@ -265,7 +265,7 @@ public class AdminFacing{
 		} 
 		return Response.status(Response.Status.OK).entity(employers).build();
 	}
-	
+
 	/**
 	 * This is the function to get the top 10 electives.
 	 *	
@@ -339,7 +339,7 @@ public class AdminFacing{
 
 		return Response.status(Response.Status.OK).entity(coopStudentsList).build();
 	}
-	
+
 	/**
 	 * This is a function for retrieving the students working in a given company
 	 * 
@@ -366,7 +366,7 @@ public class AdminFacing{
 		} else if (input.getCampus()==null || input.getCompany()==null){
 			return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Campus and Company cannot be null.").build();
 		}
-		
+
 		return Response.status(Response.Status.OK).
 				entity(studentsList).build();  
 	}
@@ -402,7 +402,7 @@ public class AdminFacing{
 		return Response.status(Response.Status.OK).
 				entity(studentsList).build();  
 	}
-	
+
 	/**
 	 * This is a function to change an existing admin's password
 	 * 
@@ -431,7 +431,7 @@ public class AdminFacing{
 				senderJwe.setPlaintext(adminLogins.getEmail()+"*#*"+ip+"*#*"+keyExpiration.toString());
 				senderJwe.setAlgorithmHeaderValue(KeyManagementAlgorithmIdentifiers.DIRECT);
 				senderJwe.setEncryptionMethodHeaderParameter(ContentEncryptionAlgorithmIdentifiers.AES_128_CBC_HMAC_SHA_256);
-				
+
 				String secretKey = ip+"sEcR3t_nsA-K3y";
 				byte[] key = secretKey.getBytes();
 				key = Arrays.copyOf(key, 32);
@@ -439,7 +439,7 @@ public class AdminFacing{
 				senderJwe.setKey(keyMain);
 				String compactSerialization = senderJwe.getCompactSerialization();
 				jsonObj.put("token", compactSerialization);
-				
+
 				return Response.status(Response.Status.OK).
 						entity(jsonObj.toString()).build();
 			} catch (Exception e) {
@@ -474,13 +474,13 @@ public class AdminFacing{
 			return Response.status(Response.Status.NOT_FOUND).
 					entity("Email doesn't exist: Invalid Email" + passwordChangeObject.getEmail()).build();
 		}
-		
+
 		if(adminLogins.isConfirmed() == false){
 
 			return Response.status(Response.Status.NOT_ACCEPTABLE).
 					entity("Please create the password before reseting it! " + passwordChangeObject.getEmail()).build();
 		}
-		
+
 		String enteredOldPassword = passwordChangeObject.getOldPassword();
 
 		String enteredNewPassword = passwordChangeObject.getNewPassword();
@@ -511,7 +511,7 @@ public class AdminFacing{
 					entity("Incorrect Password: ").build();
 		}
 	}
-	
+
 
 	/**
 	 * This function sends email to admin’s northeastern ID to reset the password.
@@ -526,9 +526,9 @@ public class AdminFacing{
 	public Response sendEmailForPasswordResetAdmin(PasswordResetObject passwordResetObject){
 
 		String adminEmail = passwordResetObject.getEmail();
-		
+
 		if (adminEmail == null){
-			
+
 			return Response.status(Response.Status.BAD_REQUEST).
 					entity("Email Id can't be null").build();
 		}else{
@@ -537,13 +537,13 @@ public class AdminFacing{
 			AdminLogins adminLogins = adminLoginsDao.findAdminLoginsByEmail(adminEmail);
 
 			if(adminLogins == null){
-				
+
 				return Response.status(Response.Status.NOT_FOUND).
 						entity("Email doesn't exist: " + adminEmail).build();
 			}
-			
+
 			if(adminLogins.isConfirmed() == false){
-				
+
 				return Response.status(Response.Status.NOT_FOUND).
 						entity("Password can't be reset....Please create password and register: " + adminEmail).build();
 			}
@@ -551,12 +551,31 @@ public class AdminFacing{
 			// generate registration key 
 			String registrationKey = createRegistrationKey(); 
 
-			System.out.println("Registration key: " + registrationKey);
-			// after generation, send email
-			MailClient.sendPasswordResetEmail(adminEmail, registrationKey);
+			// Create TimeStamp for Key Expiration for 15 min
+			Timestamp keyExpirationTime = new Timestamp(System.currentTimeMillis()+ 15*60*1000);
 
-			return Response.status(Response.Status.OK).
-					entity("Password Reset link sent succesfully!" ).build(); 	
+			AdminLogins adminLoginsNew = new AdminLogins(); 
+
+			adminLoginsNew.setEmail(adminEmail);
+			adminLoginsNew.setAdminPassword(adminLogins.getAdminPassword()); 
+			adminLoginsNew.setLoginTime(adminLogins.getLoginTime()); 
+			adminLoginsNew.setRegistrationKey(registrationKey);
+			adminLoginsNew.setKeyExpiration(keyExpirationTime);
+			adminLoginsNew.setConfirmed(true);
+
+			boolean adminLoginUpdated = adminLoginsDao.updateAdminLogin(adminLoginsNew);
+
+			if(adminLoginUpdated) {
+
+				// after generation, send email
+				MailClient.sendPasswordResetEmail(adminEmail, registrationKey);
+
+				return Response.status(Response.Status.OK).
+						entity("Password Reset link sent succesfully!" ).build(); 
+			}
+
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).
+					entity("Something Went Wrong" + adminEmail).build();
 		}
 	}
 

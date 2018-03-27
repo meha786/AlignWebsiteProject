@@ -329,16 +329,18 @@ public class StudentFacing {
 		String databaseRegistrationKey = studentLoginsExisting.getRegistrationKey();
 		Timestamp databaseTimestamp = studentLoginsExisting.getKeyExpiration();
 
-		if(studentLoginsExisting.isConfirmed() == true) {
-			return Response.status(Response.Status.OK).
-					entity("Password Already created. Consider resetting it" ).build();
-		}
-
 		// check if the entered registration key matches 
 		if((databaseRegistrationKey.equals(registrationKey))){
 
 			// if registration key matches, then check if its valid or not
 			Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+			
+			String successMessage = "Congratulations Password created and Student registered successfully!";
+			
+			if(studentLoginsExisting.isConfirmed()){
+				
+				successMessage = "Password Reset successfully";
+			}
 
 			// check if the database time is after the current time
 			if(databaseTimestamp.after(currentTimestamp)){
@@ -347,8 +349,9 @@ public class StudentFacing {
 				studentLoginsExisting.setConfirmed(true);
 				boolean studentLoginUpdatedWithPassword = studentLoginsDao.updateStudentLogin(studentLoginsExisting);
 				if(studentLoginUpdatedWithPassword) {
+					
 					return Response.status(Response.Status.OK).
-							entity("Student registered successfully!" ).build();
+							entity(successMessage).build();
 				} else {
 					return Response.status(Response.Status.INTERNAL_SERVER_ERROR).
 							entity("Database exception thrown" ).build();
@@ -448,7 +451,7 @@ public class StudentFacing {
 			if(studentLogins == null){
 
 				return Response.status(Response.Status.NOT_FOUND).
-						entity("Email doesn't exist: " + studentLogins).build();
+						entity("Email doesn't exist, Please enter a valid Email Id " + studentLogins).build();
 			}
 
 			if(studentLogins.isConfirmed() == false){
@@ -460,12 +463,31 @@ public class StudentFacing {
 			// generate registration key 
 			String registrationKey = createRegistrationKey(); 
 
-			System.out.println("Registration key: " + registrationKey);
-			// after generation, send email
-			MailClient.sendPasswordResetEmail(studentEmail, registrationKey);
+			// Create TimeStamp for Key Expiration for 15 min
+			Timestamp keyExpirationTime = new Timestamp(System.currentTimeMillis()+ 15*60*1000);
 
-			return Response.status(Response.Status.OK).
-					entity("Password Reset link sent succesfully!" ).build(); 	
+			StudentLogins studentLoginsNew = new StudentLogins();
+
+			studentLoginsNew.setEmail(studentEmail);
+			studentLoginsNew.setStudentPassword(studentLogins.getStudentPassword()); 
+			studentLoginsNew.setLoginTime(studentLogins.getLoginTime()); 
+			studentLoginsNew.setRegistrationKey(registrationKey);
+			studentLoginsNew.setKeyExpiration(keyExpirationTime);
+			studentLoginsNew.setConfirmed(true);
+
+			boolean studentLoginUpdated = studentLoginsDao.updateStudentLogin(studentLoginsNew);
+
+			if(studentLoginUpdated) {
+				System.out.println("Registration key: " + registrationKey);
+				// after generation, send email
+				MailClient.sendPasswordResetEmail(studentEmail, registrationKey);
+
+				return Response.status(Response.Status.OK).
+						entity("Password Reset link sent succesfully!" ).build(); 
+			}
+
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).
+					entity("Something Went Wrong" + studentEmail).build();
 		}
 
 	}
