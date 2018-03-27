@@ -223,8 +223,9 @@ public class StudentFacing {
 	 * Send registration email to the student only if he/she is present in the align database
 	 * 
 	 * http://localhost:8080/alignWebsite/webapi/student-facing/registration
-	 * @param adminEmail
-	 * @return
+	 * test.alignstudent123@gmail.com
+	 * @param emailToRegister
+	 * @return 200 if Registration link is sent successfully
 	 */
 	@POST
 	@Path("/registration")
@@ -235,11 +236,13 @@ public class StudentFacing {
 
 		String studentEmail = emailToRegister.getEmail();
 
-		if (studentEmail == null){
+		// check if the email string is null or empty
+		if (StringUtils.isNullOrEmpty(studentEmail)){
 			return Response.status(Response.Status.BAD_REQUEST).
-					entity("Email Id can't be null").build();
+					entity("Email Id can't be null or empty").build();
 		}else{
 
+			// check if the student is a valid Align student
 			Students student = studentDao.getStudentRecordByEmailId(studentEmail);
 
 			// check if the student record exists in the student database
@@ -251,39 +254,53 @@ public class StudentFacing {
 			// check if the student is already registered
 			StudentLogins studentLogin = studentLoginsDao.findStudentLoginsByEmail(studentEmail);
 
-			if(studentLogin == null){
-				// generate registration key 
-				String registrationKey = createRegistrationKey(); 
-
-				StudentLogins studentLoginsExisting = new StudentLogins();
-
-				Timestamp keyExpirationTime = new Timestamp(System.currentTimeMillis()+ 15*60*1000);
-
-				studentLoginsExisting.setEmail(studentEmail); 
-				studentLoginsExisting.setStudentPassword("waitingForCreatePassword");
-				studentLoginsExisting.setConfirmed(false);
-				studentLoginsExisting.setRegistrationKey(registrationKey);
-				studentLoginsExisting.setKeyExpiration(keyExpirationTime);
-
-				StudentLogins studentLoginUpdatedWithoutPassword = studentLoginsDao.createStudentLogin(studentLoginsExisting);
-
-				// after generation, send email
-				MailClient.sendRegistrationEmail(studentEmail, registrationKey);
-
-				if(studentLoginUpdatedWithoutPassword != null){
-
-					return Response.status(Response.Status.OK).
-							entity("Registration link sent succesfully to " + studentEmail).build();
-				}
-			}else{
+			// check if studenLogin either has  record for given email and "confirmed" is true
+			if(studentLogin != null && (studentLogin.isConfirmed() == true)) {
 
 				return Response.status(Response.Status.NOT_ACCEPTABLE).
 						entity("Student is Already Registered!" + studentEmail).build();
-			} 
+			}
 
+			StudentLogins studentLoginsNew = new StudentLogins();
+
+			// generate registration key 
+			String registrationKey = createRegistrationKey(); 
+
+			// Create TimeStamp for Key Expiration for 15 min
+			Timestamp keyExpirationTime = new Timestamp(System.currentTimeMillis()+ 15*60*1000);
+
+			studentLoginsNew.setEmail(studentEmail); 
+			studentLoginsNew.setStudentPassword("waitingForCreatePassword");
+			studentLoginsNew.setConfirmed(false);
+			studentLoginsNew.setRegistrationKey(registrationKey);
+			studentLoginsNew.setKeyExpiration(keyExpirationTime);
+
+			boolean success = false;
+			if(studentLogin == null){
+				
+				StudentLogins studentLoginUpdatedWithoutPassword = studentLoginsDao.createStudentLogin(studentLoginsNew);
+				if(studentLoginUpdatedWithoutPassword != null) {
+					success = true;
+				}
+			}else{
+				boolean studentLoginUpdatedWithoutPassword = studentLoginsDao.updateStudentLogin(studentLoginsNew);
+				if(studentLoginUpdatedWithoutPassword == true) {
+					success = true;
+				}
+			}
+
+			// after record created without password, registration link will be sent
+
+			if(success){
+				MailClient.sendRegistrationEmail(studentEmail, registrationKey);
+
+				return Response.status(Response.Status.OK).
+						entity("Registration link sent succesfully to " + studentEmail).build();
+			}
+
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).
+					entity("Something Went Wrong" + studentEmail).build();
 		}
-		
-		return null;
 	}
 
 	/**
@@ -314,7 +331,7 @@ public class StudentFacing {
 
 		// override existing values for testing
 		databaseTimestamp = new Timestamp(System.currentTimeMillis()+3600*1000);
-		databaseRegistrationKey = "a96f192f-554f-4d7f-8759-dedbebe92405";
+		// databaseRegistrationKey = "a96f192f-554f-4d7f-8759-dedbebe92405";
 
 		if(studentLoginsExisting.isConfirmed() == true) {
 			return Response.status(Response.Status.OK).

@@ -1,6 +1,6 @@
 package org.mehaexample.asdDemo.model.alignadmin;
 
-public class paramsObject {
+public class ParamsObject {
 
 	private String campus; 
 	private String year;
@@ -16,7 +16,7 @@ public class paramsObject {
 	/**
 	 * 
 	 */
-	public paramsObject() {
+	public ParamsObject() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -30,7 +30,7 @@ public class paramsObject {
 	 * @param enrollmentstatus
 	 * @param company
 	 */
-	public paramsObject(String campus, String year, String firstname,
+	public ParamsObject(String campus, String year, String firstname,
 			String lastname, String email, String degreeyear,
 			String enrollmentstatus, String company) {
 		super();
