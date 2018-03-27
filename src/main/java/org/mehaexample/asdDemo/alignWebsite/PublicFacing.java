@@ -24,43 +24,42 @@ import org.mehaexample.asdDemo.model.alignpublic.TopCoops;
 import org.mehaexample.asdDemo.model.alignpublic.TopGradYears;
 import org.mehaexample.asdDemo.model.alignpublic.TopUndergradDegrees;
 import org.mehaexample.asdDemo.model.alignpublic.TopUndergradSchools;
+import org.mehaexample.asdDemo.restModels.StudentSerachCriteria;
+import org.mehaexample.asdDemo.restModels.TopCoopsNumber;
+import org.mehaexample.asdDemo.restModels.TopGraduationYearsNumber;
+import org.mehaexample.asdDemo.restModels.TopUnderGradDegreesNumber;
+import org.mehaexample.asdDemo.restModels.TopUnderGradSchools;
 
 @Path("public-facing")
 public class PublicFacing {
-
-	UndergraduatesPublicDao undergraduatesPublicDao = new UndergraduatesPublicDao();
-	WorkExperiencesPublicDao workExperiencesPublicDao = new WorkExperiencesPublicDao();
-	StudentsPublicDao studentsPublicDao = new StudentsPublicDao();
+	UndergraduatesPublicDao undergraduatesPublicDao = new UndergraduatesPublicDao(true);
+	WorkExperiencesPublicDao workExperiencesPublicDao = new WorkExperiencesPublicDao(true);
+	StudentsPublicDao studentsPublicDao = new StudentsPublicDao(true);
 	
 	/**
-	 * This is the function to get top undergraduate schools.
-	 *	The body should be in the JSON format like below:
-	 *	
-	 *	http://localhost:8080/alignWebsite/webapi/public-facing/top-undergradschools
-	 * @param search
+	 * This is the function to get top n undergraduate schools
+	 * 
+	 * @param topUnderGradSchools
 	 * @return List of n top undergraduate schools
+	 * @throws SQLException
 	 */
 	@POST
 	@Path("top-undergradschools")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getUndergradSchools(String para) throws SQLException{
-		JSONObject jsonObj = new JSONObject(para);
+	public Response getUndergradSchools(TopUnderGradSchools topUnderGradSchools) throws SQLException{
+
 		List<TopUndergradSchools> undergrad = new ArrayList();
-		int number = 10;
-		if (!jsonObj.isNull("number")){
-			try{
-				number = (int) jsonObj.get("number");
-			} catch(Exception e) {
-				return Response.status(Response.Status.BAD_REQUEST).entity("Bad Request").build();
-			}
+
+		int number = topUnderGradSchools.getNumber();
+		if(number < 1){
+			return Response.status(Response.Status.BAD_REQUEST).
+					entity("The number can't be less than one").build();
 		}
+		
 		undergrad = undergraduatesPublicDao.getTopUndergradSchools(number);
-		JSONArray resultArray = new JSONArray();
-		for(TopUndergradSchools ungrad : undergrad) {
-			resultArray.put(ungrad);
-	    }
-		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
+		
+		return Response.status(Response.Status.OK).entity(undergrad).build();
 	}
 
 	/**
@@ -75,23 +74,13 @@ public class PublicFacing {
 	@Path("top-coops")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getTopCoops(String para) throws SQLException{
-		JSONObject jsonObj = new JSONObject(para);
+	public Response getTopCoops(TopCoopsNumber topCoopsNumber) throws SQLException{
 		List<TopCoops> coops = new ArrayList();
-		int number = 10;
-		if (!jsonObj.isNull("number")){
-			try{
-				number = (int) jsonObj.get("number");
-			} catch(Exception e) {
-				return Response.status(Response.Status.BAD_REQUEST).entity("Bad Request").build();
-			}
-		}
+		int number = topCoopsNumber.getNumber();
+
 		coops = workExperiencesPublicDao.getTopCoops(number);
-		JSONArray resultArray = new JSONArray();
-		for(TopCoops ungrad : coops) {
-			resultArray.put(ungrad);
-	    }
-		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
+
+		return Response.status(Response.Status.OK).entity(coops).build();
 	}
 	
 	/**
@@ -106,23 +95,14 @@ public class PublicFacing {
 	@Path("top-undergraddegrees")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getUndergradDegrees(String para) throws SQLException{
-		JSONObject jsonObj = new JSONObject(para);
+	public Response getUndergradDegrees(TopUnderGradDegreesNumber topUnderGradDegreesNumber) throws SQLException{
+		
 		List<TopUndergradDegrees> degrees = new ArrayList();
-		int number = 10;
-		if (!jsonObj.isNull("number")){
-			try{
-				number = (int) jsonObj.get("number");
-			} catch(Exception e) {
-				return Response.status(Response.Status.BAD_REQUEST).entity("Bad Request").build();
-			}
-		}
+		int number = topUnderGradDegreesNumber.getNumber();
+		
 		degrees = undergraduatesPublicDao.getTopUndergradDegrees(number);
-		JSONArray resultArray = new JSONArray();
-		for(TopUndergradDegrees ungrad : degrees) {
-			resultArray.put(ungrad);
-	    }
-		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
+
+		return Response.status(Response.Status.OK).entity(degrees).build();
 	}
 	
 	/**
@@ -137,25 +117,15 @@ public class PublicFacing {
 	@Path("top-graduationyears")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getTopGraduationYears(String para) throws SQLException{
-		JSONObject jsonObj = new JSONObject(para);
+	public Response getTopGraduationYears(TopGraduationYearsNumber topGraduationYearsNumber) throws SQLException{
+
 		List<TopGradYears> gradYears = new ArrayList();
-		int number = 10;
-		if (!jsonObj.isNull("number")){
-			try{
-				number = (int) jsonObj.get("number");
-			} catch(Exception e) {
-				return Response.status(Response.Status.BAD_REQUEST).entity("Bad Request").build();
-			}
-		}
+		int number = topGraduationYearsNumber.getNumber();
+		
 		gradYears = studentsPublicDao.getTopGraduationYears(number);
-		JSONArray resultArray = new JSONArray();
-		for(TopGradYears gy : gradYears) {
-			resultArray.put(gy);
-	    }
-		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
+		
+		return Response.status(Response.Status.OK).entity(gradYears).build();
 	}
-	
 	
 	/**
 	 * This is a function to get all undergrad schools
@@ -168,13 +138,11 @@ public class PublicFacing {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllSchools(){
 		List<String>  allUnderGradSchools = undergraduatesPublicDao.getListOfAllSchools();
-		JSONArray resultArray = new JSONArray();
-		for(String gs : allUnderGradSchools) {
-			resultArray.put(gs);
-	    }
-		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();	
+		
+		return Response.status(Response.Status.OK).entity(allUnderGradSchools).build();	
 	}
 	
+
 	/**
 	* This is a function to get list of ALL Coop companies
 	* 
@@ -186,11 +154,8 @@ public class PublicFacing {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllCoopCompanies(){
 		List<String> listOfAllCoopCompanies = workExperiencesPublicDao.getListOfAllCoopCompanies();
-		JSONArray resultArray = new JSONArray();
-		for(String gs : listOfAllCoopCompanies) {
-			resultArray.put(gs);
-	    }
-		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();	
+		
+		return Response.status(Response.Status.OK).entity(listOfAllCoopCompanies).build();	
 	}
 	
 	/**
@@ -208,13 +173,9 @@ public class PublicFacing {
 		List<String> degrees = new ArrayList();
 		
 		degrees = undergraduatesPublicDao.getListOfAllUndergraduateDegrees();
-		JSONArray resultArray = new JSONArray();
-		for(String ungrad : degrees) {
-			resultArray.put(ungrad);
-	    }
-		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
+		
+		return Response.status(Response.Status.OK).entity(degrees).build();
 	}
-	
 	
 	/**
 	 * This is the function to get all graduate years.
@@ -231,13 +192,9 @@ public class PublicFacing {
 		List<Integer> years = new ArrayList();
 		
 		years = studentsPublicDao.getListOfAllGraduationYears();
-		JSONArray resultArray = new JSONArray();
-		for(Integer year : years) {
-			resultArray.put(year.toString());
-	    }
-		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
+		
+		return Response.status(Response.Status.OK).entity(years).build();
 	}
-	
 	
 	/**
 	 * This is the function to get all students.
@@ -253,17 +210,8 @@ public class PublicFacing {
 	public Response getAllStudents() throws SQLException{
 		List<StudentsPublic> studentList = new ArrayList();
 		studentList = studentsPublicDao.getListOfAllStudents();
-		JSONArray resultArray = new JSONArray();
-		for(StudentsPublic st : studentList) {
-			JSONObject studentJson = new JSONObject();
-			JSONObject eachStudentJson = new JSONObject(st);
-			java.util.Set<String> keys = eachStudentJson.keySet();
-			for(int i=0;i<keys.toArray().length; i++){
-				studentJson.put(((String) keys.toArray()[i]).toLowerCase(), eachStudentJson.get((String) keys.toArray()[i]));
-			}
-			resultArray.put(studentJson);
-	    }
-		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
+		
+		return Response.status(Response.Status.OK).entity(studentList).build();
 	}
 	
 	/**
@@ -277,64 +225,39 @@ public class PublicFacing {
 	@Path("students")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response searchStudent(String search){
-		JSONObject jsonObj = new JSONObject(search);
-		System.out.println(jsonObj);
-		Map<String,List<String>> map = new HashMap<String,List<String>>();
-		List<String> coops = new ArrayList<String>();
-		List<String> undergraddegree = new ArrayList<String>();
-		List<String> undergradschool = new ArrayList<String>();
-		List<String> graduationyear = new ArrayList<String>();
-		if (!jsonObj.isNull("coops")){
-			System.out.println(jsonObj.get("coops"));
-			JSONArray coopsArray = (JSONArray) jsonObj.get("coops");
-			System.out.println(coopsArray);
-			for(Object cp : coopsArray) {
-				coops.add((String) cp);
-			}
-			map.put("coop",coops);
+	public Response searchStudent(StudentSerachCriteria studentSerachCriteria){
+		Map<String, List<String>> searchCriteriaMap = new HashMap<>();
+
+		if(studentSerachCriteria.getCoops().size() > 0){
+			searchCriteriaMap.put("coop", studentSerachCriteria.getCoops());
 		}
-		if (!jsonObj.isNull("undergraddegree")){
-			System.out.println(jsonObj.get("undergraddegree"));
-			JSONArray undergraddegreeArray = (JSONArray) jsonObj.get("undergraddegree");
-			System.out.println(undergraddegreeArray);
-			for(Object cp : undergraddegreeArray) {
-				undergraddegree.add((String) cp);
-			}
-			map.put("undergradDegree",undergraddegree);
-		}
-		if (!jsonObj.isNull("undergradschool")){
-			System.out.println(jsonObj.get("undergradschool"));
-			JSONArray undergradschoolArray = (JSONArray) jsonObj.get("undergradschool");
-			System.out.println(undergradschoolArray);
-			for(Object cp : undergradschoolArray) {
-				undergradschool.add((String) cp);
-			}
-			map.put("undergradSchool",undergradschool);
-		}
-		if (!jsonObj.isNull("graduationyear")){
-			System.out.println(jsonObj.get("graduationyear"));
-			JSONArray graduationyearArray = (JSONArray) jsonObj.get("graduationyear");
-			System.out.println(graduationyearArray);
-			for(Object cp : graduationyearArray) {
-				graduationyear.add((String) cp);
-			}
-			map.put("graduationYear",graduationyear);
-		}
-		List<StudentsPublic> studentRecords =  studentsPublicDao.getPublicFilteredStudents(map, 1, 20);
-		JSONArray resultArray = new JSONArray();
 		
-		for(StudentsPublic st : studentRecords) {
-			JSONObject studentJson = new JSONObject();
-			JSONObject eachStudentJson = new JSONObject(st);
-			java.util.Set<String> keys = eachStudentJson.keySet();
-			for(int i=0;i<keys.toArray().length; i++){
-				studentJson.put(((String) keys.toArray()[i]).toLowerCase(), eachStudentJson.get((String) keys.toArray()[i]));
+		if(studentSerachCriteria.getUndergraddegree().size() > 0){
+			searchCriteriaMap.put("undergradDegree", studentSerachCriteria.getUndergraddegree());
+		}
+
+		if(studentSerachCriteria.getUndergradschool().size() > 0){
+			searchCriteriaMap.put("undergradSchool", studentSerachCriteria.getUndergradschool());
+		}
+
+		if(studentSerachCriteria.getGraduationyear().size() > 0){
+			searchCriteriaMap.put("graduationYear", studentSerachCriteria.getGraduationyear());
+		}
+
+		for(String key: searchCriteriaMap.keySet()){
+			System.out.println("Key: " + key );
+			
+			List<String> values = searchCriteriaMap.get(key);
+			
+			for(String s: values){
+				System.out.print(", " + s); 
 			}
-			resultArray.put(studentJson);
-	    }
-		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
-	}
+			
+		}
+		
+		List<StudentsPublic> studentRecords =  studentsPublicDao.getPublicFilteredStudents(searchCriteriaMap, 1, 20);
 	
+		return Response.status(Response.Status.OK).entity(studentRecords).build();
+	}
 	
 }
