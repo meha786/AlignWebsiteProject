@@ -1,5 +1,5 @@
-# Before running, create the schema named AlignPublic.
-# Or just create schema if necessary.
+-- Before running, create the schema named AlignPublic.
+-- Or just create schema if necessary.
 CREATE SCHEMA IF NOT EXISTS AlignPublic;
 USE AlignPublic;
 

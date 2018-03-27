@@ -8,7 +8,7 @@ public class StudentSessionFactory {
 
   static {
     factory = new Configuration()
-            .configure("/hibernate.cfg.xml").buildSessionFactory();
+            .configure("/hibernate.Private.cfg.xml").buildSessionFactory();
   }
 
   public static SessionFactory getFactory() {
