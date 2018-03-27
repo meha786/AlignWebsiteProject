@@ -53,8 +53,8 @@ CREATE TABLE Students (
 );
 
 CREATE TABLE StudentLogins(
-	Email VARCHAR(1000) NOT NULL,
-    StudentPassword VARCHAR(50) NOT NULL,
+	Email VARCHAR(255) NOT NULL,
+    StudentPassword VARCHAR(1000) NOT NULL,
     RegistrationKey VARCHAR(255),
     LoginTime TIMESTAMP,
     KeyExpiration TIMESTAMP,

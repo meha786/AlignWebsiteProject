@@ -38,8 +38,8 @@ CREATE TABLE Administrators (
 );
 
 CREATE TABLE AdminLogins(
-	Email VARCHAR(1000) NOT NULL,
-    AdminPassword VARCHAR(50) NOT NULL,
+	Email VARCHAR(255) NOT NULL,
+    AdminPassword VARCHAR(1000) NOT NULL,
     RegistrationKey VARCHAR(255),
     LoginTime TIMESTAMP,
     KeyExpiration TIMESTAMP,
