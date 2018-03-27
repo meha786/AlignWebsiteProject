@@ -12,14 +12,13 @@ public class ParamsObject {
 	private String company;
 	private String beginindex;
 	private String endindex;
+	private String neuid;
+	private String undergradmajor;
+	private String nuundergrad;
+	private String coop;
+	private String gender;
+	private String race;
 
-	/**
-	 * 
-	 */
-	public ParamsObject() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
 	/**
 	 * @param campus
 	 * @param year
@@ -29,10 +28,20 @@ public class ParamsObject {
 	 * @param degreeyear
 	 * @param enrollmentstatus
 	 * @param company
+	 * @param beginindex
+	 * @param endindex
+	 * @param neuid
+	 * @param undergradmajor
+	 * @param nuundergrad
+	 * @param coop
+	 * @param gender
+	 * @param race
 	 */
 	public ParamsObject(String campus, String year, String firstname,
 			String lastname, String email, String degreeyear,
-			String enrollmentstatus, String company) {
+			String enrollmentstatus, String company, String beginindex,
+			String endindex, String neuid, String undergradmajor,
+			String nuundergrad, String coop, String gender, String race) {
 		super();
 		this.campus = campus;
 		this.year = year;
@@ -42,7 +51,23 @@ public class ParamsObject {
 		this.degreeyear = degreeyear;
 		this.enrollmentstatus = enrollmentstatus;
 		this.company = company;
+		this.beginindex = beginindex;
+		this.endindex = endindex;
+		this.neuid = neuid;
+		this.undergradmajor = undergradmajor;
+		this.nuundergrad = nuundergrad;
+		this.coop = coop;
+		this.gender = gender;
+		this.race = race;
 	}
+	/**
+	 * 
+	 */
+	public ParamsObject() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
 	/**
 	 * @return the campus
 	 */
@@ -163,4 +188,77 @@ public class ParamsObject {
 	public void setEndindex(String endindex) {
 		this.endindex = endindex;
 	}
+	/**
+	 * @return the neuid
+	 */
+	public String getNeuid() {
+		return neuid;
+	}
+	/**
+	 * @param neuid the neuid to set
+	 */
+	public void setNeuid(String neuid) {
+		this.neuid = neuid;
+	}
+	/**
+	 * @return the undergradmajor
+	 */
+	public String getUndergradmajor() {
+		return undergradmajor;
+	}
+	/**
+	 * @param undergradmajor the undergradmajor to set
+	 */
+	public void setUndergradmajor(String undergradmajor) {
+		this.undergradmajor = undergradmajor;
+	}
+	/**
+	 * @return the nuundergrad
+	 */
+	public String getNuundergrad() {
+		return nuundergrad;
+	}
+	/**
+	 * @param nuundergrad the nuundergrad to set
+	 */
+	public void setNuundergrad(String nuundergrad) {
+		this.nuundergrad = nuundergrad;
+	}
+	/**
+	 * @return the coop
+	 */
+	public String getCoop() {
+		return coop;
+	}
+	/**
+	 * @param coop the coop to set
+	 */
+	public void setCoop(String coop) {
+		this.coop = coop;
+	}
+	/**
+	 * @return the gender
+	 */
+	public String getGender() {
+		return gender;
+	}
+	/**
+	 * @param gender the gender to set
+	 */
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	/**
+	 * @return the race
+	 */
+	public String getRace() {
+		return race;
+	}
+	/**
+	 * @param race the race to set
+	 */
+	public void setRace(String race) {
+		this.race = race;
+	}
+	
 }

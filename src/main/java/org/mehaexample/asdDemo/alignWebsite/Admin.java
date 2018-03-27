@@ -80,8 +80,10 @@ public class Admin{
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response searchStudent(ParamsObject input){
 		Map<String,List<String>> map = new HashMap<String,List<String>>();
+		ArrayList<Students> studentRecords = new ArrayList<Students>();
 		int begin = 1;
 		int end = 20;
+	try{
 		if (input.getFirstname()!=null){
 			System.out.println("got firstname"+input.getFirstname());
 			ArrayList<String> firstnameList = new ArrayList<String>();
@@ -118,21 +120,56 @@ public class Admin{
 			companyList.add(input.getCompany());
 			map.put("companyName",companyList);
 		}
-		try{
-			if (input.getBeginindex()!=null){
-				begin = Integer.valueOf(input.getBeginindex());
-			}
-			if (input.getEndindex()!=null){
-				end = Integer.valueOf(input.getEndindex());
-			}
+		if (input.getNeuid()!=null){
+			ArrayList<String> neuIdList = new ArrayList<String>();
+			neuIdList.add(input.getNeuid());
+			map.put("neuId",neuIdList);
+		}
+		if (input.getUndergradmajor()!=null){
+			ArrayList<String> undergradmajor = new ArrayList<String>();
+			undergradmajor.add(input.getUndergradmajor());
+			map.put("majorName",undergradmajor);
+		}
+		if (input.getNuundergrad()!=null){
+			ArrayList<String> nuundergrad = new ArrayList<String>();
+			nuundergrad.add(input.getUndergradmajor());
+			map.put("institutionName",nuundergrad);
+		}
+		if (input.getCoop()!=null){
+			ArrayList<String> coop = new ArrayList<String>();
+			coop.add(input.getCoop());
+			map.put("companyName",coop);
+		}
+		if (input.getGender()!=null){
+			ArrayList<String> gender = new ArrayList<String>();
+			gender.add(input.getGender());
+			map.put("gender",gender);
+		}
+		if (input.getRace()!=null){
+			ArrayList<String> race = new ArrayList<String>();
+			race.add(input.getRace());
+			map.put("race",race);
+		}
+		if (input.getBeginindex()!=null){
+			begin = Integer.valueOf(input.getBeginindex());
+		}
+		if (input.getEndindex()!=null){
+			end = Integer.valueOf(input.getEndindex());
+		}
+		if (input.getBeginindex()!=null){
+			begin = Integer.valueOf(input.getBeginindex());
+		}
+		if (input.getEndindex()!=null){
+			end = Integer.valueOf(input.getEndindex());
+		}
+		studentRecords = (ArrayList<Students>) studentDao.getAdminFilteredStudents(map, begin, end);
 		}
 		catch(Exception e) {
+			System.out.println(e);
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("please specify begin and end index.").build();
 		}
-		ArrayList<Students> studentRecords = (ArrayList<Students>) studentDao.getAdminFilteredStudents(map, begin, end);
 		return Response.status(Response.Status.OK).entity(studentRecords).build();
 	}
-
 
 	/**
 	 * This is the function to search a student based on his/her nuid.
