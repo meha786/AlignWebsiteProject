@@ -51,6 +51,9 @@ import org.mehaexample.asdDemo.restModels.PasswordResetObject;
 import org.mehaexample.asdDemo.utils.MailClient;
 import org.mehaexample.asdDemo.utils.StringUtils;
 
+import com.lambdaworks.crypto.SCryptUtil;
+
+
 @Path("admin-facing")
 public class AdminFacing{
 
@@ -115,7 +118,6 @@ public class AdminFacing{
 			companyList.add(input.getCompany());
 			map.put("companyName",companyList);
 		}
-
 		try{
 			if (input.getBeginindex()!=null){
 				begin = Integer.valueOf(input.getBeginindex());
@@ -182,9 +184,9 @@ public class AdminFacing{
 		} else {
 			return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus field cannot be null").build();
 		}
-
 		return Response.status(Response.Status.OK).entity(ratio).build();
 	}
+
 
 	/**
 	 * This is the function to get the top 10 bachelor degrees.
@@ -222,7 +224,6 @@ public class AdminFacing{
 		} else if (input.getCampus()==null && input.getYear()==null){
 			degrees = priorEducationsDao.getTopTenBachelors(null,null);
 		}
-
 		return Response.status(Response.Status.OK).entity(degrees).build();
 	}
 
@@ -253,7 +254,6 @@ public class AdminFacing{
 			} catch(Exception e){
 				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist.").build();
 			}
-
 		}else if (input.getCampus()==null && input.getYear()!=null){
 			try{
 				employers = workExperiencesDao.getTopTenEmployers(null,Integer.valueOf(input.getYear()));
@@ -302,7 +302,6 @@ public class AdminFacing{
 		} else if (input.getCampus()==null && input.getYear()==null){
 			electives = electivesDao.getTopTenElectives(null,null);
 		}
-
 		return Response.status(Response.Status.OK).entity(electives).build();
 	}
 
@@ -336,7 +335,6 @@ public class AdminFacing{
 		} else if (input.getCampus()==null){
 			return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Campus cannot be null.").build();
 		}
-
 		return Response.status(Response.Status.OK).entity(coopStudentsList).build();
 	}
 
@@ -420,18 +418,32 @@ public class AdminFacing{
 			return Response.status(Response.Status.NOT_FOUND).
 					entity("User doesn't exist: " + loginInput.getUsername()).build();
 		}
-		if(adminLogins.getAdminPassword().equals(loginInput.getPassword())){
+		        
+        boolean matched = false;
+        try{
+        	String reqPass = loginInput.getPassword();
+    		String saltStr = loginInput.getUsername().substring(0, loginInput.getUsername().length()/2);
+    		String originalPassword = reqPass+saltStr;
+        	matched = SCryptUtil.check(originalPassword,adminLogins.getAdminPassword());
+        } catch (Exception e){
+        	return Response.status(Response.Status.UNAUTHORIZED).
+					entity("Incorrect Password").build();
+        }
+
+		if(matched){
 			try {
 				JSONObject jsonObj = new JSONObject();
+				Timestamp keyGeneration = new Timestamp(System.currentTimeMillis());
 				Timestamp keyExpiration = new Timestamp(System.currentTimeMillis()+15*60*1000);
+				adminLogins.setLoginTime(keyGeneration);
 				adminLogins.setKeyExpiration(keyExpiration);
 				adminLoginsDao.updateAdminLogin(adminLogins);
 				String ip = request.getRemoteAddr();
 				JsonWebEncryption senderJwe = new JsonWebEncryption();
-				senderJwe.setPlaintext(adminLogins.getEmail()+"*#*"+ip+"*#*"+keyExpiration.toString());
+				senderJwe.setPlaintext(adminLogins.getEmail()+"*#*"+ip+"*#*"+keyGeneration.toString());
 				senderJwe.setAlgorithmHeaderValue(KeyManagementAlgorithmIdentifiers.DIRECT);
 				senderJwe.setEncryptionMethodHeaderParameter(ContentEncryptionAlgorithmIdentifiers.AES_128_CBC_HMAC_SHA_256);
-
+				
 				String secretKey = ip+"sEcR3t_nsA-K3y";
 				byte[] key = secretKey.getBytes();
 				key = Arrays.copyOf(key, 32);
@@ -439,7 +451,7 @@ public class AdminFacing{
 				senderJwe.setKey(keyMain);
 				String compactSerialization = senderJwe.getCompactSerialization();
 				jsonObj.put("token", compactSerialization);
-
+				
 				return Response.status(Response.Status.OK).
 						entity(jsonObj.toString()).build();
 			} catch (Exception e) {
