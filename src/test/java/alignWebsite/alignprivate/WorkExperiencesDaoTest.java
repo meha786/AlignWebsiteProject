@@ -32,6 +32,9 @@ public class WorkExperiencesDaoTest {
   public static void init() {
     workExperiencesDao = new WorkExperiencesDao(true);
     studentsDao = new StudentsDao(true);
+
+//    workExperiencesDao = new WorkExperiencesDao();
+//    studentsDao = new StudentsDao();
   }
 
   @Before

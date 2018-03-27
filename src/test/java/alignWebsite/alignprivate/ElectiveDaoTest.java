@@ -29,6 +29,10 @@ public class ElectiveDaoTest {
     electivesDao = new ElectivesDao(true);
     studentsDao = new StudentsDao(true);
     coursesDao = new CoursesDao(true);
+
+//    electivesDao = new ElectivesDao();
+//    studentsDao = new StudentsDao();
+//    coursesDao = new CoursesDao();
   }
 
   @Test

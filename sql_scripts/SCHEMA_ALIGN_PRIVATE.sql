@@ -10,6 +10,7 @@ DROP TABLE IF EXISTS WorkExperiences;
 DROP TABLE IF EXISTS Electives;
 DROP TABLE IF EXISTS ExtraExperiences;
 DROP TABLE IF EXISTS Projects;
+DROP TABLE IF EXISTS Privacies;
 DROP TABLE IF EXISTS Students;
 DROP TABLE IF EXISTS Courses;
 
@@ -53,8 +54,9 @@ CREATE TABLE Students (
 
 CREATE TABLE StudentLogins(
 	Email VARCHAR(255) NOT NULL,
-    StudentPassword VARCHAR(50) NOT NULL,
+    StudentPassword VARCHAR(1000) NOT NULL,
     RegistrationKey VARCHAR(255),
+    LoginTime TIMESTAMP,
     KeyExpiration TIMESTAMP,
     Confirmed BOOLEAN DEFAULT FALSE,
     CONSTRAINT pk_StudentLogins_Email
@@ -161,6 +163,29 @@ CREATE TABLE Projects (
 	CONSTRAINT uq_Projects_Project
 		UNIQUE (NeuId, ProjectName, StartDate),
 	CONSTRAINT fk_Projects_NeuId
+		FOREIGN KEY (NeuId)
+        REFERENCES Students(NeuId)
+        ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE Privacies (
+	NeuId VARCHAR(16),
+    Photo BOOLEAN DEFAULT FALSE,
+    Coop BOOLEAN DEFAULT FALSE,
+    Phone BOOLEAN DEFAULT FALSE,
+    Email BOOLEAN DEFAULT FALSE,
+    Address BOOLEAN DEFAULT FALSE,
+    Linkedin BOOLEAN DEFAULT FALSE,
+    Github BOOLEAN DEFAULT FALSE,
+    Facebook BOOLEAN DEFAULT FALSE,
+    Website BOOLEAN DEFAULT FALSE,
+    Course BOOLEAN DEFAULT FALSE,
+    ExtraExperience BOOLEAN DEFAULT FALSE,
+    Project BOOLEAN DEFAULT FALSE,
+    Skill BOOLEAN DEFAULT FALSE,
+    CONSTRAINT pk_Privacies_NeuId
+		PRIMARY KEY (NeuId),
+	CONSTRAINT fk_Privacies_NeuId
 		FOREIGN KEY (NeuId)
         REFERENCES Students(NeuId)
         ON UPDATE CASCADE ON DELETE CASCADE

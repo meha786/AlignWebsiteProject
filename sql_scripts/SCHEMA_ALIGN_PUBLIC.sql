@@ -24,6 +24,11 @@ INSERT IGNORE INTO SingleValueAggregatedData (AnalyticKey) VALUE ("TotalStudents
 INSERT IGNORE INTO SingleValueAggregatedData (AnalyticKey) VALUE ("TotalStudentsInSeattle");
 INSERT IGNORE INTO SingleValueAggregatedData (AnalyticKey) VALUE ("TotalStudentsInSiliconValley");
 INSERT IGNORE INTO SingleValueAggregatedData (AnalyticKey) VALUE ("TotalStudentsInCharlotte");
+INSERT IGNORE INTO SingleValueAggregatedData (AnalyticKey) VALUE ("TotalMaleStudents");
+INSERT IGNORE INTO SingleValueAggregatedData (AnalyticKey) VALUE ("TotalFemaleStudents");
+INSERT IGNORE INTO SingleValueAggregatedData (AnalyticKey) VALUE ("TotalFullTimeStudents");
+INSERT IGNORE INTO SingleValueAggregatedData (AnalyticKey) VALUE ("TotalPartTimeStudents");
+INSERT IGNORE INTO SingleValueAggregatedData (AnalyticKey) VALUE ("TotalStudentsWithScholarship");
 
 CREATE TABLE MultipleValueAggregatedData(
     AnalyticTerm VARCHAR(255),

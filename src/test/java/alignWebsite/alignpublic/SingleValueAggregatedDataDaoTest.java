@@ -13,6 +13,8 @@ public class SingleValueAggregatedDataDaoTest {
   @BeforeClass
   public static void init() {
     dataDao = new SingleValueAggregatedDataDao(true);
+
+//    dataDao = new SingleValueAggregatedDataDao();
   }
 
   @Test(expected = HibernateException.class)
@@ -30,6 +32,36 @@ public class SingleValueAggregatedDataDaoTest {
     data.setAnalyticValue(50);
     dataDao.updateData(data);
     Assert.assertTrue(dataDao.getTotalStudents() == 50);
+
+    // Total Students With Scholarship
+    data = dataDao.findTotalStudentsWithScholarshipData();
+    data.setAnalyticValue(60);
+    dataDao.updateData(data);
+    Assert.assertTrue(dataDao.getTotalStudentsWithScholarship() == 60);
+
+    // Total Male Students
+    data = dataDao.findTotalMaleStudentsData();
+    data.setAnalyticValue(24);
+    dataDao.updateData(data);
+    Assert.assertTrue(dataDao.getTotalMaleStudents() == 24);
+
+    // Total Students
+    data = dataDao.findTotalFemaleStudentsData();
+    data.setAnalyticValue(26);
+    dataDao.updateData(data);
+    Assert.assertTrue(dataDao.getTotalFemaleStudents() == 26);
+
+    // Total Full Time Students
+    data = dataDao.findTotalFullTimeStudentsData();
+    data.setAnalyticValue(27);
+    dataDao.updateData(data);
+    Assert.assertTrue(dataDao.getTotalFullTimeStudents() == 27);
+
+    // Total Part Time Students
+    data = dataDao.findTotalPartTimeStudentsData();
+    data.setAnalyticValue(28);
+    dataDao.updateData(data);
+    Assert.assertTrue(dataDao.getTotalPartTimeStudents() == 28);
 
     // Total Graduated Students
     data = dataDao.findTotalGraduatedStudentsData();
