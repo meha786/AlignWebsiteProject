@@ -12,6 +12,10 @@ import org.junit.Test;
 import org.mehaexample.asdDemo.model.alignadmin.GenderRatio;
 import org.mehaexample.asdDemo.model.alignadmin.ParamsObject;
 import org.mehaexample.asdDemo.model.alignadmin.TopBachelor;
+import org.mehaexample.asdDemo.model.alignadmin.TopElective;
+import org.mehaexample.asdDemo.model.alignadmin.TopEmployer;
+import org.mehaexample.asdDemo.model.alignprivate.StudentBasicInfo;
+import org.mehaexample.asdDemo.model.alignprivate.StudentCoopList;
 import org.mehaexample.asdDemo.model.alignprivate.Students;
 import org.mehaexample.asdDemo.alignWebsite.Admin;
 import org.mehaexample.asdDemo.enums.Campus;
@@ -291,6 +295,247 @@ public class AdminTest {
 	}	
 	
 	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void getTopEmployersTest(){
+		input = new ParamsObject();
+		input.setCampus("SEATTLE");
+		input.setYear("2017");
+		try {
+			admin = new Admin();
+		Response resp = admin.getTopEmployers(input);
+		
+		ArrayList<TopEmployer> emp = new ArrayList<TopEmployer>();
+		emp =  (ArrayList<TopEmployer>) resp.getEntity();
+		
+		TopEmployer responseRecord = emp.get(0);
+		Assert.assertEquals("Amazon", responseRecord.getCompanyName());
+		Assert.assertEquals("1", responseRecord.getTotalStudents());
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void getTopEmployersTest2(){
+		input = new ParamsObject();
+		input.setCampus("SEATTLE");
+		input.setYear("2016");
+		try {
+			admin = new Admin();
+		Response resp = admin.getTopEmployers(input);
+		
+		ArrayList<TopEmployer> emp = new ArrayList<TopEmployer>();
+		emp =  (ArrayList<TopEmployer>) resp.getEntity();
+		Assert.assertEquals(0, emp.size());
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void getTopEmployersTest3(){
+		input = new ParamsObject();
+		input.setCampus("SEATTLE");
+		input.setYear("2016");
+		try {
+			admin = new Admin();
+		Response resp = admin.getTopEmployers(input);
+		String error = (String) resp.getEntity();
+		Assert.assertEquals("campus doesn't exist", error);
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+	}	
+	
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void getTopElectivesTest(){
+		input = new ParamsObject();
+		input.setCampus("SEATTLE");
+		input.setYear("2017");
+		try {
+			admin = new Admin();
+		Response resp = admin.getTopElectives(input);
+		
+		ArrayList<TopElective> emp = new ArrayList<TopElective>();
+		emp =  (ArrayList<TopElective>) resp.getEntity();
+		
+		TopElective responseRecord = emp.get(0);
+		Assert.assertEquals("Advanced Software Development", responseRecord.getCourseName());
+		Assert.assertEquals("1", responseRecord.getTotalStudents());
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void getTopElectivesTest2(){
+		input = new ParamsObject();
+		input.setCampus("SEATTLE");
+		input.setYear("2015");
+		try {
+			admin = new Admin();
+		Response resp = admin.getTopElectives(input);
+		
+		ArrayList<TopElective> emp = new ArrayList<TopElective>();
+		emp =  (ArrayList<TopElective>) resp.getEntity();
+		Assert.assertEquals(0, emp.size());
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void getTopElectivesTest3(){
+		input = new ParamsObject();
+		input.setCampus("SEATTLE");
+		input.setYear("2015");
+		try {
+			admin = new Admin();
+		Response resp = admin.getTopElectives(input);
+		String error = (String) resp.getEntity();
+		Assert.assertEquals("campus doesn't exist", error);
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void getCoopStudentsTest(){
+		input = new ParamsObject();
+		input.setCampus("SEATTLE");
+		try {
+			admin = new Admin();
+		Response resp = admin.getCoopStudents(input);
+		
+		ArrayList<StudentCoopList> emp = new ArrayList<StudentCoopList>();
+		emp =  (ArrayList<StudentCoopList>) resp.getEntity();
+		
+		StudentCoopList responseRecord = emp.get(0);
+		Assert.assertEquals("Tony", responseRecord.getFirstName());
+		Assert.assertEquals("Hawk", responseRecord.getLastName());
+		Assert.assertEquals("9878987", responseRecord.getNeuId());
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void getCoopStudentsTest2(){
+		input = new ParamsObject();
+		input.setCampus("SEATTLE");
+		input.setYear("2015");
+		try {
+			admin = new Admin();
+		Response resp = admin.getCoopStudents(input);
+		
+		ArrayList<StudentCoopList> emp = new ArrayList<StudentCoopList>();
+		emp =  (ArrayList<StudentCoopList>) resp.getEntity();
+		Assert.assertEquals(0, emp.size());
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+		
+	@SuppressWarnings("unchecked")
+	@Test
+	public void getCoopStudentsTest3(){
+		input = new ParamsObject();
+		input.setCampus("SEATTE");
+		input.setYear("2015");
+		try {
+			admin = new Admin();
+		Response resp = admin.getCoopStudents(input);
+		String error = (String) resp.getEntity();
+		Assert.assertEquals("campus doesn't exist", error);
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void getStudentsWorkingTest(){
+		input = new ParamsObject();
+		input.setCampus("SEATTLE");
+		input.setCompany("amazon");
+		try {
+			admin = new Admin();
+		Response resp = admin.getStudentsWorkingForACompany(input);
+		
+		ArrayList<StudentBasicInfo> emp = new ArrayList<StudentBasicInfo>();
+		emp =  (ArrayList<StudentBasicInfo>) resp.getEntity();
+		
+		StudentBasicInfo responseRecord = emp.get(0);
+		Assert.assertEquals("Tony", responseRecord.getFirstName());
+		Assert.assertEquals("Hawk", responseRecord.getLastName());
+		Assert.assertEquals("9878987", responseRecord.getNeuId());
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void getStudentsWorkingTest2(){
+		input = new ParamsObject();
+		input.setCampus("SEATTLE");
+		input.setCompany("amazon");
+		try {
+			admin = new Admin();
+		Response resp = admin.getStudentsWorkingForACompany(input);
+		
+		ArrayList<StudentCoopList> emp = new ArrayList<StudentCoopList>();
+		emp =  (ArrayList<StudentCoopList>) resp.getEntity();
+		Assert.assertEquals(0, emp.size());
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void getStudentsWorkingTest3(){
+		input = new ParamsObject();
+		input.setCampus("SEATTLE");
+		input.setCompany("amazon");
+		try {
+			admin = new Admin();
+		Response resp = admin.getStudentsWorkingForACompany(input);
+		String error = (String) resp.getEntity();
+		Assert.assertEquals("campus doesn't exist", error);
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+	}
 	
 	
 }
