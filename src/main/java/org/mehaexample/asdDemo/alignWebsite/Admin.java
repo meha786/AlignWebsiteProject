@@ -52,8 +52,6 @@ import org.mehaexample.asdDemo.model.alignprivate.WorkExperiences;
 import org.mehaexample.asdDemo.restModels.PasswordChangeObject;
 import org.mehaexample.asdDemo.restModels.PasswordResetObject;
 import org.mehaexample.asdDemo.utils.MailClient;
-import org.mehaexample.asdDemo.utils.StringUtils;
-
 import com.lambdaworks.crypto.SCryptUtil;
 
 
@@ -164,7 +162,7 @@ public class Admin{
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("please specify begin and end index.").build();
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("please check the request.").build();
 		}
 		return Response.status(Response.Status.OK).entity(studentRecords).build();
 	}

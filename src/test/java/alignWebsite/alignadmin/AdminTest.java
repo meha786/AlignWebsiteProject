@@ -9,7 +9,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mehaexample.asdDemo.model.alignadmin.GenderRatio;
 import org.mehaexample.asdDemo.model.alignadmin.ParamsObject;
+import org.mehaexample.asdDemo.model.alignadmin.TopBachelor;
 import org.mehaexample.asdDemo.model.alignprivate.Students;
 import org.mehaexample.asdDemo.alignWebsite.Admin;
 import org.mehaexample.asdDemo.enums.Campus;
@@ -109,6 +111,25 @@ public class AdminTest {
 	
 	@SuppressWarnings("unchecked")
 	@Test
+	public void searchTest2(){
+		input = new ParamsObject();
+		input.setCampus("SEAT");
+		input.setEmail("tonyhawk@gmail.com");
+		try {
+			admin = new Admin();
+		Response resp = admin.searchStudent(input);
+		
+		String error =  (String) resp.getEntity();
+		Assert.assertEquals("please check the request.", error);
+		
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
 	public void getStudentProfileTest(){
 		input = new ParamsObject();
 		input.setCampus("SEATTLE");
@@ -125,7 +146,150 @@ public class AdminTest {
 		catch (Exception e){
 			e.printStackTrace();
 		}
+	}	
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void getStudentProfileTest2(){
+		input = new ParamsObject();
+		input.setCampus("SEATTLE");
+		input.setEmail("tonyhawk@gmail.com");
+		try {
+			admin = new Admin();
+		Response resp = admin.getStudentProfile("98789873");
+		String error =  (String) resp.getEntity();
+		
+		Assert.assertEquals("No Student record exists with given ID", error);
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
 	}
+	
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void genderRatioTest(){
+		input = new ParamsObject();
+		input.setCampus("SEATTLE");
+		input.setYear("2017");
+		try {
+			admin = new Admin();
+		Response resp = admin.getGenderRatio(input);
+		
+		ArrayList<GenderRatio> ratio = new ArrayList<GenderRatio>();
+		ratio =  (ArrayList<GenderRatio>) resp.getEntity();
+		
+		GenderRatio responseRecord = ratio.get(0);
+		Assert.assertEquals("2015", responseRecord.getEntryYear());
+		Assert.assertEquals("1", responseRecord.getFemale());
+		Assert.assertEquals("1", responseRecord.getMale());
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+	}	
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void genderRatioTest2(){
+		input = new ParamsObject();
+		input.setCampus("Boston");
+		input.setYear("2017");
+		try {
+			admin = new Admin();
+		Response resp = admin.getGenderRatio(input);
+		
+		ArrayList<GenderRatio> ratio = new ArrayList<GenderRatio>();
+		ratio =  (ArrayList<GenderRatio>) resp.getEntity();
+		
+		Assert.assertEquals(0, ratio.size());
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void genderRatioTest3(){
+		input = new ParamsObject();
+		input.setCampus("SEATTLE");
+		input.setYear("2017");
+		try {
+			admin = new Admin();
+		Response resp = admin.getGenderRatio(input);
+		String error = (String) resp.getEntity();
+		Assert.assertEquals("campus doesn't exist", error);
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+	}	
+	
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void getTopBachelorDegreeTest(){
+		input = new ParamsObject();
+		input.setCampus("SEATTLE");
+		input.setYear("2017");
+		try {
+			admin = new Admin();
+		Response resp = admin.getTopBachelorDegree(input);
+		
+		ArrayList<TopBachelor> degrees = new ArrayList<TopBachelor>();
+		degrees =  (ArrayList<TopBachelor>) resp.getEntity();
+		
+		TopBachelor responseRecord = degrees.get(0);
+		Assert.assertEquals("Baking", responseRecord.getDegree());
+		Assert.assertEquals("1", responseRecord.getTotalStudents());
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void getTopBachelorDegreeTest2(){
+		input = new ParamsObject();
+		input.setCampus("BOSTON");
+		input.setYear("2017");
+		try {
+			admin = new Admin();
+		Response resp = admin.getTopBachelorDegree(input);
+		
+		ArrayList<TopBachelor> degrees = new ArrayList<TopBachelor>();
+		degrees =  (ArrayList<TopBachelor>) resp.getEntity();
+		
+		Assert.assertEquals(0, degrees.size());
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void getTopBachelorDegreeTest3(){
+		input = new ParamsObject();
+		input.setCampus("BOSTON");
+		input.setYear("2017");
+		try {
+			admin = new Admin();
+		Response resp = admin.getTopBachelorDegree(input);
+		String error = (String) resp.getEntity();
+		Assert.assertEquals("campus doesn't exist", error);
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+	}	
+	
 	
 	
 	
