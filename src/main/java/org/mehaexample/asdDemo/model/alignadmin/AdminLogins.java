@@ -6,14 +6,16 @@ public class AdminLogins {
   private String email;
   private String adminPassword;
   private String registrationKey;
+  private Timestamp loginTime;
   private Timestamp keyExpiration;
   private boolean confirmed;
 
-  public AdminLogins(String email, String adminPassword, String registrationKey,
+  public AdminLogins(String email, String adminPassword, String registrationKey, Timestamp loginTime,
                      Timestamp keyExpiration, boolean confirmed) {
     this.email = email;
     this.adminPassword = adminPassword;
     this.registrationKey = registrationKey;
+    this.loginTime = loginTime;
     this.keyExpiration = keyExpiration;
     this.confirmed = confirmed;
   }
@@ -42,6 +44,14 @@ public class AdminLogins {
 
   public void setRegistrationKey(String registrationKey) {
     this.registrationKey = registrationKey;
+  }
+
+  public Timestamp getLoginTime() {
+    return loginTime;
+  }
+
+  public void setLoginTime(Timestamp loginTime) {
+    this.loginTime = loginTime;
   }
 
   public Timestamp getKeyExpiration() {

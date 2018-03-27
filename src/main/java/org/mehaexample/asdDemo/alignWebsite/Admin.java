@@ -1,5 +1,6 @@
 package org.mehaexample.asdDemo.alignWebsite;
 
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.crypto.SecretKeyFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -48,6 +50,8 @@ import org.mehaexample.asdDemo.model.alignprivate.StudentCoopList;
 import org.mehaexample.asdDemo.model.alignprivate.StudentLogins;
 import org.mehaexample.asdDemo.model.alignprivate.Students;
 import org.mehaexample.asdDemo.model.alignprivate.WorkExperiences;
+
+import com.lambdaworks.crypto.SCryptUtil;
 
 
 @Path("admin-facing")
@@ -417,10 +421,23 @@ public class Admin{
 					entity("Email doesn't exist: " + passwordChangeObject.getEmail()).build();
 		}
 
-		System.out.println("yo " + passwordChangeObject.getOldPassword() + adminLogins.getAdminPassword() );
-
-		if(adminLogins.getAdminPassword().equals(passwordChangeObject.getOldPassword())){
-			adminLogins.setAdminPassword(passwordChangeObject.getNewPassword());
+        boolean matched = false;
+        try{
+        	String reqPass = passwordChangeObject.getOldPassword();
+    		String saltStr = passwordChangeObject.getEmail().substring(0, passwordChangeObject.getEmail().length()/2);
+    		String originalPassword = reqPass+saltStr;
+        	matched = SCryptUtil.check(originalPassword,adminLogins.getAdminPassword());
+        } catch (Exception e){
+        	return Response.status(Response.Status.UNAUTHORIZED).
+					entity("Incorrect Password").build();
+        }
+        
+		if(matched){
+			String newPass = passwordChangeObject.getNewPassword();
+    		String saltnewStr = passwordChangeObject.getEmail().substring(0, passwordChangeObject.getEmail().length()/2);
+    		String updatePassword = newPass+saltnewStr;
+            String generatedSecuredPasswordHash = SCryptUtil.scrypt(updatePassword, 16, 16, 16);
+            adminLogins.setAdminPassword(generatedSecuredPasswordHash);
 			adminLoginsDao.updateAdminLogin(adminLogins);
 
 			return Response.status(Response.Status.OK).
@@ -448,15 +465,29 @@ public class Admin{
 			return Response.status(Response.Status.NOT_FOUND).
 					entity("User doesn't exist: " + loginInput.getUsername()).build();
 		}
-		if(adminLogins.getAdminPassword().equals(loginInput.getPassword())){
+		        
+        boolean matched = false;
+        try{
+        	String reqPass = loginInput.getPassword();
+    		String saltStr = loginInput.getUsername().substring(0, loginInput.getUsername().length()/2);
+    		String originalPassword = reqPass+saltStr;
+        	matched = SCryptUtil.check(originalPassword,adminLogins.getAdminPassword());
+        } catch (Exception e){
+        	return Response.status(Response.Status.UNAUTHORIZED).
+					entity("Incorrect Password").build();
+        }
+
+		if(matched){
 			try {
 				JSONObject jsonObj = new JSONObject();
+				Timestamp keyGeneration = new Timestamp(System.currentTimeMillis());
 				Timestamp keyExpiration = new Timestamp(System.currentTimeMillis()+15*60*1000);
+				adminLogins.setLoginTime(keyGeneration);
 				adminLogins.setKeyExpiration(keyExpiration);
 				adminLoginsDao.updateAdminLogin(adminLogins);
 				String ip = request.getRemoteAddr();
 				JsonWebEncryption senderJwe = new JsonWebEncryption();
-				senderJwe.setPlaintext(adminLogins.getEmail()+"*#*"+ip+"*#*"+keyExpiration.toString());
+				senderJwe.setPlaintext(adminLogins.getEmail()+"*#*"+ip+"*#*"+keyGeneration.toString());
 				senderJwe.setAlgorithmHeaderValue(KeyManagementAlgorithmIdentifiers.DIRECT);
 				senderJwe.setEncryptionMethodHeaderParameter(ContentEncryptionAlgorithmIdentifiers.AES_128_CBC_HMAC_SHA_256);
 				
