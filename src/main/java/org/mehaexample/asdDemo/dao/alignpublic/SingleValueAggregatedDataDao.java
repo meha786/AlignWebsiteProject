@@ -168,7 +168,7 @@ public class SingleValueAggregatedDataDao {
     }
   }
 
-  public boolean updateData(SingleValueAggregatedData updatedData) {
+  public boolean saveOrUpdateData(SingleValueAggregatedData updatedData) {
     Transaction tx = null;
     SingleValueAggregatedData data = findDataByKey(updatedData.getAnalyticKey());
     if (data == null) {

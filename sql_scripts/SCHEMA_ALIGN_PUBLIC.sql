@@ -40,9 +40,8 @@ CREATE TABLE MultipleValueAggregatedData(
  
 CREATE TABLE Students(
 	PublicId INT NOT NULL,
-	FirstName VARCHAR(50),
-    Photo BLOB,
     GraduationYear INT,
+    VisibleToPubilc BOOLEAN DEFAULT TRUE,
     CONSTRAINT pk_Students_PublicId
 		PRIMARY KEY (PublicId)
 );

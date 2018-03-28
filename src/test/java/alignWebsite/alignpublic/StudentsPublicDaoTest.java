@@ -36,11 +36,11 @@ public class StudentsPublicDaoTest {
 //    workExperiencesPublicDao = new WorkExperiencesPublicDao();
 //    studentsPublicDao = new StudentsPublicDao();
 
-    StudentsPublic studentsPublic = new StudentsPublic(5, "Josh", null, 2016);
+    StudentsPublic studentsPublic = new StudentsPublic(5, 2016, true);
     studentsPublicDao.createStudent(studentsPublic);
-    StudentsPublic studentsPublic2 = new StudentsPublic(6, "Chet", null, 2016);
+    StudentsPublic studentsPublic2 = new StudentsPublic(6, 2016, false);
     studentsPublicDao.createStudent(studentsPublic2);
-    StudentsPublic studentsPublic3 = new StudentsPublic(7, "Bruce", null, 2017);
+    StudentsPublic studentsPublic3 = new StudentsPublic(7, 2017, true);
     studentsPublicDao.createStudent(studentsPublic3);
     workExperience = new WorkExperiencesPublic(5, "Google");
     workExperience = workExperiencesPublicDao.createWorkExperience(workExperience);
@@ -66,7 +66,7 @@ public class StudentsPublicDaoTest {
 
   @Test(expected = HibernateException.class)
   public void createDuplicateStudentTest() {
-    StudentsPublic studentsPublic = new StudentsPublic(5, "Josh", null, 2016);
+    StudentsPublic studentsPublic = new StudentsPublic(5, 2016, true);
     studentsPublicDao.createStudent(studentsPublic);
   }
 
@@ -85,15 +85,15 @@ public class StudentsPublicDaoTest {
   @Test
   public void findStudentByPublicIdAndUpdateTest() {
     StudentsPublic studentsPublic = studentsPublicDao.findStudentByPublicId(5);
-    assertTrue(studentsPublic.getFirstName().equals("Josh"));
-    studentsPublic.setFirstName("Joshua");
+    assertTrue(studentsPublic.getGraduationYear() == 2016);
+    studentsPublic.setGraduationYear(2017);
     studentsPublicDao.updateStudent(studentsPublic);
     studentsPublic = studentsPublicDao.findStudentByPublicId(5);
-    assertTrue(studentsPublic.getFirstName().equals("Joshua"));
-    studentsPublic.setFirstName("Josh");
+    assertTrue(studentsPublic.getGraduationYear() == 2017);
+    studentsPublic.setGraduationYear(2016);
     studentsPublicDao.updateStudent(studentsPublic);
     studentsPublic = studentsPublicDao.findStudentByPublicId(5);
-    assertTrue(studentsPublic.getFirstName().equals("Josh"));
+    assertTrue(studentsPublic.getGraduationYear() == 2016);
     assertTrue(studentsPublic.getUndergraduates().get(0).getUndergradSchool().equals("UCLA"));
     assertTrue(studentsPublic.getWorkExperiences().get(0).getPublicId() == 5);
     assertTrue(studentsPublic.getWorkExperiences().get(0).getCoop().equals("Google"));
@@ -120,12 +120,10 @@ public class StudentsPublicDaoTest {
   @Test
   public void getListOfAllStudentsTest() {
     List<StudentsPublic> listOfAllStudents = studentsPublicDao.getListOfAllStudents();
-    assertTrue(listOfAllStudents.size() == 3);
-    assertTrue(listOfAllStudents.get(0).getFirstName().equals("Bruce"));
-    assertTrue(listOfAllStudents.get(1).getFirstName().equals("Josh"));
+    assertTrue(listOfAllStudents.size() == 2);
+    assertTrue(listOfAllStudents.get(0).getGraduationYear() == 2017);
+    assertTrue(listOfAllStudents.get(1).getGraduationYear() == 2016);
     assertTrue(listOfAllStudents.get(1).getWorkExperiences().get(0).getCoop().equals("Google"));
-    assertTrue(listOfAllStudents.get(2).getFirstName().equals("Chet"));
-    assertTrue(listOfAllStudents.get(2).getWorkExperiences().isEmpty());
   }
 
   @Test
@@ -143,19 +141,19 @@ public class StudentsPublicDaoTest {
     filter.put("undergradDegree", undergradDegree);
     List<StudentsPublic> listOfFilteredStudents = studentsPublicDao.getPublicFilteredStudents(filter, 1, 1);
     assertTrue(listOfFilteredStudents.size() == 1);
-    assertTrue(listOfFilteredStudents.get(0).getFirstName().equals("Josh"));
+    assertTrue(listOfFilteredStudents.get(0).getGraduationYear() == 2016);
 
     listOfFilteredStudents = studentsPublicDao.getPublicFilteredStudents(new HashMap<String, List<String>>(), 1, 3);
-    assertTrue(listOfFilteredStudents.size() == 3);
+    assertTrue(listOfFilteredStudents.size() == 2);
 
     listOfFilteredStudents = studentsPublicDao.getPublicFilteredStudents(new HashMap<String, List<String>>(), 2, 3);
-    assertTrue(listOfFilteredStudents.size() == 2);
+    assertTrue(listOfFilteredStudents.size() == 1);
 
     Map<String, List<String>> filter2 = new HashMap<>();
     List<String> graduationYear2 = new ArrayList<>();
     graduationYear2.add("2016");
     filter2.put("graduationYear", graduationYear2);
     List<StudentsPublic> listOfFilteredStudents2 = studentsPublicDao.getPublicFilteredStudents(filter2, 1, 2);
-    assertTrue(listOfFilteredStudents2.size() == 2);
+    assertTrue(listOfFilteredStudents2.size() == 1);
   }
 }
