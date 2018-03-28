@@ -14,8 +14,6 @@ import org.mehaexample.asdDemo.enums.Gender;
 import org.mehaexample.asdDemo.enums.Term;
 import org.mehaexample.asdDemo.model.alignprivate.*;
 
-import javax.validation.constraints.AssertTrue;
-
 public class StudentsDaoTest {
   private static StudentsDao studentdao;
   private static WorkExperiencesDao workExperiencesDao;
@@ -321,7 +319,7 @@ public class StudentsDaoTest {
 
     WorkExperiences newWorkExperience = new WorkExperiences("1111111", "Amazon",
             dateFormat.parse("2017-06-01"), dateFormat.parse("2017-12-01"),
-            false, "Title", "Description");
+            false, true, "Title", "Description");
     workExperiencesDao.createWorkExperience(newWorkExperience);
 
     newWorkExperience.setNeuId("2222222");

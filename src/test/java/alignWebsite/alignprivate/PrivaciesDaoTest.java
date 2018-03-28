@@ -11,7 +11,6 @@ import org.mehaexample.asdDemo.enums.*;
 import org.mehaexample.asdDemo.model.alignprivate.Privacies;
 import org.mehaexample.asdDemo.model.alignprivate.Students;
 
-import javax.validation.constraints.AssertTrue;
 import java.text.ParseException;
 
 import static org.junit.Assert.*;

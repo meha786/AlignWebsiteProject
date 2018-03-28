@@ -54,9 +54,8 @@ CREATE TABLE Students (
 
 CREATE TABLE StudentLogins(
 	Email VARCHAR(255) NOT NULL,
-    StudentPassword VARCHAR(1000) NOT NULL,
+    StudentPassword VARCHAR(50) NOT NULL,
     RegistrationKey VARCHAR(255),
-    LoginTime TIMESTAMP,
     KeyExpiration TIMESTAMP,
     Confirmed BOOLEAN DEFAULT FALSE,
     CONSTRAINT pk_StudentLogins_Email
@@ -121,6 +120,7 @@ CREATE TABLE WorkExperiences (
     StartDate DATE NOT NULL,
     EndDate DATE,
     CurrentJob BOOLEAN,
+    isCoop BOOLEAN,
     Title VARCHAR(255) NOT NULL,
     Description VARCHAR(1250),
     CONSTRAINT pk_WorkExperiences_WorkExperienceId
@@ -170,6 +170,8 @@ CREATE TABLE Projects (
 
 CREATE TABLE Privacies (
 	NeuId VARCHAR(16),
+    PublicId INT AUTO_INCREMENT,
+    VisibleToPublic BOOLEAN DEFAULT TRUE,
     Photo BOOLEAN DEFAULT FALSE,
     Coop BOOLEAN DEFAULT FALSE,
     Phone BOOLEAN DEFAULT FALSE,
@@ -185,6 +187,7 @@ CREATE TABLE Privacies (
     Skill BOOLEAN DEFAULT FALSE,
     CONSTRAINT pk_Privacies_NeuId
 		PRIMARY KEY (NeuId),
+	KEY PublicId (PublicId),
 	CONSTRAINT fk_Privacies_NeuId
 		FOREIGN KEY (NeuId)
         REFERENCES Students(NeuId)
