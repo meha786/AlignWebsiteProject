@@ -23,7 +23,7 @@
 
         <property name = "currentJob" column="CurrentJob" type="boolean" />
 
-        <property name = "coop" column="Coop" type="boolean" />
+        <property name = "coop" column="isCoop" type="boolean" />
 
         <property name = "title" column="Title" type="string" />
 

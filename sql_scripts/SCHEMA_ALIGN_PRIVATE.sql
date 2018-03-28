@@ -56,6 +56,7 @@ CREATE TABLE StudentLogins(
 	Email VARCHAR(255) NOT NULL,
     StudentPassword VARCHAR(50) NOT NULL,
     RegistrationKey VARCHAR(255),
+    LoginTime TIMESTAMP,
     KeyExpiration TIMESTAMP,
     Confirmed BOOLEAN DEFAULT FALSE,
     CONSTRAINT pk_StudentLogins_Email
