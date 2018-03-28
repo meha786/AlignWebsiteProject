@@ -8,8 +8,10 @@ import org.mehaexample.asdDemo.enums.Campus;
 import org.mehaexample.asdDemo.model.alignadmin.TopElective;
 import org.mehaexample.asdDemo.model.alignadmin.TopEmployer;
 import org.mehaexample.asdDemo.model.alignprivate.Electives;
+import org.mehaexample.asdDemo.model.alignprivate.Privacies;
 
 import javax.persistence.TypedQuery;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ElectivesDao {
@@ -17,12 +19,14 @@ public class ElectivesDao {
   private Session session;
 
   private StudentsDao studentDao;
+  private PrivaciesDao privaciesDao;
 
   /**
    * Default Constructor.
    */
   public ElectivesDao() {
     studentDao = new StudentsDao();
+    privaciesDao = new PrivaciesDao();
     // it will check the hibernate.cfg.xml file and load it
     // next it goes to all table files in the hibernate file and loads them
     this.factory = StudentSessionFactory.getFactory();
@@ -31,6 +35,7 @@ public class ElectivesDao {
   public ElectivesDao(boolean test) {
     if (test) {
       studentDao = new StudentsDao(true);
+      privaciesDao = new PrivaciesDao(true);
       this.factory = StudentTestSessionFactory.getFactory();
     }
   }
@@ -43,6 +48,15 @@ public class ElectivesDao {
       return (List<Electives>) query.list();
     } finally {
       session.close();
+    }
+  }
+
+  public List<Electives> getElectivesWithPrivacy(String neuId) {
+    Privacies privacy = privaciesDao.getPrivacyByNeuId(neuId);
+    if (!privacy.isCourse()) {
+      return new ArrayList<>();
+    } else {
+      return getElectivesByNeuId(neuId);
     }
   }
 

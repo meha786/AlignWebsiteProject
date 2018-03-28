@@ -5,12 +5,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mehaexample.asdDemo.dao.alignprivate.PrivaciesDao;
 import org.mehaexample.asdDemo.dao.alignprivate.ProjectsDao;
 import org.mehaexample.asdDemo.dao.alignprivate.StudentsDao;
 import org.mehaexample.asdDemo.enums.*;
+import org.mehaexample.asdDemo.model.alignprivate.Privacies;
 import org.mehaexample.asdDemo.model.alignprivate.Projects;
 import org.mehaexample.asdDemo.model.alignprivate.Students;
 
+import javax.validation.constraints.AssertTrue;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -20,11 +23,13 @@ import static org.junit.Assert.*;
 public class ProjectsDaoTest {
   private static StudentsDao studentsDao;
   private static ProjectsDao projectsDao;
+  private static PrivaciesDao privaciesDao;
 
   @BeforeClass
   public static void init() {
     studentsDao = new StudentsDao(true);
     projectsDao = new ProjectsDao(true);
+    privaciesDao = new PrivaciesDao(true);
 
 //    studentsDao = new StudentsDao();
 //    projectsDao = new ProjectsDao();
@@ -45,6 +50,11 @@ public class ProjectsDaoTest {
     studentsDao.addStudent(student);
     studentsDao.addStudent(student2);
 
+    Privacies privacy = new Privacies();
+    privacy.setNeuId("001234567");
+    privacy.setProject(true);
+    privaciesDao.createPrivacy(privacy);
+
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     Projects project = new Projects("001234567", "Student Website", dateFormat.parse("2018-01-01"),
             dateFormat.parse("2018-04-01"), "My Project");
@@ -53,7 +63,6 @@ public class ProjectsDaoTest {
 
   @After
   public void deletePlaceholder() {
-    projectsDao.deleteProjectsByNeuId("001234567");
     studentsDao.deleteStudent("001234567");
     studentsDao.deleteStudent("111234567");
   }
@@ -116,4 +125,12 @@ public class ProjectsDaoTest {
     assertTrue(projectsDao.getProjectById(foundProject.getProjectId()) == null);
   }
 
+  @Test
+  public void getProjectWithPrivacyTest() {
+    assertTrue(projectsDao.getProjectsWithPrivacy("001234567").size()==1);
+    Privacies privacy = privaciesDao.getPrivacyByNeuId("001234567");
+    privacy.setProject(false);
+    privaciesDao.updatePrivacy(privacy);
+    assertTrue(projectsDao.getProjectsWithPrivacy("001234567").size()==0);
+  }
 }

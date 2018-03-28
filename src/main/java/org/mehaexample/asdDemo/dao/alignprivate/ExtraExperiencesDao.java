@@ -5,12 +5,15 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.mehaexample.asdDemo.model.alignprivate.ExtraExperiences;
+import org.mehaexample.asdDemo.model.alignprivate.Privacies;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ExtraExperiencesDao {
   private SessionFactory factory;
   private Session session;
+  private PrivaciesDao privaciesDao;
 
   /**
    * Default constructor.
@@ -18,11 +21,13 @@ public class ExtraExperiencesDao {
    * next it goes to all table files in the hibernate file and loads them.
    */
   public ExtraExperiencesDao() {
+    privaciesDao = new PrivaciesDao();
     this.factory = StudentSessionFactory.getFactory();
   }
 
   public ExtraExperiencesDao(boolean test) {
     if (test) {
+      privaciesDao = new PrivaciesDao(true);
       this.factory = StudentTestSessionFactory.getFactory();
     }
   }
@@ -64,6 +69,15 @@ public class ExtraExperiencesDao {
       return (List<ExtraExperiences>) query.list();
     } finally {
       session.close();
+    }
+  }
+
+  public List<ExtraExperiences> getExtraExperiencesWithPrivacy(String neuId) {
+    Privacies privacy = privaciesDao.getPrivacyByNeuId(neuId);
+    if (!privacy.isExtraExperience()) {
+      return new ArrayList<>();
+    } else {
+      return getExtraExperiencesByNeuId(neuId);
     }
   }
 

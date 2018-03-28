@@ -8,6 +8,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mehaexample.asdDemo.dao.alignprivate.CoursesDao;
 import org.mehaexample.asdDemo.dao.alignprivate.ElectivesDao;
+import org.mehaexample.asdDemo.dao.alignprivate.PrivaciesDao;
 import org.mehaexample.asdDemo.dao.alignprivate.StudentsDao;
 import org.mehaexample.asdDemo.enums.Campus;
 import org.mehaexample.asdDemo.enums.DegreeCandidacy;
@@ -17,18 +18,21 @@ import org.mehaexample.asdDemo.enums.Term;
 import org.mehaexample.asdDemo.model.alignadmin.TopElective;
 import org.mehaexample.asdDemo.model.alignprivate.Courses;
 import org.mehaexample.asdDemo.model.alignprivate.Electives;
+import org.mehaexample.asdDemo.model.alignprivate.Privacies;
 import org.mehaexample.asdDemo.model.alignprivate.Students;
 
 public class ElectiveDaoTest {
   private static ElectivesDao electivesDao;
   private static StudentsDao studentsDao;
   private static CoursesDao coursesDao;
+  private static PrivaciesDao privaciesDao;
 
   @BeforeClass
   public static void init() {
     electivesDao = new ElectivesDao(true);
     studentsDao = new StudentsDao(true);
     coursesDao = new CoursesDao(true);
+    privaciesDao = new PrivaciesDao(true);
 
 //    electivesDao = new ElectivesDao();
 //    studentsDao = new StudentsDao();
@@ -124,7 +128,6 @@ public class ElectiveDaoTest {
     studentsDao.deleteStudent(tempId + "");
   }
 
-  //
   @Test
   public void updateElectivesTest() {
     String tempId = "9187";
@@ -216,5 +219,41 @@ public class ElectiveDaoTest {
     coursesDao.deleteCourseById("789");
     coursesDao.deleteCourseById(tempId);
     studentsDao.deleteStudent(tempId);
+  }
+
+  @Test
+  public void getElectivesWithPrivacyTest() {
+    Students newStudent = new Students("11111111", "tomcat2e1kk3@gmail.com", "Tom3", "",
+            "Cat", Gender.M, "F1", "1111111111",
+            "401 Terry Ave", "WA", "Seattle", "98109",
+            Term.FALL, 2014, Term.SPRING, 2016,
+            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
+
+    studentsDao.addStudent(newStudent);
+
+    Courses newCourse = new Courses("cs5000", "course2", "course description 2");
+    Courses courses = coursesDao.createCourse(newCourse);
+
+    Privacies privacy = new Privacies();
+    privacy.setNeuId("11111111");
+    privacy.setCourse(true);
+    privaciesDao.createPrivacy(privacy);
+
+    Electives elective = new Electives();
+    elective.setNeuId(newStudent.getNeuId());
+    elective.setCourseName(newCourse.getCourseName());
+    elective.setCourseId(newCourse.getCourseId());
+    elective.setCourseTerm(Term.SPRING);
+    elective.setCourseYear(2017);
+    electivesDao.addElective(elective);
+
+    Assert.assertTrue(electivesDao.getElectivesWithPrivacy("11111111").size()==1);
+
+    privacy.setCourse(false);
+    privaciesDao.updatePrivacy(privacy);
+    Assert.assertTrue(electivesDao.getElectivesWithPrivacy("11111111").size()==0);
+
+    studentsDao.deleteStudent("11111111");
+    coursesDao.deleteCourseById("cs5000");
   }
 }

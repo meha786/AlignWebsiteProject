@@ -7,16 +7,19 @@ import org.hibernate.Transaction;
 import org.mehaexample.asdDemo.enums.Campus;
 import org.mehaexample.asdDemo.model.alignadmin.TopBachelor;
 import org.mehaexample.asdDemo.model.alignadmin.TopEmployer;
+import org.mehaexample.asdDemo.model.alignprivate.Privacies;
 import org.mehaexample.asdDemo.model.alignprivate.StudentBasicInfo;
 import org.mehaexample.asdDemo.model.alignprivate.StudentCoopList;
 import org.mehaexample.asdDemo.model.alignprivate.WorkExperiences;
 
 import javax.persistence.TypedQuery;
+import java.util.ArrayList;
 import java.util.List;
 
 public class WorkExperiencesDao {
   private SessionFactory factory;
   private Session session;
+  private PrivaciesDao privaciesDao;
 
   /**
    * Default constructor.
@@ -24,11 +27,13 @@ public class WorkExperiencesDao {
    * next it goes to all table files in the hibernate file and loads them.
    */
   public WorkExperiencesDao() {
+    privaciesDao = new PrivaciesDao();
     this.factory = StudentSessionFactory.getFactory();
   }
 
   public WorkExperiencesDao(boolean test) {
     if (test) {
+      privaciesDao = new PrivaciesDao(true);
       this.factory = StudentTestSessionFactory.getFactory();
     }
   }
@@ -70,6 +75,15 @@ public class WorkExperiencesDao {
       return (List<WorkExperiences>) query.list();
     } finally {
       session.close();
+    }
+  }
+
+  public List<WorkExperiences> getWorkExperiencesWithPrivacy(String neuId) {
+    Privacies privacy = privaciesDao.getPrivacyByNeuId(neuId);
+    if (!privacy.isCoop()) {
+      return new ArrayList<>();
+    } else {
+      return getWorkExperiencesByNeuId(neuId);
     }
   }
 

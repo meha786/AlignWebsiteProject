@@ -5,6 +5,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mehaexample.asdDemo.dao.alignprivate.PrivaciesDao;
 import org.mehaexample.asdDemo.dao.alignprivate.StudentsDao;
 import org.mehaexample.asdDemo.dao.alignprivate.WorkExperiencesDao;
 import org.mehaexample.asdDemo.enums.Campus;
@@ -13,10 +14,7 @@ import org.mehaexample.asdDemo.enums.EnrollmentStatus;
 import org.mehaexample.asdDemo.enums.Gender;
 import org.mehaexample.asdDemo.enums.Term;
 import org.mehaexample.asdDemo.model.alignadmin.TopEmployer;
-import org.mehaexample.asdDemo.model.alignprivate.StudentBasicInfo;
-import org.mehaexample.asdDemo.model.alignprivate.StudentCoopList;
-import org.mehaexample.asdDemo.model.alignprivate.Students;
-import org.mehaexample.asdDemo.model.alignprivate.WorkExperiences;
+import org.mehaexample.asdDemo.model.alignprivate.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,11 +25,13 @@ import static org.junit.Assert.*;
 public class WorkExperiencesDaoTest {
   private static WorkExperiencesDao workExperiencesDao;
   private static StudentsDao studentsDao;
+  private static PrivaciesDao privaciesDao;
 
   @BeforeClass
   public static void init() {
     workExperiencesDao = new WorkExperiencesDao(true);
     studentsDao = new StudentsDao(true);
+    privaciesDao = new PrivaciesDao(true);
 
 //    workExperiencesDao = new WorkExperiencesDao();
 //    studentsDao = new StudentsDao();
@@ -51,6 +51,11 @@ public class WorkExperiencesDaoTest {
             EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS,null, true);
     studentsDao.addStudent(student);
     studentsDao.addStudent(student2);
+
+    Privacies privacy = new Privacies();
+    privacy.setNeuId("001234567");
+    privacy.setCoop(true);
+    privaciesDao.createPrivacy(privacy);
 
     WorkExperiences newWorkExperience = new WorkExperiences();
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -265,5 +270,14 @@ public class WorkExperiencesDaoTest {
     // delete the work experience
     workExperiencesDao.deleteWorkExperienceById(foundWorkExperience.getWorkExperienceId());
     assertTrue(workExperiencesDao.getWorkExperienceById(foundWorkExperience.getWorkExperienceId()) == null);
+  }
+
+  @Test
+  public void getWorkExperiencesWithPrivacyTest() {
+    assertTrue(workExperiencesDao.getWorkExperiencesWithPrivacy("001234567").size()==1);
+    Privacies privacy = privaciesDao.getPrivacyByNeuId("001234567");
+    privacy.setCoop(false);
+    privaciesDao.updatePrivacy(privacy);
+    assertTrue(workExperiencesDao.getWorkExperiencesWithPrivacy("001234567").size()==0);
   }
 }

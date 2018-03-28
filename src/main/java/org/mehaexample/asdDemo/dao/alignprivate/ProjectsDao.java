@@ -4,13 +4,16 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.mehaexample.asdDemo.model.alignprivate.Privacies;
 import org.mehaexample.asdDemo.model.alignprivate.Projects;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProjectsDao {
   private SessionFactory factory;
   private Session session;
+  private PrivaciesDao privaciesDao;
 
   /**
    * Default constructor.
@@ -18,11 +21,13 @@ public class ProjectsDao {
    * next it goes to all table files in the hibernate file and loads them.
    */
   public ProjectsDao() {
+    privaciesDao = new PrivaciesDao();
     this.factory = StudentSessionFactory.getFactory();
   }
 
   public ProjectsDao(boolean test) {
     if (test) {
+      privaciesDao = new PrivaciesDao(true);
       this.factory = StudentTestSessionFactory.getFactory();
     }
   }
@@ -64,6 +69,15 @@ public class ProjectsDao {
       return (List<Projects>) query.list();
     } finally {
       session.close();
+    }
+  }
+
+  public List<Projects> getProjectsWithPrivacy(String neuId) {
+    Privacies privacy = privaciesDao.getPrivacyByNeuId(neuId);
+    if (!privacy.isProject()) {
+      return new ArrayList<>();
+    } else {
+      return getProjectsByNeuId(neuId);
     }
   }
 
