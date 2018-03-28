@@ -11,6 +11,7 @@ import org.mehaexample.asdDemo.enums.Campus;
 import org.mehaexample.asdDemo.enums.DegreeCandidacy;
 import org.mehaexample.asdDemo.enums.EnrollmentStatus;
 import org.mehaexample.asdDemo.enums.Gender;
+import org.mehaexample.asdDemo.model.alignprivate.Privacies;
 import org.mehaexample.asdDemo.model.alignprivate.Students;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -18,6 +19,7 @@ import org.hibernate.SessionFactory;
 public class StudentsDao {
   private SessionFactory factory;
   private Session session;
+  private PrivaciesDao privaciesDao;
 
   /**
    * Default Constructor.
@@ -26,10 +28,12 @@ public class StudentsDao {
     // it will check the hibernate.cfg.xml file and load it
     // next it goes to all table files in the hibernate file and loads them
     this.factory = StudentSessionFactory.getFactory();
+    privaciesDao = new PrivaciesDao();
   }
 
   public StudentsDao(boolean test) {
     if (test) {
+      privaciesDao = new PrivaciesDao(true);
       this.factory = StudentTestSessionFactory.getFactory();
     }
   }
@@ -250,7 +254,48 @@ public class StudentsDao {
         }
       }
 
-      return (List<Students>) query.list();
+      List<Students> result = query.list();
+      for (Students student : result) {
+        Privacies privacy = privaciesDao.getPrivacyByNeuId(student.getNeuId());
+
+        if (!privacy.isAddress()) {
+          student.setAddress("");
+        }
+
+        if (!privacy.isEmail()) {
+          student.setEmail("");
+        }
+
+        if (!privacy.isPhone()) {
+          student.setPhoneNum("");
+        }
+
+        if (!privacy.isPhoto()) {
+          student.setPhoto(null);
+        }
+
+        if (!privacy.isFacebook()) {
+          student.setFacebook("");
+        }
+
+        if (!privacy.isGithub()) {
+          student.setGithub("");
+        }
+
+        if (!privacy.isWebsite()) {
+          student.setWebsite("");
+        }
+
+        if (!privacy.isSkill()) {
+          student.setSkills("");
+        }
+
+        if (!privacy.isLinkedin()) {
+          student.setLinkedin("");
+        }
+      }
+
+      return result;
     } finally {
       session.close();
     }

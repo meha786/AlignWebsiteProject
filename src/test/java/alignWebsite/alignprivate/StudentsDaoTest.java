@@ -5,10 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import org.hibernate.HibernateException;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.mehaexample.asdDemo.dao.alignprivate.*;
 import org.mehaexample.asdDemo.enums.Campus;
 import org.mehaexample.asdDemo.enums.DegreeCandidacy;
@@ -17,12 +14,15 @@ import org.mehaexample.asdDemo.enums.Gender;
 import org.mehaexample.asdDemo.enums.Term;
 import org.mehaexample.asdDemo.model.alignprivate.*;
 
+import javax.validation.constraints.AssertTrue;
+
 public class StudentsDaoTest {
   private static StudentsDao studentdao;
   private static WorkExperiencesDao workExperiencesDao;
   private static ElectivesDao electivesDao;
   private static CoursesDao coursesDao;
   private static PriorEducationsDao priorEducationsDao;
+  private static PrivaciesDao privaciesDao;
 
   @BeforeClass
   public static void init() {
@@ -31,12 +31,29 @@ public class StudentsDaoTest {
     electivesDao = new ElectivesDao(true);
     coursesDao = new CoursesDao(true);
     priorEducationsDao = new PriorEducationsDao(true);
+    privaciesDao = new PrivaciesDao(true);
+  }
 
-//    studentdao = new StudentsDao();
-//    workExperiencesDao = new WorkExperiencesDao();
-//    electivesDao = new ElectivesDao();
-//    coursesDao = new CoursesDao();
-//    priorEducationsDao = new PriorEducationsDao();
+  @Before
+  public void addRecords() {
+    Students newStudent = new Students("0000000", "tomcat@gmail.com", "Tom", "",
+            "Cat", Gender.M, "F1", "1111111111",
+            "401 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2015,
+            Term.SPRING, 2017,
+            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
+    Students newStudent2 = new Students("1111111", "jerrymouse@gmail.com", "Jerry", "",
+            "Mouse", Gender.M, "F1", "1111111111",
+            "225 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2014,
+            Term.SPRING, 2016,
+            EnrollmentStatus.FULL_TIME, Campus.BOSTON, DegreeCandidacy.MASTERS, null, true);
+    Students newStudent3 = new Students("2222222", "tomcat3@gmail.com", "Tom", "",
+            "Dog", Gender.M, "F1", "1111111111",
+            "401 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2015,
+            Term.FALL, 2017,
+            EnrollmentStatus.DROPPED_OUT, Campus.CHARLOTTE, DegreeCandidacy.MASTERS, null, true);
+    studentdao.addStudent(newStudent);
+    studentdao.addStudent(newStudent2);
+    studentdao.addStudent(newStudent3);
   }
 
   @After
@@ -44,6 +61,10 @@ public class StudentsDaoTest {
     if (studentdao.ifNuidExists("10101010")) {
       studentdao.deleteStudent("10101010");
     }
+
+    studentdao.deleteStudent("0000000");
+    studentdao.deleteStudent("1111111");
+    studentdao.deleteStudent("2222222");
   }
 
   // need VPN for this
@@ -76,7 +97,7 @@ public class StudentsDaoTest {
 
   @Test(expected = HibernateException.class)
   public void addDuplicateStudent() {
-    Students newStudent = new Students("10101010", "tomcat@gmail.com", "Tom", "",
+    Students newStudent = new Students("10101010", "tomcat10@gmail.com", "Tom", "",
             "Cat", Gender.M, "F1", "1111111111",
             "401 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2015,
             Term.SPRING, 2017,
@@ -87,84 +108,30 @@ public class StudentsDaoTest {
 
   @Test
   public void getTotalDropoutStudentsTest() {
-    Students newStudent = new Students("0000000", "tomcat@gmail.com", "Tom", "",
-            "Cat", Gender.M, "F1", "1111111111",
-            "401 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2015,
-            Term.SPRING, 2017,
-            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
-    Students newStudent2 = new Students("1111111", "jerrymouse@gmail.com", "Jerry", "",
-            "Mouse", Gender.M, "F1", "1111111111",
-            "225 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2014,
-            Term.SPRING, 2016,
-            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
-    Students newStudent3 = new Students("2222222", "tomcat3@gmail.com", "Tom", "",
-            "Dog", Gender.M, "F1", "1111111111",
-            "401 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2015,
-            Term.SPRING, 2017,
-            EnrollmentStatus.DROPPED_OUT, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
-    studentdao.addStudent(newStudent);
-    studentdao.addStudent(newStudent2);
-    studentdao.addStudent(newStudent3);
-
     Assert.assertTrue(studentdao.getTotalDropOutStudents() == 1);
-
-    studentdao.deleteStudent("2222222");
-    studentdao.deleteStudent("1111111");
-    studentdao.deleteStudent("0000000");
   }
 
   @Test
   public void getTotalStudentInACampusTest() {
-    Students newStudent = new Students("0000000", "tomcat@gmail.com", "Tom", "",
-            "Cat", Gender.M, "F1", "1111111111",
-            "401 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2015,
-            Term.SPRING, 2017,
-            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
-    Students newStudent2 = new Students("1111111", "jerrymouse@gmail.com", "Jerry", "",
-            "Mouse", Gender.M, "F1", "1111111111",
-            "225 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2014,
-            Term.SPRING, 2016,
-            EnrollmentStatus.FULL_TIME, Campus.BOSTON, DegreeCandidacy.MASTERS, null, true);
-    Students newStudent3 = new Students("2222222", "tomcat3@gmail.com", "Tom", "",
-            "Dog", Gender.M, "F1", "1111111111",
-            "401 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2015,
-            Term.SPRING, 2017,
-            EnrollmentStatus.DROPPED_OUT, Campus.CHARLOTTE, DegreeCandidacy.MASTERS, null, true);
-    studentdao.addStudent(newStudent);
-    studentdao.addStudent(newStudent2);
-    studentdao.addStudent(newStudent3);
-
     Assert.assertTrue(studentdao.getTotalStudentsInACampus(Campus.SEATTLE) == 1);
     Assert.assertTrue(studentdao.getTotalStudentsInACampus(Campus.BOSTON) == 1);
     Assert.assertTrue(studentdao.getTotalStudentsInACampus(Campus.CHARLOTTE) == 1);
     Assert.assertTrue(studentdao.getTotalStudentsInACampus(Campus.SILICON_VALLEY) == 0);
     Assert.assertTrue(studentdao.getTotalStudents() == 3);
-
-    studentdao.deleteStudent("2222222");
-    studentdao.deleteStudent("1111111");
-    studentdao.deleteStudent("0000000");
   }
 
   @Test
   public void getAdminFilteredStudentsTest() throws ParseException {
-    Students newStudent = new Students("0000000", "tomcat@gmail.com", "Tom", "",
-            "Cat", Gender.M, "F1", "1111111111",
-            "401 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2015,
-            Term.SPRING, 2017,
-            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
-    Students newStudent2 = new Students("1111111", "jerrymouse@gmail.com", "Jerry", "",
-            "Mouse", Gender.M, "F1", "1111111111",
-            "225 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2014,
-            Term.SPRING, 2016,
-            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
-    Students newStudent3 = new Students("2222222", "tomcat3@gmail.com", "Tom", "",
-            "Dog", Gender.M, "F1", "1111111111",
-            "401 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2015,
-            Term.SPRING, 2017,
-            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
-    studentdao.addStudent(newStudent);
-    studentdao.addStudent(newStudent2);
-    studentdao.addStudent(newStudent3);
+    Students student1 = studentdao.getStudentRecord("0000000");
+    student1.setCampus(Campus.SEATTLE);
+    Students student2 = studentdao.getStudentRecord("1111111");
+    student2.setCampus(Campus.SEATTLE);
+    Students student3 = studentdao.getStudentRecord("2222222");
+    student3.setCampus(Campus.SEATTLE);
+
+    studentdao.updateStudentRecord(student1);
+    studentdao.updateStudentRecord(student2);
+    studentdao.updateStudentRecord(student3);
 
     // add prior education
     PriorEducations newPriorEducation = new PriorEducations();
@@ -172,7 +139,7 @@ public class StudentsDaoTest {
     newPriorEducation.setGraduationDate(dateFormat.parse("2015-01-01"));
     newPriorEducation.setGpa(3.50f);
     newPriorEducation.setDegreeCandidacy(DegreeCandidacy.BACHELORS);
-    newPriorEducation.setNeuId(newStudent.getNeuId());
+    newPriorEducation.setNeuId("0000000");
     newPriorEducation.setMajorName("Computer Science");
     newPriorEducation.setInstitutionName("University of Washington");
 
@@ -249,86 +216,38 @@ public class StudentsDaoTest {
     Map<String, List<String>> filters3 = new HashMap<>();
     filters3.put("companyName", companyName2);
     Assert.assertTrue(studentdao.getAdminFilteredStudents(filters3, 0, 2).isEmpty());
-
-    priorEducationsDao.deletePriorEducationById(
-            priorEducationsDao.getPriorEducationsByNeuId(newStudent.getNeuId()).get(0).getPriorEducationId());
-    workExperiencesDao.deleteWorkExperienceById(
-            workExperiencesDao.getWorkExperiencesByNeuId("1111111").get(0).getWorkExperienceId());
-    studentdao.deleteStudent("2222222");
-    studentdao.deleteStudent("1111111");
-    studentdao.deleteStudent("0000000");
-  }
-
-  @Test
-  public void addStudentTest() {
-    Students newStudent = new Students("0000000", "tomcat@gmail.com", "Tom", "",
-            "Cat", Gender.M, "F1", "1111111111",
-            "401 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2015,
-            Term.SPRING, 2017,
-            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
-
-    Students student = studentdao.addStudent(newStudent);
-    Assert.assertTrue(student.toString().equals(newStudent.toString()));
-    studentdao.deleteStudent("0000000");
   }
 
   @Test
   public void findStudentByEmailTest() {
-    Students newStudent = new Students("0000000", "tomcat@gmail.com", "Tom", "",
-            "Cat", Gender.M, "F1", "1111111111",
-            "401 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2015,
-            Term.SPRING, 2017,
-            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
-
-    Students student = studentdao.addStudent(newStudent);
     Assert.assertTrue(studentdao.getStudentRecordByEmailId("tomcat@gmail.com").getNeuId().equals("0000000"));
-    Assert.assertTrue(studentdao.getStudentRecordByEmailId("tomcat2@gmail.com") == null);
-    studentdao.deleteStudent("0000000");
+    Assert.assertTrue(studentdao.getStudentRecordByEmailId("tomcat4@gmail.com") == null);
   }
 
   @Test
   public void deleteStudentRecord() {
-    Students newStudent = new Students("0000000", "tomcat@gmail.com", "Tom", "",
+    Students newStudent = new Students("3333333", "tomcat4@gmail.com", "Tom", "",
             "Cat", Gender.M, "F1", "1111111111",
             "401 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2015,
             Term.SPRING, 2017,
             EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
 
     studentdao.addStudent(newStudent);
-    Assert.assertTrue(studentdao.deleteStudent("0000000"));
-    Assert.assertTrue(!studentdao.ifNuidExists("0000000"));
+    Assert.assertTrue(studentdao.deleteStudent("3333333"));
+    Assert.assertTrue(!studentdao.ifNuidExists("3333333"));
   }
 
   @Test
   public void getAllStudents() {
     List<Students> students = studentdao.getAllStudents();
-
-    Students newStudent = new Students("0000000", "tomcat@gmail.com", "Tom", "",
-            "Cat", Gender.M, "F1", "1111111111",
-            "401 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2015,
-            Term.SPRING, 2017,
-            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
-    studentdao.addStudent(newStudent);
-    List<Students> newStudents = studentdao.getAllStudents();
-    Assert.assertTrue(newStudents.size() == students.size() + 1);
-    studentdao.deleteStudent("0000000");
-
+    Assert.assertTrue(students.size() == 3);
   }
 
   @Test
   public void getStudentRecord() {
-    Students newStudent = new Students("0000000", "tomcat@gmail.com", "Tom", "",
-            "Cat", Gender.M, "F1", "1111111111",
-            "401 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2015,
-            Term.SPRING, 2017,
-            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
-
-    studentdao.addStudent(newStudent);
     Students student = studentdao.getStudentRecord("0000000");
-    Assert.assertTrue(student.toString().equals(newStudent.toString()));
+    Assert.assertTrue(studentdao.searchStudentRecord("Tom").size() == 2);
     Assert.assertTrue(studentdao.searchStudentRecord("Tom").get(0).getNeuId().equals("0000000"));
-    studentdao.deleteStudent("0000000");
-
   }
 
   @Test
@@ -341,63 +260,38 @@ public class StudentsDaoTest {
 
   @Test
   public void searchSimilarStudents() {
-    Students student = new Students("0000000", "tomcat@gmail.com", "Tom", "",
-            "Cat", Gender.M, "F1", "1111111111",
-            "401 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2015,
-            Term.SPRING, 2017,
-            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
-    studentdao.addStudent(student);
-
     List<Students> students = studentdao.searchSimilarStudents(DegreeCandidacy.MASTERS);
 
     for (Students s : students) {
       Assert.assertTrue(s.getDegree().name().equals("MASTERS"));
     }
-
-    studentdao.deleteStudent("0000000");
   }
 
   @Test
   public void updateStudentRecord() {
-    Students student = new Students("0000000", "tomcat@gmail.com", "Tom", "",
-            "Cat", Gender.M, "F1", "1111111111",
-            "401 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2015,
-            Term.SPRING, 2017,
-            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
-
-    studentdao.addStudent(student);
-    student = studentdao.getStudentRecord("0000000");
+    Students student = studentdao.getStudentRecord("0000000");
     Assert.assertTrue(student.getAddress().equals("401 Terry Ave"));
 
     student.setAddress("225 Terry Ave");
     Assert.assertTrue(studentdao.updateStudentRecord(student));
     student = studentdao.getStudentRecord("0000000");
     Assert.assertTrue(student.getAddress().equals("225 Terry Ave"));
-
-    studentdao.deleteStudent("0000000");
   }
 
 
   @Test
   public void getStudentFilteredStudents() throws Exception {
-    Students newStudent = new Students("0000000", "tomcat@gmail.com", "Tom", "",
-            "Cat", Gender.M, "F1", "1111111111",
-            "401 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2014,
-            Term.SPRING, 2017,
-            EnrollmentStatus.FULL_TIME, Campus.BOSTON, DegreeCandidacy.MASTERS, null, true);
-    Students newStudent2 = new Students("1111111", "jerrymouse@gmail.com", "Jerry", "",
-            "Mouse", Gender.M, "F1", "1111111111",
-            "225 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2015,
-            Term.FALL, 2016,
-            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
-    Students newStudent3 = new Students("2222222", "tomcat3@gmail.com", "Tom", "",
-            "Dog", Gender.M, "F1", "1111111111",
-            "401 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2015,
-            Term.FALL, 2017,
-            EnrollmentStatus.FULL_TIME, Campus.SILICON_VALLEY, DegreeCandidacy.MASTERS, null, true);
-    studentdao.addStudent(newStudent);
-    studentdao.addStudent(newStudent2);
-    studentdao.addStudent(newStudent3);
+    Privacies privacy1 = new Privacies();
+    privacy1.setNeuId("0000000");
+    Privacies privacy2 = new Privacies();
+    privacy2.setNeuId("1111111");
+    Privacies privacy3 = new Privacies();
+    privacy3.setNeuId("2222222");
+    privacy3.setEmail(true);
+
+    privaciesDao.createPrivacy(privacy1);
+    privaciesDao.createPrivacy(privacy2);
+    privaciesDao.createPrivacy(privacy3);
 
     // no filter case
     Assert.assertTrue(studentdao.getStudentFilteredStudents(new HashMap<String, List<String>>(), 1, 20).size() == 3);
@@ -465,14 +359,16 @@ public class StudentsDaoTest {
     map.put("courseName", courses);
     Assert.assertTrue(studentdao.getStudentFilteredStudents(map, 1, 20).size() == 1);
 
-    workExperiencesDao.deleteWorkExperienceByNeuId("1111111");
-    workExperiencesDao.deleteWorkExperienceByNeuId("2222222");
+    //check privacy
+    for (Students student : studentdao.getStudentFilteredStudents(new HashMap<String, List<String>>(), 1, 10)) {
+      if (student.getNeuId().equals("2222222")) {
+        Assert.assertTrue(student.getEmail().equals("tomcat3@gmail.com"));
+      } else {
+        Assert.assertTrue(student.getEmail().isEmpty());
+      }
+    }
+
     coursesDao.deleteCourseById("5800");
     coursesDao.deleteCourseById("5100");
-    electivesDao.deleteElectivesByNeuId("1111111");
-    electivesDao.deleteElectivesByNeuId("2222222");
-    studentdao.deleteStudent("2222222");
-    studentdao.deleteStudent("1111111");
-    studentdao.deleteStudent("0000000");
   }
 }
