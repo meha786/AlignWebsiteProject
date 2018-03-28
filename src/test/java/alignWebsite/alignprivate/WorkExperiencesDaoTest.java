@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.mehaexample.asdDemo.dao.alignprivate.PrivaciesDao;
 import org.mehaexample.asdDemo.dao.alignprivate.StudentsDao;
 import org.mehaexample.asdDemo.dao.alignprivate.WorkExperiencesDao;
+import org.mehaexample.asdDemo.dao.alignpublic.MultipleValueAggregatedDataDao;
 import org.mehaexample.asdDemo.enums.Campus;
 import org.mehaexample.asdDemo.enums.DegreeCandidacy;
 import org.mehaexample.asdDemo.enums.EnrollmentStatus;
@@ -15,6 +16,7 @@ import org.mehaexample.asdDemo.enums.Gender;
 import org.mehaexample.asdDemo.enums.Term;
 import org.mehaexample.asdDemo.model.alignadmin.TopEmployer;
 import org.mehaexample.asdDemo.model.alignprivate.*;
+import org.mehaexample.asdDemo.model.alignpublic.MultipleValueAggregatedData;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -86,6 +88,15 @@ public class WorkExperiencesDaoTest {
     WorkExperiences newWorkExperience = new WorkExperiences();
     newWorkExperience.setWorkExperienceId(-300);
     workExperiencesDao.updateWorkExperience(newWorkExperience);
+  }
+
+  @Test
+  public void getStudentEmployersTest() {
+    List<MultipleValueAggregatedData> list = workExperiencesDao.getStudentEmployers();
+    assertTrue(list.size() == 1);
+    assertTrue(list.get(0).getAnalyticTerm().equals(MultipleValueAggregatedDataDao.LIST_OF_EMPLOYERS));
+    assertTrue(list.get(0).getAnalyticKey().equals("Amazon"));
+    assertTrue(list.get(0).getAnalyticValue() == 1);
   }
 
   @Test

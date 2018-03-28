@@ -7,6 +7,11 @@ public class MultipleValueAggregatedData implements Serializable {
   private String analyticKey;
   private int analyticValue;
 
+  public MultipleValueAggregatedData(String analyticKey, int analyticValue) {
+    this.analyticKey = analyticKey;
+    this.analyticValue = analyticValue;
+  }
+
   public MultipleValueAggregatedData() { }
 
   public String getAnalyticTerm() {

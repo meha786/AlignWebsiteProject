@@ -66,23 +66,59 @@ public class StudentsDao {
     return student;
   }
 
-  public int getTotalStudentsInACampus(Campus campus) {
+  // THIS IS FOR MACHINE LEARNING AND PUBLIC SCRIPTS
+  // How many students are at the {Seattle|Boston|Silicon Valley|Charlotte) campus?
+  public int getTotalCurrentStudentsInACampus(Campus campus) {
     try {
       session = factory.openSession();
       org.hibernate.query.Query query = session.createQuery(
-              "SELECT COUNT(*) FROM Students WHERE campus = :campus");
+              "SELECT COUNT(*) FROM Students WHERE campus = :campus AND " +
+                      "(enrollmentStatus = :enrollmentStatus1 OR enrollmentStatus = :enrollmentStatus2) ");
       query.setParameter("campus", campus);
+      query.setParameter("enrollmentStatus1", EnrollmentStatus.FULL_TIME);
+      query.setParameter("enrollmentStatus2", EnrollmentStatus.PART_TIME);
       return ((Long) query.list().get(0)).intValue();
     } finally {
       session.close();
     }
   }
 
+  // THIS IS FOR MACHINE LEARNING SCRIPTS
+  // How many students are in the ALIGN program?
+  public int getTotalCurrentStudents() {
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery(
+              "SELECT COUNT(*) FROM Students WHERE " +
+                      "enrollmentStatus = :enrollmentStatus1 OR enrollmentStatus = :enrollmentStatus2");
+      query.setParameter("enrollmentStatus1", EnrollmentStatus.FULL_TIME);
+      query.setParameter("enrollmentStatus2", EnrollmentStatus.PART_TIME);
+      return ((Long) query.list().get(0)).intValue();
+    } finally {
+      session.close();
+    }
+  }
+
+  // THIS IS FOR PUBLIC SCRIPTS
   public int getTotalStudents() {
     try {
       session = factory.openSession();
       org.hibernate.query.Query query = session.createQuery(
               "SELECT COUNT(*) FROM Students");
+      return ((Long) query.list().get(0)).intValue();
+    } finally {
+      session.close();
+    }
+  }
+
+  // THIS IS FOR MACHINE LEARNING SCRIPTS
+  // HOW MANY STUDENTS GRADUATED FROM THE ALIGN PROGRAM?
+  public int getTotalGraduatedStudents() {
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery(
+              "SELECT COUNT(*) FROM Students WHERE enrollmentStatus = :enrollmentStatus ");
+      query.setParameter("enrollmentStatus", EnrollmentStatus.GRADUATED);
       return ((Long) query.list().get(0)).intValue();
     } finally {
       session.close();
@@ -161,6 +197,8 @@ public class StudentsDao {
     }
   }
 
+  // THIS IS FOR MACHINE LEARNING SCRIPT
+  // What is the drop out rate for Align?
   public int getTotalDropOutStudents() {
     try {
       session = factory.openSession();
@@ -439,7 +477,8 @@ public class StudentsDao {
     return find;
   }
 
-
+  // THIS IS A SCRIPT FOR MACHINE LEARNING / PUBLIC
+  // GET TOTAL CURRENT MALE STUDENTS
   /**
    * Get the total number of male students in database.
    *
@@ -447,12 +486,15 @@ public class StudentsDao {
    */
   public int countMaleStudents() {
     session = factory.openSession();
-    org.hibernate.query.Query query = session.createQuery("FROM Students WHERE gender = 'M'");
+    org.hibernate.query.Query query = session.createQuery("FROM Students WHERE gender = 'M' AND " +
+            "(enrollmentStatus = 'FULL_TIME' OR enrollmentStatus = 'PART_TIME') ");
     List<Students> list = query.list();
     session.close();
     return list.size();
   }
 
+  // THIS IS A SCRIPT FOR MACHINE LEARNING / PUBLIC
+  // GET TOTAL CURRENT FEMALE STUDENTS
   /**
    * Get the total number of female students in database.
    *
@@ -460,7 +502,8 @@ public class StudentsDao {
    */
   public int countFemaleStudents() {
     session = factory.openSession();
-    org.hibernate.query.Query query = session.createQuery("FROM Students WHERE gender = 'F'");
+    org.hibernate.query.Query query = session.createQuery("FROM Students WHERE gender = 'F' AND " +
+            "(enrollmentStatus = 'FULL_TIME' OR enrollmentStatus = 'PART_TIME') ");
     List<Students> list = query.list();
     session.close();
     return list.size();

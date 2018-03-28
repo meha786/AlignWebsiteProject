@@ -4,6 +4,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.mehaexample.asdDemo.dao.alignpublic.MultipleValueAggregatedDataDao;
 import org.mehaexample.asdDemo.enums.Campus;
 import org.mehaexample.asdDemo.model.alignadmin.TopBachelor;
 import org.mehaexample.asdDemo.model.alignadmin.TopEmployer;
@@ -11,6 +12,7 @@ import org.mehaexample.asdDemo.model.alignprivate.Privacies;
 import org.mehaexample.asdDemo.model.alignprivate.StudentBasicInfo;
 import org.mehaexample.asdDemo.model.alignprivate.StudentCoopList;
 import org.mehaexample.asdDemo.model.alignprivate.WorkExperiences;
+import org.mehaexample.asdDemo.model.alignpublic.MultipleValueAggregatedData;
 
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
@@ -229,6 +231,27 @@ public class WorkExperiencesDao {
         query.setParameter("year", year);
       }
       return query.getResultList();
+    } finally {
+      session.close();
+    }
+  }
+
+  // THIS IS A SCRIPT FOR MACHINE LEARNING / PUBLIC FACING
+  // Who are the largest Align student employers?
+  public List<MultipleValueAggregatedData> getStudentEmployers() {
+    String hql = "SELECT NEW org.mehaexample.asdDemo.model.alignpublic.MultipleValueAggregatedData ( " +
+            "we.companyName, cast(Count(*) as integer) ) " +
+            "FROM WorkExperiences we " +
+            "GROUP BY we.companyName " +
+            "ORDER BY Count(*) DESC ";
+    try {
+      session = factory.openSession();
+      TypedQuery<MultipleValueAggregatedData> query = session.createQuery(hql, MultipleValueAggregatedData.class);
+      List<MultipleValueAggregatedData> list = query.getResultList();
+      for (MultipleValueAggregatedData data : list) {
+        data.setAnalyticTerm(MultipleValueAggregatedDataDao.LIST_OF_EMPLOYERS);
+      }
+      return list;
     } finally {
       session.close();
     }
