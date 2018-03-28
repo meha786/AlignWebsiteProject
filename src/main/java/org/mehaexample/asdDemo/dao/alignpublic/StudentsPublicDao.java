@@ -101,6 +101,7 @@ public class StudentsPublicDao {
     try {
       String hql = "SELECT s " +
               "FROM StudentsPublic s " +
+              "WHERE s.visibleToPublic = true " +
               "ORDER BY s.graduationYear DESC";
       session = factory.openSession();
       org.hibernate.query.Query query = session.createQuery(hql);
@@ -112,34 +113,15 @@ public class StudentsPublicDao {
   }
 
   public List<StudentsPublic> getPublicFilteredStudents(Map<String, List<String>> filters, int begin, int end) {
-	  System.out.println("===========================================================");
-
-	  for(String key: filters.keySet()){
-			System.out.println("filters-Key: " + key );
-			
-			List<String> values = filters.get(key);
-			
-			for(String s: values){
-				System.out.print(", " + s); 
-			}
-			
-		}
-	  System.out.println("===========================================================");
-
     StringBuilder hql = new StringBuilder("SELECT Distinct(s) " +
             "FROM StudentsPublic s " +
             "LEFT OUTER JOIN WorkExperiencesPublic we ON s.publicId = we.publicId " +
-            "LEFT OUTER JOIN UndergraduatesPublic u ON s.publicId = u.publicId ");
+            "LEFT OUTER JOIN UndergraduatesPublic u ON s.publicId = u.publicId " +
+            "WHERE (s.visibleToPublic = true) ");
     List<StudentsPublic> list;
     Set<String> filterKeys = filters.keySet();
-    if (!filters.isEmpty()) {
-      hql.append(" WHERE ");
-    }
-    boolean firstWhereArgument = true;
     for (String filter : filterKeys) {
-      if (!firstWhereArgument) {
-        hql.append("AND ");
-      }
+      hql.append("AND ");
       hql.append("(");
       boolean first = true;
       List<String> filterElements = filters.get(filter);
@@ -159,9 +141,6 @@ public class StudentsPublicDao {
         }
       }
       hql.append(") ");
-      if (firstWhereArgument) {
-        firstWhereArgument = false;
-      }
     }
 
     hql.append(" ORDER BY s.graduationYear DESC ");

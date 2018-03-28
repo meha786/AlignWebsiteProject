@@ -1,22 +1,19 @@
 package org.mehaexample.asdDemo.model.alignpublic;
 
-import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 
 public class StudentsPublic {
   private int publicId;
-  private String firstName;
-  private Blob photo;
   private int graduationYear;
+  private boolean visibleToPublic;
   private List<WorkExperiencesPublic> workExperiences = new ArrayList<>(0);
   private List<UndergraduatesPublic> undergraduates = new ArrayList<>(0);
 
-  public StudentsPublic(int publicId, String firstName, Blob photo, int graduationYear) {
+  public StudentsPublic(int publicId, int graduationYear, boolean visibleToPublic) {
     this.publicId = publicId;
-    this.firstName = firstName;
-    this.photo = photo;
     this.graduationYear = graduationYear;
+    this.visibleToPublic = visibleToPublic;
   }
 
   public StudentsPublic() { }
@@ -29,28 +26,20 @@ public class StudentsPublic {
     this.publicId = publicId;
   }
 
-  public String getFirstName() {
-    return firstName;
-  }
-
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
-  }
-
-  public Blob getPhoto() {
-    return photo;
-  }
-
-  public void setPhoto(Blob photo) {
-    this.photo = photo;
-  }
-
   public int getGraduationYear() {
     return graduationYear;
   }
 
   public void setGraduationYear(int graduationYear) {
     this.graduationYear = graduationYear;
+  }
+
+  public boolean isVisibleToPublic() {
+    return visibleToPublic;
+  }
+
+  public void setVisibleToPublic(boolean visibleToPublic) {
+    this.visibleToPublic = visibleToPublic;
   }
 
   public List<WorkExperiencesPublic> getWorkExperiences() {

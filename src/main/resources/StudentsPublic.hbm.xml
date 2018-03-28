@@ -13,11 +13,9 @@
             <generator class="assigned"/>
         </id>
 
-        <property name="firstName" column="FirstName" type="string"/>
-
-        <property name="photo" column="Photo" type="blob"/>
-
         <property name="graduationYear" column="GraduationYear" type="int"/>
+
+        <property name="visibleToPublic" column="VisibleToPubilc" type="boolean"/>
 
         <bag name="workExperiences" table="WorkExperiences"
              inverse="true" lazy="false" fetch="select">

@@ -31,10 +31,10 @@ public class UndergraduatesPublicDaoTest {
 //    studentsPublicDao = new StudentsPublicDao();
 
     StudentsPublic studentsPublic = new StudentsPublic(
-            5, "Josh", null, 2016);
+            5, 2016, true);
     studentsPublicDao.createStudent(studentsPublic);
     StudentsPublic studentsPublic2 = new StudentsPublic(
-            6, "Chet", null, 2016);
+            6, 2016, true);
     studentsPublicDao.createStudent(studentsPublic2);
     undergraduate = new UndergraduatesPublic(
             5, "Chemistry", "George Washington University");
