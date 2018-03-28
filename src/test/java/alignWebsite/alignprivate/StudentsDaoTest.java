@@ -42,10 +42,10 @@ public class StudentsDaoTest {
             Term.SPRING, 2017,
             EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
     Students newStudent2 = new Students("1111111", "jerrymouse@gmail.com", "Jerry", "",
-            "Mouse", Gender.M, "F1", "1111111111",
+            "Mouse", Gender.F, "F1", "1111111111",
             "225 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2014,
             Term.SPRING, 2016,
-            EnrollmentStatus.FULL_TIME, Campus.BOSTON, DegreeCandidacy.MASTERS, null, true);
+            EnrollmentStatus.PART_TIME, Campus.BOSTON, DegreeCandidacy.MASTERS, null, true);
     Students newStudent3 = new Students("2222222", "tomcat3@gmail.com", "Tom", "",
             "Dog", Gender.M, "F1", "1111111111",
             "401 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2015,
@@ -113,11 +113,17 @@ public class StudentsDaoTest {
 
   @Test
   public void getTotalStudentInACampusTest() {
-    Assert.assertTrue(studentdao.getTotalStudentsInACampus(Campus.SEATTLE) == 1);
-    Assert.assertTrue(studentdao.getTotalStudentsInACampus(Campus.BOSTON) == 1);
-    Assert.assertTrue(studentdao.getTotalStudentsInACampus(Campus.CHARLOTTE) == 1);
-    Assert.assertTrue(studentdao.getTotalStudentsInACampus(Campus.SILICON_VALLEY) == 0);
+    Assert.assertTrue(studentdao.getTotalCurrentStudentsInACampus(Campus.SEATTLE) == 1);
+    Assert.assertTrue(studentdao.getTotalCurrentStudentsInACampus(Campus.BOSTON) == 1);
+    Assert.assertTrue(studentdao.getTotalCurrentStudentsInACampus(Campus.CHARLOTTE) == 0);
+    Assert.assertTrue(studentdao.getTotalCurrentStudentsInACampus(Campus.SILICON_VALLEY) == 0);
+    Assert.assertTrue(studentdao.getTotalCurrentStudents() == 2);
     Assert.assertTrue(studentdao.getTotalStudents() == 3);
+  }
+
+  @Test
+  public void getTotalGraduatedStudents() {
+    Assert.assertTrue(studentdao.getTotalGraduatedStudents() == 0);
   }
 
   @Test
@@ -251,11 +257,11 @@ public class StudentsDaoTest {
   }
 
   @Test
-  public void countMaleStudents() {
+  public void countMaleAndFemaleStudents() {
     int males = studentdao.countMaleStudents();
     int females = studentdao.countFemaleStudents();
-    List<Students> students = studentdao.getAllStudents();
-    Assert.assertTrue(students.size() == males + females);
+    Assert.assertTrue(males == 1);
+    Assert.assertTrue(females == 1);
   }
 
   @Test

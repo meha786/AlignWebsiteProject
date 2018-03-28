@@ -4,10 +4,12 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.mehaexample.asdDemo.dao.alignpublic.MultipleValueAggregatedDataDao;
 import org.mehaexample.asdDemo.enums.Campus;
 import org.mehaexample.asdDemo.model.alignadmin.StudentBachelorInstitution;
 import org.mehaexample.asdDemo.model.alignadmin.TopBachelor;
 import org.mehaexample.asdDemo.model.alignprivate.PriorEducations;
+import org.mehaexample.asdDemo.model.alignpublic.MultipleValueAggregatedData;
 
 import javax.persistence.TypedQuery;
 import java.util.List;
@@ -95,6 +97,27 @@ public class PriorEducationsDao {
     }
 
     return priorEducation;
+  }
+
+  // THIS IS A SCRIPT FOR MACHINE LEARNING / PUBLIC FACING
+  // What bachelors degrees do Align students have?
+  public List<MultipleValueAggregatedData> getStudentBachelorDegrees() {
+    String hql = "SELECT NEW org.mehaexample.asdDemo.model.alignpublic.MultipleValueAggregatedData ( " +
+            "pe.institutionName, cast(Count(*) as integer) ) " +
+            "FROM PriorEducations pe WHERE pe.degreeCandidacy = 'BACHELORS'" +
+            "GROUP BY pe.institutionName " +
+            "ORDER BY Count(*) DESC ";
+    try {
+      session = factory.openSession();
+      TypedQuery<MultipleValueAggregatedData> query = session.createQuery(hql, MultipleValueAggregatedData.class);
+      List<MultipleValueAggregatedData> list = query.getResultList();
+      for (MultipleValueAggregatedData data : list) {
+        data.setAnalyticTerm(MultipleValueAggregatedDataDao.LIST_OF_BACHELOR_DEGREES);
+      }
+      return list;
+    } finally {
+      session.close();
+    }
   }
 
   /**

@@ -1,12 +1,10 @@
 package alignWebsite.alignprivate;
 
 import org.hibernate.HibernateException;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.mehaexample.asdDemo.dao.alignprivate.PriorEducationsDao;
 import org.mehaexample.asdDemo.dao.alignprivate.StudentsDao;
+import org.mehaexample.asdDemo.dao.alignpublic.MultipleValueAggregatedDataDao;
 import org.mehaexample.asdDemo.enums.Campus;
 import org.mehaexample.asdDemo.enums.DegreeCandidacy;
 import org.mehaexample.asdDemo.enums.EnrollmentStatus;
@@ -16,6 +14,7 @@ import org.mehaexample.asdDemo.model.alignadmin.StudentBachelorInstitution;
 import org.mehaexample.asdDemo.model.alignadmin.TopBachelor;
 import org.mehaexample.asdDemo.model.alignprivate.PriorEducations;
 import org.mehaexample.asdDemo.model.alignprivate.Students;
+import org.mehaexample.asdDemo.model.alignpublic.MultipleValueAggregatedData;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -70,6 +69,15 @@ public class PriorEducationsDaoTest {
     studentsDao.deleteStudent("001234567");
     studentsDao.deleteStudent("111234567");
 
+  }
+
+  @Test
+  public void getStudentBachelorDegreesTest() {
+    List<MultipleValueAggregatedData> list = priorEducationsDao.getStudentBachelorDegrees();
+    assertTrue(list.size() == 1);
+    assertTrue(list.get(0).getAnalyticTerm().equals(MultipleValueAggregatedDataDao.LIST_OF_BACHELOR_DEGREES));
+    assertTrue(list.get(0).getAnalyticKey().equals("University of Washington"));
+    assertTrue(list.get(0).getAnalyticValue() == 1);
   }
 
   @Test
