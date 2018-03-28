@@ -29,9 +29,9 @@ public class WorkExperiencesPublicDaoTest {
 //    workExperiencesPublicDao = new WorkExperiencesPublicDao();
 //    studentsPublicDao = new StudentsPublicDao();
 
-    StudentsPublic studentsPublic = new StudentsPublic(5, "Josh", null, 2016);
+    StudentsPublic studentsPublic = new StudentsPublic(5, 2016, true);
     studentsPublicDao.createStudent(studentsPublic);
-    StudentsPublic studentsPublic2 = new StudentsPublic(6, "Chet", null, 2016);
+    StudentsPublic studentsPublic2 = new StudentsPublic(6, 2016, true);
     studentsPublicDao.createStudent(studentsPublic2);
     workExperience = new WorkExperiencesPublic(5, "Google");
     workExperience = workExperiencesPublicDao.createWorkExperience(workExperience);
