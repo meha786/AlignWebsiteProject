@@ -13,11 +13,11 @@
             <generator class="native"/>
         </id>
 
-        <property name = "neuId" column="NeuId" type="string" />
-
-        <property name = "projectName" column="ProjectName" type="string" />
-
-        <property name = "startDate" column="StartDate" type="date" />
+        <properties name="uq_Projects_Project" unique="true">
+            <property name = "neuId" column="NeuId" type="string" />
+            <property name = "projectName" column="ProjectName" type="string" />
+            <property name = "startDate" column="StartDate" type="date" />
+        </properties>
 
         <property name = "endDate" column="EndDate" type="date" />
 

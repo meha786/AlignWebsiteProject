@@ -13,9 +13,11 @@
             <generator class="native"/>
         </id>
 
-        <property name="institutionName" column="InstitutionName" type="string"/>
-
-        <property name="majorName" column="MajorName" type="string"/>
+        <properties name="uq_PriorEducations_PriorEducation" unique="true">
+            <property name = "neuId" column="NeuId" type="string" />
+            <property name="institutionName" column="InstitutionName" type="string"/>
+            <property name="majorName" column="MajorName" type="string"/>
+        </properties>
 
         <property name="graduationDate" column="GraduationDate" type="date"/>
 
@@ -28,8 +30,6 @@
                 <param name="useNamed">true</param>
             </type>
         </property>
-
-        <property name = "neuId" column="NeuId" type="string" />
 
     </class>
 </hibernate-mapping>
