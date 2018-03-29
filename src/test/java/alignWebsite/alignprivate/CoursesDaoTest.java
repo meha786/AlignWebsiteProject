@@ -93,7 +93,6 @@ public class CoursesDaoTest {
 	public void getAllCoursesTest() {
 		List<Courses> courses = coursesDao.getAllCourses();
 
-		System.out.println(courses.size());
 		Courses newcourse = new Courses("111", "course2", "course desc");	
 		coursesDao.createCourse(newcourse);
 		List<Courses> newCourses = coursesDao.getAllCourses();

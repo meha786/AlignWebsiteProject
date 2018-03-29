@@ -68,15 +68,14 @@ public class PriorEducationsDaoTest {
             priorEducationsDao.getPriorEducationsByNeuId("001234567").get(0).getPriorEducationId());
     studentsDao.deleteStudent("001234567");
     studentsDao.deleteStudent("111234567");
-
   }
 
   @Test
   public void getStudentBachelorDegreesTest() {
-    List<MultipleValueAggregatedData> list = priorEducationsDao.getStudentBachelorDegrees();
+    List<MultipleValueAggregatedData> list = priorEducationsDao.getStudentBachelorMajors();
     assertTrue(list.size() == 1);
     assertTrue(list.get(0).getAnalyticTerm().equals(MultipleValueAggregatedDataDao.LIST_OF_BACHELOR_DEGREES));
-    assertTrue(list.get(0).getAnalyticKey().equals("University of Washington"));
+    assertTrue(list.get(0).getAnalyticKey().equals("Computer Science"));
     assertTrue(list.get(0).getAnalyticValue() == 1);
   }
 

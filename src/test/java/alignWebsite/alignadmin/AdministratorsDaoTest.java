@@ -85,7 +85,6 @@ public class AdministratorsDaoTest {
 	public void getAllAdministratorsTest() {
 		List<Administrators> administrators = administratorsDao.getAllAdminstrators();
 
-		System.out.println(administrators.size());
 		Administrators newAdministrator = new Administrators("111", "john.lstew1art@gmail.com", 
 				"John", "Main", "Stewart");	
 		administratorsDao.addAdministrator(newAdministrator);

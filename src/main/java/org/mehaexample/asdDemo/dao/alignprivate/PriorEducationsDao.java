@@ -100,12 +100,12 @@ public class PriorEducationsDao {
   }
 
   // THIS IS A SCRIPT FOR MACHINE LEARNING / PUBLIC FACING
-  // What bachelors degrees do Align students have?
-  public List<MultipleValueAggregatedData> getStudentBachelorDegrees() {
+  // What bachelors majors do Align students have?
+  public List<MultipleValueAggregatedData> getStudentBachelorMajors() {
     String hql = "SELECT NEW org.mehaexample.asdDemo.model.alignpublic.MultipleValueAggregatedData ( " +
-            "pe.institutionName, cast(Count(*) as integer) ) " +
+            "pe.majorName, cast(Count(*) as integer) ) " +
             "FROM PriorEducations pe WHERE pe.degreeCandidacy = 'BACHELORS'" +
-            "GROUP BY pe.institutionName " +
+            "GROUP BY pe.majorName " +
             "ORDER BY Count(*) DESC ";
     try {
       session = factory.openSession();
