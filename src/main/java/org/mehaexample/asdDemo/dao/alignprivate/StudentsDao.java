@@ -138,6 +138,7 @@ public class StudentsDao {
     if (!filters.isEmpty()) {
       hql.append(" WHERE ");
     }
+    boolean coop = false;
     boolean firstWhereArgument = true;
     for (String filter : filterKeys) {
       if (!firstWhereArgument) {
@@ -155,6 +156,9 @@ public class StudentsDao {
         }
         if (filter.equalsIgnoreCase("companyName")) {
           hql.append("we.").append(filter).append(" = :").append(filter).append(i);
+          if (!coop) {
+            coop = true;
+          }
         } else if (filter.equalsIgnoreCase("majorName")
                 || filter.equalsIgnoreCase("institutionName")
                 || filter.equalsIgnoreCase("degreeCandidacy")) {
@@ -168,7 +172,9 @@ public class StudentsDao {
         firstWhereArgument = false;
       }
     }
-
+    if (coop) {
+      hql.append("AND we.coop = true ");
+    }
     hql.append(" ORDER BY s.expectedLastYear DESC ");
     try {
       session = factory.openSession();

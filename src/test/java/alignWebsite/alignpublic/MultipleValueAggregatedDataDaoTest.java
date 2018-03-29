@@ -145,38 +145,6 @@ public class MultipleValueAggregatedDataDaoTest {
   }
 
   @Test
-  public void updateGetDeleteUndergraduateMajorsTest() {
-    // add data
-    MultipleValueAggregatedData mathematics = new MultipleValueAggregatedData();
-    mathematics.setAnalyticTerm(MultipleValueAggregatedDataDao.LIST_OF_UNDERGRADUATE_MAJORS);
-    mathematics.setAnalyticKey("Mathematics");
-    mathematics.setAnalyticValue(20);
-
-    MultipleValueAggregatedData computerScience = new MultipleValueAggregatedData();
-    computerScience.setAnalyticTerm(MultipleValueAggregatedDataDao.LIST_OF_UNDERGRADUATE_MAJORS);
-    computerScience.setAnalyticKey("Computer Science");
-    computerScience.setAnalyticValue(21);
-
-    // update in database
-    List<MultipleValueAggregatedData> listOfUndergraduateMajors = new ArrayList<>();
-    listOfUndergraduateMajors.add(mathematics);
-    listOfUndergraduateMajors.add(computerScience);
-    dataDao.saveOrUpdateList(listOfUndergraduateMajors);
-
-    // query the database
-    List<DataCount> result = dataDao.getListOfUndergraduateMajorsCount();
-    Assert.assertTrue(result.size() == 2);
-    Assert.assertTrue(result.get(0).getDataKey().equals("Computer Science"));
-    Assert.assertTrue(result.get(0).getDataValue() == 21);
-    Assert.assertTrue(result.get(1).getDataKey().equals("Mathematics"));
-    Assert.assertTrue(result.get(1).getDataValue() == 20);
-
-    // clear the database
-    dataDao.deleteListOfUndergraduateMajorsCounts();
-    Assert.assertTrue(dataDao.getListOfUndergraduateMajorsCount().isEmpty());
-  }
-
-  @Test
   public void updateGetDeleteHighestDegreesTest() {
     // add data
     MultipleValueAggregatedData masters = new MultipleValueAggregatedData();

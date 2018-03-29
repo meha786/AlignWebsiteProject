@@ -199,6 +199,7 @@ public class StudentsDaoTest {
     newWorkExperience.setStartDate(dateFormat.parse("2017-06-01"));
     newWorkExperience.setEndDate(dateFormat.parse("2017-12-01"));
     newWorkExperience.setCurrentJob(false);
+    newWorkExperience.setCoop(true);
     newWorkExperience.setTitle("Title");
     newWorkExperience.setDescription("Description");
     newWorkExperience.setNeuId("1111111");

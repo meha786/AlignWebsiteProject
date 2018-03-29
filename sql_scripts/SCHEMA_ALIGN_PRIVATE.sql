@@ -54,7 +54,7 @@ CREATE TABLE Students (
 
 CREATE TABLE StudentLogins(
 	Email VARCHAR(255) NOT NULL,
-    StudentPassword VARCHAR(50) NOT NULL,
+    StudentPassword VARCHAR(1000) NOT NULL,
     RegistrationKey VARCHAR(255),
     LoginTime TIMESTAMP,
     KeyExpiration TIMESTAMP,
@@ -171,7 +171,7 @@ CREATE TABLE Projects (
 
 CREATE TABLE Privacies (
 	NeuId VARCHAR(16),
-    PublicId INT,
+    PublicId INT NOT NULL,
     VisibleToPublic BOOLEAN DEFAULT TRUE,
     Photo BOOLEAN DEFAULT FALSE,
     Coop BOOLEAN DEFAULT FALSE,
