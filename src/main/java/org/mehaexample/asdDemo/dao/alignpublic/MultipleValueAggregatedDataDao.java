@@ -15,7 +15,7 @@ public class MultipleValueAggregatedDataDao {
   public static final String LIST_OF_BACHELOR_DEGREES = "ListOfBachelorDegrees";
   public static final String LIST_OF_STUDENTS_STATES = "ListOfStudentsStates";
   public static final String LIST_OF_UNDERGRADUATE_MAJORS = "ListOfUndergraduateMajors";
-  public static final String LIST_OF_HIGHEST_DEGREES = "ListOfHighestDegrees";
+  public static final String LIST_OF_DEGREES = "ListOfDegrees";
 
   private SessionFactory factory;
   private Session session;
@@ -85,7 +85,7 @@ public class MultipleValueAggregatedDataDao {
   }
 
   public List<DataCount> getListOfHighestDegreesCount() {
-    return findDataCountByTerm(LIST_OF_HIGHEST_DEGREES);
+    return findDataCountByTerm(LIST_OF_DEGREES);
   }
 
   private List<DataCount> findDataCountByTerm(String analyticTerm) {
@@ -125,7 +125,7 @@ public class MultipleValueAggregatedDataDao {
   }
 
   public boolean deleteListOfHighestDegreesCounts() {
-    return deleteDataByTerm(LIST_OF_HIGHEST_DEGREES);
+    return deleteDataByTerm(LIST_OF_DEGREES);
   }
 
   private List<MultipleValueAggregatedData> findDataByTerm(String analyticTerm) {

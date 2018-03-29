@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
+import org.mehaexample.asdDemo.dao.alignpublic.MultipleValueAggregatedDataDao;
 import org.mehaexample.asdDemo.enums.Campus;
 import org.mehaexample.asdDemo.enums.DegreeCandidacy;
 import org.mehaexample.asdDemo.enums.EnrollmentStatus;
@@ -15,6 +16,9 @@ import org.mehaexample.asdDemo.model.alignprivate.Privacies;
 import org.mehaexample.asdDemo.model.alignprivate.Students;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.mehaexample.asdDemo.model.alignpublic.MultipleValueAggregatedData;
+
+import javax.persistence.TypedQuery;
 
 public class StudentsDao {
   private SessionFactory factory;
@@ -247,6 +251,48 @@ public class StudentsDao {
       org.hibernate.query.Query query = session.createQuery(
               "SELECT COUNT(*) FROM Students WHERE scholarship = true");
       return ((Long) query.list().get(0)).intValue();
+    } finally {
+      session.close();
+    }
+  }
+
+  // THIS IS FOR PUBLIC FACING SCRIPT
+  // Race Breakdown?
+  public List<MultipleValueAggregatedData> getRaceList() {
+    String hql = "SELECT NEW org.mehaexample.asdDemo.model.alignpublic.MultipleValueAggregatedData ( " +
+            "s.race, cast(Count(*) as integer) ) " +
+            "FROM Students s " +
+            "GROUP BY s.race " +
+            "ORDER BY Count(*) DESC ";
+    try {
+      session = factory.openSession();
+      TypedQuery<MultipleValueAggregatedData> query = session.createQuery(hql, MultipleValueAggregatedData.class);
+      List<MultipleValueAggregatedData> list = query.getResultList();
+      for (MultipleValueAggregatedData data : list) {
+        data.setAnalyticTerm(MultipleValueAggregatedDataDao.LIST_OF_RACES);
+      }
+      return list;
+    } finally {
+      session.close();
+    }
+  }
+
+  // THIS IS FOR PUBLIC FACING SCRIPT
+  // State Breakdown?
+  public List<MultipleValueAggregatedData> getStateList() {
+    String hql = "SELECT NEW org.mehaexample.asdDemo.model.alignpublic.MultipleValueAggregatedData ( " +
+            "s.state, cast(Count(*) as integer) ) " +
+            "FROM Students s " +
+            "GROUP BY s.state " +
+            "ORDER BY Count(*) DESC ";
+    try {
+      session = factory.openSession();
+      TypedQuery<MultipleValueAggregatedData> query = session.createQuery(hql, MultipleValueAggregatedData.class);
+      List<MultipleValueAggregatedData> list = query.getResultList();
+      for (MultipleValueAggregatedData data : list) {
+        data.setAnalyticTerm(MultipleValueAggregatedDataDao.LIST_OF_STUDENTS_STATES);
+      }
+      return list;
     } finally {
       session.close();
     }

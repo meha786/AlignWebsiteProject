@@ -120,6 +120,27 @@ public class PriorEducationsDao {
     }
   }
 
+  // THIS IS FOR PUBLIC FACING SCRIPT
+  // Degree Breakdown?
+  public List<MultipleValueAggregatedData> getDegreeList() {
+    String hql = "SELECT NEW org.mehaexample.asdDemo.model.alignpublic.MultipleValueAggregatedData ( " +
+            "cast(pe.degreeCandidacy as string ), cast(Count(*) as integer) ) " +
+            "FROM PriorEducations pe " +
+            "GROUP BY pe.degreeCandidacy " +
+            "ORDER BY Count(*) DESC ";
+    try {
+      session = factory.openSession();
+      TypedQuery<MultipleValueAggregatedData> query = session.createQuery(hql, MultipleValueAggregatedData.class);
+      List<MultipleValueAggregatedData> list = query.getResultList();
+      for (MultipleValueAggregatedData data : list) {
+        data.setAnalyticTerm(MultipleValueAggregatedDataDao.LIST_OF_DEGREES);
+      }
+      return list;
+    } finally {
+      session.close();
+    }
+  }
+
   /**
    * Delete a prior education in the private database.
    *

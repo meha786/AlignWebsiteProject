@@ -7,12 +7,14 @@ import java.util.*;
 import org.hibernate.HibernateException;
 import org.junit.*;
 import org.mehaexample.asdDemo.dao.alignprivate.*;
+import org.mehaexample.asdDemo.dao.alignpublic.MultipleValueAggregatedDataDao;
 import org.mehaexample.asdDemo.enums.Campus;
 import org.mehaexample.asdDemo.enums.DegreeCandidacy;
 import org.mehaexample.asdDemo.enums.EnrollmentStatus;
 import org.mehaexample.asdDemo.enums.Gender;
 import org.mehaexample.asdDemo.enums.Term;
 import org.mehaexample.asdDemo.model.alignprivate.*;
+import org.mehaexample.asdDemo.model.alignpublic.MultipleValueAggregatedData;
 
 public class StudentsDaoTest {
   private static StudentsDao studentdao;
@@ -41,7 +43,7 @@ public class StudentsDaoTest {
             EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
     Students newStudent2 = new Students("1111111", "jerrymouse@gmail.com", "Jerry", "",
             "Mouse", Gender.F, "F1", "1111111111",
-            "225 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2014,
+            "225 Terry Ave", "MA", "Seattle", "98109", Term.FALL, 2014,
             Term.SPRING, 2016,
             EnrollmentStatus.PART_TIME, Campus.BOSTON, DegreeCandidacy.MASTERS, null, true);
     Students newStudent3 = new Students("2222222", "tomcat3@gmail.com", "Tom", "",
@@ -50,6 +52,9 @@ public class StudentsDaoTest {
             Term.FALL, 2017,
             EnrollmentStatus.DROPPED_OUT, Campus.CHARLOTTE, DegreeCandidacy.MASTERS, null, true);
     newStudent.setScholarship(true);
+    newStudent.setRace("White");
+    newStudent2.setRace("Black");
+    newStudent3.setRace("White");
     studentdao.addStudent(newStudent);
     studentdao.addStudent(newStudent2);
     studentdao.addStudent(newStudent3);
@@ -103,6 +108,30 @@ public class StudentsDaoTest {
             EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
     studentdao.addStudent(newStudent);
     studentdao.addStudent(newStudent);
+  }
+
+  @Test
+  public void getRaceListTest() {
+    List<MultipleValueAggregatedData> raceList = studentdao.getRaceList();
+    Assert.assertTrue(raceList.size() == 2);
+    Assert.assertTrue(raceList.get(0).getAnalyticKey().equals("White"));
+    Assert.assertTrue(raceList.get(0).getAnalyticTerm().equals(MultipleValueAggregatedDataDao.LIST_OF_RACES));
+    Assert.assertTrue(raceList.get(0).getAnalyticValue() == 2);
+    Assert.assertTrue(raceList.get(1).getAnalyticKey().equals("Black"));
+    Assert.assertTrue(raceList.get(1).getAnalyticValue() == 1);
+    Assert.assertTrue(raceList.get(1).getAnalyticTerm().equals(MultipleValueAggregatedDataDao.LIST_OF_RACES));
+  }
+
+  @Test
+  public void getStateListTest() {
+    List<MultipleValueAggregatedData> stateList = studentdao.getStateList();
+    Assert.assertTrue(stateList.size() == 2);
+    Assert.assertTrue(stateList.get(0).getAnalyticKey().equals("WA"));
+    Assert.assertTrue(stateList.get(0).getAnalyticTerm().equals(MultipleValueAggregatedDataDao.LIST_OF_STUDENTS_STATES));
+    Assert.assertTrue(stateList.get(0).getAnalyticValue() == 2);
+    Assert.assertTrue(stateList.get(1).getAnalyticKey().equals("MA"));
+    Assert.assertTrue(stateList.get(1).getAnalyticValue() == 1);
+    Assert.assertTrue(stateList.get(1).getAnalyticTerm().equals(MultipleValueAggregatedDataDao.LIST_OF_STUDENTS_STATES));
   }
 
   @Test

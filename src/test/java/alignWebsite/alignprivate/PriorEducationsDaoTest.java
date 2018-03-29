@@ -37,16 +37,16 @@ public class PriorEducationsDaoTest {
 
   @Before
   public void addDatabasePlaceholder() throws ParseException {
-    Students student = new Students("001234567","tomcat@gmail.com", "Tom", "",
+    Students student = new Students("001234567", "tomcat@gmail.com", "Tom", "",
             "Cat", Gender.M, "F1", "1111111111",
             "401 Terry Ave", "WA", "Seattle", "98109",
             Term.FALL, 2014, Term.SPRING, 2016,
-            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS,null, true);
-    Students student2 = new Students("111234567","jerrymouse@gmail.com", "Jerry", "",
+            EnrollmentStatus.FULL_TIME, Campus.SEATTLE, DegreeCandidacy.MASTERS, null, true);
+    Students student2 = new Students("111234567", "jerrymouse@gmail.com", "Jerry", "",
             "Mouse", Gender.M, "F1", "1111111111",
             "401 Terry Ave", "WA", "Boston", "98109",
             Term.FALL, 2014, Term.SPRING, 2016,
-            EnrollmentStatus.FULL_TIME, Campus.BOSTON, DegreeCandidacy.MASTERS,null, true);
+            EnrollmentStatus.FULL_TIME, Campus.BOSTON, DegreeCandidacy.MASTERS, null, true);
     studentsDao.addStudent(student);
     studentsDao.addStudent(student2);
 
@@ -77,6 +77,15 @@ public class PriorEducationsDaoTest {
     assertTrue(list.size() == 1);
     assertTrue(list.get(0).getAnalyticTerm().equals(MultipleValueAggregatedDataDao.LIST_OF_BACHELOR_DEGREES));
     assertTrue(list.get(0).getAnalyticKey().equals("University of Washington"));
+    assertTrue(list.get(0).getAnalyticValue() == 1);
+  }
+
+  @Test
+  public void getDegreeListTest() {
+    List<MultipleValueAggregatedData> list = priorEducationsDao.getDegreeList();
+    assertTrue(list.size() == 1);
+    assertTrue(list.get(0).getAnalyticTerm().equals(MultipleValueAggregatedDataDao.LIST_OF_DEGREES));
+    assertTrue(list.get(0).getAnalyticKey().equals("BACHELORS"));
     assertTrue(list.get(0).getAnalyticValue() == 1);
   }
 

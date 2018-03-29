@@ -180,12 +180,12 @@ public class MultipleValueAggregatedDataDaoTest {
   public void updateGetDeleteHighestDegreesTest() {
     // add data
     MultipleValueAggregatedData masters = new MultipleValueAggregatedData();
-    masters.setAnalyticTerm(MultipleValueAggregatedDataDao.LIST_OF_HIGHEST_DEGREES);
+    masters.setAnalyticTerm(MultipleValueAggregatedDataDao.LIST_OF_DEGREES);
     masters.setAnalyticKey("Masters");
     masters.setAnalyticValue(20);
 
     MultipleValueAggregatedData bachelors = new MultipleValueAggregatedData();
-    bachelors.setAnalyticTerm(MultipleValueAggregatedDataDao.LIST_OF_HIGHEST_DEGREES);
+    bachelors.setAnalyticTerm(MultipleValueAggregatedDataDao.LIST_OF_DEGREES);
     bachelors.setAnalyticKey("Bachelors");
     bachelors.setAnalyticValue(21);
 
