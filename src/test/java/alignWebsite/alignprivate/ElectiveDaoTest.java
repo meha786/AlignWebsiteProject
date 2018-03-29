@@ -236,6 +236,7 @@ public class ElectiveDaoTest {
 
     Privacies privacy = new Privacies();
     privacy.setNeuId("11111111");
+    privacy.setPublicId(studentsDao.getStudentRecord("11111111").getPublicId());
     privacy.setCourse(true);
     privaciesDao.createPrivacy(privacy);
 

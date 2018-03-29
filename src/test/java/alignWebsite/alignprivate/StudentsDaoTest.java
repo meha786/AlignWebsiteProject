@@ -49,6 +49,7 @@ public class StudentsDaoTest {
             "401 Terry Ave", "WA", "Seattle", "98109", Term.FALL, 2015,
             Term.FALL, 2017,
             EnrollmentStatus.DROPPED_OUT, Campus.CHARLOTTE, DegreeCandidacy.MASTERS, null, true);
+    newStudent.setScholarship(true);
     studentdao.addStudent(newStudent);
     studentdao.addStudent(newStudent2);
     studentdao.addStudent(newStudent3);
@@ -107,6 +108,21 @@ public class StudentsDaoTest {
   @Test
   public void getTotalDropoutStudentsTest() {
     Assert.assertTrue(studentdao.getTotalDropOutStudents() == 1);
+  }
+
+  @Test
+  public void getTotalFullTimeStudentsTest() {
+    Assert.assertTrue(studentdao.getTotalFullTimeStudents() == 1);
+  }
+
+  @Test
+  public void getTotalPartTimeStudentsTest() {
+    Assert.assertTrue(studentdao.getTotalPartTimeStudents() == 1);
+  }
+
+  @Test
+  public void getTotalStudentsWithScholarshipTest() {
+    Assert.assertTrue(studentdao.getTotalStudentsWithScholarship() == 1);
   }
 
   @Test
@@ -286,11 +302,17 @@ public class StudentsDaoTest {
   @Test
   public void getStudentFilteredStudents() throws Exception {
     Privacies privacy1 = new Privacies();
+    Students student1 = studentdao.getStudentRecord("0000000");
     privacy1.setNeuId("0000000");
+    privacy1.setPublicId(student1.getPublicId());
     Privacies privacy2 = new Privacies();
+    Students student2 = studentdao.getStudentRecord("1111111");
     privacy2.setNeuId("1111111");
+    privacy2.setPublicId(student2.getPublicId());
     Privacies privacy3 = new Privacies();
+    Students student3 = studentdao.getStudentRecord("2222222");
     privacy3.setNeuId("2222222");
+    privacy3.setPublicId(student3.getPublicId());
     privacy3.setEmail(true);
 
     privaciesDao.createPrivacy(privacy1);

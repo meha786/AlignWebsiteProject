@@ -2,6 +2,7 @@ package org.mehaexample.asdDemo.model.alignprivate;
 
 public class Privacies {
   private String neuId;
+  private int publicId;
   private boolean visibleToPublic;
   private boolean photo;
   private boolean coop;
@@ -19,10 +20,11 @@ public class Privacies {
 
   public Privacies() { }
 
-  public Privacies(String neuId, boolean visibleToPublic, boolean photo, boolean coop, boolean phone, boolean email,
+  public Privacies(String neuId, int publicId, boolean visibleToPublic, boolean photo, boolean coop, boolean phone, boolean email,
                    boolean address, boolean linkedin, boolean github, boolean facebook, boolean website, boolean course,
                    boolean extraExperience, boolean project, boolean skill) {
     this.visibleToPublic = visibleToPublic;
+    this.publicId = publicId;
     this.neuId = neuId;
     this.photo = photo;
     this.coop = coop;
@@ -45,6 +47,14 @@ public class Privacies {
 
   public void setNeuId(String neuId) {
     this.neuId = neuId;
+  }
+
+  public int getPublicId() {
+    return publicId;
+  }
+
+  public void setPublicId(int publicId) {
+    this.publicId = publicId;
   }
 
   public boolean isVisibleToPublic() {

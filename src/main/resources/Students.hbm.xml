@@ -19,6 +19,7 @@
 			<property name="email" column="Email" type="string" />
 		</properties>
 
+		<property name="publicId" column="PublicId" type="int" />
 		<property name="firstName" column="FirstName" type="string" />
 		<property name="middleName" column="MiddleName" type="string" />
 		<property name="lastName" column="LastName" type="string" />

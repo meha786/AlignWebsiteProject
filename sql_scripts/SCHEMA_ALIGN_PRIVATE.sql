@@ -171,7 +171,7 @@ CREATE TABLE Projects (
 
 CREATE TABLE Privacies (
 	NeuId VARCHAR(16),
-    PublicId INT AUTO_INCREMENT,
+    PublicId INT,
     VisibleToPublic BOOLEAN DEFAULT TRUE,
     Photo BOOLEAN DEFAULT FALSE,
     Coop BOOLEAN DEFAULT FALSE,
@@ -188,7 +188,10 @@ CREATE TABLE Privacies (
     Skill BOOLEAN DEFAULT FALSE,
     CONSTRAINT pk_Privacies_NeuId
 		PRIMARY KEY (NeuId),
-	KEY PublicId (PublicId),
+	CONSTRAINT fk_Privacies_PublicId
+		FOREIGN KEY (PublicId)
+        REFERENCES Students(PublicId)
+        ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT fk_Privacies_NeuId
 		FOREIGN KEY (NeuId)
         REFERENCES Students(NeuId)

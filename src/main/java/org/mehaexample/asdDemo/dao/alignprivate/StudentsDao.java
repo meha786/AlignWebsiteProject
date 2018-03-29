@@ -211,6 +211,47 @@ public class StudentsDao {
     }
   }
 
+  // THIS IS FOR PUBLIC FACING SCRIPT
+  // Total Full Time Students?
+  public int getTotalFullTimeStudents() {
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery(
+              "SELECT COUNT(*) FROM Students WHERE enrollmentStatus = :enrollmentStatus");
+      query.setParameter("enrollmentStatus", EnrollmentStatus.FULL_TIME);
+      return ((Long) query.list().get(0)).intValue();
+    } finally {
+      session.close();
+    }
+  }
+
+  // THIS IS FOR PUBLIC FACING SCRIPT
+  // Total Part Time Students?
+  public int getTotalPartTimeStudents() {
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery(
+              "SELECT COUNT(*) FROM Students WHERE enrollmentStatus = :enrollmentStatus");
+      query.setParameter("enrollmentStatus", EnrollmentStatus.PART_TIME);
+      return ((Long) query.list().get(0)).intValue();
+    } finally {
+      session.close();
+    }
+  }
+
+  // THIS IS FOR PUBLIC FACING SCRIPT
+  // Total Students With Scholarship?
+  public int getTotalStudentsWithScholarship() {
+    try {
+      session = factory.openSession();
+      org.hibernate.query.Query query = session.createQuery(
+              "SELECT COUNT(*) FROM Students WHERE scholarship = true");
+      return ((Long) query.list().get(0)).intValue();
+    } finally {
+      session.close();
+    }
+  }
+
   /**
    * Search for students by multiple properties. Each property have one or multiple values.
    *

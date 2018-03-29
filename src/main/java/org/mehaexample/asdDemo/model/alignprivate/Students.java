@@ -10,6 +10,7 @@ import org.mehaexample.asdDemo.enums.Term;
 
 public class Students {
   private String neuId;
+  private int publicId;
   private String email;
   private String firstName;
   private String middleName;
@@ -142,6 +143,14 @@ public class Students {
 
   public void setNeuId(String neuId) {
     this.neuId = neuId;
+  }
+
+  public int getPublicId() {
+    return publicId;
+  }
+
+  public void setPublicId(int publicId) {
+    this.publicId = publicId;
   }
 
   public String getEmail() {

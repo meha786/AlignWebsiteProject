@@ -45,8 +45,10 @@ public class PrivaciesDaoTest {
 
     Privacies privacy1 = new Privacies();
     privacy1.setNeuId("001234567");
+    privacy1.setPublicId(studentsDao.getStudentRecord("001234567").getPublicId());
     Privacies privacy2 = new Privacies();
     privacy2.setNeuId("111234567");
+    privacy2.setPublicId(studentsDao.getStudentRecord("111234567").getPublicId());
     privacy2.setAddress(true);
 
     privaciesDao.createPrivacy(privacy1);
@@ -104,6 +106,7 @@ public class PrivaciesDaoTest {
     studentsDao.addStudent(student1);
 
     Privacies privacy = new Privacies();
+    privacy.setPublicId(studentsDao.getStudentRecord("11111111").getPublicId());
     privacy.setNeuId("11111111");
 
     privaciesDao.createPrivacy(privacy);

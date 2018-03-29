@@ -51,6 +51,7 @@ public class ProjectsDaoTest {
 
     Privacies privacy = new Privacies();
     privacy.setNeuId("001234567");
+    privacy.setPublicId(studentsDao.getStudentRecord("001234567").getPublicId());
     privacy.setProject(true);
     privaciesDao.createPrivacy(privacy);
 

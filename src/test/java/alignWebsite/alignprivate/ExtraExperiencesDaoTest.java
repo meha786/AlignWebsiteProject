@@ -48,6 +48,7 @@ public class ExtraExperiencesDaoTest {
 
     Privacies privacy = new Privacies();
     privacy.setNeuId("001234567");
+    privacy.setPublicId(studentsDao.getStudentRecord("001234567").getPublicId());
     privacy.setExtraExperience(true);
     privaciesDao.createPrivacy(privacy);
 

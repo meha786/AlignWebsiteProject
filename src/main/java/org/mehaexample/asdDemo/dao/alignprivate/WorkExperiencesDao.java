@@ -114,11 +114,13 @@ public class WorkExperiencesDao {
     return workExperience;
   }
 
+  // THIS IS THE SCRIPT FOR MACHINE LEARNING
+  // How many Align students get jobs?
   public int getTotalStudentsGotJob() {
     try {
       session = factory.openSession();
       org.hibernate.query.Query query = session.createQuery(
-              "SELECT COUNT(DISTINCT we.neuId) FROM WorkExperiences we");
+              "SELECT COUNT(DISTINCT we.neuId) FROM WorkExperiences we WHERE we.coop = false ");
       return ((Long) query.list().get(0)).intValue();
     } finally {
       session.close();
@@ -204,19 +206,13 @@ public class WorkExperiencesDao {
     StringBuilder hql = new StringBuilder("SELECT NEW org.mehaexample.asdDemo.model.alignadmin.TopEmployer( " +
             "we.companyName, Count(*) ) " +
             "FROM Students s INNER JOIN WorkExperiences we " +
-            "ON s.neuId = we.neuId ");
-    boolean first = true;
+            "ON s.neuId = we.neuId " +
+            "WHERE we.coop = false ");
     if (campus != null) {
-      hql.append("WHERE s.campus = :campus ");
-      first = false;
+      hql.append("AND s.campus = :campus ");
     }
     if (year != null) {
-      if (first) {
-        hql.append("WHERE ");
-      } else {
-        hql.append("AND ");
-      }
-      hql.append("s.expectedLastYear = :year ");
+      hql.append("AND s.expectedLastYear = :year ");
     }
     hql.append("GROUP BY s.neuId ");
     hql.append("ORDER BY Count(*) DESC ");
@@ -242,6 +238,7 @@ public class WorkExperiencesDao {
     String hql = "SELECT NEW org.mehaexample.asdDemo.model.alignpublic.MultipleValueAggregatedData ( " +
             "we.companyName, cast(Count(*) as integer) ) " +
             "FROM WorkExperiences we " +
+            "WHERE we.coop = false " +
             "GROUP BY we.companyName " +
             "ORDER BY Count(*) DESC ";
     try {
@@ -261,19 +258,13 @@ public class WorkExperiencesDao {
     StringBuilder hql = new StringBuilder("SELECT DISTINCT NEW org.mehaexample.asdDemo.model.alignprivate.StudentCoopList( " +
             "s.neuId, s.firstName, s.lastName ) " +
             "FROM Students s INNER JOIN WorkExperiences we " +
-            "ON s.neuId = we.neuId ");
-    boolean first = true;
+            "ON s.neuId = we.neuId " +
+            "WHERE we.coop = true ");
     if (campus != null) {
-      hql.append("WHERE s.campus = :campus ");
-      first = false;
+      hql.append("AND s.campus = :campus ");
     }
     if (year != null) {
-      if (first) {
-        hql.append("WHERE ");
-      } else {
-        hql.append("AND ");
-      }
-      hql.append("s.expectedLastYear = :year ");
+      hql.append("AND s.expectedLastYear = :year ");
     }
     try {
       session = factory.openSession();
@@ -312,7 +303,8 @@ public class WorkExperiencesDao {
             "s.firstName, s.lastName, s.neuId ) " +
             "FROM Students s INNER JOIN WorkExperiences we " +
             "ON s.neuId = we.neuId " +
-            "WHERE we.companyName = :companyName ");
+            "WHERE we.companyName = :companyName " +
+            "AND we.coop = false ");
     if (campus != null) {
       hql.append("AND s.campus = :campus ");
     }
@@ -340,7 +332,7 @@ public class WorkExperiencesDao {
             "s.neuId, s.firstName, s.lastName ) " +
             "FROM Students s INNER JOIN WorkExperiences we " +
             "ON s.neuId = we.neuId ");
-    hql.append("WHERE we.currentJob = true ");
+    hql.append("WHERE we.currentJob = true AND we.coop = false ");
     if (campus != null) {
       hql.append("AND s.campus = :campus ");
     }

@@ -13,6 +13,8 @@
             <generator class="assigned"/>
         </id>
 
+        <property name = "publicId" column="PublicId" type="int" />
+
         <property name = "visibleToPublic" column="VisibleToPublic" type="boolean" />
 
         <property name = "photo" column="Photo" type="boolean" />
