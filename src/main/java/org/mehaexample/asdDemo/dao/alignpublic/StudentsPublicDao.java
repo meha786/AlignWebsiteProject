@@ -118,7 +118,20 @@ public class StudentsPublicDao {
             "LEFT OUTER JOIN WorkExperiencesPublic we ON s.publicId = we.publicId " +
             "LEFT OUTER JOIN UndergraduatesPublic u ON s.publicId = u.publicId " +
             "WHERE (s.visibleToPublic = true) ");
-    List<StudentsPublic> list;
+    return (List<StudentsPublic>) populatePublicFilteredHql(hql, filters, begin, end);
+  }
+
+  public int getPublicFilteredStudentsCount(Map<String, List<String>> filters) {
+    StringBuilder hql = new StringBuilder("SELECT Count ( Distinct s ) " +
+            "FROM StudentsPublic s " +
+            "LEFT OUTER JOIN WorkExperiencesPublic we ON s.publicId = we.publicId " +
+            "LEFT OUTER JOIN UndergraduatesPublic u ON s.publicId = u.publicId " +
+            "WHERE (s.visibleToPublic = true) ");
+    List<Long> count = (List<Long>) populatePublicFilteredHql(hql, filters, null, null);
+    return count.get(0).intValue();
+  }
+
+  private List populatePublicFilteredHql(StringBuilder hql, Map<String, List<String>> filters, Integer begin, Integer end) {
     Set<String> filterKeys = filters.keySet();
     for (String filter : filterKeys) {
       hql.append("AND ");
@@ -147,9 +160,10 @@ public class StudentsPublicDao {
     try {
       session = factory.openSession();
       org.hibernate.query.Query query = session.createQuery(hql.toString());
-      query.setFirstResult(begin - 1);
-      query.setMaxResults(end - begin + 1);
-
+      if (begin != null || end != null) {
+        query.setFirstResult(begin - 1);
+        query.setMaxResults(end - begin + 1);
+      }
       for (String filter : filterKeys) {
         List<String> filterElements = filters.get(filter);
         for (int i = 0; i < filterElements.size(); i++) {
@@ -160,11 +174,10 @@ public class StudentsPublicDao {
           }
         }
       }
-      list = query.list();
+      return query.list();
     } finally {
       session.close();
     }
-    return list;
   }
 
   public boolean updateStudent(StudentsPublic student) {
