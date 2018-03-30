@@ -58,23 +58,24 @@ import com.lambdaworks.crypto.SCryptUtil;
 @Path("admin-facing")
 public class Admin{
 
-	// DAO methods
-	StudentsDao studentDao = new StudentsDao(true);
-	ElectivesAdminDao electiveDao = new ElectivesAdminDao(true);
-	GenderRatioDao genderRatioDao = new GenderRatioDao(true);
-	WorkExperiencesDao workExperiencesDao = new WorkExperiencesDao(true);
-	PriorEducationsDao priorEducationsDao = new PriorEducationsDao(true);
-	ElectivesDao electivesDao = new ElectivesDao(true);
-	AdminLoginsDao adminLoginsDao = new AdminLoginsDao(true);
-	ExtraExperiencesDao extraExperiencesDao = new ExtraExperiencesDao(true);
+	//importing DAO methods
+	StudentsDao studentDao = new StudentsDao();
+	ElectivesAdminDao electiveDao = new ElectivesAdminDao();
+	GenderRatioDao genderRatioDao = new GenderRatioDao();
+	WorkExperiencesDao workExperiencesDao = new WorkExperiencesDao();
+	PriorEducationsDao priorEducationsDao = new PriorEducationsDao();
+	ElectivesDao electivesDao = new ElectivesDao();
+	AdminLoginsDao adminLoginsDao = new AdminLoginsDao();
+	ExtraExperiencesDao extraExperiencesDao = new ExtraExperiencesDao();
 	StudentLogins studentLogins = new StudentLogins();
 
 	/**
+	 * Request 1
 	 * This is the function to search for students
 	 *	
-	 *	http://localhost:8080/alignWebsite/webapi/admin-facing/students
+	 *	http://localhost:8080/webapi/students
 	 * @param firstname
-	 * @return the list of student profiles matching the fields.
+	 * @return the list of student profiles matching the search fields.
 	 */
 	@POST
 	@Path("students")
@@ -168,11 +169,12 @@ public class Admin{
 	}
 
 	/**
-	 * This is the function to search a student based on his/her nuid.
+	 * Request 2
+	 * This is the function to retrieve a student details based on nuid.
 	 *	
-	 *	http://localhost:8080/alignWebsite/webapi/admin/student/090
+	 *	http://localhost:8080/webapi/student/090
 	 * @param nuid
-	 * @return the student profile matching the nuid.
+	 * @return the student details matching the nuid.
 	 */
 	@GET
 	@Path("students/{nuid}")
@@ -192,8 +194,6 @@ public class Admin{
 			return Response.status(Response.Status.OK).entity(jsonObj.toString()).build();
 		}
 	}
-
-	// Data analytics methods
 
 	/**
 	 * This is the function to get the men to women ratio.

@@ -14,8 +14,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.mehaexample.asdDemo.dao.alignpublic.StudentsPublicDao;
 import org.mehaexample.asdDemo.dao.alignpublic.UndergraduatesPublicDao;
 import org.mehaexample.asdDemo.dao.alignpublic.WorkExperiencesPublicDao;

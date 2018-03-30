@@ -1,6 +1,5 @@
 package org.mehaexample.asdDemo.alignWebsite;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -56,8 +55,6 @@ public class StudentFacing {
     String projectRecord = "ProjectRecord";
     String extraExperienceRecord = "extraExperienceRecord";
     
-    
-
     /**
      * uopdate student details.
      * <p>

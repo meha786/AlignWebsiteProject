@@ -73,7 +73,8 @@ public class SecureAuth implements ContainerRequestFilter{
 			}
 			String loginTime = adminLogins.getLoginTime().toString();
 			String expireTime = adminLogins.getKeyExpiration().toString();
-			Timestamp valid = Timestamp.valueOf(timeValid);
+			Timestamp now = new Timestamp(System.currentTimeMillis());
+			Timestamp valid = Timestamp.valueOf(now.toString());
 			Timestamp expire = Timestamp.valueOf(expireTime);
 			String timeLogin = loginTime.substring(0,loginTime.length()-4);
 			if(ip.equals(ipAddress) && timeLogin.equals(tokenCheck) && valid.before(expire)) {
