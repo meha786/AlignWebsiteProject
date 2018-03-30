@@ -63,7 +63,7 @@ public class AdministratorNotesDaoTest {
   @Test(expected = HibernateException.class)
   public void deleteNonExistentAdministratorNoteTest() {
     AdministratorNotes note = new AdministratorNotes("111111", "000000", "TEST", "TEST");
-    administratorNotesDao.deleteAdministratorNoteRecord(note);
+    administratorNotesDao.deleteAdministratorNoteRecord(-20);
   }
 
   @Test
@@ -83,7 +83,7 @@ public class AdministratorNotesDaoTest {
     for (AdministratorNotes n : notes)
       Assert.assertTrue(n.getTitle().equals("TEST"));
 
-    administratorNotesDao.deleteAdministratorNoteRecord(note);
+    administratorNotesDao.deleteAdministratorNoteRecord(note.getAdministratorNoteId());
   }
 
   @Test
@@ -100,7 +100,7 @@ public class AdministratorNotesDaoTest {
     Assert.assertTrue(note.getTitle().equals("TEST2"));
 
     Assert.assertTrue(administratorNotesDao.ifNuidExists("001234567"));
-    administratorNotesDao.deleteAdministratorNoteRecord(note);
+    administratorNotesDao.deleteAdministratorNoteRecord(note.getAdministratorNoteId());
     Assert.assertTrue(!administratorNotesDao.ifNuidExists("001234567"));
   }
 
@@ -110,7 +110,7 @@ public class AdministratorNotesDaoTest {
     Administrators admin = adminDao.getAdministratorRecord("123456789");
     AdministratorNotes note = new AdministratorNotes(student.getNeuId(), admin.getAdministratorNeuId(), "TEST", "TEST");
     administratorNotesDao.addAdministratorNoteRecord(note);
-    administratorNotesDao.deleteAdministratorNoteRecord(note);
+    administratorNotesDao.deleteAdministratorNoteRecord(note.getAdministratorNoteId());
     Assert.assertTrue(!administratorNotesDao.ifNuidExists("001234567"));
   }
 
@@ -121,7 +121,7 @@ public class AdministratorNotesDaoTest {
     AdministratorNotes note = new AdministratorNotes(student.getNeuId(), admin.getAdministratorNeuId(), "TEST", "TEST");
     administratorNotesDao.addAdministratorNoteRecord(note);
     Assert.assertTrue(administratorNotesDao.ifNuidExists("001234567"));
-    administratorNotesDao.deleteAdministratorNoteRecord(note);
+    administratorNotesDao.deleteAdministratorNoteRecord(note.getAdministratorNoteId());
     Assert.assertTrue(!administratorNotesDao.ifNuidExists("001234567"));
   }
 }

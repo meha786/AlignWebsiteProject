@@ -134,13 +134,12 @@ public class AdministratorNotesDao {
   /**
    * Delete existing Administrator Record.
    *
-   * @param note Administrator Note whose administratorNoteId indicates the note to be deleted from database.
+   * @param noteId administratorNoteId indicates the note to be deleted from database.
    * @return true if delete successfully. Return false if failed.
    */
-  public boolean deleteAdministratorNoteRecord(AdministratorNotes note) {
+  public boolean deleteAdministratorNoteRecord(int noteId) {
     Transaction tx = null;
-    int administratorNoteId = note.getAdministratorNoteId();
-    if (getAdministratorNoteById(note.getAdministratorNoteId()) == null) {
+    if (getAdministratorNoteById(noteId) == null) {
       throw new HibernateException("Administrator Note Id does not exist");
     }
     try {
@@ -148,7 +147,7 @@ public class AdministratorNotesDao {
       tx = session.beginTransaction();
       org.hibernate.query.Query query = session.createQuery("DELETE FROM AdministratorNotes " +
               "WHERE administratorNoteId = :administratorNoteId ");
-      query.setParameter("administratorNoteId", administratorNoteId);
+      query.setParameter("administratorNoteId", noteId);
       query.executeUpdate();
       tx.commit();
       return true;
