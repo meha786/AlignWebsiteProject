@@ -219,19 +219,20 @@ public class StudentsDaoTest {
     filters.put("campus", campus);
     List<Students> students = studentdao.getAdminFilteredStudents(filters, 1 , 2);
     Assert.assertTrue(students.size() == 2);
-    Assert.assertTrue(students.get(0).getNeuId().equals("0000000"));
-    Assert.assertTrue(students.get(1).getNeuId().equals("2222222"));
+    Assert.assertTrue(students.get(0).getNeuId().equals("2222222"));
+    Assert.assertTrue(students.get(1).getNeuId().equals("0000000"));
 
     students = studentdao.getAdminFilteredStudents(filters, 1 , 1);
     Assert.assertTrue(students.size() == 1);
-    Assert.assertTrue(students.get(0).getNeuId().equals("0000000"));
+    Assert.assertTrue(students.get(0).getNeuId().equals("2222222"));
 
     students = studentdao.getAdminFilteredStudents(filters, 2 , 2);
     Assert.assertTrue(students.size() == 1);
-    Assert.assertTrue(students.get(0).getNeuId().equals("2222222"));
+    Assert.assertTrue(students.get(0).getNeuId().equals("0000000"));
 
     students = studentdao.getAdminFilteredStudents(filters, 1 , 10);
     Assert.assertTrue(students.size() == 2);
+    Assert.assertTrue(studentdao.getAdminFilteredStudentsCount(filters) == 2);
 
     List<String> majorName = new ArrayList<>();
     majorName.add("computer science");
@@ -370,6 +371,7 @@ public class StudentsDaoTest {
     campuses.addAll(Arrays.asList(new String[]{"SEATTLE", "BOSTON"}));
     map.put("campus", campuses);
     Assert.assertTrue(studentdao.getStudentFilteredStudents(map, 1, 20).size() == 2);
+    Assert.assertTrue(studentdao.getStudentFilteredStudentsCount(map) == 2);
     map.remove("campus");
 
     // filter by work experience - company name

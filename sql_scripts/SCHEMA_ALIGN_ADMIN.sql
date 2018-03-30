@@ -54,10 +54,10 @@ CREATE TABLE AdminLogins(
 
 CREATE TABLE AdministratorNotes (
 	AdministratorNoteId INT AUTO_INCREMENT,
-    NeuId VARCHAR(16),
+    NeuId VARCHAR(16) NOT NULL,
     AdministratorNeuId VARCHAR(16),
     Title VARCHAR(255),
-    Description VARCHAR(255),
+    Description VARCHAR(1000),
     CONSTRAINT pk_AdministratorNotes_AdministratorNoteId
 		PRIMARY KEY (AdministratorNoteId),
 	CONSTRAINT fk_AdministratorNotes_AdministratorNeuId

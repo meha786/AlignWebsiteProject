@@ -54,6 +54,13 @@ public class AdministratorNotesDaoTest {
   }
 
   @Test(expected = HibernateException.class)
+  public void updateNonExistentAdministratorNoteTest() {
+    AdministratorNotes note = new AdministratorNotes("111111", "000000", "TEST", "TEST");
+    note.setAdministratorNoteId(-200);
+    administratorNotesDao.updateAdministratorNote(note);
+  }
+
+  @Test(expected = HibernateException.class)
   public void deleteNonExistentAdministratorNoteTest() {
     AdministratorNotes note = new AdministratorNotes("111111", "000000", "TEST", "TEST");
     administratorNotesDao.deleteAdministratorNoteRecord(note);
@@ -80,11 +87,17 @@ public class AdministratorNotesDaoTest {
   }
 
   @Test
-  public void addAdministratorNoteRecordTest() {
+  public void addAndUpdateAdministratorNoteRecordTest() {
     Students student = studentsDao.getStudentRecord("001234567");
     Administrators admin = adminDao.getAdministratorRecord("123456789");
     AdministratorNotes note = new AdministratorNotes(student.getNeuId(), admin.getAdministratorNeuId(), "TEST", "TEST");
     administratorNotesDao.addAdministratorNoteRecord(note);
+
+    note.setTitle("TEST2");
+    int noteId = note.getAdministratorNoteId();
+    administratorNotesDao.updateAdministratorNote(note);
+    note = administratorNotesDao.getAdministratorNoteById(noteId);
+    Assert.assertTrue(note.getTitle().equals("TEST2"));
 
     Assert.assertTrue(administratorNotesDao.ifNuidExists("001234567"));
     administratorNotesDao.deleteAdministratorNoteRecord(note);

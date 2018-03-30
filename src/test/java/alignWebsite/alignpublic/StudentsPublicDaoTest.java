@@ -143,6 +143,8 @@ public class StudentsPublicDaoTest {
     assertTrue(listOfFilteredStudents.size() == 1);
     assertTrue(listOfFilteredStudents.get(0).getGraduationYear() == 2016);
 
+    assertTrue(studentsPublicDao.getPublicFilteredStudentsCount(new HashMap<String, List<String>>()) == 2);
+
     listOfFilteredStudents = studentsPublicDao.getPublicFilteredStudents(new HashMap<String, List<String>>(), 1, 3);
     assertTrue(listOfFilteredStudents.size() == 2);
 

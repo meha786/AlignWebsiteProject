@@ -399,4 +399,78 @@ public class Students {
             ", photo=" + photo +
             '}';
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    Students students = (Students) o;
+
+    if (publicId != students.publicId) return false;
+    if (scholarship != students.scholarship) return false;
+    if (entryYear != students.entryYear) return false;
+    if (expectedLastYear != students.expectedLastYear) return false;
+    if (visible != students.visible) return false;
+    if (neuId != null ? !neuId.equals(students.neuId) : students.neuId != null) return false;
+    if (email != null ? !email.equals(students.email) : students.email != null) return false;
+    if (firstName != null ? !firstName.equals(students.firstName) : students.firstName != null) return false;
+    if (middleName != null ? !middleName.equals(students.middleName) : students.middleName != null) return false;
+    if (lastName != null ? !lastName.equals(students.lastName) : students.lastName != null) return false;
+    if (gender != students.gender) return false;
+    if (race != null ? !race.equals(students.race) : students.race != null) return false;
+    if (visa != null ? !visa.equals(students.visa) : students.visa != null) return false;
+    if (phoneNum != null ? !phoneNum.equals(students.phoneNum) : students.phoneNum != null) return false;
+    if (address != null ? !address.equals(students.address) : students.address != null) return false;
+    if (state != null ? !state.equals(students.state) : students.state != null) return false;
+    if (city != null ? !city.equals(students.city) : students.city != null) return false;
+    if (zip != null ? !zip.equals(students.zip) : students.zip != null) return false;
+    if (entryTerm != students.entryTerm) return false;
+    if (expectedLastTerm != students.expectedLastTerm) return false;
+    if (enrollmentStatus != students.enrollmentStatus) return false;
+    if (campus != students.campus) return false;
+    if (degree != students.degree) return false;
+    if (photo != null ? !photo.equals(students.photo) : students.photo != null) return false;
+    if (linkedin != null ? !linkedin.equals(students.linkedin) : students.linkedin != null) return false;
+    if (facebook != null ? !facebook.equals(students.facebook) : students.facebook != null) return false;
+    if (github != null ? !github.equals(students.github) : students.github != null) return false;
+    if (website != null ? !website.equals(students.website) : students.website != null) return false;
+    if (skills != null ? !skills.equals(students.skills) : students.skills != null) return false;
+    return summary != null ? summary.equals(students.summary) : students.summary == null;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = neuId != null ? neuId.hashCode() : 0;
+    result = 31 * result + publicId;
+    result = 31 * result + (email != null ? email.hashCode() : 0);
+    result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+    result = 31 * result + (middleName != null ? middleName.hashCode() : 0);
+    result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+    result = 31 * result + (gender != null ? gender.hashCode() : 0);
+    result = 31 * result + (race != null ? race.hashCode() : 0);
+    result = 31 * result + (scholarship ? 1 : 0);
+    result = 31 * result + (visa != null ? visa.hashCode() : 0);
+    result = 31 * result + (phoneNum != null ? phoneNum.hashCode() : 0);
+    result = 31 * result + (address != null ? address.hashCode() : 0);
+    result = 31 * result + (state != null ? state.hashCode() : 0);
+    result = 31 * result + (city != null ? city.hashCode() : 0);
+    result = 31 * result + (zip != null ? zip.hashCode() : 0);
+    result = 31 * result + (entryTerm != null ? entryTerm.hashCode() : 0);
+    result = 31 * result + entryYear;
+    result = 31 * result + (expectedLastTerm != null ? expectedLastTerm.hashCode() : 0);
+    result = 31 * result + expectedLastYear;
+    result = 31 * result + (enrollmentStatus != null ? enrollmentStatus.hashCode() : 0);
+    result = 31 * result + (campus != null ? campus.hashCode() : 0);
+    result = 31 * result + (degree != null ? degree.hashCode() : 0);
+    result = 31 * result + (photo != null ? photo.hashCode() : 0);
+    result = 31 * result + (visible ? 1 : 0);
+    result = 31 * result + (linkedin != null ? linkedin.hashCode() : 0);
+    result = 31 * result + (facebook != null ? facebook.hashCode() : 0);
+    result = 31 * result + (github != null ? github.hashCode() : 0);
+    result = 31 * result + (website != null ? website.hashCode() : 0);
+    result = 31 * result + (skills != null ? skills.hashCode() : 0);
+    result = 31 * result + (summary != null ? summary.hashCode() : 0);
+    return result;
+  }
 }

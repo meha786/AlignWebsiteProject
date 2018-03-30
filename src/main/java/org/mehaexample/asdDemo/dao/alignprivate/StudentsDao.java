@@ -130,10 +130,23 @@ public class StudentsDao {
   }
 
   public List<Students> getAdminFilteredStudents(Map<String, List<String>> filters, int begin, int end) {
-    StringBuilder hql = new StringBuilder("SELECT Distinct(s) " +
+    StringBuilder hql = new StringBuilder("SELECT Distinct s " +
             "FROM Students s " +
             "LEFT OUTER JOIN WorkExperiences we ON s.neuId = we.neuId " +
             "LEFT OUTER JOIN PriorEducations pe ON s.neuId = pe.neuId ");
+    return (List<Students>) populateAdminFilterHql(hql, filters, begin, end);
+  }
+
+  public int getAdminFilteredStudentsCount(Map<String, List<String>> filters) {
+    StringBuilder hql = new StringBuilder("SELECT Count( Distinct s ) " +
+            "FROM Students s " +
+            "LEFT OUTER JOIN WorkExperiences we ON s.neuId = we.neuId " +
+            "LEFT OUTER JOIN PriorEducations pe ON s.neuId = pe.neuId ");
+    List<Long> count = (List<Long>) populateAdminFilterHql(hql, filters, null, null);
+    return count.get(0).intValue();
+  }
+
+  private List populateAdminFilterHql(StringBuilder hql, Map<String, List<String>> filters, Integer begin, Integer end) {
     Set<String> filterKeys = filters.keySet();
     if (!filters.isEmpty()) {
       hql.append(" WHERE ");
@@ -175,12 +188,14 @@ public class StudentsDao {
     if (coop) {
       hql.append("AND we.coop = true ");
     }
-    hql.append(" ORDER BY s.expectedLastYear DESC ");
+    hql.append(" ORDER BY s.lastName DESC ");
     try {
       session = factory.openSession();
       org.hibernate.query.Query query = session.createQuery(hql.toString());
-      query.setFirstResult(begin - 1);
-      query.setMaxResults(end - begin + 1);
+      if (begin != null && end != null) {
+        query.setFirstResult(begin - 1);
+        query.setMaxResults(end - begin + 1);
+      }
 
       for (String filter : filterKeys) {
         List<String> filterElements = filters.get(filter);
@@ -200,8 +215,7 @@ public class StudentsDao {
           }
         }
       }
-
-      return (List<Students>) query.list();
+      return query.list();
     } finally {
       session.close();
     }
@@ -314,6 +328,56 @@ public class StudentsDao {
   public List<Students> getStudentFilteredStudents(Map<String, List<String>> filters, int begin, int end) {
     StringBuilder hql = new StringBuilder("SELECT Distinct(s) FROM Students s ");
 
+    List<Students> result = (List<Students>) populateStudentFilterHql(hql, filters, begin, end);
+    for (Students student : result) {
+      Privacies privacy = privaciesDao.getPrivacyByNeuId(student.getNeuId());
+
+      if (!privacy.isAddress()) {
+        student.setAddress("");
+      }
+
+      if (!privacy.isEmail()) {
+        student.setEmail("");
+      }
+
+      if (!privacy.isPhone()) {
+        student.setPhoneNum("");
+      }
+
+      if (!privacy.isPhoto()) {
+        student.setPhoto(null);
+      }
+
+      if (!privacy.isFacebook()) {
+        student.setFacebook("");
+      }
+
+      if (!privacy.isGithub()) {
+        student.setGithub("");
+      }
+
+      if (!privacy.isWebsite()) {
+        student.setWebsite("");
+      }
+
+      if (!privacy.isSkill()) {
+        student.setSkills("");
+      }
+
+      if (!privacy.isLinkedin()) {
+        student.setLinkedin("");
+      }
+    }
+    return result;
+  }
+
+  public int getStudentFilteredStudentsCount(Map<String, List<String>> filters) {
+    StringBuilder hql = new StringBuilder("SELECT Count( Distinct s ) FROM Students s ");
+    List<Long> count = populateStudentFilterHql(hql, filters, null, null);
+    return count.get(0).intValue();
+  }
+
+  private List populateStudentFilterHql(StringBuilder hql, Map<String, List<String>> filters, Integer begin, Integer end) {
     if (filters.containsKey("companyName")) {
       hql.append("INNER JOIN WorkExperiences we ON s.neuId = we.neuId ");
     }
@@ -363,9 +427,10 @@ public class StudentsDao {
     try {
       session = factory.openSession();
       org.hibernate.query.Query query = session.createQuery(hql.toString());
-      query.setFirstResult(begin - 1);
-      query.setMaxResults(end - begin + 1);
-
+      if (begin != null || end != null) {
+        query.setFirstResult(begin - 1);
+        query.setMaxResults(end - begin + 1);
+      }
       for (String filter : filterKeys) {
         List<String> filterElements = filters.get(filter);
         if (filter.equals("campus")) {
@@ -385,48 +450,7 @@ public class StudentsDao {
         }
       }
 
-      List<Students> result = query.list();
-      for (Students student : result) {
-        Privacies privacy = privaciesDao.getPrivacyByNeuId(student.getNeuId());
-
-        if (!privacy.isAddress()) {
-          student.setAddress("");
-        }
-
-        if (!privacy.isEmail()) {
-          student.setEmail("");
-        }
-
-        if (!privacy.isPhone()) {
-          student.setPhoneNum("");
-        }
-
-        if (!privacy.isPhoto()) {
-          student.setPhoto(null);
-        }
-
-        if (!privacy.isFacebook()) {
-          student.setFacebook("");
-        }
-
-        if (!privacy.isGithub()) {
-          student.setGithub("");
-        }
-
-        if (!privacy.isWebsite()) {
-          student.setWebsite("");
-        }
-
-        if (!privacy.isSkill()) {
-          student.setSkills("");
-        }
-
-        if (!privacy.isLinkedin()) {
-          student.setLinkedin("");
-        }
-      }
-
-      return result;
+      return query.list();
     } finally {
       session.close();
     }
@@ -572,6 +596,7 @@ public class StudentsDao {
 
   // THIS IS A SCRIPT FOR MACHINE LEARNING / PUBLIC
   // GET TOTAL CURRENT MALE STUDENTS
+
   /**
    * Get the total number of male students in database.
    *
@@ -588,6 +613,7 @@ public class StudentsDao {
 
   // THIS IS A SCRIPT FOR MACHINE LEARNING / PUBLIC
   // GET TOTAL CURRENT FEMALE STUDENTS
+
   /**
    * Get the total number of female students in database.
    *

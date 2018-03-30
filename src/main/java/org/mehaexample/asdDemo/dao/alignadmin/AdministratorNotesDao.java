@@ -108,6 +108,29 @@ public class AdministratorNotesDao {
     return note;
   }
 
+  public boolean updateAdministratorNote(AdministratorNotes note) {
+    Transaction tx = null;
+    AdministratorNotes foundNote = getAdministratorNoteById(note.getAdministratorNoteId());
+
+    if (foundNote != null) {
+      try {
+        session = factory.openSession();
+        tx = session.beginTransaction();
+        session.saveOrUpdate(note);
+        tx.commit();
+      } catch (HibernateException e) {
+        if (tx != null) tx.rollback();
+        throw new HibernateException(e);
+      } finally {
+        session.close();
+      }
+    } else {
+      throw new HibernateException("Administrator Note cannot be found.");
+    }
+
+    return true;
+  }
+
   /**
    * Delete existing Administrator Record.
    *
