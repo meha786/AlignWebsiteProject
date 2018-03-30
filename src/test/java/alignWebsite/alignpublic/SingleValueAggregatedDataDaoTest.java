@@ -33,6 +33,12 @@ public class SingleValueAggregatedDataDaoTest {
     dataDao.saveOrUpdateData(data);
     Assert.assertTrue(dataDao.getTotalStudents() == 50);
 
+    // Total Current Students
+    data = dataDao.findTotalCurrentStudentsData();
+    data.setAnalyticValue(20);
+    dataDao.saveOrUpdateData(data);
+    Assert.assertTrue(dataDao.getTotalCurrentStudents() == 20);
+
     // Total Students With Scholarship
     data = dataDao.findTotalStudentsWithScholarshipData();
     data.setAnalyticValue(60);

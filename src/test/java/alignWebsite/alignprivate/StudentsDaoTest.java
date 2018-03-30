@@ -116,7 +116,7 @@ public class StudentsDaoTest {
     Assert.assertTrue(raceList.size() == 2);
     Assert.assertTrue(raceList.get(0).getAnalyticKey().equals("White"));
     Assert.assertTrue(raceList.get(0).getAnalyticTerm().equals(MultipleValueAggregatedDataDao.LIST_OF_RACES));
-    Assert.assertTrue(raceList.get(0).getAnalyticValue() == 2);
+    Assert.assertTrue(raceList.get(0).getAnalyticValue() == 1);
     Assert.assertTrue(raceList.get(1).getAnalyticKey().equals("Black"));
     Assert.assertTrue(raceList.get(1).getAnalyticValue() == 1);
     Assert.assertTrue(raceList.get(1).getAnalyticTerm().equals(MultipleValueAggregatedDataDao.LIST_OF_RACES));
@@ -128,7 +128,7 @@ public class StudentsDaoTest {
     Assert.assertTrue(stateList.size() == 2);
     Assert.assertTrue(stateList.get(0).getAnalyticKey().equals("WA"));
     Assert.assertTrue(stateList.get(0).getAnalyticTerm().equals(MultipleValueAggregatedDataDao.LIST_OF_STUDENTS_STATES));
-    Assert.assertTrue(stateList.get(0).getAnalyticValue() == 2);
+    Assert.assertTrue(stateList.get(0).getAnalyticValue() == 1);
     Assert.assertTrue(stateList.get(1).getAnalyticKey().equals("MA"));
     Assert.assertTrue(stateList.get(1).getAnalyticValue() == 1);
     Assert.assertTrue(stateList.get(1).getAnalyticTerm().equals(MultipleValueAggregatedDataDao.LIST_OF_STUDENTS_STATES));

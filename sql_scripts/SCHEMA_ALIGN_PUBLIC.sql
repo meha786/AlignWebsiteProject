@@ -18,6 +18,7 @@ CREATE TABLE SingleValueAggregatedData(
 
 INSERT IGNORE INTO SingleValueAggregatedData (AnalyticKey) VALUE ("TotalGraduatedStudents");
 INSERT IGNORE INTO SingleValueAggregatedData (AnalyticKey) VALUE ("TotalStudents");
+INSERT IGNORE INTO SingleValueAggregatedData (AnalyticKey) VALUE ("TotalCurrentStudents");
 INSERT IGNORE INTO SingleValueAggregatedData (AnalyticKey) VALUE ("TotalStudentsDroppedOut");
 INSERT IGNORE INTO SingleValueAggregatedData (AnalyticKey) VALUE ("TotalStudentsGotJob");
 INSERT IGNORE INTO SingleValueAggregatedData (AnalyticKey) VALUE ("TotalStudentsInBoston");

@@ -10,6 +10,7 @@ import java.util.List;
 
 public class SingleValueAggregatedDataDao {
   private static final String TOTAL_GRADUATED_STUDENTS = "TotalGraduatedStudents";
+  private static final String TOTAL_CURRENT_STUDENTS = "TotalCurrentStudents";
   private static final String TOTAL_STUDENTS = "TotalStudents";
   private static final String TOTAL_STUDENTS_DROPPED_OUT = "TotalStudentsDroppedOut";
   private static final String TOTAL_STUDENTS_GOT_JOB = "TotalStudentsGotJob";
@@ -42,6 +43,10 @@ public class SingleValueAggregatedDataDao {
 
   public int getTotalStudents() {
     return findValueByKey(TOTAL_STUDENTS);
+  }
+
+  public int getTotalCurrentStudents() {
+    return findValueByKey(TOTAL_CURRENT_STUDENTS);
   }
 
   public int getTotalStudentsWithScholarship() {
@@ -106,6 +111,10 @@ public class SingleValueAggregatedDataDao {
 
   public SingleValueAggregatedData findTotalStudentsData() {
     return findDataByKey(TOTAL_STUDENTS);
+  }
+
+  public SingleValueAggregatedData findTotalCurrentStudentsData() {
+    return findDataByKey(TOTAL_CURRENT_STUDENTS);
   }
 
   public SingleValueAggregatedData findTotalStudentsWithScholarshipData() {

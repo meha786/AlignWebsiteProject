@@ -269,7 +269,9 @@ public class StudentsDao {
     try {
       session = factory.openSession();
       org.hibernate.query.Query query = session.createQuery(
-              "SELECT COUNT(*) FROM Students WHERE scholarship = true");
+              "SELECT COUNT(*) FROM Students " +
+                      "WHERE scholarship = true AND " +
+                      "(enrollmentStatus = 'FULL_TIME' OR enrollmentStatus = 'PART_TIME') ");
       return ((Long) query.list().get(0)).intValue();
     } finally {
       session.close();
@@ -282,6 +284,7 @@ public class StudentsDao {
     String hql = "SELECT NEW org.mehaexample.asdDemo.model.alignpublic.MultipleValueAggregatedData ( " +
             "s.race, cast(Count(*) as integer) ) " +
             "FROM Students s " +
+            "WHERE s.enrollmentStatus = 'FULL_TIME' OR s.enrollmentStatus = 'PART_TIME' " +
             "GROUP BY s.race " +
             "ORDER BY Count(*) DESC ";
     try {
@@ -303,6 +306,7 @@ public class StudentsDao {
     String hql = "SELECT NEW org.mehaexample.asdDemo.model.alignpublic.MultipleValueAggregatedData ( " +
             "s.state, cast(Count(*) as integer) ) " +
             "FROM Students s " +
+            "WHERE s.enrollmentStatus = 'FULL_TIME' OR s.enrollmentStatus = 'PART_TIME' " +
             "GROUP BY s.state " +
             "ORDER BY Count(*) DESC ";
     try {

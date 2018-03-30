@@ -104,7 +104,9 @@ public class PriorEducationsDao {
   public List<MultipleValueAggregatedData> getStudentBachelorMajors() {
     String hql = "SELECT NEW org.mehaexample.asdDemo.model.alignpublic.MultipleValueAggregatedData ( " +
             "pe.majorName, cast(Count(*) as integer) ) " +
-            "FROM PriorEducations pe WHERE pe.degreeCandidacy = 'BACHELORS'" +
+            "FROM PriorEducations pe LEFT OUTER JOIN Students s ON pe.neuId = s.neuId " +
+            "WHERE pe.degreeCandidacy = 'BACHELORS' " +
+            "AND (s.enrollmentStatus = 'FULL_TIME' OR s.enrollmentStatus = 'PART_TIME') " +
             "GROUP BY pe.majorName " +
             "ORDER BY Count(*) DESC ";
     try {
@@ -125,7 +127,8 @@ public class PriorEducationsDao {
   public List<MultipleValueAggregatedData> getDegreeList() {
     String hql = "SELECT NEW org.mehaexample.asdDemo.model.alignpublic.MultipleValueAggregatedData ( " +
             "cast(pe.degreeCandidacy as string ), cast(Count(*) as integer) ) " +
-            "FROM PriorEducations pe " +
+            "FROM PriorEducations pe LEFT OUTER JOIN Students s ON pe.neuId = s.neuId " +
+            "WHERE s.enrollmentStatus = 'FULL_TIME' OR s.enrollmentStatus = 'PART_TIME'" +
             "GROUP BY pe.degreeCandidacy " +
             "ORDER BY Count(*) DESC ";
     try {
