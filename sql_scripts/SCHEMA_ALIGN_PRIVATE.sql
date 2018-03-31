@@ -78,7 +78,7 @@ CREATE TABLE PriorEducations (
     CONSTRAINT pk_PriorEducations_PriorEducationId
 		PRIMARY KEY (PriorEducationId),
 	CONSTRAINT uq_PriorEducations_PriorEducation
-		UNIQUE (NeuId, InstitutionName, MajorName),
+		UNIQUE (NeuId, InstitutionName, MajorName, DegreeCandidacy),
 	CONSTRAINT fk_PriorEducations_NeuId
 		FOREIGN KEY (NeuId)
 		REFERENCES Students(NeuId)
