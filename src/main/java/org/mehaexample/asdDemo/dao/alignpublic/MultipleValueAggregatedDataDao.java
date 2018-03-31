@@ -23,11 +23,11 @@ public class MultipleValueAggregatedDataDao {
     this.factory = PublicSessionFactory.getFactory();
   }
 
-//  public MultipleValueAggregatedDataDao(boolean test) {
-//    if (test) {
-//      this.factory = PublicTestSessionFactory.getFactory();
-//    }
-//  }
+  public MultipleValueAggregatedDataDao(boolean test) {
+    if (test) {
+      this.factory = PublicTestSessionFactory.getFactory();
+    }
+  }
 
   public boolean saveOrUpdateList(List<MultipleValueAggregatedData> list) {
     Transaction tx = null;

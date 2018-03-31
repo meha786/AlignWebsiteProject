@@ -23,11 +23,11 @@ public class WorkExperiencesPublicDaoTest {
 
   @BeforeClass
   public static void init() {
-//    workExperiencesPublicDao = new WorkExperiencesPublicDao(true);
-//    studentsPublicDao = new StudentsPublicDao(true);
+    workExperiencesPublicDao = new WorkExperiencesPublicDao(true);
+    studentsPublicDao = new StudentsPublicDao(true);
 
-    workExperiencesPublicDao = new WorkExperiencesPublicDao();
-    studentsPublicDao = new StudentsPublicDao();
+//    workExperiencesPublicDao = new WorkExperiencesPublicDao();
+//    studentsPublicDao = new StudentsPublicDao();
 
     StudentsPublic studentsPublic = new StudentsPublic(5, 2016, true);
     studentsPublicDao.createStudent(studentsPublic);

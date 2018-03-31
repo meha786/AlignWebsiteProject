@@ -33,12 +33,12 @@ public class WorkExperiencesDao {
     this.factory = StudentSessionFactory.getFactory();
   }
 
-//  public WorkExperiencesDao(boolean test) {
-//    if (test) {
-//      privaciesDao = new PrivaciesDao(true);
-//      this.factory = StudentTestSessionFactory.getFactory();
-//    }
-//  }
+  public WorkExperiencesDao(boolean test) {
+    if (test) {
+      privaciesDao = new PrivaciesDao(true);
+      this.factory = StudentTestSessionFactory.getFactory();
+    }
+  }
 
   /**
    * Find a Work Experience by the Work Experience Id.

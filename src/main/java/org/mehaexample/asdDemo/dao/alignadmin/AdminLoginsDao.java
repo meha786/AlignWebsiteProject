@@ -24,11 +24,11 @@ public class AdminLoginsDao {
     this.factory = AdminSessionFactory.getFactory();
   }
 
-//  public AdminLoginsDao(boolean test) {
-//    if (test) {
-////      this.factory = AdminTestSessionFactory.getFactory();
-//    }
-//  }
+  public AdminLoginsDao(boolean test) {
+    if (test) {
+      this.factory = AdminTestSessionFactory.getFactory();
+    }
+  }
 
   public AdminLogins findAdminLoginsByEmail(String email) {
     try {

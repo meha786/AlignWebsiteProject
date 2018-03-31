@@ -16,11 +16,11 @@ public class StudentLoginsDaoTest {
 
   @BeforeClass
   public static void init() {
-//    studentLoginsDao = new StudentLoginsDao(true);
-//    studentsDao = new StudentsDao(true);
+    studentLoginsDao = new StudentLoginsDao(true);
+    studentsDao = new StudentsDao(true);
 
-    studentLoginsDao = new StudentLoginsDao();
-    studentsDao = new StudentsDao();
+//    studentLoginsDao = new StudentLoginsDao();
+//    studentsDao = new StudentsDao();
 
     Students newStudent = new Students("0000000", "tomcat@gmail.com", "Tom", "",
             "Cat", Gender.M, "F1", "1111111111",

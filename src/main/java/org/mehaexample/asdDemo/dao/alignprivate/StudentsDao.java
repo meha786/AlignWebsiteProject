@@ -35,12 +35,12 @@ public class StudentsDao {
     privaciesDao = new PrivaciesDao();
   }
 
-//  public StudentsDao(boolean test) {
-//    if (test) {
-//      privaciesDao = new PrivaciesDao(true);
-//      this.factory = StudentTestSessionFactory.getFactory();
-//    }
-//  }
+  public StudentsDao(boolean test) {
+    if (test) {
+      privaciesDao = new PrivaciesDao(true);
+      this.factory = StudentTestSessionFactory.getFactory();
+    }
+  }
 
   /**
    * This is the function to add a student into database.

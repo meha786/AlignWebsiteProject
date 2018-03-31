@@ -31,11 +31,11 @@ public class SingleValueAggregatedDataDao {
     this.factory = PublicSessionFactory.getFactory();
   }
 
-//  public SingleValueAggregatedDataDao(boolean test) {
-//    if (test) {
-//      this.factory = PublicTestSessionFactory.getFactory();
-//    }
-//  }
+  public SingleValueAggregatedDataDao(boolean test) {
+    if (test) {
+      this.factory = PublicTestSessionFactory.getFactory();
+    }
+  }
 
   public int getTotalGraduatedStudents() {
     return findValueByKey(TOTAL_GRADUATED_STUDENTS);

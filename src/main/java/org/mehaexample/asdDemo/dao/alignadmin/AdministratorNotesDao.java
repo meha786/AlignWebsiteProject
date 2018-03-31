@@ -24,16 +24,16 @@ public class AdministratorNotesDao {
     this.factory = AdminSessionFactory.getFactory();
   }
 
-//  /**
-//   * test constructor
-//   */
-//  public AdministratorNotesDao(boolean test) {
-//    // it will check the hibernate.cfg.xml file and load it
-//    // next it goes to all table files in the hibernate file and loads them
-//    if (test) {
-////      this.factory = AdminTestSessionFactory.getFactory();
-//    }
-//  }
+  /**
+   * test constructor
+   */
+  public AdministratorNotesDao(boolean test) {
+    // it will check the hibernate.cfg.xml file and load it
+    // next it goes to all table files in the hibernate file and loads them
+    if (test) {
+      this.factory = AdminTestSessionFactory.getFactory();
+    }
+  }
 
   /**
    * Search for a list of Administrator Note by neu Id.

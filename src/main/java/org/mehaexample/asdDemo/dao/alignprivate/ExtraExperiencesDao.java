@@ -25,12 +25,12 @@ public class ExtraExperiencesDao {
     this.factory = StudentSessionFactory.getFactory();
   }
 
-//  public ExtraExperiencesDao(boolean test) {
-//    if (test) {
-//      privaciesDao = new PrivaciesDao(true);
-//      this.factory = StudentTestSessionFactory.getFactory();
-//    }
-//  }
+  public ExtraExperiencesDao(boolean test) {
+    if (test) {
+      privaciesDao = new PrivaciesDao(true);
+      this.factory = StudentTestSessionFactory.getFactory();
+    }
+  }
 
   /**
    * Find an Extra Experience by the Experience Id.

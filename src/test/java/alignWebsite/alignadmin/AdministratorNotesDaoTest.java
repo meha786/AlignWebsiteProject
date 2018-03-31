@@ -23,10 +23,9 @@ public class AdministratorNotesDaoTest {
 
   @BeforeClass
   public static void init() {
-    // for server
-    studentsDao = new StudentsDao();
-    adminDao = new AdministratorsDao();
-    administratorNotesDao = new AdministratorNotesDao();
+    studentsDao = new StudentsDao(true);
+    adminDao = new AdministratorsDao(true);
+    administratorNotesDao = new AdministratorNotesDao(true);
   }
 
   @Before

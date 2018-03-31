@@ -28,11 +28,11 @@ public class PriorEducationsDaoTest {
 
   @BeforeClass
   public static void init() {
-//    priorEducationsDao = new PriorEducationsDao(true);
-//    studentsDao = new StudentsDao(true);
+    priorEducationsDao = new PriorEducationsDao(true);
+    studentsDao = new StudentsDao(true);
 
-    priorEducationsDao = new PriorEducationsDao();
-    studentsDao = new StudentsDao();
+//    priorEducationsDao = new PriorEducationsDao();
+//    studentsDao = new StudentsDao();
   }
 
   @Before

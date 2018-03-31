@@ -26,19 +26,19 @@ public class StudentsDaoTest {
 
   @BeforeClass
   public static void init() {
-//    studentdao = new StudentsDao(true);
-//    workExperiencesDao = new WorkExperiencesDao(true);
-//    electivesDao = new ElectivesDao(true);
-//    coursesDao = new CoursesDao(true);
-//    priorEducationsDao = new PriorEducationsDao(true);
-//    privaciesDao = new PrivaciesDao(true);
+    studentdao = new StudentsDao(true);
+    workExperiencesDao = new WorkExperiencesDao(true);
+    electivesDao = new ElectivesDao(true);
+    coursesDao = new CoursesDao(true);
+    priorEducationsDao = new PriorEducationsDao(true);
+    privaciesDao = new PrivaciesDao(true);
 
-    studentdao = new StudentsDao();
-    workExperiencesDao = new WorkExperiencesDao();
-    electivesDao = new ElectivesDao();
-    coursesDao = new CoursesDao();
-    priorEducationsDao = new PriorEducationsDao();
-    privaciesDao = new PrivaciesDao();
+//    studentdao = new StudentsDao();
+//    workExperiencesDao = new WorkExperiencesDao();
+//    electivesDao = new ElectivesDao();
+//    coursesDao = new CoursesDao();
+//    priorEducationsDao = new PriorEducationsDao();
+//    privaciesDao = new PrivaciesDao();
   }
 
   @Before
