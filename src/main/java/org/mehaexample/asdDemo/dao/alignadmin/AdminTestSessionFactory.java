@@ -8,8 +8,8 @@ public class AdminTestSessionFactory {
 
   static {
     factory = new Configuration()
-    .configure("/hibernate_Admin.cfg.xml").buildSessionFactory();
-//    .configure("/hibernate_admin_test.cfg.xml").buildSessionFactory();
+//    .configure("/hibernate_Admin.cfg.xml").buildSessionFactory();
+    .configure("/hibernate_admin_test.cfg.xml").buildSessionFactory();
   }
 
   public static SessionFactory getFactory() {
