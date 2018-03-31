@@ -30,9 +30,9 @@ import org.mehaexample.asdDemo.restModels.TopUnderGradSchools;
 
 @Path("public-facing")
 public class PublicFacing {
-	UndergraduatesPublicDao undergraduatesPublicDao = new UndergraduatesPublicDao(true);
-	WorkExperiencesPublicDao workExperiencesPublicDao = new WorkExperiencesPublicDao(true);
-	StudentsPublicDao studentsPublicDao = new StudentsPublicDao(true);
+	UndergraduatesPublicDao undergraduatesPublicDao = new UndergraduatesPublicDao();
+	WorkExperiencesPublicDao workExperiencesPublicDao = new WorkExperiencesPublicDao();
+	StudentsPublicDao studentsPublicDao = new StudentsPublicDao();
 	
 	/**
 	 * This is the function to get top n undergraduate schools

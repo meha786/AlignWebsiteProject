@@ -27,19 +27,21 @@ public class SecureAuth implements ContainerRequestFilter{
 
 	private static final String AUTHOIRIZATION_HEADER = "token";
 	private static final String LOGIN_URL = "login";
-	private static final String REGISTER_URL = "register";
+	private static final String REGISTER_URL = "registration";
 	private static final String RESET_URL = "password-reset";
+	private static final String CREATE_URL = "password-create";
 	
 	@Context
     private HttpServletRequest sr;
 	
-	AdminLoginsDao adminLoginsDao = new AdminLoginsDao(true);
+	AdminLoginsDao adminLoginsDao = new AdminLoginsDao();
 	
 	@Override
 	public void filter(ContainerRequestContext requestContext)
 			throws IOException {
 	if(!requestContext.getUriInfo().getPath().contains(LOGIN_URL) && 
-	   !requestContext.getUriInfo().getPath().contains(REGISTER_URL) && 
+	   !requestContext.getUriInfo().getPath().contains(REGISTER_URL) &&
+	   !requestContext.getUriInfo().getPath().contains(CREATE_URL) && 
 	   !requestContext.getUriInfo().getPath().contains(RESET_URL)){
 	try {	
 		List<String> authHeader =  requestContext.getHeaders().get(AUTHOIRIZATION_HEADER);

@@ -50,12 +50,14 @@ import org.mehaexample.asdDemo.model.alignprivate.StudentLogins;
 import org.mehaexample.asdDemo.model.alignprivate.Students;
 import org.mehaexample.asdDemo.model.alignprivate.WorkExperiences;
 import org.mehaexample.asdDemo.restModels.PasswordChangeObject;
+import org.mehaexample.asdDemo.restModels.PasswordCreateObject;
 import org.mehaexample.asdDemo.restModels.PasswordResetObject;
 import org.mehaexample.asdDemo.utils.MailClient;
+
 import com.lambdaworks.crypto.SCryptUtil;
 
 
-@Path("admin-facing")
+@Path("")
 public class Admin{
 
 	//importing DAO methods
@@ -172,7 +174,7 @@ public class Admin{
 	 * Request 2
 	 * This is the function to retrieve a student details based on nuid.
 	 *	
-	 *	http://localhost:8080/webapi/student/090
+	 *	http://localhost:8080/webapi/students/090
 	 * @param nuid
 	 * @return the student details matching the nuid.
 	 */
@@ -196,11 +198,12 @@ public class Admin{
 	}
 
 	/**
-	 * This is the function to get the men to women ratio.
+	 * Request 2
+	 * This is the function to get the gender ratio counts per year.
 	 *	
-	 *	http://localhost:8080/alignWebsite/webapi/admin/analytics/gender-ratio
+	 *	http://localhost:8080/webapi/analytics/gender-ratio
 	 * @param 
-	 * @return the gender ratio is returned as string
+	 * @return the gender ratio is returned as a list of years with counts
 	 * @throws SQLException 
 	 */
 	@POST
@@ -208,7 +211,6 @@ public class Admin{
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getGenderRatio(ParamsObject input) throws SQLException{
-
 		List<GenderRatio> ratio = new ArrayList<GenderRatio>();
 		if (input.getCampus()!=null){
 			try{
@@ -224,11 +226,12 @@ public class Admin{
 
 
 	/**
-	 * This is the function to get the top 10 bachelor degrees.
+	 * Request 4
+	 * This is the function to get the list of top 10 bachelor degrees.
 	 *	
-	 *	http://localhost:8080/alignWebsite/webapi/admin/analytics/topbachelordegrees
+	 *	http://localhost:8080/webapi/analytics/top-bachelor-degrees
 	 * @param 
-	 * @return the list of top 10 bachelor degrees
+	 * @return the list of top 10 bachelor degrees and number of students
 	 * @throws SQLException 
 	 * 
 	 */
@@ -263,11 +266,12 @@ public class Admin{
 	}
 
 	/**
-	 * This is the function to get the top 10 employers.
+	 * Request 5
+	 * This is the function to get a list of the top 10 employers.
 	 *	
-	 *	http://localhost:8080/alignWebsite/webapi/admin/analytics/top-employers
+	 *	http://localhost:8080/webapi/analytics/top-employers
 	 * @param 
-	 * @return the list of top 10 employers
+	 * @return the list of top 10 employers and number of students
 	 * @throws SQLException 
 	 * 
 	 */
@@ -302,11 +306,12 @@ public class Admin{
 	}
 
 	/**
-	 * This is the function to get the top 10 electives.
+	 * Request 6
+	 * This is the function to get a list of the top 10 electives.
 	 *	
-	 *	http://localhost:8080/alignWebsite/webapi/admin/analytics/topelectives
+	 *	http://localhost:8080/webapi/aanalytics/top-electives
 	 * @param 
-	 * @return the list of top 10 electives
+	 * @return the list of top 10 electives and number of students
 	 * @throws SQLException 
 	 * 
 	 */
@@ -341,11 +346,12 @@ public class Admin{
 	}
 
 	/**
-	 * This is the function to get the list of companies students worked for as coop.
+	 * Request 7
+	 * This is the function to get the list of students,companies worked for as coop.
 	 *	
-	 *	http://localhost:8080/alignWebsite/webapi/admin/analytics/coop-students
+	 *	http://localhost:8080/webapi/analytics/coop-students
 	 * @param 
-	 * @return the list of top 10 electives
+	 * @return the list student details , companies they worked for as coop
 	 * @throws SQLException 
 	 * 
 	 */
@@ -374,11 +380,12 @@ public class Admin{
 	}
 
 	/**
+	 * Request 8 
 	 * This is a function for retrieving the students working in a given company
 	 * 
-	 * http://localhost:8080/alignWebsite/webapi/admin-facing/analytics/company
+	 * http://localhost:8080/webapi/analytics/company
 	 * @param params
-	 * @return
+	 * @return the list student details working for a company
 	 */
 	@POST
 	@Path("/analytics/company")
@@ -405,11 +412,12 @@ public class Admin{
 	}
 
 	/**
+	 * Request 9
 	 * This is a function for retrieving the students working as full time
 	 * 
-	 * http://localhost:8080/alignWebsite/webapi/admin-facing/analytics/working
+	 * http://localhost:8080/webapi/analytics/working
 	 * @param params
-	 * @return
+	 * @return the list student details and company they are working for.
 	 */
 	@POST
 	@Path("/analytics/working")
@@ -437,11 +445,12 @@ public class Admin{
 	}
 	
 	/**
-	 * This is a function for retrieving the students working as full time
+	 * Request 10
+	 * This is a function for retrieving the undergrad institutions of all the students
 	 * 
-	 * http://localhost:8080/alignWebsite/webapi/admin-facing/analytics/undergrad-institutions
+	 * http://localhost:8080/webapi/analytics/undergrad-institutions
 	 * @param params
-	 * @return
+	 * @return the list of undergrad institution and count
 	 */
 	@POST
 	@Path("/analytics/undergrad-institutions")
@@ -469,11 +478,71 @@ public class Admin{
 	}
 	
 	/**
-	 * This is a function to change an existing admin's password
+	 * Request 12
+	 * This function creates the password for admin when they reset their password
 	 * 
-	 * http://localhost:8080/alignWebsite/webapi/admin-facing/login
+	 * @param passwordCreateObject
+	 * @return 200 if password changed successfully else return 404
+	 */
+	@POST
+	@Path("/password-create")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response createPassword(PasswordCreateObject passwordCreateObject){
+		String email = passwordCreateObject.getEmail();
+		String password = passwordCreateObject.getPassword();
+		String registrationKey = passwordCreateObject.getRegistrationKey();
+		System.out.println(email + password + registrationKey); 
+
+		// before create password, a student login should exist
+		AdminLogins adminLoginsExisting = adminLoginsDao.findAdminLoginsByEmail(email); 
+		if(adminLoginsExisting == null) {
+			return Response.status(Response.Status.BAD_REQUEST).
+					entity("Invalid Admin details. Admin does not exist" ).build();
+		}
+
+		String databaseRegistrationKey = adminLoginsExisting.getRegistrationKey();
+		Timestamp databaseTimestamp = adminLoginsExisting.getKeyExpiration();
+
+		// check if the entered registration key matches 
+		if((databaseRegistrationKey.equals(registrationKey))){
+
+			// if registration key matches, then check if its valid or not
+			Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+
+			// check if the database time is after the current time
+			if(databaseTimestamp.after(currentTimestamp)){
+	    		String saltnewStr = email.substring(0, email.length()/2);
+	    		String setPassword = password+saltnewStr;
+	            String hashedPassword = SCryptUtil.scrypt(setPassword, 16, 16, 16);
+				adminLoginsExisting.setAdminPassword(hashedPassword);
+				adminLoginsExisting.setConfirmed(true);
+				boolean adminLoginUpdatedWithPassword = adminLoginsDao.updateAdminLogin(adminLoginsExisting);
+				if(adminLoginUpdatedWithPassword) {
+					
+					return Response.status(Response.Status.OK).
+							entity("Congratulations Password Reset successfully for Admin!").build();
+				} else {
+					return Response.status(Response.Status.INTERNAL_SERVER_ERROR).
+							entity("Database exception thrown" ).build();
+				}
+			} else {
+				return Response.status(Response.Status.OK).
+						entity(" Registration key expired!" ).build();
+			}
+		} else {
+			return Response.status(Response.Status.BAD_REQUEST).
+					entity("Invalid registration key" ).build();
+		}
+	}
+	
+	/**
+	 * Request 13
+	 * This is a function to login using admin email and password
+	 * 
+	 * http://localhost:8080/webapi/login
 	 * @param passwordChangeObject
-	 * @return 200 + token if logged in successfully else return 404
+	 * @return the token if logged in successfully
 	 */
 	@POST
 	@Path("/login")
@@ -485,7 +554,7 @@ public class Admin{
 			return Response.status(Response.Status.NOT_FOUND).
 					entity("User doesn't exist: " + loginInput.getUsername()).build();
 		}
-		        
+
         boolean matched = false;
         try{
         	String reqPass = loginInput.getPassword();
@@ -518,6 +587,7 @@ public class Admin{
 				senderJwe.setKey(keyMain);
 				String compactSerialization = senderJwe.getCompactSerialization();
 				jsonObj.put("token", compactSerialization);
+				jsonObj.put("id", "nuidOfAdmin");
 				
 				return Response.status(Response.Status.OK).
 						entity(jsonObj.toString()).build();
@@ -531,11 +601,43 @@ public class Admin{
 					entity("Incorrect Password").build();
 		}
 	}
+	
+	/**
+	 * Request 14
+	 * This is a function to logout
+	 * 
+	 * http://localhost:8080/webapi/logout
+	 * @param 
+	 * @return 200 OK
+	 */
+	@POST
+	@Path("/logout")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response logoutUser(@Context HttpServletRequest request,LoginObject loginInput){
+		AdminLogins adminLogins = adminLoginsDao.findAdminLoginsByEmail(loginInput.getUsername());
+		if(adminLogins == null){
+			return Response.status(Response.Status.NOT_FOUND).
+					entity("User doesn't exist: " + loginInput.getUsername()).build();
+		}
+		try{
+			Timestamp keyExpiration = new Timestamp(System.currentTimeMillis());
+			adminLogins.setKeyExpiration(keyExpiration);
+			adminLoginsDao.updateAdminLogin(adminLogins);
+		}
+		catch (Exception e){
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).
+					entity("Internal Server Error").build();	
+		}
+		return Response.status(Response.Status.OK).
+				entity("Logged Out Successfully").build();
+	}
 
 	/**
+	 * Request 15
 	 * This is a function to change an existing admin's password
 	 * 
-	 * http://localhost:8080/alignWebsite/webapi/password-changes
+	 * http://localhost:8080/webapi/password-change
 	 * @param passwordChangeObject
 	 * @return 200 if password changed successfully else return 404
 	 */
@@ -544,7 +646,6 @@ public class Admin{
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response changeUserPassword(PasswordChangeObject passwordChangeObject){
-		
 		AdminLogins adminLogins = adminLoginsDao.findAdminLoginsByEmail(passwordChangeObject.getEmail());
 
 		if(adminLogins == null){
@@ -581,48 +682,37 @@ public class Admin{
 
 
 	/**
+	 * Request 16
 	 * This function sends email to admin’s northeastern ID to reset the password.
 	 * 
 	 * @param adminEmail
-	 * @return 200 if password changed successfully else return 404
+	 * @return 200 if password reset successfully else return 404
 	 */
 	@POST
 	@Path("/password-reset")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response sendEmailForPasswordResetAdmin(PasswordResetObject passwordResetObject){
-
 		String adminEmail = passwordResetObject.getEmail();
-
 		if (adminEmail == null){
-
-			return Response.status(Response.Status.BAD_REQUEST).
+				return Response.status(Response.Status.BAD_REQUEST).
 					entity("Email Id can't be null").build();
 		}else{
-
 			// Check if the admin is registered already
 			AdminLogins adminLogins = adminLoginsDao.findAdminLoginsByEmail(adminEmail);
-
 			if(adminLogins == null){
-
 				return Response.status(Response.Status.NOT_FOUND).
 						entity("Email doesn't exist: " + adminEmail).build();
 			}
-
 			if(adminLogins.isConfirmed() == false){
-
 				return Response.status(Response.Status.NOT_FOUND).
 						entity("Password can't be reset....Please create password and register: " + adminEmail).build();
 			}
-
 			// generate registration key 
 			String registrationKey = createRegistrationKey(); 
-
 			// Create TimeStamp for Key Expiration for 15 min
 			Timestamp keyExpirationTime = new Timestamp(System.currentTimeMillis()+ 15*60*1000);
-
-			AdminLogins adminLoginsNew = new AdminLogins(); 
-
+			AdminLogins adminLoginsNew = new AdminLogins();
 			adminLoginsNew.setEmail(adminEmail);
 			adminLoginsNew.setAdminPassword(adminLogins.getAdminPassword()); 
 			adminLoginsNew.setLoginTime(adminLogins.getLoginTime()); 

@@ -40,14 +40,16 @@ import org.mehaexample.asdDemo.utils.MailClient;
 import org.mehaexample.asdDemo.utils.StringUtils;
 import org.mehaexample.asdDemo.restModels.EmailToRegister;
 
+import com.lambdaworks.crypto.SCryptUtil;
+
 @Path("student-facing")
 public class StudentFacing {
-    StudentsDao studentDao = new StudentsDao(true);
-    ElectivesDao electivesDao = new ElectivesDao(true);
-    CoursesDao coursesDao = new CoursesDao(true);
-    WorkExperiencesDao workExperiencesDao = new WorkExperiencesDao(true);
-    ExtraExperiencesDao extraExperiencesDao = new ExtraExperiencesDao(true);
-    ProjectsDao projectsDao = new ProjectsDao(true);
+    StudentsDao studentDao = new StudentsDao();
+    ElectivesDao electivesDao = new ElectivesDao();
+    CoursesDao coursesDao = new CoursesDao();
+    WorkExperiencesDao workExperiencesDao = new WorkExperiencesDao();
+    ExtraExperiencesDao extraExperiencesDao = new ExtraExperiencesDao();
+    ProjectsDao projectsDao = new ProjectsDao();
     StudentLoginsDao studentLoginsDao = new StudentLoginsDao(); 
     String nuIdNotFound = "No Student record exists with given ID";
     String workExperienceRecord = "WorkExperienceRecoed";
@@ -431,7 +433,9 @@ public class StudentFacing {
 
 			// check if the database time is after the current time
 			if(databaseTimestamp.after(currentTimestamp)){
-				String hashedPassword = StringUtils.createHash(password);
+				String saltnewStr = email.substring(0, email.length()/2);
+	    		String setPassword = password+saltnewStr;
+	            String hashedPassword = SCryptUtil.scrypt(setPassword, 16, 16, 16);
 				studentLoginsExisting.setStudentPassword(hashedPassword);
 				studentLoginsExisting.setConfirmed(true);
 				boolean studentLoginUpdatedWithPassword = studentLoginsDao.updateStudentLogin(studentLoginsExisting);
