@@ -31,7 +31,7 @@ public class AdministratorNotesDao {
     // it will check the hibernate.cfg.xml file and load it
     // next it goes to all table files in the hibernate file and loads them
     if (test) {
-      this.factory = AdminTestSessionFactory.getFactory();
+//      this.factory = AdminTestSessionFactory.getFactory();
     }
   }
 

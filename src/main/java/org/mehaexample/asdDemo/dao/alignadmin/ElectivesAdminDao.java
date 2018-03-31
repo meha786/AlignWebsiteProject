@@ -29,7 +29,7 @@ public class ElectivesAdminDao {
   public ElectivesAdminDao( boolean test) {
     studentDao = new StudentsDao(true);
     if (test) {
-      this.factory = AdminTestSessionFactory.getFactory();
+//      this.factory = AdminTestSessionFactory.getFactory();
     }
   }
 

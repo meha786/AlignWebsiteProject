@@ -26,7 +26,7 @@ public class AdminLoginsDao {
 
   public AdminLoginsDao(boolean test) {
     if (test) {
-      this.factory = AdminTestSessionFactory.getFactory();
+//      this.factory = AdminTestSessionFactory.getFactory();
     }
   }
 

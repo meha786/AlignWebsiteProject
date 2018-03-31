@@ -20,7 +20,7 @@ public class GenderRatioDao {
 
   public GenderRatioDao(boolean test) {
     if (test) {
-      this.factory = StudentTestSessionFactory.getFactory();
+//      this.factory = StudentTestSessionFactory.getFactory();
     }
   }
 
