@@ -21,11 +21,11 @@ public class PrivaciesDaoTest {
 
   @BeforeClass
   public static void init() {
-    studentsDao = new StudentsDao(true);
-    privaciesDao = new PrivaciesDao(true);
+//    studentsDao = new StudentsDao(true);
+//    privaciesDao = new PrivaciesDao(true);
 
-//    studentsDao = new StudentsDao();
-//    privaciesDao = new PrivaciesDao();
+    studentsDao = new StudentsDao();
+    privaciesDao = new PrivaciesDao();
   }
 
   @Before

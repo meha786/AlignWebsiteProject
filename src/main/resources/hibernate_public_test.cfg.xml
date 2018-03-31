@@ -1,34 +1,34 @@
-<?xml version = "1.0" encoding = "utf-8"?>
-<!DOCTYPE hibernate-configuration SYSTEM
-        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
-<hibernate-configuration>
-    <session-factory>
+<!--<?xml version = "1.0" encoding = "utf-8"?>-->
+<!--<!DOCTYPE hibernate-configuration SYSTEM-->
+        <!--"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">-->
+<!--<hibernate-configuration>-->
+    <!--<session-factory>-->
 
-        <property name="hibernate.dialect">
-            org.hibernate.dialect.MySQLDialect
-        </property>
+        <!--<property name="hibernate.dialect">-->
+            <!--org.hibernate.dialect.MySQLDialect-->
+        <!--</property>-->
 
-        <property name="hibernate.connection.driver_class">
-            org.mariadb.jdbc.Driver
-        </property>
+        <!--<property name="hibernate.connection.driver_class">-->
+            <!--org.mariadb.jdbc.Driver-->
+        <!--</property>-->
 
-        <property name="hibernate.connection.url">
-            jdbc:mariadb://${test.ip}:${test.port}/AlignPublic
-        </property>
+        <!--<property name="hibernate.connection.url">-->
+            <!--jdbc:mariadb://${test.ip}:${test.port}/AlignPublic-->
+        <!--</property>-->
 
-        <property name="hibernate.connection.username">
-            ${test.username}
-        </property>
+        <!--<property name="hibernate.connection.username">-->
+            <!--${test.username}-->
+        <!--</property>-->
 
-        <property name="hibernate.connection.password">
-            ${test.password}
-        </property>
+        <!--<property name="hibernate.connection.password">-->
+            <!--${test.password}-->
+        <!--</property>-->
 
-        <!-- List of XML mapping files -->
-        <mapping resource="WorkExperiencesPublic.hbm.xml" />
-        <mapping resource="UndergraduatesPublic.hbm.xml" />
-        <mapping resource="StudentsPublic.hbm.xml" />
-        <mapping resource="SingleValueAggregatedData.hbm.xml" />
-        <mapping resource="MultipleValueAggregatedData.hbm.xml" />
-    </session-factory>
-</hibernate-configuration>
+        <!--&lt;!&ndash; List of XML mapping files &ndash;&gt;-->
+        <!--<mapping resource="WorkExperiencesPublic.hbm.xml" />-->
+        <!--<mapping resource="UndergraduatesPublic.hbm.xml" />-->
+        <!--<mapping resource="StudentsPublic.hbm.xml" />-->
+        <!--<mapping resource="SingleValueAggregatedData.hbm.xml" />-->
+        <!--<mapping resource="MultipleValueAggregatedData.hbm.xml" />-->
+    <!--</session-factory>-->
+<!--</hibernate-configuration>-->

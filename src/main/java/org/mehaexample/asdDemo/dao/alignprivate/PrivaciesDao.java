@@ -16,11 +16,11 @@ public class PrivaciesDao {
     this.factory = StudentSessionFactory.getFactory();
   }
 
-  public PrivaciesDao(boolean test) {
-    if (test) {
-      this.factory = StudentTestSessionFactory.getFactory();
-    }
-  }
+//  public PrivaciesDao(boolean test) {
+//    if (test) {
+//      this.factory = StudentTestSessionFactory.getFactory();
+//    }
+//  }
 
   /**
    * Get privacy record by neu id

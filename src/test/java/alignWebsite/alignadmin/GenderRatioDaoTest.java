@@ -18,11 +18,11 @@ public class GenderRatioDaoTest {
 
   @BeforeClass
   public static void initOnce() {
-    studentsDao = new StudentsDao(true);
-    genderRatioDao = new GenderRatioDao(true);
+//    studentsDao = new StudentsDao(true);
+//    genderRatioDao = new GenderRatioDao(true);
 
-//    studentsDao = new StudentsDao();
-//    genderRatioDao = new GenderRatioDao();
+    studentsDao = new StudentsDao();
+    genderRatioDao = new GenderRatioDao();
 
     Students newStudent = new Students("0000000", "tomcat@gmail.com", "Tom", "",
             "Cat", Gender.M, "F1", "1111111111",

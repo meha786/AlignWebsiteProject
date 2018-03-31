@@ -15,9 +15,9 @@ public class MultipleValueAggregatedDataDaoTest {
 
   @BeforeClass
   public static void init() {
-    dataDao = new MultipleValueAggregatedDataDao(true);
+//    dataDao = new MultipleValueAggregatedDataDao(true);
 
-//    dataDao = new MultipleValueAggregatedDataDao();
+    dataDao = new MultipleValueAggregatedDataDao();
   }
 
   @Test

@@ -32,13 +32,13 @@ public class ElectivesDao {
     this.factory = StudentSessionFactory.getFactory();
   }
 
-  public ElectivesDao(boolean test) {
-    if (test) {
-      studentDao = new StudentsDao(true);
-      privaciesDao = new PrivaciesDao(true);
-      this.factory = StudentTestSessionFactory.getFactory();
-    }
-  }
+//  public ElectivesDao(boolean test) {
+//    if (test) {
+//      studentDao = new StudentsDao(true);
+//      privaciesDao = new PrivaciesDao(true);
+//      this.factory = StudentTestSessionFactory.getFactory();
+//    }
+//  }
 
   public List<Electives> getElectivesByNeuId(String neuId) {
     try {

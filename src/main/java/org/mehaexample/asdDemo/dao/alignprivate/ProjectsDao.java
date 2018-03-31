@@ -25,12 +25,12 @@ public class ProjectsDao {
     this.factory = StudentSessionFactory.getFactory();
   }
 
-  public ProjectsDao(boolean test) {
-    if (test) {
-      privaciesDao = new PrivaciesDao(true);
-      this.factory = StudentTestSessionFactory.getFactory();
-    }
-  }
+//  public ProjectsDao(boolean test) {
+//    if (test) {
+//      privaciesDao = new PrivaciesDao(true);
+//      this.factory = StudentTestSessionFactory.getFactory();
+//    }
+//  }
 
   /**
    * Find a Project by the Project Id.

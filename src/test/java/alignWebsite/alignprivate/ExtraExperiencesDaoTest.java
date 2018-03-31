@@ -23,12 +23,13 @@ public class ExtraExperiencesDaoTest {
 
   @BeforeClass
   public static void init() {
-    extraExperiencesDao = new ExtraExperiencesDao(true);
-    studentsDao = new StudentsDao(true);
-    privaciesDao = new PrivaciesDao(true);
+//    extraExperiencesDao = new ExtraExperiencesDao(true);
+//    studentsDao = new StudentsDao(true);
+//    privaciesDao = new PrivaciesDao(true);
 
-//        extraExperiencesDao = new ExtraExperiencesDao();
-//        studentsDao = new StudentsDao();
+    extraExperiencesDao = new ExtraExperiencesDao();
+    studentsDao = new StudentsDao();
+    privaciesDao = new PrivaciesDao();
   }
 
   @Before

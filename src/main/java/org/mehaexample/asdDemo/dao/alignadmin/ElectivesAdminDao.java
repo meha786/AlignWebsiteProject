@@ -26,12 +26,12 @@ public class ElectivesAdminDao {
     this.factory = AdminSessionFactory.getFactory();
   }
 
-  public ElectivesAdminDao( boolean test) {
-    studentDao = new StudentsDao(true);
-    if (test) {
-//      this.factory = AdminTestSessionFactory.getFactory();
-    }
-  }
+//  public ElectivesAdminDao( boolean test) {
+//    studentDao = new StudentsDao(true);
+//    if (test) {
+////      this.factory = AdminTestSessionFactory.getFactory();
+//    }
+//  }
 
   public List<ElectivesAdmin> getElectivesByNeuId(String neuId) {
     try {

@@ -21,11 +21,11 @@ public class WorkExperiencesPublicDao {
     this.factory = PublicSessionFactory.getFactory();
   }
 
-  public WorkExperiencesPublicDao(boolean test) {
-    if (test) {
-      this.factory = PublicTestSessionFactory.getFactory();
-    }
-  }
+//  public WorkExperiencesPublicDao(boolean test) {
+//    if (test) {
+//      this.factory = PublicTestSessionFactory.getFactory();
+//    }
+//  }
 
   public WorkExperiencesPublic createWorkExperience(WorkExperiencesPublic workExperience) {
     Transaction tx = null;

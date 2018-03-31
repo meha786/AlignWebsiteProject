@@ -22,11 +22,11 @@ public class CoursesDao {
     this.factory = StudentSessionFactory.getFactory();
   }
 
-  public CoursesDao(boolean test) {
-    if (test) {
-      this.factory = StudentTestSessionFactory.getFactory();
-    }
-  }
+//  public CoursesDao(boolean test) {
+//    if (test) {
+//      this.factory = StudentTestSessionFactory.getFactory();
+//    }
+//  }
 
   /**
    * Get list of all companies from the private database.

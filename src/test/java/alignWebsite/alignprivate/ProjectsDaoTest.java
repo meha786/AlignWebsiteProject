@@ -26,12 +26,13 @@ public class ProjectsDaoTest {
 
   @BeforeClass
   public static void init() {
-    studentsDao = new StudentsDao(true);
-    projectsDao = new ProjectsDao(true);
-    privaciesDao = new PrivaciesDao(true);
+//    studentsDao = new StudentsDao(true);
+//    projectsDao = new ProjectsDao(true);
+//    privaciesDao = new PrivaciesDao(true);
 
-//    studentsDao = new StudentsDao();
-//    projectsDao = new ProjectsDao();
+    studentsDao = new StudentsDao();
+    projectsDao = new ProjectsDao();
+    privaciesDao = new PrivaciesDao();
   }
 
   @Before

@@ -29,14 +29,15 @@ public class ElectiveDaoTest {
 
   @BeforeClass
   public static void init() {
-    electivesDao = new ElectivesDao(true);
-    studentsDao = new StudentsDao(true);
-    coursesDao = new CoursesDao(true);
-    privaciesDao = new PrivaciesDao(true);
+//    electivesDao = new ElectivesDao(true);
+//    studentsDao = new StudentsDao(true);
+//    coursesDao = new CoursesDao(true);
+//    privaciesDao = new PrivaciesDao(true);
 
-//    electivesDao = new ElectivesDao();
-//    studentsDao = new StudentsDao();
-//    coursesDao = new CoursesDao();
+    electivesDao = new ElectivesDao();
+    studentsDao = new StudentsDao();
+    coursesDao = new CoursesDao();
+    privaciesDao = new PrivaciesDao();
   }
 
   @Test

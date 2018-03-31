@@ -22,11 +22,11 @@ public class UndergraduatesPublicDao {
     this.factory = PublicSessionFactory.getFactory();
   }
 
-  public UndergraduatesPublicDao(boolean test) {
-    if (test) {
-      this.factory = PublicTestSessionFactory.getFactory();
-    }
-  }
+//  public UndergraduatesPublicDao(boolean test) {
+//    if (test) {
+//      this.factory = PublicTestSessionFactory.getFactory();
+//    }
+//  }
 
   public UndergraduatesPublic createUndergraduate(UndergraduatesPublic undergraduate) {
     Transaction tx = null;

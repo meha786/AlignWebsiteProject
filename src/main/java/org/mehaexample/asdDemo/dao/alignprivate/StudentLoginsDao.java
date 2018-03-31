@@ -21,11 +21,11 @@ public class StudentLoginsDao {
     this.factory = StudentSessionFactory.getFactory();
   }
 
-  public StudentLoginsDao(boolean test) {
-    if (test) {
-      this.factory = StudentTestSessionFactory.getFactory();
-    }
-  }
+//  public StudentLoginsDao(boolean test) {
+//    if (test) {
+//      this.factory = StudentTestSessionFactory.getFactory();
+//    }
+//  }
 
   public StudentLogins findStudentLoginsByEmail(String email) {
     try {

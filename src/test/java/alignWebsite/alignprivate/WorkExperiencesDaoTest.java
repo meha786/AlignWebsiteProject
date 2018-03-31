@@ -31,12 +31,13 @@ public class WorkExperiencesDaoTest {
 
   @BeforeClass
   public static void init() {
-    workExperiencesDao = new WorkExperiencesDao(true);
-    studentsDao = new StudentsDao(true);
-    privaciesDao = new PrivaciesDao(true);
+//    workExperiencesDao = new WorkExperiencesDao(true);
+//    studentsDao = new StudentsDao(true);
+//    privaciesDao = new PrivaciesDao(true);
 
-//    workExperiencesDao = new WorkExperiencesDao();
-//    studentsDao = new StudentsDao();
+    workExperiencesDao = new WorkExperiencesDao();
+    studentsDao = new StudentsDao();
+    privaciesDao = new PrivaciesDao();
   }
 
   @Before

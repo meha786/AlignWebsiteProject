@@ -27,11 +27,11 @@ public class PriorEducationsDao {
     this.factory = StudentSessionFactory.getFactory();
   }
 
-  public PriorEducationsDao(boolean test) {
-    if (test) {
-      this.factory = StudentTestSessionFactory.getFactory();
-    }
-  }
+//  public PriorEducationsDao(boolean test) {
+//    if (test) {
+//      this.factory = StudentTestSessionFactory.getFactory();
+//    }
+//  }
 
   /**
    * Find a Prior Education by the Work Experience Id.

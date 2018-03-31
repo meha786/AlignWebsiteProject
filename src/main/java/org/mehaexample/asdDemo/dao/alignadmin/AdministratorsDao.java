@@ -24,15 +24,15 @@ public class AdministratorsDao {
     this.factory = AdminSessionFactory.getFactory();
   }
 
-  /**
-   * test constructor
-   * @param test
-   */
-  public AdministratorsDao(boolean test) {
-    if (test) {
-//      this.factory = AdminTestSessionFactory.getFactory();
-    }
-  }
+//  /**
+//   * test constructor
+//   * @param test
+//   */
+//  public AdministratorsDao(boolean test) {
+//    if (test) {
+////      this.factory = AdminTestSessionFactory.getFactory();
+//    }
+//  }
 
   /**
    * This is the function to add an Administrator into database.

@@ -28,13 +28,13 @@ public class StudentsPublicDaoTest {
 
   @BeforeClass
   public static void init() {
-    undergraduatesPublicDao = new UndergraduatesPublicDao(true);
-    workExperiencesPublicDao = new WorkExperiencesPublicDao(true);
-    studentsPublicDao = new StudentsPublicDao(true);
+//    undergraduatesPublicDao = new UndergraduatesPublicDao(true);
+//    workExperiencesPublicDao = new WorkExperiencesPublicDao(true);
+//    studentsPublicDao = new StudentsPublicDao(true);
 
-//    undergraduatesPublicDao = new UndergraduatesPublicDao();
-//    workExperiencesPublicDao = new WorkExperiencesPublicDao();
-//    studentsPublicDao = new StudentsPublicDao();
+    undergraduatesPublicDao = new UndergraduatesPublicDao();
+    workExperiencesPublicDao = new WorkExperiencesPublicDao();
+    studentsPublicDao = new StudentsPublicDao();
 
     StudentsPublic studentsPublic = new StudentsPublic(5, 2016, true);
     studentsPublicDao.createStudent(studentsPublic);

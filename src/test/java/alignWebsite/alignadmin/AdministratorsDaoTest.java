@@ -13,8 +13,8 @@ public class AdministratorsDaoTest {
 
 	@BeforeClass
 	public static void init() {
-		administratorsDao = new AdministratorsDao(true);
-//		administratorsDao = new AdministratorsDao();
+//		administratorsDao = new AdministratorsDao(true);
+		administratorsDao = new AdministratorsDao();
 	}
 
 	@Before

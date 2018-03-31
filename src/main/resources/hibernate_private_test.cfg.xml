@@ -1,38 +1,38 @@
-<?xml version = "1.0" encoding = "utf-8"?>
-<!DOCTYPE hibernate-configuration SYSTEM
-        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
-<hibernate-configuration>
-    <session-factory>
+<!--<?xml version = "1.0" encoding = "utf-8"?>-->
+<!--<!DOCTYPE hibernate-configuration SYSTEM-->
+        <!--"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">-->
+<!--<hibernate-configuration>-->
+    <!--<session-factory>-->
 
-        <property name="hibernate.dialect">
-            org.hibernate.dialect.MySQLDialect
-        </property>
+        <!--<property name="hibernate.dialect">-->
+            <!--org.hibernate.dialect.MySQLDialect-->
+        <!--</property>-->
 
-        <property name="hibernate.connection.driver_class">
-            org.mariadb.jdbc.Driver
-        </property>
+        <!--<property name="hibernate.connection.driver_class">-->
+            <!--org.mariadb.jdbc.Driver-->
+        <!--</property>-->
 
-        <property name="hibernate.connection.url">
-            jdbc:mariadb://${test.ip}:${test.port}/AlignPrivate
-        </property>
+        <!--<property name="hibernate.connection.url">-->
+            <!--jdbc:mariadb://${test.ip}:${test.port}/AlignPrivate-->
+        <!--</property>-->
 
-        <property name="hibernate.connection.username">
-            ${test.username}
-        </property>
+        <!--<property name="hibernate.connection.username">-->
+            <!--${test.username}-->
+        <!--</property>-->
 
-        <property name="hibernate.connection.password">
-            ${test.password}
-        </property>
+        <!--<property name="hibernate.connection.password">-->
+            <!--${test.password}-->
+        <!--</property>-->
 
-        <!-- List of XML mapping files -->
-        <mapping resource="Students.hbm.xml" />
-        <mapping resource="Courses.hbm.xml" />
-        <mapping resource="WorkExperiences.hbm.xml" />
-        <mapping resource="Electives.hbm.xml" />
-        <mapping resource="PriorEducations.hbm.xml" />
-        <mapping resource="StudentLogins.hbm.xml" />
-        <mapping resource="ExtraExperiences.hbm.xml" />
-        <mapping resource="Projects.hbm.xml" />
-        <mapping resource="Privacies.hbm.xml"/>
-    </session-factory>
-</hibernate-configuration>
+        <!--&lt;!&ndash; List of XML mapping files &ndash;&gt;-->
+        <!--<mapping resource="Students.hbm.xml" />-->
+        <!--<mapping resource="Courses.hbm.xml" />-->
+        <!--<mapping resource="WorkExperiences.hbm.xml" />-->
+        <!--<mapping resource="Electives.hbm.xml" />-->
+        <!--<mapping resource="PriorEducations.hbm.xml" />-->
+        <!--<mapping resource="StudentLogins.hbm.xml" />-->
+        <!--<mapping resource="ExtraExperiences.hbm.xml" />-->
+        <!--<mapping resource="Projects.hbm.xml" />-->
+        <!--<mapping resource="Privacies.hbm.xml"/>-->
+    <!--</session-factory>-->
+<!--</hibernate-configuration>-->

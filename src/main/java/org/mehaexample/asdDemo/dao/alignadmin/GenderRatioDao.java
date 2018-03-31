@@ -3,7 +3,6 @@ package org.mehaexample.asdDemo.dao.alignadmin;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.mehaexample.asdDemo.dao.alignprivate.StudentSessionFactory;
-import org.mehaexample.asdDemo.dao.alignprivate.StudentTestSessionFactory;
 import org.mehaexample.asdDemo.enums.Campus;
 import org.mehaexample.asdDemo.model.alignadmin.GenderRatio;
 
@@ -18,11 +17,11 @@ public class GenderRatioDao {
     this.factory = StudentSessionFactory.getFactory();
   }
 
-  public GenderRatioDao(boolean test) {
-    if (test) {
-//      this.factory = StudentTestSessionFactory.getFactory();
-    }
-  }
+//  public GenderRatioDao(boolean test) {
+//    if (test) {
+////      this.factory = StudentTestSessionFactory.getFactory();
+//    }
+//  }
 
   public List<GenderRatio> getYearlyGenderRatio(Campus campus) {
     String hql = "SELECT NEW org.mehaexample.asdDemo.model.alignadmin.GenderRatio(s.entryYear, " +
