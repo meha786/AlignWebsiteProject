@@ -86,7 +86,7 @@ CREATE TABLE PriorEducations (
 );
 
 CREATE TABLE Courses (
-	CourseId VARCHAR(6) NOT NULL,
+	CourseId VARCHAR(10) NOT NULL,
     CourseName VARCHAR(255),
     Description VARCHAR(1250),
     CONSTRAINT pk_Courses_CourseId
