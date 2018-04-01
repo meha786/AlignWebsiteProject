@@ -58,8 +58,6 @@ import org.mehaexample.asdDemo.restModels.PasswordCreateObject;
 import org.mehaexample.asdDemo.restModels.PasswordResetObject;
 import org.mehaexample.asdDemo.utils.MailClient;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonPrimitive;
 import com.lambdaworks.crypto.SCryptUtil;
 
 
