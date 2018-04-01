@@ -93,7 +93,8 @@ public class Admin{
 		Map<String,List<String>> map = new HashMap<String,List<String>>();
 		ArrayList<Students> studentRecords = new ArrayList<Students>();
 		JSONArray resultArray = new JSONArray();
-		JSONObject obj = new JSONObject();
+		JSONObject finalResult = new JSONObject();
+		int total = -1;
 		int begin = 1;
 		int end = 20;
 	try{
@@ -170,6 +171,7 @@ public class Admin{
 			end = Integer.valueOf(input.getEndindex());
 		}
 		studentRecords = (ArrayList<Students>) studentDao.getAdminFilteredStudents(map, begin, end);
+		total = studentDao.getAdminFilteredStudentsCount(map);
 		
 		for(Students st : studentRecords) {
 			JSONObject studentJson = new JSONObject();
@@ -181,13 +183,17 @@ public class Admin{
 			studentJson.put("notes",administratorNotesDao.getAdministratorNoteRecordByNeuId(studentJson.get("neuid").toString()));
 			resultArray.put(studentJson);
 		}
-	
+		finalResult.put("students", resultArray);
+		finalResult.put("beginindex", begin);
+		finalResult.put("endindex", end);
+		finalResult.put("totalcount", total);
+		
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("please check the request.").build();
 		}
-		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
+		return Response.status(Response.Status.OK).entity(finalResult.toString()).build();
 	}
 
 	/**
@@ -213,6 +219,7 @@ public class Admin{
 			jsonObj.put("courses", electives);
 			List<ExtraExperiences> coop = extraExperiencesDao.getExtraExperiencesByNeuId(nuid);
 			jsonObj.put("coopexperience", coop);
+			jsonObj.put("notes",administratorNotesDao.getAdministratorNoteRecordByNeuId(nuid));
 			return Response.status(Response.Status.OK).entity(jsonObj.toString()).build();
 		}
 	}
