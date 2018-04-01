@@ -25,7 +25,10 @@ import org.jose4j.jwe.JsonWebEncryption;
 import org.jose4j.jwe.KeyManagementAlgorithmIdentifiers;
 import org.jose4j.keys.AesKey;
 import org.json.JSONObject;
+import org.json.JSONArray;
 import org.mehaexample.asdDemo.dao.alignadmin.AdminLoginsDao;
+import org.mehaexample.asdDemo.dao.alignadmin.AdministratorNotesDao;
+import org.mehaexample.asdDemo.dao.alignadmin.AdministratorsDao;
 import org.mehaexample.asdDemo.dao.alignadmin.ElectivesAdminDao;
 import org.mehaexample.asdDemo.dao.alignadmin.GenderRatioDao;
 import org.mehaexample.asdDemo.dao.alignprivate.ElectivesDao;
@@ -35,6 +38,7 @@ import org.mehaexample.asdDemo.dao.alignprivate.StudentsDao;
 import org.mehaexample.asdDemo.dao.alignprivate.WorkExperiencesDao;
 import org.mehaexample.asdDemo.enums.Campus;
 import org.mehaexample.asdDemo.model.alignadmin.AdminLogins;
+import org.mehaexample.asdDemo.model.alignadmin.Administrators;
 import org.mehaexample.asdDemo.model.alignadmin.ElectivesAdmin;
 import org.mehaexample.asdDemo.model.alignadmin.GenderRatio;
 import org.mehaexample.asdDemo.model.alignadmin.LoginObject;
@@ -54,6 +58,8 @@ import org.mehaexample.asdDemo.restModels.PasswordCreateObject;
 import org.mehaexample.asdDemo.restModels.PasswordResetObject;
 import org.mehaexample.asdDemo.utils.MailClient;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonPrimitive;
 import com.lambdaworks.crypto.SCryptUtil;
 
 
@@ -69,6 +75,8 @@ public class Admin{
 	ElectivesDao electivesDao = new ElectivesDao();
 	AdminLoginsDao adminLoginsDao = new AdminLoginsDao();
 	ExtraExperiencesDao extraExperiencesDao = new ExtraExperiencesDao();
+	AdministratorsDao administratorsDao = new AdministratorsDao();
+	AdministratorNotesDao administratorNotesDao = new AdministratorNotesDao();
 	StudentLogins studentLogins = new StudentLogins();
 
 	/**
@@ -86,6 +94,8 @@ public class Admin{
 	public Response searchStudent(ParamsObject input){
 		Map<String,List<String>> map = new HashMap<String,List<String>>();
 		ArrayList<Students> studentRecords = new ArrayList<Students>();
+		JSONArray resultArray = new JSONArray();
+		JSONObject obj = new JSONObject();
 		int begin = 1;
 		int end = 20;
 	try{
@@ -162,12 +172,24 @@ public class Admin{
 			end = Integer.valueOf(input.getEndindex());
 		}
 		studentRecords = (ArrayList<Students>) studentDao.getAdminFilteredStudents(map, begin, end);
+		
+		for(Students st : studentRecords) {
+			JSONObject studentJson = new JSONObject();
+			JSONObject eachStudentJson = new JSONObject(st);
+			java.util.Set<String> keys = eachStudentJson.keySet();
+			for(int i=0;i<keys.toArray().length; i++){
+				studentJson.put(((String) keys.toArray()[i]).toLowerCase(), eachStudentJson.get((String) keys.toArray()[i]));
+			}
+			studentJson.put("notes",administratorNotesDao.getAdministratorNoteRecordByNeuId(studentJson.get("neuid").toString()));
+			resultArray.put(studentJson);
+		}
+	
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("please check the request.").build();
 		}
-		return Response.status(Response.Status.OK).entity(studentRecords).build();
+		return Response.status(Response.Status.OK).entity(resultArray.toString()).build();
 	}
 
 	/**
@@ -198,7 +220,7 @@ public class Admin{
 	}
 
 	/**
-	 * Request 2
+	 * Request 3
 	 * This is the function to get the gender ratio counts per year.
 	 *	
 	 *	http://localhost:8080/webapi/analytics/gender-ratio
@@ -587,7 +609,8 @@ public class Admin{
 				senderJwe.setKey(keyMain);
 				String compactSerialization = senderJwe.getCompactSerialization();
 				jsonObj.put("token", compactSerialization);
-				jsonObj.put("id", "nuidOfAdmin");
+				Administrators admin = administratorsDao.findAdministratorByEmail(loginInput.getUsername());
+				jsonObj.put("id", admin.getAdministratorNeuId());
 				
 				return Response.status(Response.Status.OK).
 						entity(jsonObj.toString()).build();
@@ -698,7 +721,6 @@ public class Admin{
 				return Response.status(Response.Status.BAD_REQUEST).
 					entity("Email Id can't be null").build();
 		}else{
-			// Check if the admin is registered already
 			AdminLogins adminLogins = adminLoginsDao.findAdminLoginsByEmail(adminEmail);
 			if(adminLogins == null){
 				return Response.status(Response.Status.NOT_FOUND).
@@ -708,9 +730,7 @@ public class Admin{
 				return Response.status(Response.Status.NOT_FOUND).
 						entity("Password can't be reset....Please create password and register: " + adminEmail).build();
 			}
-			// generate registration key 
 			String registrationKey = createRegistrationKey(); 
-			// Create TimeStamp for Key Expiration for 15 min
 			Timestamp keyExpirationTime = new Timestamp(System.currentTimeMillis()+ 15*60*1000);
 			AdminLogins adminLoginsNew = new AdminLogins();
 			adminLoginsNew.setEmail(adminEmail);
@@ -721,23 +741,18 @@ public class Admin{
 			adminLoginsNew.setConfirmed(true);
 
 			boolean adminLoginUpdated = adminLoginsDao.updateAdminLogin(adminLoginsNew);
-
 			if(adminLoginUpdated) {
-
 				// after generation, send email
 				MailClient.sendPasswordResetEmail(adminEmail, registrationKey);
-
 				return Response.status(Response.Status.OK).
 						entity("Password Reset link sent succesfully!" ).build(); 
 			}
-
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).
 					entity("Something Went Wrong" + adminEmail).build();
 		}
 	}
 
 	private String createRegistrationKey() {
-
 		return UUID.randomUUID().toString();
 	}	
 }
