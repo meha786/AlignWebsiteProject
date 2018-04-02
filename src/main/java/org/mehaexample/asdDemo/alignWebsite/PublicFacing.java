@@ -63,7 +63,7 @@ public class PublicFacing {
 	}
 
 	/**
-	 * This is the function to get top coops.
+	 * This is the function to get n top coops.
 	 *	The body should be in the JSON format like below:
 	 *	
 	 *	http://localhost:8080/alignWebsite/webapi/public-facing/top-coops
@@ -84,7 +84,7 @@ public class PublicFacing {
 	}
 	
 	/**
-	 * This is the function to get top undergraduate degrees.
+	 * This is the function to get n top undergraduate degrees.
 	 *	The body should be in the JSON format like below:
 	 *	
 	 *	http://localhost:8080/alignWebsite/webapi/public-facing/top-undergraddegrees

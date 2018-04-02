@@ -22,12 +22,11 @@ public class StringUtils {
 	}
 
 	public static String createHash(String strToHash){
-//		// generate a secure random number generator
-//		SecureRandom random = new SecureRandom();
-//		byte salt[] = new byte[20];
-//		// generate 20 random bytes
-//		random.nextBytes(salt);
-		
+		// generate a secure random number generator
+		// SecureRandom random = new SecureRandom();
+		// byte salt[] = new byte[20];
+		// generate 20 random bytes
+
 		byte[] salt = { (byte) 204, 29, (byte) 207, (byte) 217 };
 		try {
 			salt = "saltforhasing#239874".getBytes("UTF-8");

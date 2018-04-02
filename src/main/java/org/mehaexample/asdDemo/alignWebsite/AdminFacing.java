@@ -49,6 +49,7 @@ import org.mehaexample.asdDemo.model.alignprivate.StudentLogins;
 import org.mehaexample.asdDemo.model.alignprivate.Students;
 import org.mehaexample.asdDemo.model.alignprivate.WorkExperiences;
 import org.mehaexample.asdDemo.restModels.PasswordChangeObject;
+import org.mehaexample.asdDemo.restModels.PasswordCreateObject;
 import org.mehaexample.asdDemo.restModels.PasswordResetObject;
 import org.mehaexample.asdDemo.utils.MailClient;
 import org.mehaexample.asdDemo.utils.StringUtils;
@@ -592,6 +593,62 @@ public class AdminFacing{
 
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).
 					entity("Something Went Wrong" + adminEmail).build();
+		}
+	}
+
+	/**
+	 * This function creates the password for admin when they reset their password
+	 * 
+	 * @param passwordCreateObject
+	 * @return 200 if password changed successfully else return 404
+	 */
+	@POST
+	@Path("/password-create")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response createPassword(PasswordCreateObject passwordCreateObject){
+		String email = passwordCreateObject.getEmail();
+		String password = passwordCreateObject.getPassword();
+		String registrationKey = passwordCreateObject.getRegistrationKey();
+		System.out.println(email + password + registrationKey); 
+
+		// before create password, a student login should exist
+		AdminLogins adminLoginsExisting = adminLoginsDao.findAdminLoginsByEmail(email); 
+		if(adminLoginsExisting == null) {
+			return Response.status(Response.Status.BAD_REQUEST).
+					entity("Invalid Admin details. Admin does not exist" ).build();
+		}
+
+		String databaseRegistrationKey = adminLoginsExisting.getRegistrationKey();
+		Timestamp databaseTimestamp = adminLoginsExisting.getKeyExpiration();
+
+		// check if the entered registration key matches 
+		if((databaseRegistrationKey.equals(registrationKey))){
+
+			// if registration key matches, then check if its valid or not
+			Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+
+			// check if the database time is after the current time
+			if(databaseTimestamp.after(currentTimestamp)){
+				String hashedPassword = StringUtils.createHash(password);
+				adminLoginsExisting.setAdminPassword(hashedPassword);
+				adminLoginsExisting.setConfirmed(true);
+				boolean adminLoginUpdatedWithPassword = adminLoginsDao.updateAdminLogin(adminLoginsExisting);
+				if(adminLoginUpdatedWithPassword) {
+					
+					return Response.status(Response.Status.OK).
+							entity("Congratulations Password Reset successfully for Admin!").build();
+				} else {
+					return Response.status(Response.Status.INTERNAL_SERVER_ERROR).
+							entity("Database exception thrown" ).build();
+				}
+			} else {
+				return Response.status(Response.Status.OK).
+						entity(" Registration key expired!" ).build();
+			}
+		} else {
+			return Response.status(Response.Status.BAD_REQUEST).
+					entity("Invalid registration key" ).build();
 		}
 	}
 

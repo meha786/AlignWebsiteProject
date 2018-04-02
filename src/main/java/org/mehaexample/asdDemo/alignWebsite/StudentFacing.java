@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -14,6 +15,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -21,6 +23,7 @@ import org.json.JSONObject;
 import org.mehaexample.asdDemo.dao.alignprivate.StudentLoginsDao;
 import org.mehaexample.asdDemo.dao.alignprivate.StudentsDao;
 import org.mehaexample.asdDemo.model.alignadmin.AdminLogins;
+import org.mehaexample.asdDemo.model.alignadmin.LoginObject;
 import org.mehaexample.asdDemo.model.alignprivate.StudentLogins;
 import org.mehaexample.asdDemo.model.alignprivate.Students;
 import org.mehaexample.asdDemo.restModels.PasswordChangeObject;
@@ -110,22 +113,6 @@ public class StudentFacing {
 		return studentRecord; 
 	}
 
-	/**------------------------------------------------------------------------------------------------*/
-
-	//	//  webapi/student-facing/students/change-password/{NUID}
-	//	@POST
-	//	@Path("/{changePassword}")
-	//	@Consumes(MediaType.APPLICATION_JSON)
-	//	public boolean chnagePassword(PasswordChangeModel passwordModel){
-	//		boolean exists = studentDao.ifEmailExists(passwordModel.getEmail());
-	//		
-	////		if(passwordDao.getOldPassword(passwordModel.getEmail()).equals(passwordModel.getOldPwd())) {
-	////			passwordDao.updatePassword(passwordModel);
-	////		}
-	//		
-	//		return true;
-	//	}
-
 	// webapi/student-facing/students/reset-password/{NUID}
 	@POST
 	@Path("/{resetPassword}")
@@ -144,15 +131,6 @@ public class StudentFacing {
 		// check if the student data is present in align db
 		// register the student.
 	}
-
-	/**-----------------------------------------------------**/
-	//	@POST 
-	//	@Path("/{VerifyStudentLogin2FA}")
-	//	@Consumes(MediaType.APPLICATION_JSON)
-	//	public void VerifyStudentLogin2FA(){
-	//		// check if password entered is correct from db
-	//		// if it is correct, send him an email 
-	//	}
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -217,13 +195,13 @@ public class StudentFacing {
 		return studentList; 
 	}
 
-	// ====================================================================================================================
 
 	/**
 	 * Send registration email to the student only if he/she is present in the align database
 	 * 
+	 *  
 	 * http://localhost:8080/alignWebsite/webapi/student-facing/registration
-	 * test.alignstudent123@gmail.com
+	 * test.alignstudent123@gmail.com, PBKDF2
 	 * @param emailToRegister
 	 * @return 200 if Registration link is sent successfully
 	 */
@@ -491,6 +469,38 @@ public class StudentFacing {
 		}
 
 	}
+	
+	/**
+     * Request 13
+     * This is a function to logout for Student
+     * 
+     * http://localhost:8080/webapi/logout
+     * @param 
+     * @return 200 OK
+     */
+    @POST
+    @Path("/logout")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response logoutUser(@Context HttpServletRequest request,LoginObject loginInput){
+    	StudentLogins studentLogins = studentLoginsDao.findStudentLoginsByEmail(loginInput.getUsername());
+    	
+        if(studentLogins == null){
+            return Response.status(Response.Status.NOT_FOUND).
+                    entity("User doesn't exist: " + loginInput.getUsername()).build();
+        }
+        try{
+            Timestamp keyExpiration = new Timestamp(System.currentTimeMillis());
+            studentLogins.setKeyExpiration(keyExpiration);
+            studentLoginsDao.updateStudentLogin(studentLogins);
+        }
+        catch (Exception e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).
+                    entity("Internal Server Error").build();    
+        }
+        return Response.status(Response.Status.OK).
+                entity("Logged Out Successfully").build();
+    }
 
 	private String createRegistrationKey() {
 
