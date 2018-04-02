@@ -86,7 +86,7 @@ public class Admin{
 	 *	
 	 *	http://localhost:8080/webapi/students
 	 * @param firstname
-	 * @return the list of student profiles matching the search fields.
+	 * @return the list of student profiles matching the search fields. 200 OK else 500
 	 */
 	@POST
 	@Path("students")
@@ -205,7 +205,7 @@ public class Admin{
 	 *	
 	 *	http://localhost:8080/webapi/students/090
 	 * @param nuid
-	 * @return the student details matching the nuid.
+	 * @return the student details matching the nuid. 200 OK else 404
 	 */
 	@GET
 	@Path("students/{nuid}")
@@ -233,7 +233,7 @@ public class Admin{
 	 *	
 	 *	http://localhost:8080/webapi/analytics/gender-ratio
 	 * @param 
-	 * @return the gender ratio is returned as a list of years with counts
+	 * @return the gender ratio is returned as a list of years with counts 200 OK else 400
 	 * @throws SQLException 
 	 */
 	@POST
@@ -261,7 +261,7 @@ public class Admin{
 	 *	
 	 *	http://localhost:8080/webapi/analytics/top-bachelor-degrees
 	 * @param 
-	 * @return the list of top 10 bachelor degrees and number of students
+	 * @return the list of top 10 bachelor degrees and number of students 200 OK else 400
 	 * @throws SQLException 
 	 * 
 	 */
@@ -301,7 +301,7 @@ public class Admin{
 	 *	
 	 *	http://localhost:8080/webapi/analytics/top-employers
 	 * @param 
-	 * @return the list of top 10 employers and number of students
+	 * @return the list of top 10 employers and number of students 200 OK else 400
 	 * @throws SQLException 
 	 * 
 	 */
@@ -341,7 +341,7 @@ public class Admin{
 	 *	
 	 *	http://localhost:8080/webapi/aanalytics/top-electives
 	 * @param 
-	 * @return the list of top 10 electives and number of students
+	 * @return the list of top 10 electives and number of students 200 OK else 400
 	 * @throws SQLException 
 	 * 
 	 */
@@ -381,7 +381,7 @@ public class Admin{
 	 *	
 	 *	http://localhost:8080/webapi/analytics/coop-students
 	 * @param 
-	 * @return the list student details , companies they worked for as coop
+	 * @return the list student details , companies they worked for as coop 200 OK else 400
 	 * @throws SQLException 
 	 * 
 	 */
@@ -415,7 +415,7 @@ public class Admin{
 	 * 
 	 * http://localhost:8080/webapi/analytics/company
 	 * @param params
-	 * @return the list student details working for a company
+	 * @return the list student details working for a company 200 OK else 400
 	 */
 	@POST
 	@Path("/analytics/company")
@@ -447,7 +447,7 @@ public class Admin{
 	 * 
 	 * http://localhost:8080/webapi/analytics/working
 	 * @param params
-	 * @return the list student details and company they are working for.
+	 * @return the list student details and company they are working for. 200 OK else 400
 	 */
 	@POST
 	@Path("/analytics/working")
@@ -480,7 +480,7 @@ public class Admin{
 	 * 
 	 * http://localhost:8080/webapi/analytics/undergrad-institutions
 	 * @param params
-	 * @return the list of undergrad institution and count
+	 * @return the list of undergrad institution and count 200 OK else 400
 	 */
 	@POST
 	@Path("/analytics/undergrad-institutions")
@@ -508,12 +508,12 @@ public class Admin{
 	}
 	
 	/**
-	 * Request 12
+	 * Request 11
 	 * This is a function to update an existing student notes
 	 * 
 	 * http://localhost:8080/webapi/notes/{noteid}
 	 * @param AdministratorNotes
-	 * @return 200 if notes updated successfully else return 404
+	 * @return 200 if notes updated successfully else return 404, 500
 	 */
 	@PUT
 	@Path("/notes/{noteid}")
@@ -523,7 +523,7 @@ public class Admin{
 		try{
 			if(administratorNotesDao.updateAdministratorNote(input)){
 				return Response.status(Response.Status.OK).
-						entity("note updated").build();
+						entity("note updated successfully").build();
 			}
 			} catch (Exception e){
 				return Response.status(Response.Status.NOT_FOUND).entity("Please check the note id").build();
@@ -532,14 +532,13 @@ public class Admin{
 				entity("note updation failed").build();
 	}
 	
-	
 	/**
-	 * Request 13
+	 * Request 12
 	 * This is a function to create a student notes
 	 * 
 	 * http://localhost:8080/webapi/{adminneuid}/notes
 	 * @param AdministratorNotes
-	 * @return 200 if notes created successfully else return 404
+	 * @return 200 if notes created successfully else return 400, 404
 	 */
 	@POST
 	@Path("/{adminneuid}/notes")
@@ -554,19 +553,19 @@ public class Admin{
 			}
 			AdministratorNotes note = administratorNotesDao.addAdministratorNoteRecord(input);
 			return Response.status(Response.Status.OK).
-						entity("note created" + note.toString()).build();
+						entity("note created").build();
 			} catch (Exception e){
 				return Response.status(Response.Status.BAD_REQUEST).entity("Please check the request").build();
 			}
 	}
 	
 	/**
-	 * Request 14
+	 * Request 13
 	 * This is a function to DELETE a student notes
 	 * 
-	 * http://localhost:8080/webapi/notes{adminnoteid}/
+	 * http://localhost:8080/webapi/notes/{adminnoteid}
 	 * @param 
-	 * @return 200 if notes deleted successfully else return 404
+	 * @return 200 if notes deleted successfully else return 400, 406
 	 */
 	@DELETE
 	@Path("/notes/{adminnoteid}")
@@ -586,11 +585,11 @@ public class Admin{
 	
 	
 	/**
-	 * Request 12
+	 * Request 14
 	 * This function creates the password for admin when they reset their password
 	 * 
 	 * @param passwordCreateObject
-	 * @return 200 if password changed successfully else return 404
+	 * @return 200 if password changed successfully else return 400,500
 	 */
 	@POST
 	@Path("/password-create")
@@ -645,12 +644,12 @@ public class Admin{
 	}
 	
 	/**
-	 * Request 13
+	 * Request 15
 	 * This is a function to login using admin email and password
 	 * 
 	 * http://localhost:8080/webapi/login
 	 * @param passwordChangeObject
-	 * @return the token if logged in successfully
+	 * @return the token if logged in successfully 200 OK else 404,401,400,500
 	 */
 	@POST
 	@Path("/login")
@@ -712,12 +711,12 @@ public class Admin{
 	}
 	
 	/**
-	 * Request 14
+	 * Request 16
 	 * This is a function to logout
 	 * 
 	 * http://localhost:8080/webapi/logout
 	 * @param 
-	 * @return 200 OK
+	 * @return 200 OK else 404,500
 	 */
 	@POST
 	@Path("/logout")
@@ -743,12 +742,12 @@ public class Admin{
 	}
 
 	/**
-	 * Request 15
+	 * Request 17
 	 * This is a function to change an existing admin's password
 	 * 
 	 * http://localhost:8080/webapi/password-change
 	 * @param passwordChangeObject
-	 * @return 200 if password changed successfully else return 404
+	 * @return 200 if password changed successfully else return 404,400,401
 	 */
 	@POST
 	@Path("/password-change")
@@ -791,11 +790,11 @@ public class Admin{
 
 
 	/**
-	 * Request 16
+	 * Request 18
 	 * This function sends email to admin’s northeastern ID to reset the password.
 	 * 
 	 * @param adminEmail
-	 * @return 200 if password reset successfully else return 404
+	 * @return 200 if password reset successfully else return 404,400,500
 	 */
 	@POST
 	@Path("/password-reset")
