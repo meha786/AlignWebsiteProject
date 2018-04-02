@@ -11,8 +11,10 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -38,6 +40,7 @@ import org.mehaexample.asdDemo.dao.alignprivate.StudentsDao;
 import org.mehaexample.asdDemo.dao.alignprivate.WorkExperiencesDao;
 import org.mehaexample.asdDemo.enums.Campus;
 import org.mehaexample.asdDemo.model.alignadmin.AdminLogins;
+import org.mehaexample.asdDemo.model.alignadmin.AdministratorNotes;
 import org.mehaexample.asdDemo.model.alignadmin.Administrators;
 import org.mehaexample.asdDemo.model.alignadmin.ElectivesAdmin;
 import org.mehaexample.asdDemo.model.alignadmin.GenderRatio;
@@ -243,10 +246,10 @@ public class Admin{
 			try{
 				ratio = genderRatioDao.getYearlyGenderRatio(Campus.valueOf(input.getCampus().toUpperCase()));
 			} catch(Exception e){
-				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist").build();
+				return Response.status(Response.Status.BAD_REQUEST).entity("campus doesn't exist").build();
 			}
 		} else {
-			return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus field cannot be null").build();
+			return Response.status(Response.Status.BAD_REQUEST).entity("campus field cannot be null").build();
 		}
 		return Response.status(Response.Status.OK).entity(ratio).build();
 	}
@@ -272,19 +275,19 @@ public class Admin{
 			try{
 				degrees = priorEducationsDao.getTopTenBachelors(Campus.valueOf(input.getCampus().toUpperCase()),Integer.valueOf(input.getYear()));
 			} catch(Exception e){
-				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist or year should be integer.").build();
+				return Response.status(Response.Status.BAD_REQUEST).entity("campus doesn't exist or year should be integer.").build();
 			}
 		} else if (input.getCampus()!=null && input.getYear()==null){
 			try{
 				degrees = priorEducationsDao.getTopTenBachelors(Campus.valueOf(input.getCampus().toUpperCase()),null);
 			} catch(Exception e){
-				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist.").build();
+				return Response.status(Response.Status.BAD_REQUEST).entity("campus doesn't exist.").build();
 			}
 		} else if (input.getCampus()==null && input.getYear()!=null){
 			try{
 				degrees = priorEducationsDao.getTopTenBachelors(null,Integer.valueOf(input.getYear()));
 			} catch(Exception e){
-				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist or year should be integer.").build();
+				return Response.status(Response.Status.BAD_REQUEST).entity("campus doesn't exist or year should be integer.").build();
 			}
 		} else if (input.getCampus()==null && input.getYear()==null){
 			degrees = priorEducationsDao.getTopTenBachelors(null,null);
@@ -312,19 +315,19 @@ public class Admin{
 			try{
 				employers = workExperiencesDao.getTopTenEmployers(Campus.valueOf(input.getCampus().toUpperCase()),Integer.valueOf(input.getYear()));
 			} catch(Exception e){
-				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist or year should be integer.").build();
+				return Response.status(Response.Status.BAD_REQUEST).entity("campus doesn't exist or year should be integer.").build();
 			}
 		} else if (input.getCampus()!=null && input.getYear()==null){
 			try{
 				employers = workExperiencesDao.getTopTenEmployers(Campus.valueOf(input.getCampus().toUpperCase()),null);
 			} catch(Exception e){
-				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist.").build();
+				return Response.status(Response.Status.BAD_REQUEST).entity("campus doesn't exist.").build();
 			}
 		}else if (input.getCampus()==null && input.getYear()!=null){
 			try{
 				employers = workExperiencesDao.getTopTenEmployers(null,Integer.valueOf(input.getYear()));
 			} catch(Exception e){
-				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist.").build();
+				return Response.status(Response.Status.BAD_REQUEST).entity("campus doesn't exist.").build();
 			}
 		} else if (input.getCampus()==null && input.getYear()==null){
 			employers = workExperiencesDao.getTopTenEmployers(null,null);
@@ -352,19 +355,19 @@ public class Admin{
 			try{
 				electives = electivesDao.getTopTenElectives(Campus.valueOf(input.getCampus().toUpperCase()),Integer.valueOf(input.getYear()));
 			} catch(Exception e){
-				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist or year should be integer.").build();
+				return Response.status(Response.Status.BAD_REQUEST).entity("campus doesn't exist or year should be integer.").build();
 			}
 		} else if (input.getCampus()!=null && input.getYear()==null){
 			try{
 				electives = electivesDao.getTopTenElectives(Campus.valueOf(input.getCampus().toUpperCase()),null);
 			} catch(Exception e){
-				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist.").build();
+				return Response.status(Response.Status.BAD_REQUEST).entity("campus doesn't exist.").build();
 			}
 		} else if (input.getCampus()==null && input.getYear()!=null){
 			try{
 				electives = electivesDao.getTopTenElectives(null,Integer.valueOf(input.getYear()));
 			} catch(Exception e){
-				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("year should be integer.").build();
+				return Response.status(Response.Status.BAD_REQUEST).entity("year should be integer.").build();
 			}
 		} else if (input.getCampus()==null && input.getYear()==null){
 			electives = electivesDao.getTopTenElectives(null,null);
@@ -392,16 +395,16 @@ public class Admin{
 			try{
 				coopStudentsList = workExperiencesDao.getStudentCoopCompanies(Campus.valueOf(input.getCampus().toUpperCase()),Integer.valueOf(input.getYear()));
 			} catch(Exception e){
-				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist or year should be integer.").build();
+				return Response.status(Response.Status.BAD_REQUEST).entity("campus doesn't exist or year should be integer.").build();
 			}
 		} else if (input.getCampus()!=null && input.getYear()==null){
 			try{
 				coopStudentsList = workExperiencesDao.getStudentCoopCompanies(Campus.valueOf(input.getCampus().toUpperCase()),null);
 			} catch(Exception e){
-				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist.").build();
+				return Response.status(Response.Status.BAD_REQUEST).entity("campus doesn't exist.").build();
 			}
 		} else if (input.getCampus()==null){
-			return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Campus cannot be null.").build();
+			return Response.status(Response.Status.BAD_REQUEST).entity("Campus cannot be null.").build();
 		}
 		return Response.status(Response.Status.OK).entity(coopStudentsList).build();
 	}
@@ -422,16 +425,16 @@ public class Admin{
 			try{
 				studentsList = workExperiencesDao.getStudentsWorkingInACompany(Campus.valueOf(input.getCampus().toUpperCase()),Integer.valueOf(input.getYear()),input.getCompany());
 			} catch(Exception e){
-				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist or year should be integer.").build();
+				return Response.status(Response.Status.BAD_REQUEST).entity("campus doesn't exist or year should be integer.").build();
 			}
 		} else if (input.getCampus()!=null && input.getCompany()!=null && input.getYear()==null){
 			try{
 				studentsList = workExperiencesDao.getStudentsWorkingInACompany(Campus.valueOf(input.getCampus().toUpperCase()),null,input.getCompany());
 			} catch(Exception e){
-				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist.").build();
+				return Response.status(Response.Status.BAD_REQUEST).entity("campus doesn't exist.").build();
 			}
 		} else if (input.getCampus()==null || input.getCompany()==null){
-			return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Campus and Company cannot be null.").build();
+			return Response.status(Response.Status.BAD_REQUEST).entity("Campus and Company cannot be null.").build();
 		}
 
 		return Response.status(Response.Status.OK).
@@ -455,17 +458,17 @@ public class Admin{
 				studentsList = workExperiencesDao.
 						getStudentCurrentCompanies(Campus.valueOf(input.getCampus().toUpperCase()),Integer.valueOf(input.getYear()));
 			} catch(Exception e){
-				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist or year should be integer.").build();
+				return Response.status(Response.Status.BAD_REQUEST).entity("campus doesn't exist or year should be integer.").build();
 			}
 		} else if (input.getCampus()!=null && input.getYear()==null){
 			try{
 				studentsList = workExperiencesDao.
 						getStudentCurrentCompanies(Campus.valueOf(input.getCampus().toUpperCase()),null);
 			} catch(Exception e){
-				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist.").build();
+				return Response.status(Response.Status.BAD_REQUEST).entity("campus doesn't exist.").build();
 			}
 		} else if (input.getCampus()==null){
-			return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Campus cannot be null.").build();
+			return Response.status(Response.Status.BAD_REQUEST).entity("Campus cannot be null.").build();
 		}
 		return Response.status(Response.Status.OK).
 				entity(studentsList).build();  
@@ -488,21 +491,99 @@ public class Admin{
 				instList = priorEducationsDao.
 						getListOfBachelorInstitutions(Campus.valueOf(input.getCampus().toUpperCase()),Integer.valueOf(input.getYear()));
 			} catch(Exception e){
-				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist or year should be integer.").build();
+				return Response.status(Response.Status.BAD_REQUEST).entity("campus doesn't exist or year should be integer.").build();
 			}
 		} else if (input.getCampus()!=null && input.getYear()==null){
 			try{
 				instList = priorEducationsDao.
 						getListOfBachelorInstitutions(Campus.valueOf(input.getCampus().toUpperCase()),null);
 			} catch(Exception e){
-				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("campus doesn't exist.").build();
+				return Response.status(Response.Status.BAD_REQUEST).entity("campus doesn't exist.").build();
 			}
 		} else if (input.getCampus()==null){
-			return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Campus cannot be null.").build();
+			return Response.status(Response.Status.BAD_REQUEST).entity("Campus cannot be null.").build();
 		}
 		return Response.status(Response.Status.OK).
 				entity(instList).build();  
 	}
+	
+	/**
+	 * Request 12
+	 * This is a function to update an existing student notes
+	 * 
+	 * http://localhost:8080/webapi/notes/{noteid}
+	 * @param AdministratorNotes
+	 * @return 200 if notes updated successfully else return 404
+	 */
+	@PUT
+	@Path("/notes/{noteid}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response updateNote(AdministratorNotes input,@PathParam("noteid") String noteid){
+		try{
+			if(administratorNotesDao.updateAdministratorNote(input)){
+				return Response.status(Response.Status.OK).
+						entity("note updated").build();
+			}
+			} catch (Exception e){
+				return Response.status(Response.Status.NOT_FOUND).entity("Please check the note id").build();
+			}
+		return Response.status(Response.Status.INTERNAL_SERVER_ERROR).
+				entity("note updation failed").build();
+	}
+	
+	
+	/**
+	 * Request 13
+	 * This is a function to create a student notes
+	 * 
+	 * http://localhost:8080/webapi/{adminneuid}/notes
+	 * @param AdministratorNotes
+	 * @return 200 if notes created successfully else return 404
+	 */
+	@POST
+	@Path("/{adminneuid}/notes")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response createNote(AdministratorNotes input,@PathParam("adminneuid") String adminneuid){
+		try{
+			Administrators admin = administratorsDao.getAdministratorRecord(adminneuid);
+			if(admin == null){
+				return Response.status(Response.Status.NOT_FOUND).
+						entity("Please check the administrator NEUID").build();
+			}
+			AdministratorNotes note = administratorNotesDao.addAdministratorNoteRecord(input);
+			return Response.status(Response.Status.OK).
+						entity("note created" + note.toString()).build();
+			} catch (Exception e){
+				return Response.status(Response.Status.BAD_REQUEST).entity("Please check the request").build();
+			}
+	}
+	
+	/**
+	 * Request 14
+	 * This is a function to DELETE a student notes
+	 * 
+	 * http://localhost:8080/webapi/notes{adminnoteid}/
+	 * @param 
+	 * @return 200 if notes deleted successfully else return 404
+	 */
+	@DELETE
+	@Path("/notes/{adminnoteid}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response deleteNote(@PathParam("adminnoteid") String adminnoteid){
+		try{
+			if(administratorNotesDao.deleteAdministratorNoteRecord(Integer.valueOf(adminnoteid))){
+				return Response.status(Response.Status.OK).
+						entity("note deleted successfully").build();
+			}
+			} catch (Exception e){
+				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Please check the request").build();
+			}
+		return Response.status(Response.Status.BAD_REQUEST).entity("Please check the request").build();
+	}
+	
 	
 	/**
 	 * Request 12
