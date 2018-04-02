@@ -54,15 +54,7 @@ public class SecureAuth implements ContainerRequestFilter{
 		if(authHeader.size() > 0){
 			try {
 			String authToken = authHeader.get(0);
-			if(authToken == null){
-				requestContext.abortWith(Response.status(Response.Status.BAD_REQUEST).
-						entity("Bad Request. authToken is null.").build());
-			}
 			String ip = sr.getRemoteAddr();
-			if(ip == null){
-				requestContext.abortWith(Response.status(Response.Status.BAD_REQUEST).
-						entity("Bad Request. IP is null.").build());
-			}
 			String secretKey = ip+"sEcR3t_nsA-K3y";
 			byte[] key = secretKey.getBytes();
 			key = Arrays.copyOf(key, 32);
@@ -118,11 +110,10 @@ public class SecureAuth implements ContainerRequestFilter{
 		catch (Exception e) {
 			e.printStackTrace();
 			requestContext.abortWith(Response.status(Response.Status.BAD_REQUEST).
-					entity("Bad Request from secureAuth."+e.toString()).build());
+					entity("Bad Request.").build());
 		}
 		} else {
 			return;
 		}
 	}
-
 }
