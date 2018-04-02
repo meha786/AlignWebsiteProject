@@ -49,8 +49,16 @@ public class SecureAuth implements ContainerRequestFilter{
 		List<String> authHeader =  requestContext.getHeaders().get(AUTHOIRIZATION_HEADER);
 		if(authHeader.size() > 0){
 			try {
-			String authToken = authHeader.get(0);			
+			String authToken = authHeader.get(0);
+			if(authToken == null){
+				requestContext.abortWith(Response.status(Response.Status.BAD_REQUEST).
+						entity("Bad Request. authToken is null.").build());
+			}
 			String ip = sr.getRemoteAddr();
+			if(ip == null){
+				requestContext.abortWith(Response.status(Response.Status.BAD_REQUEST).
+						entity("Bad Request. IP is null.").build());
+			}
 			String secretKey = ip+"sEcR3t_nsA-K3y";
 			byte[] key = secretKey.getBytes();
 			key = Arrays.copyOf(key, 32);
@@ -65,6 +73,10 @@ public class SecureAuth implements ContainerRequestFilter{
 		    receiverJwe.setKey(keyMain);
 		    String plaintext;
 			plaintext = receiverJwe.getPlaintextString();
+			if(plaintext == null){
+				requestContext.abortWith(Response.status(Response.Status.BAD_REQUEST).
+						entity("Bad Request. plaintext is null.").build());
+			}
 			StringTokenizer tokenData = new StringTokenizer(plaintext,"*#*");
 			String email = tokenData.nextToken();
 			String ipAddress = tokenData.nextToken();
