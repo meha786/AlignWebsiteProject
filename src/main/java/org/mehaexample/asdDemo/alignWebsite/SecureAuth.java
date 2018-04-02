@@ -100,8 +100,9 @@ public class SecureAuth implements ContainerRequestFilter{
 		}
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 			requestContext.abortWith(Response.status(Response.Status.BAD_REQUEST).
-					entity("Bad Request from secureAuth."+e.getStackTrace()).build());
+					entity("Bad Request from secureAuth."+e.toString()).build());
 		}
 		} else {
 			return;
