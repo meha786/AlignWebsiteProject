@@ -30,6 +30,7 @@ public class SecureAuth implements ContainerRequestFilter{
 	private static final String REGISTER_URL = "registration";
 	private static final String RESET_URL = "password-reset";
 	private static final String CREATE_URL = "password-create";
+	private static final String PUBLIC_FACING_URL = "public-facing";
 	
 	@Context
     private HttpServletRequest sr;
@@ -42,6 +43,7 @@ public class SecureAuth implements ContainerRequestFilter{
 	if(!requestContext.getUriInfo().getPath().contains(LOGIN_URL) && 
 	   !requestContext.getUriInfo().getPath().contains(REGISTER_URL) &&
 	   !requestContext.getUriInfo().getPath().contains(CREATE_URL) && 
+	   !requestContext.getUriInfo().getPath().contains(PUBLIC_FACING_URL) && 
 	   !requestContext.getUriInfo().getPath().contains(RESET_URL)){
 	try {	
 		List<String> authHeader =  requestContext.getHeaders().get(AUTHOIRIZATION_HEADER);
